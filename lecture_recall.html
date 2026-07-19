@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture Recall — Fast Per-Lecture Review · Endo/Repro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec; --surface:#ffffff; --ink:#1c2024; --muted:#6c7077;
+    --line:#e3ded3; --line-strong:#cdc6b6;
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  header{padding:30px 26px 0;max-width:1180px;margin:0 auto}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.02;margin:0;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:74ch;margin:12px 0 0;font-size:14.5px}
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+
+  .stickytop{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--line-strong);margin-top:20px}
+  .controls{padding:14px 26px;max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center}
+  .search{position:relative;flex:1 1 260px;min-width:220px;max-width:420px}
+  .search input{width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);font:inherit;color:var(--ink)}
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .secpick{position:relative}
+  .secpick select{font-family:'IBM Plex Mono',monospace;font-size:11.5px;padding:9px 32px 9px 12px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);color:var(--ink);cursor:pointer;appearance:none;-webkit-appearance:none;max-width:320px}
+  .secpick svg{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+  .btn{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;padding:9px 13px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn:hover{border-color:var(--ink)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+  .count b{color:var(--exam-strong)}
+
+  .wrap{max-width:1180px;margin:18px auto 60px;padding:0 26px}
+  .unit-head{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:11px;margin:26px 0 12px}
+  .unit-head .n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.03em}
+
+  .lec{background:var(--surface);border:1px solid var(--line-strong);border-radius:13px;margin:0 0 11px;overflow:hidden}
+  .lec.hide{display:none}
+  .lec-head{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;cursor:pointer;user-select:none}
+  .lec-head:hover{background:#faf8f2}
+  .lec-chev{flex:0 0 auto;color:var(--muted);font-size:13px;margin-top:3px;transition:transform .15s}
+  .lec.open .lec-chev{transform:rotate(90deg);color:var(--exam-strong)}
+  .lec-main{flex:1;min-width:0}
+  .lec-title{font-family:'Fraunces',serif;font-weight:600;font-size:16.5px;letter-spacing:-.005em;line-height:1.2}
+  .lec-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:7px}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:5px}
+  .t-physio{background:#e0eef4;color:#1d5a76} .t-path{background:var(--exam-bg);color:var(--exam-strong)}
+  .t-pharm{background:#e5e0f4;color:#463b7a} .t-biochem{background:var(--gene-bg);color:var(--gene-ink)}
+  .t-embryo{background:#fbe9d8;color:#8a4b1e} .t-histo{background:#f3e7f0;color:#7a3b6e}
+  .t-anatomy{background:#eceadf;color:#5c5647} .t-imaging{background:#e2eee0;color:#3a6b34}
+  .t-genetics{background:#d8efe9;color:#0c5247} .t-clinical{background:#f6e6d6;color:#7a5c12}
+  .lec-pg{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-left:2px}
+  .lec-gist{font-size:13px;color:#33373d;margin-top:8px;line-height:1.5;font-style:italic}
+  .lec-gist b{font-style:normal;color:var(--ink)}
+
+  .lec-body{display:none;padding:0 16px 16px 40px;border-top:1px solid var(--line);margin-top:0}
+  .lec.open .lec-body{display:block}
+  .lec-body h4{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin:15px 0 7px;display:flex;align-items:center;gap:7px}
+  .lec-body h4.covered{color:var(--gene-ink)} .lec-body h4.forget{color:var(--exam-strong)}
+  .lec-body ul{margin:0;padding-left:18px}
+  .lec-body li{margin:0 0 6px;font-size:13.2px;line-height:1.5;color:#33373d}
+  .lec-body li b{color:var(--ink)}
+  .lec-body ul.forget li{color:#3a2326}
+  .lec-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+  .lk{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-decoration:none;color:var(--gene-ink);background:var(--gene-bg);border:1px solid transparent;border-radius:6px;padding:3px 8px;white-space:nowrap}
+  .lk:hover{border-color:var(--gene-ink)}
+  .lk.pdf{color:var(--muted);background:var(--paper);border-color:var(--line-strong)}
+  .lk.pdf:hover{color:var(--ink);border-color:var(--ink)}
+  .noresults{display:none;text-align:center;padding:44px;color:var(--muted);font-style:italic}
+  footer{max-width:1180px;margin:0 auto 50px;padding:0 26px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Endo / Repro Unit · Lecture Recall</p>
+  <h1>Every lecture in a minute — <em>what it covered</em>, and what you'd forget.</h1>
+  <p class="sub">One card per lecture. Read the gist to jog your memory, expand for the arc of what it covered, and — the part that matters — the <b>Don't-forget list</b>: the easy-to-miss, high-yield details that separate a pass from a miss. Search to jump to any topic; each card links into the deeper tables. Built from the actual lecture PDFs.</p>
+</header>
+
+<div class="stickytop">
+  <div class="controls">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search a lecture, topic, buzzword…" autocomplete="off">
+    </div>
+    <div class="secpick">
+      <select id="unitpick"></select>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+    <button class="btn" id="toggleAll">Expand all</button>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<div class="wrap" id="wrap"></div>
+<div class="noresults" id="noresults">No lecture matches that search.</div>
+
+<footer>
+  <hr>
+  Summaries compiled from your Endo/Repro lecture PDFs (learning objectives + high-yield content). The "Don't forget" lists emphasize commonly-tested, easy-to-miss points — verify against your primary notes. Slide + notes versions of the same lecture are merged into one card.
+</footer>
+
+<script>
+const DATA = [
+ {unit:"Axis & Pituitary", lectures:[
+  {t:"Hypothalamus–Pituitary: Structure & Function", subj:["physio"], pg:57, pdf:"Axis & Pituitary/Hypothalamus_Pituitary_Structure & Function_Notes.pdf", tables:[["Physio","physio_table.html"]],
+   gist:"How the hypothalamus runs the pituitary — anatomy, the portal system, and the 6-in / 6-out hormone axes.",
+   covered:["Pituitary anatomy: sits in the <b>sella turcica</b>; anterior (adenohypophysis, from <b>oral ectoderm</b>) vs posterior (neurohypophysis, from <b>neural tissue</b>).","Blood supply: <b>superior hypophyseal artery</b> → primary plexus in median eminence → hypophyseal portal veins → anterior pituitary.","<b>Parvocellular</b> neurons → releasing/inhibiting hormones into the portal system (anterior pituitary); <b>magnocellular</b> (PVN/SON) → ADH &amp; oxytocin to the posterior pituitary.","The 6 hypothalamic (TRH, GnRH, CRH, GHRH, GHIH/somatostatin, dopamine) and 6 anterior pituitary hormones (TSH, FSH/LH, ACTH, GH, PRL) and their receptor types.","Feedback loops (long vs short, negative vs positive) and GH / IGF-1 physiology.","Primary vs secondary vs tertiary hypo/hypersecretion logic."],
+   forget:["Posterior pituitary hormones are <mark>made in the hypothalamus, only stored/released posteriorly</mark> — stored in <b>Herring bodies</b>.","<mark>Prolactin is the only one under tonic INHIBITION</mark> (dopamine, D2/Gi) — lose dopamine → prolactin rises.","Hypothalamic releasing hormones <mark>aren't measured clinically</mark> — they go into portal blood, not systemic.","Secondary hypogonadism: low T <b>with HIGH GnRH</b> (no feedback on an intact hypothalamus); primary: low T, high LH &amp; GnRH.","GH is <b>diabetogenic</b> (anti-insulin); acts via a <b>JAK/STAT</b> receptor → hepatic IGF-1. Laron = GH-receptor defect → ↑GH, ↓IGF-1."]},
+  {t:"Hormone Synthesis", subj:["biochem"], pg:49, pdf:"Axis & Pituitary/Hormone Synthesis.pdf", tables:[["Biochem","biochem_table.html"],["Physio","physio_table.html"]],
+   gist:"How each hormone class is built, carried, and cleaved — the biochem grammar behind every axis.",
+   covered:["Hormone classes (peptide, steroid, amine, eicosanoid) and their precursors.","Plasma protein binding — which classes are bound and why it matters for half-life &amp; action.","Insulin synthesis and its link to <b>C-peptide</b>.","Oxytocin vs vasopressin synthesis (nonapeptides).","<b>POMC</b> as the precursor for ACTH, β-lipotropin, MSH, β-endorphin.","Proteolytic activation of <b>angiotensin II</b>."],
+   forget:["<mark>Steroid &amp; thyroid hormones are protein-bound</mark> (long half-life, act on nuclear receptors); peptides/amines are mostly free &amp; short-lived.","<mark>C-peptide = endogenous insulin</mark> (1:1 with insulin) — it distinguishes insulinoma/T2DM from exogenous insulin injection (C-peptide low).","POMC cleavage explains <b>hyperpigmentation in Addison / ectopic ACTH</b> (MSH co-produced).","Only <b>free</b> hormone is biologically active; changes in binding protein shift total but not free levels."]},
+  {t:"Disorders of the Hypothalamus & Pituitary Gland 1", subj:["path"], pg:42, pdf:"Axis & Pituitary/Disorders of the Hypothalamus & Pituitary Gland 1.pdf", tables:[["Pathology","pathology_table.html"],["Patterns","pattern_recognition.html"]],
+   gist:"Pituitary adenomas, hypopituitarism, DI/SIADH, and two must-know masses (craniopharyngioma, pineal germinoma).",
+   covered:["Hyper- vs hypopituitarism correlated with physiology.","Pituitary adenoma subtypes (functioning vs non-functioning) — presentation, histo, labs.","Causes of hypopituitarism.","Central vs nephrogenic diabetes insipidus.","Causes of SIADH.","Craniopharyngioma and pineal germinoma."],
+   forget:["<mark>Prolactinoma is the most common pituitary adenoma</mark> — treat medically (dopamine agonist) FIRST, not surgery.","<b>Water deprivation + desmopressin</b>: central DI concentrates urine after desmopressin (>800); nephrogenic doesn't.","<mark>Craniopharyngioma</mark> = from <b>Rathke's pouch remnants</b>, calcified, 'motor-oil' cyst fluid, bitemporal hemianopia — kids &amp; older adults.","Non-functioning macroadenoma → mass effect: <b>bitemporal hemianopia</b> (optic chiasm) &amp; hypopituitarism.","Sheehan syndrome (postpartum pituitary infarction) &amp; pituitary apoplexy as causes of acute hypopituitarism."]},
+  {t:"Disorders of the Hypothalamus & Pituitary Gland 2", subj:["path"], pg:40, pdf:"Axis & Pituitary/Disorders of the Hypothalamus & Pituitary Gland 2.pdf", tables:[["Pathology","pathology_table.html"],["Drugs","drugs_table.html"]],
+   gist:"The functioning-tumour syndromes: acromegaly and Cushing disease, plus posterior pituitary & paraneoplastic SIADH.",
+   covered:["Etiology of pituitary dysfunction (genetic, tumour, trauma, infection, inflammation).","Hyperpituitarism — <b>acromegaly</b> (GH) and <b>Cushing disease</b> (ACTH).","Pituitary hyperplasia vs adenoma vs carcinoma.","Hypopituitarism &amp; non-functional adenomas.","SIADH incl. <b>paraneoplastic</b> (small cell lung cancer).","Rathke pouch embryology → craniopharyngioma."],
+   forget:["Acromegaly: diagnose with <mark>IGF-1 first</mark>, confirm with <b>oral glucose suppression test</b> (GH fails to suppress); random GH is useless.","In adults GH excess = <b>acromegaly</b> (bone widens); in children before growth-plate closure = <b>gigantism</b>.","Cushing DISEASE = pituitary ACTH adenoma specifically; Cushing SYNDROME = any cause of cortisol excess.","SIADH → <mark>euvolemic hyponatremia, concentrated urine</mark>; classic paraneoplastic cause = <b>small cell lung ca</b>."]},
+  {t:"Hypothalamus–Pituitary Pharmacology", subj:["pharm"], pg:54, pdf:"Axis & Pituitary/Hypothalamus-Pituitary_Pharmacology.pdf", tables:[["Drugs","drugs_table.html"]],
+   gist:"The drugs that mimic or block pituitary axis hormones — GH, somatostatin, dopamine, and the vasopressin family.",
+   covered:["Somatostatin analogs (octreotide) — MOA &amp; uses.","GH axis drugs: <b>somatropin</b> (GH), <b>mecasermin</b> (IGF-1), <b>pegvisomant</b> (GH-receptor antagonist).","Dopamine agonists (bromocriptine, cabergoline).","Oxytocin, vasopressin, desmopressin.","Vasopressin antagonists (vaptans).","Half-lives of natural vs synthetic analogs; routes; adverse effects."],
+   forget:["<mark>Pegvisomant: follow IGF-1, NOT GH</mark> — it blocks the receptor so serum GH rises and is meaningless.","<b>Mecasermin (IGF-1)</b> for Laron syndrome — somatropin is useless there (receptor defect); mecasermin causes <b>hypoglycemia</b> (give with food).","Cabergoline > bromocriptine for prolactinoma (weekly, better tolerated) but <mark>cardiac valve fibrosis</mark> at high dose.","Desmopressin = <b>V2-selective</b> (no pressor effect); octreotide → <b>gallstones</b>."]},
+ ]},
+
+ {unit:"Thyroid · Parathyroid · Adrenal", lectures:[
+  {t:"Thyroid Anatomy, Histology & Biochemistry", subj:["anatomy","histo","biochem"], pg:50, pdf:"Thyroid, Parathyroid, Adrenal/Thyroid Anatomy, Histology and Biochemistry.pdf", tables:[["Biochem","biochem_table.html"],["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"The gland itself — where it sits, how it's built, and every step of thyroid-hormone synthesis.",
+   covered:["Thyroid structure, location, blood supply, lymphatic drainage &amp; innervation.","Most common congenital neck mass (<b>thyroglossal duct cyst</b>).","Histology: <b>follicles</b>, follicular cells, <b>colloid</b>, parafollicular (C) cells.","Hormone synthesis steps &amp; plasma binding proteins (TBG).","Thyroid receptor &amp; mechanism; peripheral <b>T4→T3 deiodination</b>.","Metabolic/tissue-specific effects; deficiency in adults vs children; goiter."],
+   forget:["<mark>Thyroglossal duct cyst</mark> = midline neck mass that <b>moves with swallowing/tongue protrusion</b>; tracks to foramen cecum.","<b>C cells make calcitonin</b> and are neural-crest derived → <mark>don't take up iodine</mark> (medullary carcinoma → RAI useless).","T4 is the prohormone; <mark>T3 is 10× more active</mark> — made peripherally by deiodinases.","Wolff-Chaikoff (high iodide transiently ↓synthesis) vs Jod-Basedow (iodine load → hyperthyroid in nodular goiter).","Only <b>free</b> T3/T4 is active — TBG changes (pregnancy, OCPs) shift total but not free."]},
+  {t:"Thyroid Physiology", subj:["physio"], pg:30, pdf:"Thyroid, Parathyroid, Adrenal/Thyroid Physiology Notes.pdf", tables:[["Physio","physio_table.html"],["Patterns","pattern_recognition.html"]],
+   gist:"The HPT axis and what thyroid hormone actually does to metabolism — and how to read the TFTs.",
+   covered:["Draw the <b>HPT axis</b> (TRH → TSH → T3/T4) and its feedback control.","Regulation of thyroid hormone secretion.","Metabolic &amp; tissue-specific effects of thyroid hormone.","Signs of deficiency in adults vs children.","Mechanism of goiter.","Common thyroid disorders &amp; their clinicopathologic manifestations."],
+   forget:["<mark>TSH is the single most sensitive test</mark> of thyroid status; primary hypothyroid → ↑TSH, low T4.","Thyroid hormone <b>up-regulates β-adrenergic receptors</b> — explains the tachycardia/tremor of hyperthyroidism and why β-blockers help.","Cold → ↑TRH; <b>cortisol &amp; dopamine suppress TSH</b>.","Child deficiency = <mark>cretinism</mark> (intellectual disability, short stature); adult = myxedema.","Goiter = TSH (or TSH-receptor Ab) driving gland growth."]},
+  {t:"Function & Disorders of the Parathyroid Gland", subj:["physio","path","pharm"], pg:91, pdf:"Thyroid, Parathyroid, Adrenal/Function and Disorders of the Parathyroid Gland.pdf", tables:[["Physio","physio_table.html"],["Pathology","pathology_table.html"],["Patterns","pattern_recognition.html"]],
+   gist:"The PTH–calcium–phosphate loop end to end: anatomy, physiology, the hyper/hypo disorders, and how to treat them.",
+   covered:["Parathyroid gross/histo anatomy &amp; development.","PTH synthesis, action (bone, kidney, gut via vit D) &amp; regulation by the CaSR.","Effects of hypo- and hypercalcemia on nerve, muscle &amp; cardiac conduction.","Hyperparathyroidism (1°/2°/3°), <b>brown tumour</b>, PTHrP &amp; hypercalcemia of malignancy.","Adenoma vs hyperplasia vs carcinoma morphology.","Pharmacology: Ca, vitamin D analogs, IV calcium, bisphosphonates, calcitonin, cinacalcet."],
+   forget:["Memorize the <mark>Ca / PO₄ / PTH grid</mark>: 1° hyperPTH = ↑Ca ↓PO₄ ↑PTH; malignancy = ↑Ca, <b>↓PTH</b> (PTHrP); 2° (CKD) = ↓Ca ↑PO₄ ↑PTH.","PTH is <b>phosphaturic</b> (↑Ca reabsorption, ↓PO₄ reabsorption) &amp; activates <b>1α-hydroxylase</b>.","Hypocalcemia signs: <mark>Chvostek &amp; Trousseau</mark>, prolonged QT, tetany; hypercalcemia: 'stones, bones, groans, psychiatric moans', short QT.","<mark>Correct magnesium first</mark> — low Mg blocks PTH release &amp; action, so Ca won't correct.","Acute hypercalcemia: <b>IV saline first → calcitonin (fast) → bisphosphonate (durable)</b>."]},
+  {t:"Structure & Function of the Adrenal Gland", subj:["physio","anatomy"], pg:47, pdf:"Thyroid, Parathyroid, Adrenal/Structure and Function of the Adrenal Gland.pdf", tables:[["Physio","physio_table.html"],["Biochem","biochem_table.html"]],
+   gist:"The layered adrenal: which zone makes what, and the steroid/catecholamine pathways behind it.",
+   covered:["Gross &amp; microanatomy; cortex vs medulla; vascular supply.","The three cortical zones and their products.","Steroidogenesis (cholesterol → mineralocorticoids / glucocorticoids / androgens).","Regulation: RAAS &amp; K⁺ for aldosterone; ACTH/CRH for cortisol.","Adrenal medulla — chromaffin cells &amp; catecholamine synthesis."],
+   forget:["<mark>'GFR — Salt, Sugar, Sex'</mark>: Glomerulosa→aldosterone, Fasciculata→cortisol, Reticularis→androgens (deeper = less water-related).","Aldosterone is driven by <b>RAAS &amp; serum K⁺</b>, NOT primarily ACTH; cortisol is ACTH-driven with a <b>circadian rhythm</b> (peak AM).","Cortisol at high levels spills onto the <b>mineralocorticoid receptor</b> — normally blocked by <mark>11β-HSD2</mark> (licorice/AME inhibits it).","<b>PNMT</b> (NE→Epi) needs cortisol from the adjacent cortex → only the adrenal medulla makes epinephrine.","Medulla is <b>not essential for life</b>; cortex is."]},
+  {t:"Disorders of the Adrenal Gland", subj:["path"], pg:66, pdf:"Thyroid, Parathyroid, Adrenal/Disorders of the Adrenal Gland.pdf", tables:[["Pathology","pathology_table.html"],["Drugs","drugs_table.html"],["Patterns","pattern_recognition.html"]],
+   gist:"Everything that breaks the adrenal: Cushing, Conn, Addison, CAH, and pheochromocytoma.",
+   covered:["Cushing syndrome — pathogenesis; adrenal adenoma, pituitary (disease), ectopic ACTH.","Adrenal adenoma vs carcinoma pathology.","Conn syndrome (primary hyperaldosteronism): adenoma vs bilateral hyperplasia.","Primary adrenal insufficiency (autoimmune, infectious, genetic).","Congenital adrenal hyperplasia (CAH).","Pheochromocytoma (&amp; neuroblastoma)."],
+   forget:["Cushing workup: confirm cortisol excess → <b>ACTH</b> (low = adrenal; high = pituitary/ectopic) → <mark>high-dose dexamethasone</mark> suppression &amp; imaging.","CAH: <mark>21-hydroxylase (most common)</mark> = ↓cortisol, ↓aldo (salt-wasting), ↑androgens; 17α-OH = ↑BP, ↓androgens.","Conn: <b>adenoma → surgery; bilateral hyperplasia → spironolactone</b>; HTN + hypokalemia + <b>low renin</b>.","Pheo <mark>'rule of 10s'</mark>; treat with <b>α-blockade (phenoxybenzamine) BEFORE β-blockade</b> — never β first.","Addison = ↓cortisol + ↓aldo + <b>hyperpigmentation</b> (↑ACTH/POMC) + hyperkalemia; secondary AI spares aldosterone &amp; pigment."]},
+ ]},
+
+ {unit:"Pancreas · Diabetes · Metabolic", lectures:[
+  {t:"Diabetes & Other Disorders of the Endocrine Pancreas", subj:["path","clinical"], pg:106, pdf:"Pancreas, Diabetes, Metabolic/Diabetes & Other Disorders of Endocrine Pancreas.pdf", tables:[["Pathology","pathology_table.html"],["Physio","physio_table.html"],["Patterns","pattern_recognition.html"]],
+   gist:"The biggest lecture in the unit: T1 vs T2DM, the hyperglycemic emergencies, complications, and islet tumours.",
+   covered:["T1 vs T2DM: etiology, pathophysiology, morphology, presentation, diagnosis/screening, management.","Hyperglycemic emergencies — <b>DKA vs HHS</b>.","Acute &amp; chronic complications and their target-organ pathology.","Other diabetes: secondary, drug-induced, <b>MODY</b>, neonatal.","Pancreatic endocrine tumours — <b>insulinoma</b>, Zollinger-Ellison (gastrinoma)."],
+   forget:["Diagnosis: <mark>HbA1c ≥6.5%, FPG ≥126, 2-h OGTT ≥200, random ≥200 + symptoms</mark>.","<mark>DKA (T1, ketones, anion-gap acidosis) vs HHS (T2, glucose often >600, minimal ketones, very high osmolality)</mark>; DKA management order = <b>fluids → K⁺ → insulin</b>.","T1 = autoimmune β-cell loss (anti-GAD), <b>HLA-DR3/DR4</b>; T2 = insulin resistance + relative deficiency, amyloid in islets.","Insulinoma: <mark>↑insulin AND ↑C-peptide</mark> (Whipple's triad) — sulfonylurea abuse mimics it (screen for the drug).","Chronic complications tie to <b>non-enzymatic glycation</b> &amp; sorbitol: retinopathy, nephropathy (Kimmelstiel-Wilson), neuropathy."]},
+  {t:"Treatment of Diabetes with Insulin", subj:["pharm"], pg:23, pdf:"Pancreas, Diabetes, Metabolic/Treatment of Diabetes with Insulin.pdf", tables:[["Drugs","drugs_table.html"]],
+   gist:"Insulin physiology, the preparations by time-course, and how regimens are built.",
+   covered:["Insulin synthesis, secretion &amp; regulation; role in carb/protein/fat metabolism.","Insulin vs counter-regulatory hormones on liver &amp; muscle.","Insulin types: rapid, short, intermediate, long, ultra-long — PK/PD.","Insulin &amp; glucagon receptor signalling.","Indications (T1, advanced T2); regimen choice (basal-bolus, split-mixed, CSII)."],
+   forget:["<mark>Regular insulin is the only IV insulin</mark> (DKA, hyperkalemia); rapid analogs are SC only.","Insulin drives <b>K⁺ into cells</b> — basis of both its hyperkalemia use and DKA hypokalemia risk.","<b>NPH</b> is the only cloudy insulin and the one with a peak → <mark>nocturnal hypoglycemia</mark>; glargine is peakless.","<b>β-blockers mask hypoglycemia</b> warning signs (tremor/palpitations); sweating preserved.","Dawn phenomenon vs <b>Somogyi effect</b> (rebound after nocturnal hypo)."]},
+  {t:"Oral Hypoglycemic Drugs", subj:["pharm"], pg:35, pdf:"Pancreas, Diabetes, Metabolic/Oral Hypoglycemic Drugs.pdf", tables:[["Drugs","drugs_table.html"]],
+   gist:"Every non-insulin class for T2DM — mechanism, when to use it, and its signature toxicity.",
+   covered:["Classify the classes: biguanides, sulfonylureas, meglitinides, TZDs, DPP-4i, GLP-1 agonists, SGLT2i, α-glucosidase inhibitors.","Mechanisms &amp; effect on glucose metabolism / insulin sensitivity.","PK, indications, efficacy comparisons.","Adverse effects &amp; hypoglycemia management.","Drug interactions &amp; rationale for combination therapy."],
+   forget:["<mark>Metformin is first-line</mark> — no hypoglycemia, weight-neutral; hold for contrast/renal failure (<b>lactic acidosis</b>); causes <b>B12 deficiency</b>.","<b>Sulfonylureas cause hypoglycemia &amp; weight gain</b> (close K-ATP); <b>GLP-1 &amp; DPP-4 are glucose-dependent</b> (minimal hypo).","<mark>SGLT2 inhibitors → euglycemic DKA</mark> + genital mycotic infections; cardiorenal benefit.","<b>TZDs (pioglitazone): fluid retention → contraindicated in heart failure</b>; GLP-1: MTC/MEN2 contraindication.","On acarbose, treat hypoglycemia with <b>glucose, not sucrose</b>."]},
+  {t:"Obesity & Metabolic Syndrome", subj:["physio","biochem"], pg:40, pdf:"Pancreas, Diabetes, Metabolic/Obesity and Metabolic Syndrome.pdf", tables:[["Physio","physio_table.html"],["Pathology","pathology_table.html"]],
+   gist:"Appetite regulation, insulin resistance, and the criteria that define metabolic syndrome.",
+   covered:["Normal weight maintenance &amp; BMI; definitions of obesity and metabolic syndrome.","Overnutrition and its metabolic consequences across tissues.","Appetite hormones: <b>leptin, ghrelin, PYY, CCK, insulin, glucagon</b> and the arcuate nucleus.","Prader-Willi syndrome.","Mechanisms of insulin resistance."],
+   forget:["Most human obesity is <mark>leptin RESISTANCE</mark> (high leptin, blunted response), not deficiency; <b>MC4R mutation</b> = commonest monogenic obesity.","<b>Ghrelin rises before meals</b> (hunger, from gastric fundus); <b>leptin/PYY/CCK</b> promote satiety.","Metabolic syndrome = <mark>≥3 of: waist, TG ≥150, HDL low, BP ≥130/85, FPG ≥100</mark>.","<b>Prader-Willi</b> (paternal 15q deletion) → hyperphagia/obesity; ghrelin is elevated.","Leptin/POMC/α-MSH → satiety; NPY/AgRP → hunger (AgRP is an MC4R antagonist)."]},
+  {t:"Obesity Treatment: Lifestyle, Behavioral & Medications", subj:["clinical","pharm"], pg:55, pdf:"Pancreas, Diabetes, Metabolic/Obesity Treatment Lifestyle, Behavioral and Medications.pdf", tables:[["Drugs","drugs_table.html"]],
+   gist:"Obesity as a chronic disease — staging, behavior-change counseling, and the weight-loss drugs.",
+   covered:["Obesity as a complex chronic disease; epidemiology &amp; modifiable/non-modifiable risk factors.","Classification/staging (King's, Edmonton, American Obesity Society).","<b>5 A's</b> model &amp; assessing readiness to change.","Weight-loss pharmacology (GLP-1/GIP agonists, orlistat, phentermine, phentermine-topiramate, naltrexone-bupropion).","Bariatric surgery context."],
+   forget:["<mark>GLP-1 / dual GIP-GLP-1 (semaglutide, tirzepatide)</mark> are the most effective medical options; <b>MTC/MEN2 contraindication</b>.","<b>Orlistat</b> (lipase inhibitor): steatorrhea + <b>fat-soluble vitamin (ADEK) malabsorption</b> — supplement.","<b>Phentermine-topiramate is teratogenic</b> (cleft palate); bupropion lowers the seizure threshold (avoid in bulimia).","Bariatric surgery: BMI ≥40 (or ≥35 + comorbidity); lifelong <b>B12/iron/Ca/D</b>; <b>dumping syndrome</b>; T2DM often remits before weight loss."]},
+  {t:"Obesity: Epidemic, Complications & Comorbidities", subj:["clinical"], pg:36, pdf:"Pancreas, Diabetes, Metabolic/Obesity_Epidemic Complications and Comorbidities, Impact of Weight Loss.pdf", tables:[["Pathology","pathology_table.html"]],
+   gist:"The public-health picture: what obesity causes and what even modest weight loss reverses.",
+   covered:["Obesity-related complications &amp; comorbidities across organ systems.","Benefits of weight reduction.","Epidemiologic trends.","Differences between high-income vs low/middle-income countries."],
+   forget:["Even <mark>5–10% weight loss</mark> gives dose-dependent metabolic benefit (glucose, BP, lipids).","Obesity is a formally recognized <b>disease</b> (AMA 2013); it's a chronic <b>relapsing</b> condition — weight regain on stopping therapy.","Comorbidities to know: T2DM, OSA, NAFLD, HTN, dyslipidemia, certain cancers, osteoarthritis.","Obesity now rising fastest in <b>low- and middle-income countries</b>."]},
+  {t:"Nutrition in Diabetes", subj:["clinical"], pg:3, pdf:"Pancreas, Diabetes, Metabolic/Nutrition in Diabetes.pdf", tables:[["Drugs","drugs_table.html"]],
+   gist:"Short, practical: the dietary goals that differ across obese, T2, and insulin-dependent patients.",
+   covered:["Treatment goals compared for obese, type 2, and insulin-dependent patients.","Practical approaches to keep glucose in range and move toward a healthy BMI."],
+   forget:["The <b>goal differs by patient type</b> — weight loss (obese/T2) vs consistent carbohydrate timing/counting for insulin matching (T1).","Carbohydrate consistency matters most when <b>matching insulin to meals</b>."]},
+ ]},
+
+ {unit:"Embryology · Repro Histology", lectures:[
+  {t:"Embryology of the Reproductive System", subj:["embryo"], pg:19, pdf:"Embryo - Repro:Histo/Embryology of the Reproductive System.pdf", tables:[["Embryo/Anat","embryo_anatomy_table.html"],["Pathology","pathology_table.html"]],
+   gist:"From the indifferent gonad to a male or female tract — SRY, the two duct systems, and their anomalies.",
+   covered:["<b>SRY</b> as the key determinant of sexual dimorphism.","Origin of reproductive organs from intermediate mesoderm; the indifferent gonad.","Development of gonads; origins of Sertoli, Leydig &amp; follicular cells.","<b>Mesonephric (Wolffian)</b> vs <b>paramesonephric (Müllerian)</b> ducts &amp; their derivatives.","External genitalia development; descent of testes/ovaries.","Vestigial structures &amp; clinical correlates."],
+   forget:["<mark>SRY → testis → Sertoli make AMH (regress Müllerian) + Leydig make testosterone (maintain Wolffian)</mark>; DHT builds external genitalia.","<b>Wolffian → SEED</b> (Seminal vesicles, Epididymis, Ejaculatory duct, ductus Deferens); <b>Müllerian → uterus, tubes, upper vagina</b>.","Default is <b>female</b> — no SRY / no testis → Müllerian persists, Wolffian regresses.","<b>5α-reductase deficiency</b>: internal male ducts but female-appearing genitalia until puberty (DHT needed for external).","Cryptorchidism = failed descent → ↑ risk of <b>germ cell tumours</b> &amp; infertility."]},
+  {t:"Histology of the Male Reproductive System", subj:["histo"], pg:55, pdf:"Embryo - Repro:Histo/Histology of Male Reproductive System.pdf", tables:[["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"The seminiferous tubule up close — the cells of spermatogenesis and the ducts that carry sperm out.",
+   covered:["Testis, tunica albuginea, <b>Leydig</b> (interstitial) &amp; <b>Sertoli</b> cells, seminiferous tubule, germinal epithelium.","Spermatogonia → spermatocytes → spermatids → spermatozoa; spermatogenesis &amp; spermiogenesis.","Duct system: tubuli recti, rete testis, ductuli efferentes, epididymis, vas deferens, ejaculatory duct.","Prostate (corpora amylacea), seminal vesicle, bulbourethral gland, urethra segments, penile erectile tissue.","The <b>blood-testis barrier</b>; how erectile tissue works."],
+   forget:["<mark>Sertoli = FSH, blood-testis barrier, inhibin B, AMH, androgen-binding protein</mark>; <mark>Leydig = LH, testosterone</mark>.","Blood-testis barrier (Sertoli tight junctions) <b>hides sperm antigens from the immune system</b> — vasectomy can breach it → anti-sperm Abs.","<b>Corpora amylacea</b> = prostatic concretions, increase with age.","Spermiogenesis = spermatid → mature spermatozoon (acrosome + flagellum, no division).","Erection = <b>parasympathetic (NO/cGMP)</b>, emission = sympathetic, ejaculation = somatic ('Point &amp; Shoot')."]},
+  {t:"Male Reproductive Physiology & Pharmacology", subj:["physio","pharm"], pg:45, pdf:"Embryo - Repro:Histo/Male Reproductive Physiology and Pharmacology.pdf", tables:[["Physio","physio_table.html"],["Drugs","drugs_table.html"]],
+   gist:"The HPT (gonadal) axis, testosterone's life-stage roles, and the androgen-modulating drugs.",
+   covered:["Endocrine regulation of the testis: <b>GnRH → FSH/LH → Sertoli/Leydig</b>, androgen feedback.","Testosterone biosynthesis, transport, metabolism, elimination.","Steroid action across male tissues; role in development &amp; function.","Physiologic changes at puberty; aging changes in the axis.","Causes/consequences of over- and under-secretion.","Pharm: androgens, antiandrogens (flutamide, finasteride), GnRH agonists (leuprolide)/antagonists (degarelix), FSH/LH/hMG."],
+   forget:["<mark>Pulsatile GnRH stimulates; continuous GnRH suppresses</mark> — basis of leuprolide (start with a flare → cover with an antiandrogen).","<b>Testosterone → DHT (5α-reductase)</b> for external genitalia/prostate/hair; <b>→ estradiol (aromatase)</b> for epiphyseal closure &amp; bone.","<b>Inhibin B feeds back on FSH only</b>; testosterone on LH/GnRH.","Exogenous testosterone <mark>shuts down the axis → infertility &amp; testicular atrophy</mark>; restore fertility with hCG/hMG.","Degarelix (GnRH antagonist) gives <b>no initial flare</b> — advantage over leuprolide."]},
+  {t:"Pathology of the Male Reproductive System", subj:["path"], pg:53, pdf:"Embryo - Repro:Histo/Pathology of Male Reproductive System.pdf", tables:[["Pathology","pathology_table.html"],["Patterns","pattern_recognition.html"]],
+   gist:"Penis, testis, and prostate disease — congenital anomalies, the testicular tumours, BPH and prostate cancer.",
+   covered:["Penis: <b>hypospadias</b>, carcinoma of the penis.","Testis congenital: varicocele, <b>Klinefelter</b>, undescended testis.","Classification of testicular tumours &amp; the individual types (morphology, clinical importance).","<b>BPH</b>: etiopathogenesis, morphology, labs, clinical.","<b>Prostate carcinoma</b>: etiopathogenesis, morphology, labs, clinical.","(Self-study) torsion, mumps, testicular atrophy, inflammation/infection."],
+   forget:["Testicular tumours: <mark>seminoma (radiosensitive, ↑PLAP), yolk sac (kids, ↑AFP), choriocarcinoma (↑hCG), embryonal</mark>; <b>β-hCG &amp; AFP</b> are the markers.","<b>Cryptorchidism &amp; Klinefelter raise testicular cancer risk</b>; varicocele = 'bag of worms', <b>left-sided</b> (left gonadal vein → renal vein).","<b>BPH = transition/central zone</b> (not premalignant); <b>prostate cancer = peripheral zone</b> (hard nodule on DRE, ↑PSA, osteoblastic mets).","Hypospadias (ventral) more common than epispadias (dorsal, assoc. bladder exstrophy).","Testicular torsion = <b>surgical emergency</b>, absent cremasteric reflex, negative Prehn sign."]},
+  {t:"Clinical Approach to the Male Patient", subj:["clinical"], pg:43, pdf:"Embryo - Repro:Histo/Clinical Approach to the Male Patient.pdf", tables:[["Pathology","pathology_table.html"],["Drugs","drugs_table.html"]],
+   gist:"How male repro problems actually present — turning complaints into a differential, beyond buzzwords.",
+   covered:["Common presenting complaints: erectile dysfunction, ↓libido, ejaculatory/orgasmic dysfunction, penile discharge/lesions, scrotal pain/swelling/masses.","Urinary symptoms: dysuria, hematuria, hesitancy, reduced stream, terminal dribbling.","Building a differential from each complaint by integrating pathology + anatomy.","Recognizing the diagnosis from a clinical vignette."],
+   forget:["<mark>ED can be the sentinel sign of cardiovascular disease</mark> — and PDE5 inhibitors are <b>contraindicated with nitrates</b>.","Obstructive urinary symptoms (hesitancy, weak stream, dribbling) → think <b>BPH</b>; painless scrotal mass → <b>testicular tumour</b> until proven otherwise.","Painful scrotum: <b>torsion (sudden, emergency) vs epididymitis (gradual, positive Prehn)</b>.","Always pair the buzzword with the mechanism — vignettes are integrated."]},
+ ]},
+
+ {unit:"Anatomy · Imaging (Pelvis)", lectures:[
+  {t:"Gross Anatomy: Pelvis & Perineum 1", subj:["anatomy"], pg:99, pdf:"Anatomy, Imaging - Repro/Gross Anatomy_Pelvis and Perineum 1.pdf", tables:[["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"The bony pelvis and pelvic floor — the framework, the muscles, and the perineum.",
+   covered:["Pelvic girdle bones, joints &amp; ligaments; pelvic inlet/outlet; greater (false) vs lesser (true) pelvis.","Male vs female pelvis; the <b>4 pelvis types</b> &amp; the gynecoid pelvis.","Pelvic diameters/conjugates &amp; their clinical/obstetric significance.","Pelvic wall &amp; floor muscles; the <b>pelvic diaphragm</b> &amp; puborectalis (continence).","Perineum: anal &amp; urogenital triangles, ischioanal fossa.","Superficial &amp; deep perineal pouches &amp; contents; the perineal body / episiotomy."],
+   forget:["<mark>Gynecoid pelvis</mark> is the most favorable for vaginal delivery; the <b>diagonal conjugate</b> is measured clinically to estimate the <b>obstetric conjugate</b> (true measure).","<b>Levator ani (puborectalis)</b> maintains fecal continence &amp; the anorectal angle.","<b>Perineal body</b> is the central tendon — episiotomy protects it during delivery.","Deep perineal pouch (male): membranous urethra, bulbourethral glands, deep transverse perineal; superficial pouch differs by sex.","Pudendal nerve (S2–S4) — target of the <b>pudendal nerve block</b>."]},
+  {t:"Pelvis & Perineum 2 — Part 1: Female External Genitalia & Pelvic Organs", subj:["anatomy"], pg:72, pdf:"Anatomy, Imaging - Repro/Pelvis and Perineum 2 - Part 1_Female External Genitalia and Pelvic Organs.pdf", tables:[["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"The breast and female pelvic organs — vasculature, lymphatic drainage, and organ relationships.",
+   covered:["Breast: external/internal features (modified sweat gland), vascular supply.","<b>Lymph drainage of the breast</b> by region.","Female external genitalia (vs male).","Positioning &amp; relationships of the female pelvic organs; identifying their parts.","Clinical correlations."],
+   forget:["<mark>~75% of breast lymph drains to the axillary nodes</mark> — key route for breast cancer spread; medial breast → parasternal (internal mammary) nodes.","Uterus is normally <b>anteverted &amp; anteflexed</b>, resting on the bladder.","Ovary blood supply = <b>ovarian artery (from aorta)</b>; <b>left ovarian vein → left renal vein, right → IVC</b>.","Know the <b>ureter–uterine artery</b> relation: 'water (ureter) under the bridge (uterine artery)' — at risk in hysterectomy."]},
+  {t:"Pelvis & Perineum 2 — Part 2: Male External Genitalia & Pelvic Organs", subj:["anatomy"], pg:52, pdf:"Anatomy, Imaging - Repro/Pelvis and Perineum 2 - Part 2_Male External Genitalia and Pelvic Organs.pdf", tables:[["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"Male external genitalia and pelvic organ relationships, and how to orient on a sagittal section.",
+   covered:["Male external genitalia (vs female).","Positioning &amp; relationships of male pelvic organs; identifying their parts.","Orienting on a sagittal pelvis (pubic symphysis, sacrum).","Clinical correlations."],
+   forget:["On a sagittal section, <mark>always use two verification methods for sex</mark> — no uterus ≠ automatically male.","Male pelvic organs anterior→posterior: <b>bladder → prostate → rectum</b> (why the prostate is palpable on DRE).","Spermatic cord contents ('<b>3 arteries, 3 nerves, 3 other</b>'); the vas deferens is palpable within it.","Scrotal layers mirror the abdominal wall (dartos, cremaster from internal oblique)."]},
+  {t:"Medical Imaging of the Pelvis", subj:["imaging"], pg:40, pdf:"Anatomy, Imaging - Repro/Medical Imaging of the Pelvis.pdf", tables:[["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"Reading the pelvis on X-ray, CT and ultrasound — landmarks, the pelvic ring, and organ-specific studies.",
+   covered:["Label bony pelvis &amp; organs on radiograph, CT, ultrasound.","The pelvis as <b>multiple rings</b> — implications in trauma.","Two primary studies for the <b>appendix</b> &amp; criteria for a normal appendix.","Uterus↔bladder and prostate↔bladder relationships.","<b>Hysterosalpingogram</b>: endometrial canal, tubes &amp; tubal patency.","Best studies for urethra (retrograde urethrogram) and for uterus/ovaries/testicles (ultrasound)."],
+   forget:["The pelvis is a <mark>ring — it breaks in ≥2 places</mark> (open-book, Malgaigne); a single-break 'fracture' is unusual.","Appendix on imaging: <b>US (non-compressible, >6 mm) or CT (fat stranding, appendicolith)</b>.","Hysterosalpingogram: <b>free spill of contrast = patent tubes</b>; no spill = blockage (e.g., hydrosalpinx).","<b>Ultrasound</b> is first-line for uterus/ovaries/testicles (no radiation); <b>retrograde urethrogram</b> for suspected urethral injury."]},
+  {t:"Additional Medical Images — Imaging of the Pelvis", subj:["imaging"], pg:3, pdf:"Anatomy, Imaging - Repro/Additional Medical Images- Imaging of the Pelvis.pdf", tables:[["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"A focused add-on: urethral injury patterns in trauma.",
+   covered:["Urethral injury — anterior (straddle/blunt) vs posterior (pelvic fracture).","Clinical features: inability to urinate, blood at the meatus, high-riding prostate.","Male vs female urethral injury."],
+   forget:["<mark>Blood at the urethral meatus + high-riding prostate → DO NOT insert a catheter</mark> — get a retrograde urethrogram first.","Posterior (membranous) urethral injury is classically from a <b>pelvic fracture</b> disrupting the puboprostatic ligament → prostate rides high.","Anterior urethral injury = <b>straddle injury</b>."]},
+  {t:"ENRE Anatomy (Cram Deck)", subj:["anatomy"], pg:25, pdf:"Anatomy, Imaging - Repro/ENRE ANATOMY.pdf", tables:[["Cram Trainer","embryo_anatomy_table.html"],["Embryo/Anat","embryo_anatomy_table.html"]],
+   gist:"The condensed anatomy image deck — the source for the interactive Cram Trainer.",
+   covered:["High-yield labeled anatomy across the unit: pituitary blood supply, thyroid, adrenal, pelvis &amp; perineum.","Vasculature &amp; lymphatics of the pelvic organs.","Imaging landmarks tied to the gross anatomy."],
+   forget:["This deck is best reviewed <b>actively</b> — use the <mark>Cram Trainer tab</mark> to self-test every labeled structure rather than re-reading.","Focus your recall on <b>vasculature &amp; lymphatic drainage</b> (the highest-yield, most-forgotten relations)."]},
+ ]},
+
+ {unit:"Genetics · Biochemistry", lectures:[
+  {t:"Chromosome Structure and Disease", subj:["genetics"], pg:70, pdf:"Genetics:Biochem/Chromosome Structure and Disease.pdf", tables:[["Pattern Recognition","pattern_recognition.html"],["Pathology","pathology_table.html"]],
+   gist:"Chromosome structure and the aneuploidy/deletion syndromes — plus the cytogenetic techniques.",
+   covered:["Chromosome structure &amp; nomenclature; telomere structure.","Trisomy mechanisms &amp; using quantitative markers to find the origin of the extra chromosome.","<b>Mosaicism</b> mechanisms.","The syndromes: <b>Turner, Klinefelter, XXX/XYY, Down (&amp; Robertsonian), Edwards, Patau, Cri du chat, DiGeorge</b>.","Techniques: FISH, chromosome painting, comparative genomic hybridization vs banded karyotype; indications for karyotyping."],
+   forget:["<mark>Turner (45,X)</mark>: streak ovaries, short stature, webbed neck, coarctation, <b>most miscarried</b>; Klinefelter (47,XXY): tall, small firm testes, gynecomastia, ↑FSH/LH.","Down: most from <b>meiotic nondisjunction</b>, but a young mother with recurrence → <b>Robertsonian translocation</b> (check parents).","<b>DiGeorge (22q11 deletion)</b>: diagnosed by <b>FISH</b> — CATCH-22 (Cardiac, Abnormal facies, Thymic aplasia, Cleft palate, Hypocalcemia).","Cri du chat = <b>5p deletion</b> (high-pitched cry); Edwards (18), Patau (13).","Nondisjunction risk ↑ with maternal age; mosaicism = post-zygotic error → milder/variable."]},
+  {t:"Genetics of Trinucleotide Diseases", subj:["genetics"], pg:37, pdf:"Genetics:Biochem/Genetics of Trinucleotide Diseases.pdf", tables:[["Pattern Recognition","pattern_recognition.html"]],
+   gist:"Repeat-expansion disease — why it worsens down generations (anticipation) and the classic examples.",
+   covered:["How trinucleotide repeats expand and cause <b>anticipation</b>.","Premutation vs full mutation; measuring repeat length by electrophoresis.","<b>CAG → polyglutamine</b> and the protein-sequestration hypothesis.","Repeats outside the coding region as a disease mechanism.","Inheritance: mostly dominant; <b>Fragile X</b> fits neither; <b>Friedreich ataxia</b> is recessive."],
+   forget:["<mark>Anticipation</mark> = earlier onset &amp; worse severity in successive generations as the repeat expands.","<b>Fragile X (CGG)</b>: most common inherited intellectual disability; long face, large ears/jaw, macroorchidism; <b>premutation → FXTAS / POI</b>.","<b>Huntington (CAG)</b>: paternal expansion, polyQ; <b>Friedreich (GAA, recessive)</b>: ataxia + hypertrophic cardiomyopathy + diabetes.","Myotonic dystrophy (CTG). Coding-region CAG = dominant, gain-of-function."]},
+  {t:"Imprinting", subj:["genetics"], pg:38, pdf:"Genetics:Biochem/Imprinting.pdf", tables:[["Pattern Recognition","pattern_recognition.html"]],
+   gist:"When the parent-of-origin matters — methylation silencing and the four imprinting syndromes.",
+   covered:["Imprinting changes across life; DNA sequence unchanged (<b>methylation &amp; histone modification</b> silence a region).","Male vs female gametogenesis re-setting of imprints.","<b>Uniparental disomy</b>; imprinted genes in <b>hydatidiform moles</b>.","Deletions + UPD in <b>Prader-Willi &amp; Angelman</b>.","<b>Beckwith-Wiedemann &amp; Silver-Russell</b>; compare all four."],
+   forget:["<mark>Prader-Willi = loss of PATERNAL 15q</mark> (deletion or maternal UPD) → hyperphagia/obesity, hypotonia; <mark>Angelman = loss of MATERNAL 15q</mark> → 'happy puppet', ataxia, seizures.","Same locus, opposite parent → opposite disease — the classic imprinting teaching point.","<b>Complete hydatidiform mole = all paternal DNA</b> (46,XX, empty egg) → 'snowstorm', ↑↑hCG, risk of choriocarcinoma.","Beckwith-Wiedemann (11p15, overgrowth, macroglossia, ↑Wilms/hepatoblastoma) vs Silver-Russell (growth restriction)."]},
+  {t:"Bayesian Calculation in Medical Genetics", subj:["genetics"], pg:12, pdf:"Genetics:Biochem/Bayesian Calculation Application of Medical Genetics.pdf", tables:[["Pattern Recognition","pattern_recognition.html"]],
+   gist:"How to update a carrier risk with new evidence — the one lecture you learn by doing problems.",
+   covered:["When Bayesian calculation applies: doubt about carrier status + additional information that changes the risk.","Combining prior probability with conditional information (offspring phenotype, lab values, exam, reduced penetrance).","Working risk through genetic pedigrees."],
+   forget:["<mark>Do these by hand</mark> — reading them isn't enough; the exam expects you to compute.","Structure = <b>prior × conditional = joint</b>, then normalize joints to get the <b>posterior</b> probability.","Unaffected sons of a possible X-linked carrier <b>lower</b> her posterior carrier probability (each is conditional evidence).","Reduced penetrance enters as a conditional term."]},
+  {t:"Cases in Biochemistry and Genetics", subj:["biochem","genetics"], pg:37, pdf:"Genetics:Biochem/Cases in Biochemistry and Genetics.pdf", tables:[["Biochem","biochem_table.html"]],
+   gist:"Integrated cases: mitochondrial inheritance, heme synthesis/porphyrias, and the coagulation cascade.",
+   covered:["Mitochondrial vs nuclear DNA structure, replication, inheritance; <b>heteroplasmy</b> &amp; mild-vs-severe disease.","<b>MELAS</b> — genetics, pathophysiology, presentation.","Heme synthesis &amp; regulation; RBC vs non-RBC enzyme isoforms.","Porphyrias: <b>AIP, porphyria cutanea tarda, erythropoietic protoporphyria</b>.","Coagulation cascade (extrinsic/intrinsic/common); clot amplification; negative regulators.","Hemophilia A, B, C."],
+   forget:["<mark>Mitochondrial DNA = maternal inheritance</mark>; <b>heteroplasmy</b> → variable severity by mutant-load threshold (MELAS, MERRF).","Porphyrias: <b>AIP</b> (neurovisceral, painful abdomen + psych, no photosensitivity, urine darkens) vs <b>PCT</b> (photosensitive blistering, most common).","Coagulation: <b>PT/INR = extrinsic (VII); PTT = intrinsic (VIII, IX, XI)</b>.","<mark>Hemophilia A = factor VIII, B = factor IX (both X-linked recessive), C = factor XI</mark>; treat with DDAVP (mild A) or factor replacement.","Negative regulators: antithrombin III, protein C &amp; S."]},
+  {t:"Prostaglandin Biochemistry", subj:["biochem"], pg:40, pdf:"Genetics:Biochem/Prostaglandin Biochemistry.pdf", tables:[["Biochem","biochem_table.html"],["Physio","physio_table.html"],["Drugs","drugs_table.html"]],
+   gist:"The eicosanoid pathway — COX vs LOX, the products, and exactly where each drug blocks.",
+   covered:["Fatty-acid precursors of prostaglandins (dietary/metabolic sources).","<b>Cyclooxygenases</b> &amp; <b>lipoxygenases</b> as the key enzymes.","COX-1 vs COX-2.","Products of the COX &amp; LOX pathways &amp; their structures.","Meaning of the prostaglandin subscript numbers.","Actions of prostaglandins &amp; how synthesis is inhibited."],
+   forget:["<mark>NSAIDs block COX only → leukotrienes (LOX arm) persist</mark>; <b>steroids block PLA2</b> upstream → both PGs AND LTs gone.","<b>COX-1 = constitutive</b> (gastric mucosa, platelet TXA2, renal flow); <b>COX-2 = inducible</b> (inflammation) — COX-2 selectives spare the stomach but ↑ thrombotic risk.","<b>TXA2</b> (platelets) = vasoconstriction + aggregation; <b>PGI2</b> (endothelium) = vasodilation + anti-aggregation — opposites.","<mark>PGE1 (alprostadil) keeps the PDA open; indomethacin (NSAID) closes it</mark>; misoprostol protects the gastric mucosa.","Aspirin = irreversible COX (acetylation); platelets can't resynthesize → effect lasts the platelet lifespan."]},
+ ]},
+];
+
+const wrap=document.getElementById('wrap');
+const qEl=document.getElementById('q');
+const unitpick=document.getElementById('unitpick');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+const toggleAllBtn=document.getElementById('toggleAll');
+const SUBJ={physio:'physio',path:'path',pharm:'pharm',biochem:'biochem',embryo:'embryo',histo:'histo',anatomy:'anatomy',imaging:'imaging',genetics:'genetics',clinical:'clinical'};
+const SUBJ_LABEL={physio:'physio',path:'pathology',pharm:'pharm',biochem:'biochem',embryo:'embryo',histo:'histo',anatomy:'anatomy',imaging:'imaging',genetics:'genetics',clinical:'clinical'};
+
+function pdfHref(p){ return p.split('/').map(encodeURIComponent).join('/'); }
+let total=0;
+DATA.forEach((u,ui)=>{
+  const head=document.createElement('div'); head.className='unit-head'; head.dataset.unit=ui;
+  head.innerHTML=`${u.unit}<span class="n">· ${u.lectures.length} lecture${u.lectures.length>1?'s':''}</span>`;
+  wrap.appendChild(head);
+  u.lectures.forEach(l=>{
+    total++;
+    const card=document.createElement('div'); card.className='lec'; card.dataset.unit=ui;
+    const txt=(l.t+' '+l.gist+' '+l.covered.join(' ')+' '+l.forget.join(' ')+' '+u.unit+' '+l.subj.join(' ')).replace(/<[^>]+>/g,'').toLowerCase();
+    card.dataset.txt=txt;
+    const tags=l.subj.map(s=>`<span class="tag t-${SUBJ[s]||'anatomy'}">${SUBJ_LABEL[s]||s}</span>`).join('');
+    const covered=l.covered.map(c=>`<li>${c}</li>`).join('');
+    const forget=l.forget.map(c=>`<li>${c}</li>`).join('');
+    const tableLinks=(l.tables||[]).map(t=>`<a class="lk" href="${t[1]}">${t[0]} table →</a>`).join('');
+    const pdfLink=l.pdf?`<a class="lk pdf" href="${pdfHref(l.pdf)}" title="Open the lecture PDF (works from your drive)">▸ lecture PDF</a>`:'';
+    card.innerHTML=`
+      <div class="lec-head">
+        <div class="lec-chev">▶</div>
+        <div class="lec-main">
+          <div class="lec-title">${l.t}</div>
+          <div class="lec-meta">${tags}<span class="lec-pg">${l.pg} pg</span></div>
+          <div class="lec-gist">${l.gist}</div>
+        </div>
+      </div>
+      <div class="lec-body">
+        <h4 class="covered">✓ What it covered</h4>
+        <ul class="covered">${covered}</ul>
+        <h4 class="forget">★ Don't forget</h4>
+        <ul class="forget">${forget}</ul>
+        <div class="lec-links">${tableLinks}${pdfLink}</div>
+      </div>`;
+    card.querySelector('.lec-head').addEventListener('click',()=>card.classList.toggle('open'));
+    wrap.appendChild(card);
+  });
+});
+
+// unit picker
+const optAll=document.createElement('option'); optAll.value='all'; optAll.textContent='All units'; unitpick.appendChild(optAll);
+DATA.forEach((u,ui)=>{ const o=document.createElement('option'); o.value=ui; o.textContent=`${u.unit}  (${u.lectures.length})`; unitpick.appendChild(o); });
+
+let activeUnit='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  document.querySelectorAll('.lec').forEach(c=>{
+    const unitOk = activeUnit==='all' || c.dataset.unit===activeUnit;
+    const qOk = !q || c.dataset.txt.includes(q);
+    const show = unitOk && qOk;
+    c.classList.toggle('hide',!show);
+    if(show){ visible++; if(q) c.classList.add('open'); }
+  });
+  document.querySelectorAll('.unit-head').forEach(h=>{
+    const unitOk = activeUnit==='all' || h.dataset.unit===activeUnit;
+    let any=false;
+    document.querySelectorAll(`.lec[data-unit="${h.dataset.unit}"]`).forEach(c=>{ if(!c.classList.contains('hide')) any=true; });
+    h.style.display=(unitOk&&any)?'':'none';
+  });
+  countEl.innerHTML = (q||activeUnit!=='all') ? `<b>${visible}</b> / ${total} lectures` : `<b>${total}</b> lectures`;
+  noresults.style.display = visible===0?'block':'none';
+}
+qEl.addEventListener('input',apply);
+unitpick.addEventListener('change',()=>{ activeUnit=unitpick.value; apply(); });
+
+let allOpen=false;
+toggleAllBtn.addEventListener('click',()=>{
+  allOpen=!allOpen;
+  document.querySelectorAll('.lec:not(.hide)').forEach(c=>c.classList.toggle('open',allOpen));
+  toggleAllBtn.textContent=allOpen?'Collapse all':'Expand all';
+});
+apply();
+</script>
+
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['lecture_recall.html','Lecture Recall'],
+    ['physio_quiz.html','Physio Quiz'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){
+    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+    if(p[0].toLowerCase()===here) a.className='sk-here';
+    nav.appendChild(a);
+  });
+  document.body.insertBefore(nav, document.body.firstChild);
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+</body>
+</html>

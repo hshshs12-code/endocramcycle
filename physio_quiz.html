@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endocrine Physiology — Practice Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec; --surface:#ffffff; --ink:#1c2024; --muted:#6c7077;
+    --line:#e3ded3; --line-strong:#cdc6b6;
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --ok:#0c7a52; --ok-bg:#e2f3ea; --bad:#b3261e; --bad-bg:#fbe6e4;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  header{max-width:900px;margin:0 auto;padding:28px 22px 0}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4vw,40px);line-height:1.03;margin:0;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:70ch;margin:11px 0 0;font-size:14px}
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+
+  .bar{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--line-strong);margin-top:18px}
+  .bar-in{max-width:900px;margin:0 auto;padding:11px 22px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+  .prog{flex:1 1 180px;min-width:150px}
+  .prog .track{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .prog .track i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+  .prog .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:5px;letter-spacing:.03em}
+  .score{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+  .score b{color:var(--ok)} .score .w{color:var(--bad)}
+  .btn{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;padding:7px 12px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn:hover{border-color:var(--ink)} .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{background:transparent}
+
+  .wrap{max-width:900px;margin:20px auto 40px;padding:0 22px}
+  .card{background:var(--surface);border:1px solid var(--line-strong);border-radius:15px;padding:22px 24px}
+  .qnum{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--exam-strong);font-weight:600}
+  .stem{font-size:16px;line-height:1.55;margin:9px 0 4px;color:var(--ink)}
+  .stem .fig{display:block;margin-top:8px;font-size:12.5px;color:var(--muted);font-style:italic;border-left:3px solid var(--line-strong);padding-left:10px}
+
+  .hintrow{margin:14px 0 4px}
+  .hintbtn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.03em;color:var(--buzz-ink);background:#fdf6df;border:1px solid #ecdca6;border-radius:8px;padding:6px 11px;cursor:pointer}
+  .hintbtn:hover{background:#fbefc9}
+  .hint{display:none;margin-top:9px;background:#fffdf3;border:1px dashed #e0cf8f;border-radius:9px;padding:10px 13px;font-size:13.4px;color:#5c4b1a}
+  .hint.on{display:block}
+  .hint b{color:var(--buzz-ink)}
+
+  .opts{margin:16px 0 0;display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line-strong);border-radius:11px;padding:11px 13px;cursor:pointer;font:inherit;color:var(--ink);transition:.12s}
+  .opt:hover:not(:disabled){border-color:var(--ink);background:#faf8f2}
+  .opt:disabled{cursor:default}
+  .opt .key{flex:0 0 auto;width:24px;height:24px;border-radius:7px;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase}
+  .opt .txt{flex:1;font-size:14px;line-height:1.45;padding-top:1px}
+  .opt .why{display:none;font-size:12.7px;line-height:1.45;margin-top:6px;color:#4a4d52}
+  .card.answered .opt .why{display:block}
+  .opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+  .opt.correct .key{background:var(--ok);border-color:var(--ok);color:#fff}
+  .opt.correct .why{color:#0b5f41}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .opt.wrong .key{background:var(--bad);border-color:var(--bad);color:#fff}
+  .opt.wrong .why{color:#8a201a}
+  .opt .mk{margin-left:auto;font-size:15px;font-weight:700;display:none}
+  .opt.correct .mk{display:block;color:var(--ok)} .opt.wrong .mk{display:block;color:var(--bad)}
+
+  .expl{display:none;margin-top:18px}
+  .card.answered .expl{display:block}
+  .expl h4{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;margin:0 0 7px;display:flex;align-items:center;gap:7px}
+  .expl .block{border-radius:11px;padding:13px 15px;font-size:13.4px;line-height:1.6;margin-bottom:12px}
+  .expl .pdf{background:#f7f4ec;border:1px solid var(--line-strong)}
+  .expl .pdf h4{color:var(--muted)}
+  .expl .lec{background:var(--gene-bg);border:1px solid #b8ddd2}
+  .expl .lec h4{color:var(--gene-ink)}
+  .expl .lec .body{color:#0c4a3c}
+  .expl .note{background:var(--exam-bg);border:1px solid #f3cfd0;color:var(--exam-ink);font-size:12.8px}
+  .cite{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+
+  .nav{display:flex;align-items:center;gap:10px;margin-top:22px}
+  .nav .sp{flex:1}
+  .palette{display:flex;flex-wrap:wrap;gap:5px;max-width:900px;margin:16px auto 0;padding:0 22px}
+  .pnum{width:30px;height:30px;border-radius:7px;border:1px solid var(--line-strong);background:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;color:var(--muted)}
+  .pnum:hover{border-color:var(--ink)}
+  .pnum.cur{outline:2px solid var(--ink);outline-offset:1px}
+  .pnum.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+  .pnum.no{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+  .paltitle{max-width:900px;margin:26px auto 0;padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+  .done{background:var(--surface);border:1px solid var(--line-strong);border-radius:15px;padding:26px;text-align:center}
+  .done .big{font-family:'Fraunces',serif;font-size:44px;font-weight:700;color:var(--exam-strong)}
+  footer{max-width:900px;margin:20px auto 50px;padding:0 22px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Endocrine Physiology · Practice Quiz · 42 questions</p>
+  <h1>Answer, then see <em>why</em> — every option, explained.</h1>
+  <p class="sub">Click an answer and each choice tells you why it's right or wrong. Stuck? Every question has a <b>hint</b>. After you answer you get the <b>verbatim explanation from the source</b> plus a <b>from-your-lectures</b> note tied to the physio table. Your progress is saved in this browser.</p>
+</header>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="prog"><div class="track"><i id="progBar"></i></div><div class="lbl" id="progLbl"></div></div>
+    <span class="score" id="score"></span>
+    <button class="btn ghost" id="resetBtn">↺ Reset</button>
+  </div>
+</div>
+
+<div class="wrap" id="wrap"></div>
+
+<div class="paltitle">Jump to question</div>
+<div class="palette" id="palette"></div>
+
+<footer>
+  <hr>
+  Questions, answers &amp; the verbatim explanations are transcribed from your <b>print.pdf</b> practice set (Endocrine Physiology, Q461–502; source cites Ganong / Stead / Kasper). The "From your lectures" notes are drawn from your Physiology table. Practice aid only — verify against primary sources.
+</footer>
+
+<script>
+/* ---- Q481 note: source key prints (c) but its own explanation + the physiology describe (e). Marked (e). ---- */
+const DATA = [
+{id:461, stem:"A 43-year-old male develops a brain tumor that impinges on the supraoptic nucleus in the hypothalamus. As a result, the secretion of which of the following hormones is affected?",
+ hint:"The supraoptic nucleus feeds the <b>posterior</b> pituitary — only two hormones are made there.",
+ correct:"b",
+ opts:[
+  ["a","Adrenocorticotropic hormone (ACTH)","Anterior-pituitary hormone (corticotropes) — not made in the supraoptic nucleus."],
+  ["b","Antidiuretic hormone (ADH)","ADH (vasopressin) is synthesized in the supraoptic (and paraventricular) nuclei and released from the posterior pituitary."],
+  ["c","Follicle-stimulating hormone (FSH)","Anterior-pituitary gonadotrope hormone."],
+  ["d","Growth hormone (GH)","Anterior-pituitary somatotrope hormone."],
+  ["e","Prolactin","Anterior-pituitary lactotrope hormone."]],
+ pdf:"The answer is b. (Ganong, pp 234–236, 242–250.) Antidiuretic hormone (ADH), also called arginine vasopressin (AVP), is secreted from the posterior lobe of the pituitary gland (neurohypophysis) into the general circulation from the endings of supraoptic neurons in the hypothalamus. ACTH, FSH, GH, and prolactin are all secreted by the anterior pituitary gland (adenohypophysis) into the portal hypophysial circulation from the endings of arcuate and other hypothalamic neurons.",
+ lec:"HP-axis lecture: <b>magnocellular</b> neurons in the SON &amp; PVN make <mark>ADH &amp; oxytocin</mark>, carried down the stalk and released from the posterior pituitary. The other four come from anterior-pituitary cell types driven by parvocellular releasing hormones."},
+
+{id:462, stem:"Following neck surgery, a patient develops circumoral paresthesia and a long QT interval consistent with hypocalcemia from injury to the parathyroid glands. Which of the following is true regarding parathyroid hormone (PTH)?",
+ hint:"PTH raises Ca and is <b>phosphaturic</b>; secretion is inverse to Ca; and enterocytes have no PTH receptor.",
+ correct:"c",
+ opts:[
+  ["a","It is synthesized and secreted from the oxyphil cells in the parathyroid glands","PTH is made by the <b>chief cells</b>, not oxyphil cells."],
+  ["b","Secretion is increased in response to an increase in plasma-free Ca²⁺","Backwards — PTH secretion is <mark>inversely</mark> related to ionized Ca²⁺ (rises when Ca falls)."],
+  ["c","It acts directly on bone cells to increase Ca²⁺ resorption and mobilize Ca²⁺","Correct — PTH acts on bone (via osteoblasts → RANKL → osteoclasts, ↑cAMP) to mobilize calcium."],
+  ["d","It acts directly on intestinal cells to increase Ca²⁺ absorption","Intestinal Ca absorption rises only <b>indirectly</b>, via PTH-stimulated calcitriol (1,25-vit D)."],
+  ["e","It increases phosphate reabsorption in the renal proximal tubular cells","Opposite — PTH is <mark>phosphaturic</mark> (decreases proximal phosphate reabsorption)."]],
+ pdf:"The answer is c. (Ganong, pp 390–392. Stead et al., pp 88–89, 232–233.) PTH, secreted by the chief cells of the parathyroid gland, is essential for life. PTH has a direct effect on bone to increase bone resorption and mobilize Ca²⁺; this effect is mediated by increasing intracellular cAMP levels in osteoblasts. PTH also increases calcium absorption from the gut, although that effect is the result of PTH-mediated increases in renal 1,25-dihydroxy-cholecalciferol. PTH has a phosphaturic action due to a decrease in phosphate reabsorption in the proximal tubules. The secretion of PTH is inversely related to the circulating levels of ionized calcium.",
+ lec:"Calcium-homeostasis flow: PTH (chief cells) → <b>bone</b> (osteoblast RANKL → osteoclast resorption), <b>kidney</b> (↑Ca reabsorption, ↓PO₄ reabsorption, ↑1α-hydroxylase → calcitriol), <b>gut</b> only indirectly via calcitriol. Net = <mark>↑Ca, ↓PO₄</mark>; the CaSR senses low Ca and drives PTH up."},
+
+{id:463, stem:"A 39-year-old man with an enlarged head, hands, and feet, osteoarthritic vertebral changes and hirsutism presents with gynecomastia and lactation. The patient most likely has a tumor in which location?",
+ hint:"Big head/hands/feet = GH excess; lactation/gynecomastia = prolactin. What single gland makes both?",
+ correct:"b",
+ opts:[
+  ["a","Hypothalamus","A GHRH-secreting hypothalamic tumor can cause acromegaly but is rare, and wouldn't explain the prolactin excess."],
+  ["b","Anterior pituitary","Correct — a somatotroph adenoma → GH excess (acromegaly); up to 40% co-secrete prolactin → galactorrhea/gynecomastia."],
+  ["c","Posterior pituitary","Makes only ADH &amp; oxytocin."],
+  ["d","Adrenal cortex","Produces steroids, not GH or prolactin."],
+  ["e","Breast","A breast tumor would not cause acromegaly."]],
+ pdf:"The answer is b. (Ganong, pp 399–402, 409. Stead et al., pp 74–75, 233.) Tumors of the somatotropes of the anterior pituitary gland secrete large amounts of growth hormone, leading to acromegaly in adults. When the epiphyses have not yet fused to the long bones, growth is stimulated by excess growth hormone leading to gigantism in children. Once the epiphyses have closed, linear growth is no longer possible, and growth hormone produces the pattern of bone and soft tissue abnormalities typical of acromegaly. Hypersecretion of growth hormone is accompanied by hypersecretion of prolactin in up to 40% of patients with acromegaly. Human growth hormone also has intrinsic lactogenic activity. Acromegaly can be caused by hypothalamic tumors that secrete GRH, but these are rare.",
+ lec:"Physio: GH (somatotropes) and prolactin (lactotropes) are both <b>anterior-pituitary acidophils</b>. Acromegaly = GH excess after epiphyseal closure; somatotroph adenomas commonly co-secrete prolactin."},
+
+{id:464, stem:"A major-league baseball player takes human growth hormone. Which of the following is true regarding human growth hormone?",
+ hint:"GH's growth effects are mediated by liver-made somatomedins.",
+ correct:"e",
+ opts:[
+  ["a","Secretion is stimulated by somatostatin and inhibited by ghrelin","Reversed — GH is stimulated by GHRH &amp; ghrelin and <mark>inhibited by somatostatin</mark>."],
+  ["b","It has a long half-life","GH has a <b>short</b> half-life (~6–20 min)."],
+  ["c","It inhibits protein synthesis","GH is protein-<b>anabolic</b> (stimulates protein synthesis)."],
+  ["d","It decreases lipolysis","GH <b>increases</b> lipolysis (raises free fatty acids)."],
+  ["e","It stimulates production of somatomedins (IGF-I and II) by the liver, cartilage, and other tissues","Correct — GH acts largely through hepatic/tissue IGF-1 &amp; IGF-2."]],
+ pdf:"The answer is e. (Ganong, pp 248, 305, 352, 398–406.) Growth hormone (GH) exerts many of its effects on growth and metabolism by stimulating the production and release of polypeptide growth factors called somatomedins from the liver, cartilage, and other tissues. In humans, the principal circulating somatomedins are IGF-I (somatomedin C) and IGF-II. GH release is stimulated by GHRH and ghrelin and inhibited by somatostatin. GH increases lipolysis; the resultant increase in free fatty acids provides a ready source of energy during hypoglycemia, fasting, and stress. GH also has a protein anabolic effect. The half-life of circulating GH in humans is 6 to 20 minutes.",
+ lec:"HP-somatotropic axis: GHRH → GH (<b>JAK/STAT</b> receptor) → hepatic <mark>IGF-1</mark>; GH is directly <b>diabetogenic</b> (↑lipolysis, ↑glucose, protein-anabolic). Somatostatin inhibits; short half-life."},
+
+{id:465, stem:"A 28-year-old woman develops a posterior pituitary tumor. Which of the following hormones is secreted by the posterior pituitary gland?",
+ hint:"Posterior pituitary = exactly two hormones.",
+ correct:"d",
+ opts:[
+  ["a","α-Melanocyte-stimulating hormone (α-MSH)","Released from the <b>intermediate lobe</b> (POMC-derived)."],
+  ["b","β-Lipotropin (β-LPH)","Anterior-pituitary POMC product."],
+  ["c","Luteinizing hormone (LH)","Anterior-pituitary gonadotrope hormone."],
+  ["d","Oxytocin","Correct — made in the PVN, released from the posterior pituitary."],
+  ["e","Thyroid-stimulating hormone (TSH)","Anterior-pituitary thyrotrope hormone."]],
+ pdf:"The answer is d. (Ganong, pp 396–397.) Oxytocin is secreted from the posterior lobe of the pituitary gland (neurohypophysis) into the general circulation from the endings of paraventricular neurons in the hypothalamus. LH, TSH, and β-lipotropin are all secreted by the anterior pituitary gland (adenohypophysis). α-MSH is released from the intermediate lobe of the pituitary.",
+ lec:"Physio: the posterior pituitary releases only <mark>ADH &amp; oxytocin</mark> (synthesized in the hypothalamus). α-MSH is a pars-intermedia POMC cleavage product."},
+
+{id:466, stem:"A 36-week pregnant mother has decreased urinary estriol excretion, indicating a decline in fetal adrenal cortical activity. Which is the principal steroid secreted by the fetal adrenal cortex?",
+ hint:"The fetal adrenal lacks 3β-HSD — so it's stuck making an androgen precursor.",
+ correct:"c",
+ opts:[
+  ["a","Cortisol","Requires 3β-HSD (progesterone step), which the fetal cortex lacks."],
+  ["b","Corticosterone","Also downstream of 3β-HSD — not the fetal predominant product."],
+  ["c","Dehydroepiandrosterone","Correct — lacking 3β-HSD, the fetal cortex makes mainly DHEA(-S), aromatized by the placenta to estriol."],
+  ["d","Progesterone","This is the 3β-HSD product the fetal adrenal can't make; the placenta supplies progesterone."],
+  ["e","Pregnenolone","A precursor, but the dominant secreted steroid is DHEA-S."]],
+ pdf:"The answer is c. (Ganong, pp 356, 361–366, 450.) Because it lacks 3β-hydroxysteroid dehydrogenase, the enzyme that converts pregnenolone to progesterone (the initial step in both glucocorticoid and mineralocorticoid synthesis), the fetal cortex synthesizes primarily dehydroepiandrosterone. This steroid is released as its sulfate and is metabolized further to estrogen and androgen by the placenta. During fetal life, the adrenal cortex consists of a thin subcapsular rim, which eventually gives rise to the adult cortex, and a thick inner fetal cortex, which constitutes 80% of the gland. This zone undergoes rapid involution after birth.",
+ lec:"Adrenal steroidogenesis (Hormone Synthesis): the shared first committed step is <b>pregnenolone → progesterone via 3β-HSD</b>. Without it, output shunts to <mark>DHEA-S</mark>; the placenta aromatizes it to estriol — the basis of the estriol test of fetal wellbeing."},
+
+{id:467, stem:"A 22-year-old woman with recurrent vaginal candidiasis and elevated fasting glucose is started on insulin. Which aspect of glucose transport is enhanced by insulin?",
+ hint:"Insulin recruits GLUT4 — which insulin-sensitive tissue is on the list?",
+ correct:"a",
+ opts:[
+  ["a","Transport into adipocytes","Correct — insulin inserts GLUT4 into adipocytes (and muscle)."],
+  ["b","Transport across the tubular epithelium of the kidney","Renal glucose handling is insulin-independent."],
+  ["c","Transport into the brain","Brain uses GLUT1/GLUT3 — insulin-independent."],
+  ["d","Transport through the intestinal mucosa","Intestinal absorption (SGLT1/GLUT2) is insulin-independent."],
+  ["e","Transport against a concentration gradient","Glucose entry is <b>facilitated diffusion</b> — down its gradient, not against it."]],
+ pdf:"The answer is a. (Ganong, pp 336–338. Stead et al., pp 63–65.) Insulin increases glucose uptake by adipocytes. Transport of glucose into cells is by facilitated diffusion. Insulin increases the number of transporters available for glucose uptake in many cells, including adipocytes, skeletal, and cardiac muscle, and some smooth muscle. Insulin does not enhance glucose transport into brain cells, intestinal mucosal cells, or renal tubular epithelial cells. Diabetics have increased susceptibility to infections due to decreased efficacy of granulocytes despite a normal number.",
+ lec:"Insulin (RTK → IRS → PI3K/Akt) inserts <mark>GLUT4</mark> in <b>muscle &amp; adipose</b>. Brain, liver, RBC, kidney and gut are insulin-independent. Transport is facilitated diffusion (down-gradient)."},
+
+{id:468, stem:"A 52-year-old woman referred for a sleep study. As shown in the graph, the plasma concentration of a hormone varied over 24 hours. This diurnal variation results from which hormone?",
+ fig:"Graph: plasma hormone level over 24 h — rises during sleep, peaks in the early morning around waking, then falls to a nadir ~12 h later.",
+ hint:"Which hormone peaks early in the morning and tracks ACTH?",
+ correct:"d",
+ opts:[
+  ["a","Thyroxine","Stable levels (long half-life, heavily protein-bound) — no marked diurnal swing."],
+  ["b","Insulin","Varies with meals, not a fixed circadian rhythm."],
+  ["c","Parathyroid hormone","Tracks calcium, not a clock."],
+  ["d","Cortisol","Correct — the classic diurnal rhythm: peak just after waking, trough at night, mirroring ACTH."],
+  ["e","Estrogen","Cyclic over the menstrual cycle, not a daily rhythm."]],
+ pdf:"The answer is d. (Ganong, pp 373–374, 317–395, 411–453.) Cortisol is the only hormone that has a diurnal variation, as shown in the graph. Plasma cortisol levels rise sharply during sleep, peaking soon after awakening, and sinking to a low level approximately 12 hours later. This pattern is intimately related to the secretory rhythm of ACTH, which governs, and in turn is partly governed by, plasma concentration of cortisol.",
+ lec:"HPA axis: CRH → ACTH → cortisol follow a <mark>circadian rhythm</mark> — peak early AM, trough late evening. This is why an 8 AM cortisol and midnight cortisol are drawn at set times."},
+
+{id:469, stem:"A 3-year-old child in Sudan is short, has a pot-belly, enlarged protruding tongue, and is developmentally delayed. Iodine is prescribed. Iodides are stored in the thyroid follicles mainly in the form of which of the following?",
+ hint:"Iodide is organified onto tyrosines of one big storage protein in the colloid.",
+ correct:"c",
+ opts:[
+  ["a","Thyroxine","T4 is the secreted product, not the storage form."],
+  ["b","Triiodothyronine","T3 is a product, and the minority one."],
+  ["c","Thyroglobulin","Correct — iodide is organified onto tyrosines of thyroglobulin and stored in colloid."],
+  ["d","Monoiodotyrosine","MIT is an intermediate on thyroglobulin, not the storage form itself."],
+  ["e","Thyroid peroxidase","TPO is the enzyme that organifies iodide — not a storage form."]],
+ pdf:"The answer is b. [Note: the source text prints \"b\" but its own explanation states iodide is stored as thyroglobulin, i.e. option (c).] The thyroid gland stores iodide primarily as thyroglobulin. The thyroid has an active transport system that traps iodide against a large gradient. Within the thyroid, iodide undergoes organification — oxidized and covalently linked to tyrosine residues in thyroglobulin. The iodinated tyrosines couple to form thyroxine. Children who are hypothyroid from birth are called cretins; worldwide, congenital hypothyroidism is a leading cause of preventable intellectual disability, and maternal iodine deficiency is a major cause.",
+ note:"The source answer key prints (b) Triiodothyronine, but its explanation explicitly says storage is as <b>thyroglobulin</b> = option (c). We've marked (c) as correct.",
+ lec:"Thyroid biochem: <b>NIS</b> traps iodide → <b>TPO</b> organifies it onto tyrosines of <mark>thyroglobulin</mark> (stored in colloid) → coupling forms T3/T4. Child hypothyroidism = <b>cretinism</b>."},
+
+{id:470, stem:"A 15-year-old girl with loss of the outer third of her eyebrows, thyroid enlargement, delayed reflex relaxation, and elevated CPK and TSH is started on thyroid hormone. Physiologically active thyroxine exists in which form?",
+ hint:"Only the FREE fraction acts; binding proteins are just a reservoir.",
+ correct:"e",
+ opts:[
+  ["a","Bound to albumin","Bound hormone is inactive (albumin carries a small fraction)."],
+  ["b","Bound to prealbumin","Bound (transthyretin/TBPA) = inactive reservoir."],
+  ["c","Bound to globulin","Most T4 is bound to TBG — but bound = inactive."],
+  ["d","As a glucuronide","A metabolic conjugate for excretion, not active hormone."],
+  ["e","Unbound","Correct — only free (unbound) thyroxine is physiologically active."]],
+ pdf:"The answer is e. (Ganong, pp 321–323. Stead et al., pp 81–83.) Only the free unbound form of thyroxine is physiologically active. Circulating thyroxine can be bound to albumin, thyroxine-binding prealbumin (TBPA), or thyroxine-binding globulin (TBG). Most thyroxine is bound, and despite the large available pool of albumin, most of it is bound to TBG, reflecting the greater affinity of TBG for thyroxine.",
+ lec:"Thyroid physio: &gt;99% of T4 is protein-bound (<b>TBG &gt; transthyretin &gt; albumin</b>); only <mark>free hormone is active</mark>. Changes in TBG (pregnancy, OCPs) shift total but not free levels — patient stays euthyroid."},
+
+{id:471, stem:"A patient with uncontrolled diabetes has increased plasma free fatty acids paralleling his glucose. Which is correct regarding activation of hormone-sensitive lipase in adipocytes?",
+ hint:"Epinephrine/glucagon → cAMP → PKA → phosphorylate &amp; activate the lipase.",
+ correct:"b",
+ opts:[
+  ["a","It causes increased hydrolysis of cholesterol esters","It hydrolyzes triglyceride to FFA + glycerol, not cholesterol esters."],
+  ["b","It is mediated by a cyclic AMP-dependent protein kinase","Correct — PKA phosphorylates and activates the enzyme."],
+  ["c","It is prevented by cortisol","Cortisol <b>enhances</b> lipolysis (promotes enzyme synthesis)."],
+  ["d","It is stimulated by insulin","Insulin <mark>inhibits</mark> it (blocks cAMP-dependent phosphorylation)."],
+  ["e","It results in accumulation of monoglycerides and diglycerides","No mono-/diglyceride accumulation occurs; the first hydrolysis step is rate-limiting."]],
+ pdf:"The answer is b. (Ganong, pp 305, 342.) Hormone-sensitive lipase is a cytoplasmic enzyme in adipocytes that catalyzes complete hydrolysis of triglyceride to fatty acids and glycerol. It is activated by a cyclic AMP-dependent protein kinase that phosphorylates the enzyme. Because no accumulation of mono- or diglycerides is detected, the initial hydrolysis of triglyceride is the rate-limiting step. HSL is regulated in vivo primarily by epinephrine and glucagon (which activate it via cAMP) and insulin (which inhibits it). Cortisol enhances lipolysis indirectly by promoting increased enzyme synthesis.",
+ lec:"Physio (insulin/glucagon): <b>glucagon &amp; epinephrine</b> (Gs → cAMP → PKA) activate HSL; <mark>insulin inhibits it</mark>. Cortisol is permissive. This is the fed-vs-fasted switch on adipose."},
+
+{id:472, stem:"A patient with DiGeorge congenital thymic aplasia presents with a seizure; elevated phosphorus and low calcium confirm hypoparathyroidism. Plasma calcium is increased most rapidly by the direct action of PTH on which of the following?",
+ hint:"Kidney &amp; gut effects are slower/indirect — what's the rapid calcium reservoir?",
+ correct:"d",
+ opts:[
+  ["a","Kidney","PTH does increase renal Ca reabsorption, but more slowly than bone mobilization."],
+  ["b","Intestine","Intestinal absorption is indirect (via calcitriol) and slow, needing dietary Ca."],
+  ["c","Thyroid gland","The thyroid's C-cells make calcitonin, which <b>lowers</b> Ca — opposite of PTH."],
+  ["d","Bones","Correct — PTH raises plasma Ca fastest by mobilizing calcium from bone."],
+  ["e","Skeletal musculature","Muscle is not a calcium store PTH acts on."]],
+ pdf:"The answer is d. (Ganong, pp 390–392. Kasper et al., pp 1942, 2264, 1382. Stead et al., pp 88–89.) PTH increases plasma calcium levels primarily by mobilizing bone calcium. The main function of the parathyroid gland is to maintain a constant ionized calcium level. PTH can also increase renal tubular reabsorption of calcium and intestinal absorption of calcium, but these effects depend on adequate dietary calcium and occur more slowly.",
+ lec:"Calcium loop: PTH raises Ca <mark>fastest via bone</mark> (osteoclast resorption); renal reabsorption is next; the <b>gut effect is indirect (calcitriol) and slowest</b>."},
+
+{id:473, stem:"A 20-year-old with narcolepsy (sudden REM onset) is noted that REM sleep decreases GH secretion. Physiological secretion of growth hormone is increased by which of the following?",
+ hint:"GH is a stress / energy-deficit hormone.",
+ correct:"a",
+ opts:[
+  ["a","Hypoglycemia","Correct — energy-substrate deficiency (hypoglycemia, fasting, exercise) is a major GH stimulus."],
+  ["b","Hyperglycemia","Glucose <b>suppresses</b> GH."],
+  ["c","Free fatty acids","FFAs <b>decrease</b> GH secretion."],
+  ["d","Somatostatin","Somatostatin (GHIH) <mark>inhibits</mark> GH."],
+  ["e","Growth hormone","GH feeds back to inhibit its own release (short-loop)."]],
+ pdf:"The answer is a. (Ganong, pp 201, 400–406. Stead et al., p 71.) GH secretion is regulated by factors that alter the balance between GHRH and somatostatin. Stimuli that increase GH: (1) energy-substrate deficiency (hypoglycemia, exercise, fasting); (2) stress (fever, psychological); (3) arginine and some amino acids; (4) glucagon; (5) L-Dopa and dopamine agonists; (6) estrogens and androgens; (7) going to sleep. Stimuli that decrease GH: somatostatin, REM sleep, glucose, cortisol, free fatty acids, and GH itself.",
+ lec:"Physio: GH ↑ with <mark>hypoglycemia, fasting, exercise, stress, deep (slow-wave) sleep, arginine</mark>; ↓ with glucose, FFAs, cortisol, somatostatin, and REM sleep."},
+
+{id:474, stem:"A 50-year-old alcoholic with cirrhosis and chronic pancreatitis, nauseated and not eating, has elevated glucagon. This results in which of the following?",
+ hint:"Glucagon's job is to raise glucose, acting on the LIVER via cAMP.",
+ correct:"c",
+ opts:[
+  ["a","Stimulation of glycogenolysis in muscle","Muscle lacks glucagon receptors — glycogenolysis is <b>hepatic</b>."],
+  ["b","Inhibition of insulin secretion","Glucagon doesn't directly inhibit insulin (it actually stimulates it)."],
+  ["c","Stimulation of gluconeogenesis in the liver","Correct — glucagon (Gs → cAMP) drives hepatic gluconeogenesis and glycogenolysis."],
+  ["d","Inhibition of adenylate cyclase","It <b>activates</b> adenylate cyclase (Gs)."],
+  ["e","Inhibition of phospholipase C","Glucagon can activate hepatic PLC (raising Ca²⁺), not inhibit it."]],
+ pdf:"The answer is c. (Ganong, pp 348–350. Kasper et al., pp 1855–1859. Stead et al., pp 114–117.) The primary action of glucagon is to increase blood glucose, which it accomplishes by promoting gluconeogenesis and glycogenolysis in the liver but not in muscle. These effects are mediated by cyclic AMP produced by hepatic adenylate cyclase after glucagon binds its receptor. Interaction with different hepatic receptors activates phospholipase C, raising intracellular Ca²⁺, which further stimulates glycogenolysis. Although glucagon opposes insulin, it does not directly affect insulin secretion.",
+ lec:"Insulin/glucagon physio: glucagon (<b>Gs → ↑cAMP → PKA</b>) → hepatic glycogenolysis + gluconeogenesis + ketogenesis; <mark>minimal muscle effect</mark> (few receptors). Net = ↑blood glucose."},
+
+{id:475, stem:"A patient in hyperkalemic renal failure is given glucose and insulin. The actions of insulin include which of the following?",
+ hint:"Why is insulin + glucose used to treat hyperkalemia?",
+ correct:"d",
+ opts:[
+  ["a","Converting glycogen to glucose","Opposite — insulin promotes glycogen synthesis (glucose → glycogen)."],
+  ["b","Stimulating gluconeogenesis","Insulin <b>decreases</b> gluconeogenesis."],
+  ["c","Increasing plasma amino acid concentration","Insulin <b>lowers</b> plasma amino acids (promotes uptake)."],
+  ["d","Enhancing potassium entry into cells","Correct — insulin stimulates the Na⁺/K⁺-ATPase, driving K⁺ into cells."],
+  ["e","Reducing urine formation","Insulin has no direct effect on urine formation."]],
+ pdf:"The answer is d. (Ganong, pp 336–338.) One of insulin's major effects is stimulation of the Na⁺-K⁺ pump, which increases potassium entry into cells, lowering extracellular K⁺. Insulin given with glucose (to prevent hypoglycemia) is used to treat hyperkalemia. Insulin's major metabolic effect is synthesis of proteins and lipids and storage of glucose as glycogen; it stimulates uptake of amino acids and glucose and decreases gluconeogenesis. Insulin has no effect on urine formation, but in diabetes elevated glucose acts as an osmotic diuretic.",
+ lec:"Physio: insulin drives <mark>K⁺ into cells</mark> (Na⁺/K⁺-ATPase) — the basis of both its <b>hyperkalemia treatment</b> and the hypokalemia risk in DKA. It is anabolic and ↓gluconeogenesis."},
+
+{id:476, stem:"A 47-year-old woman with an anterior pituitary tumor has poor wound healing and hypertension. Endogenous ACTH secretion is correctly described by which statement?",
+ hint:"Same rhythm as cortisol; and cortisol feeds back to suppress it.",
+ correct:"a",
+ opts:[
+  ["a","It shows a circadian rhythm in humans","Correct — ACTH peaks in the early morning, troughs in the evening."],
+  ["b","It is decreased during periods of stress","Stress <b>increases</b> ACTH."],
+  ["c","It is inhibited by aldosterone","Aldosterone is a mineralocorticoid and doesn't control ACTH."],
+  ["d","It is stimulated by glucocorticoids","Glucocorticoids <mark>inhibit</mark> ACTH (negative feedback)."],
+  ["e","It is stimulated by epinephrine","Epinephrine has no appreciable effect on ACTH."]],
+ pdf:"The answer is a. (Ganong, pp 372–375. Kasper et al., pp 2092–2094.) ACTH secretion occurs in several irregular bursts during the day; the peak occurs early in the morning prior to awakening (not due to the stress of arising). This circadian rhythm — maximum in early morning, minimum in the evening — is regulated by hypothalamic CRH. In addition, physical or mental stress increases ACTH within minutes. ACTH is also regulated by feedback inhibition from the hormones it stimulates (glucocorticoids). Aldosterone is not controlled by ACTH; epinephrine has no effect on ACTH secretion.",
+ lec:"HPA axis: ACTH is <mark>circadian</mark> (peak AM), <b>↑ by stress</b>, and under <b>negative feedback by cortisol</b>. Aldosterone is RAAS/K⁺-driven, not ACTH-dependent."},
+
+{id:477, stem:"A TB patient is confused with cramps and nausea. Na⁺ 125 mEq/L, serum osm 200, urine osm 1500, urine Na 400 mEq/day, normal blood volume. These findings are consistent with which of the following?",
+ hint:"Euvolemic hyponatremia with concentrated urine = too much of which posterior hormone?",
+ correct:"e",
+ opts:[
+  ["a","Increased secretion of atrial natriuretic peptide","↑ANP would cause volume loss, not euvolemic hyponatremia with concentrated urine."],
+  ["b","Decreased secretion of aldosterone","Would cause hypovolemic hyponatremia (Na wasting), not euvolemia."],
+  ["c","Increased secretion of aldosterone","Causes hypernatremia + volume expansion — opposite of this picture."],
+  ["d","Decreased secretion of antidiuretic hormone","Low ADH → dilute urine (diabetes insipidus), not urine osm 1500."],
+  ["e","Increased secretion of antidiuretic hormone","Correct — SIADH: euvolemic hypotonic hyponatremia with inappropriately concentrated urine and high urine Na."]],
+ pdf:"The answer is e. (Ganong, pp 246–247, 378–379, 729–730. Kasper et al., pp 213–214. Stead et al., pp 77–78, 226–228.) An increase in antidiuretic hormone is associated with isovolemic, hypotonic hyponatremia and an increase in both urine osmolarity and urine sodium. SIADH includes idiopathic overproduction of ADH often associated with CNS disorders (encephalitis, stroke, head trauma) and pulmonary disease (TB, pneumonia). Hyperaldosteronism leads to hypernatremia and increased ECF volume. Decreased aldosterone → hypovolemic hyponatremia. Decreased ANP → decreased Na and water excretion.",
+ lec:"ADH physio: <mark>SIADH</mark> = inappropriate ADH → water retention → <b>euvolemic, hypotonic hyponatremia</b> with concentrated urine and high urine Na. Classic cause here = pulmonary TB."},
+
+{id:478, stem:"A 29-year-old recovering from a viral URI develops subacute thyroiditis needing hormone therapy. Injection of thyroid hormone will result in which of the following?",
+ hint:"Thyroid hormone is calorigenic and anabolic for protein, but clears cholesterol.",
+ correct:"b",
+ opts:[
+  ["a","Decrease the rate of oxygen consumption","TH <b>increases</b> O₂ consumption (calorigenesis)."],
+  ["b","Increase muscle protein synthesis","Correct — thyroid hormone stimulates protein synthesis."],
+  ["c","Decrease the need for vitamins","TH <b>increases</b> demand for coenzymes and vitamins."],
+  ["d","Increase the plasma concentration of cholesterol","TH <b>lowers</b> plasma cholesterol (increases clearance)."],
+  ["e","Decrease the rate of lipolysis","TH <b>increases</b> lipolysis (net decrease in lipid stores)."]],
+ pdf:"The answer is b. (Ganong, pp 323–326. Stead et al., pp 85–86.) Thyroid hormone affects all aspects of metabolism; it increases calorigenesis in every tissue. It stimulates protein synthesis, which may be directly responsible for a portion of its calorigenic effect. It affects both synthesis and degradation of lipids, with a net decrease in lipid stores, and decreases plasma cholesterol by increasing the mechanisms by which cholesterol is eliminated. Because of its stimulatory effect on metabolism, thyroid hormone increases the demand for coenzymes and vitamins.",
+ lec:"Thyroid physio: TH ↑<mark>BMR / calorigenesis</mark>, ↑protein synthesis, ↑lipolysis, and <b>↓plasma cholesterol</b>; it up-regulates β-adrenergic receptors (tachycardia in excess)."},
+
+{id:479, stem:"An abdominal CT in a patient with Conn's syndrome (primary hyperaldosteronism) shows multiple small adrenocortical masses. Which clinical finding is most likely present?",
+ hint:"Aldosterone excess = retain Na/water, lose K.",
+ correct:"a",
+ opts:[
+  ["a","Hypertension","Correct — aldosterone-driven Na/water retention raises blood pressure."],
+  ["b","Hyperkalemia","Aldosterone causes <mark>hypokalemia</mark> (K⁺ wasting)."],
+  ["c","Decreased extracellular fluid volume","ECF volume is <b>expanded</b>."],
+  ["d","Increased concentrating ability of the kidney","Hypokalemia impairs concentrating ability (nephrogenic DI-like)."],
+  ["e","Increased hematocrit","Volume expansion gives a <b>decreased</b> hematocrit (dilutional)."]],
+ pdf:"The answer is a. (Ganong, pp 376–381. Stead et al., pp 93–94.) The symptoms of primary hyperaldosteronism (Conn's syndrome) develop from chronic excess aldosterone from the zona glomerulosa. Patients are hypertensive and have an expanded blood volume with a decreased hematocrit. They are not markedly hypernatremic because of a renal escape phenomenon. They are severely depleted of potassium and, as a consequence, suffer kidney damage with a resulting loss in concentrating ability.",
+ lec:"RAAS / adrenal physio: aldosterone → ↑ENaC + Na⁺/K⁺-ATPase → Na/water retention, K⁺/H⁺ loss → <mark>HTN + hypokalemia + metabolic alkalosis</mark>; 'renal escape' limits hypernatremia."},
+
+{id:480, stem:"A 75-year-old woman with primary hyperparathyroidism presents with dehydration and malaise. Which plasma level is most likely decreased?",
+ hint:"PTH is phosphaturic.",
+ correct:"a",
+ opts:[
+  ["a","Phosphate","Correct — PTH's phosphaturic action lowers plasma phosphate."],
+  ["b","Sodium","Not primarily altered by PTH."],
+  ["c","Calcium","Hyperparathyroidism <b>raises</b> calcium (hypercalcemia)."],
+  ["d","Potassium","Not the primary PTH-related change."],
+  ["e","Calcitonin","May rise reactively to hypercalcemia, but isn't decreased."]],
+ pdf:"The answer is a. (Ganong, pp 392–393. Stead et al., pp 87–88, 233–234.) Parathyroid hormone (PTH) is essential for maintaining plasma calcium and phosphate. It is released in response to decreased plasma calcium and acts to increase calcium reabsorption and phosphate excretion. Thus, hyperparathyroidism is characterized by hypophosphatemia and hypercalcemia.",
+ lec:"Calcium grid: primary hyperPTH = <mark>↑Ca, ↓PO₄, ↑PTH</mark> (phosphaturia). Hypercalcemia → 'stones, bones, groans, psychiatric moans' + polyuria/dehydration."},
+
+{id:481, stem:"A patient undergoes adrenalectomy to remove a tumor. Adrenalectomy is associated with which of the following?",
+ hint:"Adrenalectomy = Addison-like: no cortisol (hypoglycemia) and no aldosterone (salt &amp; water loss).",
+ correct:"e",
+ opts:[
+  ["a","Euphoria","Cortisol lack tends toward fatigue/depression, not euphoria."],
+  ["b","Increased mobilization and utilization of fatty acids","Cortisol is permissive for lipolysis; its loss doesn't increase FA mobilization."],
+  ["c","Hyperglycemia with decreased insulin sensitivity","Opposite — loss of glucocorticoid impairs gluconeogenesis → <mark>hypoglycemia</mark> with increased insulin sensitivity."],
+  ["d","Improved resistance to infection or shock","Adrenal insufficiency <b>worsens</b> resistance to stress/shock."],
+  ["e","Augmented water excretion by the kidneys and sodium loss in the urine","Correct — mineralocorticoid loss → diuresis, natriuresis (Na &amp; water loss), K⁺ retention."]],
+ pdf:"The answer is c. (Ganong, p 381. Stead et al., pp 89–91, 233–234.) Removal of the adrenal glands produces the clinical picture known as Addison's disease, a disorder associated with deprivation of adrenocortical hormones. A lack of glucocorticoids diminishes the body's ability to synthesize glucose by gluconeogenesis. Mineralocorticoid deprivation produces diuresis, natriuresis, and decreased potassium secretion leading to excessive potassium plasma levels and acidosis.",
+ note:"⚠ The source answer key prints (c), but its own explanation — diuresis, natriuresis, Na loss, K⁺ retention — describes option (e), and the physiology agrees (Addisonian mineralocorticoid loss → salt &amp; water wasting; glucocorticoid loss → <b>hypo</b>glycemia, not the hyperglycemia in (c)). We've marked (e) correct.",
+ lec:"Adrenal physio: adrenalectomy = Addisonian. Lose <b>cortisol</b> → ↓gluconeogenesis, hypoglycemia, poor stress tolerance. Lose <b>aldosterone</b> → <mark>Na &amp; water loss, hyperkalemia, metabolic acidosis</mark>."},
+
+{id:482, stem:"A 37-year-old with exophthalmos, an enlarged thyroid, and elevated free T4/T3 has Graves' disease. Other clinical findings include which of the following?",
+ hint:"Hyperthyroid = everything sped up.",
+ correct:"b",
+ opts:[
+  ["a","Anorexia","Appetite <b>increases</b> in hyperthyroidism."],
+  ["b","Increased basal metabolic rate","Correct — hyperthyroidism raises BMR 60–100%."],
+  ["c","Bradycardia","Hyperthyroidism causes <mark>tachycardia</mark>."],
+  ["d","Increased weight gain","Weight <b>loss</b> despite increased intake."],
+  ["e","Decreased sweating","Sweating <b>increases</b> (heat intolerance)."]],
+ pdf:"The answer is b. (Ganong, pp 329–330. Stead et al., pp 78–81.) Hyperthyroidism can increase the basal metabolic rate 60 to 100% above normal. Thyroid hormone causes nuclear transcription of large numbers of genes in virtually all cells, producing a generalized increase in functional cell activity and metabolism. Increased metabolic activity is accompanied by increased food intake, yet body weight decreases. The generalized increase in cellular activity results in increased sweat production and increased heart rate.",
+ lec:"Thyroid physio: hyperthyroidism → <mark>↑BMR, tachycardia, weight loss with ↑appetite, heat intolerance, sweating, tremor</mark> (β-receptor up-regulation)."},
+
+{id:483, stem:"A 20-year-old diabetic forgets his insulin before an NCAA swim meet. Insulin-independent glucose uptake occurs in which of the following sites?",
+ hint:"Which tissue uses GLUT1/GLUT3 and never needs insulin?",
+ correct:"d",
+ opts:[
+  ["a","Adipose tissue","Adipose needs insulin (GLUT4)."],
+  ["b","Cardiac muscle","Cardiac muscle uptake is insulin-dependent (GLUT4)."],
+  ["c","Skeletal muscle","Skeletal muscle needs insulin/GLUT4 (except during exercise via contraction)."],
+  ["d","The brain","Correct — the brain uses GLUT1/GLUT3 and takes up glucose independent of insulin."],
+  ["e","The uterus","Not the classic insulin-independent tissue."]],
+ pdf:"The answer is d. (Ganong, pp 336–338.) Insulin does not promote glucose uptake by most brain cells. Insulin does increase glucose uptake in skeletal muscle, cardiac muscle, smooth muscle, adipose tissue, leukocytes, and the liver. In most insulin-sensitive tissues, insulin promotes glucose transport by enhancing facilitated diffusion down a concentration gradient. In the liver, where glucose freely permeates, uptake increases via phosphorylation by glucokinase (forming glucose-6-phosphate) which maintains the inward gradient.",
+ lec:"Insulin physio: <mark>brain (GLUT1/3), RBCs, liver</mark> are insulin-independent; <b>muscle &amp; fat</b> need insulin-recruited GLUT4. (Exercising muscle can also take up glucose via contraction, insulin-independently.)"},
+
+{id:484, stem:"A 46-year-old on lithium presents with weakness, arthralgia, constipation; labs show hypercholesterolemia, ↑TSH, ↓T4/T3. Which is also likely with her hypothyroid state?",
+ hint:"Hypothyroid = everything slowed.",
+ correct:"d",
+ opts:[
+  ["a","Tachycardia","Hypothyroidism causes <mark>bradycardia</mark>."],
+  ["b","Increased metabolic rate","BMR is <b>decreased</b>."],
+  ["c","Heat intolerance","Hypothyroid patients have <b>cold</b> intolerance."],
+  ["d","Sleepiness","Correct — fatigue/sleepiness is characteristic of hypothyroidism."],
+  ["e","Decreased body mass index","Hypothyroidism causes weight <b>gain</b>."]],
+ pdf:"The answer is d. (Ganong, pp 323–326. Stead et al., pp 81–83.) Sleepiness is common in patients with hypothyroidism. Hypothyroidism is usually characterized by low T3 and T4 due to thyroid atrophy. A deficiency of thyroid hormones results in bradycardia (decreased sympathetic activity) and a decreased metabolic rate with associated sleepiness, weight gain, and cold intolerance. Excess thyroid hormone increases metabolic rate, heat production, appetite, and causes weight loss; heat intolerance is characteristic of hyperthyroidism.",
+ lec:"Thyroid physio: hypothyroidism → <mark>bradycardia, ↓BMR, cold intolerance, weight gain, sleepiness/fatigue, hypercholesterolemia, delayed reflex relaxation</mark>. Lithium is a classic drug cause."},
+
+{id:485, stem:"A multisystem trauma patient develops hyperpyrexia, severe tachycardia, and high-output heart failure — thyroid storm. Which is the most appropriate treatment for the exaggerated hyperthyroidism?",
+ hint:"Block synthesis first; never give iodine before the thionamide; avoid aspirin.",
+ correct:"c",
+ opts:[
+  ["a","T3 administration to induce negative feedback inhibition of T4","Giving T3 would worsen the thyrotoxicosis."],
+  ["b","Aspirin to treat the fever","Aspirin <mark>displaces T4 from binding proteins</mark> → raises free T4 → worse; avoid."],
+  ["c","Propylthiouracil to block synthesis of new thyroid hormone","Correct — PTU blocks synthesis (and peripheral T4→T3); give β-blockers too."],
+  ["d","β₂-adrenergic agents to mediate vasodilation and bronchodilation","You want β-<b>blockade</b>, not β-agonism, in storm."],
+  ["e","Iodine followed by propylthiouracil to block release and synthesis","Wrong order — <b>PTU first</b>, then iodine ≥~1 h later (iodine first fuels synthesis)."]],
+ pdf:"The answer is c. (Ganong, pp 321–326. Stead et al., pp 79–80.) Thyroid storm is an exaggerated manifestation of hyperthyroidism and a medical emergency (mortality 20–50%). After stabilizing airway, breathing, circulation, and fluids, treatment includes propylthiouracil (PTU) or methimazole to block synthesis of new thyroid hormone and β-blockers to block adrenergic effects. Iodine should not be given until after PTU has taken effect (~1.5 h) or more thyroid hormone will be produced. Aspirin displaces T4 from thyroid-binding protein and should not be used to treat the fever. T3 and T4 inhibit release of TRH from the hypothalamus.",
+ lec:"Thyroid/pharm: storm regimen = <mark>β-blocker (propranolol) → PTU → iodine AFTER PTU → glucocorticoid</mark>. PTU also blocks peripheral T4→T3; iodine before PTU would supply substrate (Jod-Basedow risk); aspirin is contraindicated."},
+
+{id:486, stem:"A 5-year-old boy with sexual precocity has low 24-hour melatonin. Which is true regarding melatonin?",
+ hint:"Dark → sympathetic NE → pineal → melatonin (made from tryptophan).",
+ correct:"c",
+ opts:[
+  ["a","It is synthesized in the anterior pituitary gland","It's made in the <b>pineal gland</b>, not the anterior pituitary."],
+  ["b","It regulates skin pigmentation in humans","It lightens amphibian skin but has <b>no role in human skin color</b>."],
+  ["c","Its secretion is increased by darkness","Correct — melatonin rises in the dark."],
+  ["d","Its secretion is inhibited by norepinephrine from the sympathetic nervous system","Reversed — sympathetic NE <mark>stimulates</mark> melatonin synthesis."],
+  ["e","It is synthesized from the amino acid L-arginine","It's made from <b>tryptophan</b> (→ serotonin → melatonin)."]],
+ pdf:"The answer is c. (Ganong, pp 420, 462–465.) Synthesis and secretion of melatonin are increased in the dark via input from norepinephrine secreted by postganglionic sympathetic neurons. Melatonin is synthesized in the pineal gland from the amino acid tryptophan. Pinealomas that destroy the pineal gland and reduce melatonin (and cause hypothalamic damage) may cause precocious puberty by removing the inhibitory effect of melatonin on the pituitary response to GnRH. Melatonin lightens amphibian skin but has no role in human skin color.",
+ lec:"Pineal physio (HP structure/function lecture): pinealocytes make <mark>melatonin from tryptophan</mark>; <b>sympathetic NE increases it in darkness</b>. A pinealoma → ↓melatonin → loss of GnRH inhibition → precocious puberty."},
+
+{id:487, stem:"A patient with Whipple's triad and CT showing islet-cell enlargement (islet-cell carcinoma). Which is true regarding the islets of Langerhans?",
+ hint:"Islets are the endocrine pancreas — a small fraction, richly vascular, α/β/δ/F cells.",
+ correct:"e",
+ opts:[
+  ["a","They are found primarily in the head of the pancreas","They're scattered throughout but more numerous in the <b>tail</b>."],
+  ["b","They constitute approximately 30% of the pancreatic weight","They're only ~<mark>1–2%</mark> of pancreatic weight."],
+  ["c","They contain six distinct endocrine cell types","Four main types (A/α, B/β, D/δ, F/PP)."],
+  ["d","They have a meager blood supply","Islets are <b>richly</b> vascularized."],
+  ["e","They secrete insulin and glucagon","Correct — plus somatostatin and pancreatic polypeptide."]],
+ pdf:"The answer is e. (Ganong, pp 333–334. Stead et al., pp 69–70.) The islets of Langerhans, which constitute 1 to 2% of the pancreatic weight, secrete insulin, glucagon, somatostatin, and pancreatic polypeptide. Each is secreted from a distinct cell type — A, B, D, and F, respectively. The islets are scattered throughout the pancreas but are more plentiful in the tail than in the body or head.",
+ lec:"Endocrine pancreas physio: islets = ~1–2% of the pancreas — <b>β (insulin), α (glucagon), δ (somatostatin), F/PP</b>; richly vascular; denser in the tail."},
+
+{id:488, stem:"A 59-year-old man with weakness, polyuria, and fruity breath, urine strongly positive for ketones and high glucose (presumptive diabetes). As a result of insulin deficiency, which is most likely to occur?",
+ hint:"No insulin → cells can't use glucose → no α-glycerophosphate to re-esterify fats → lipolysis dominates.",
+ correct:"b",
+ opts:[
+  ["a","Increased cellular uptake of glucose","Insulin deficiency <b>decreases</b> glucose uptake."],
+  ["b","Decreased intracellular α-glycerophosphate in liver and fat cells","Correct — less glucose use → less α-glycerophosphate → fats aren't re-esterified → lipolysis and FFA release."],
+  ["c","Enhanced glucose uptake and use except by brain tissue","Glucose use is <b>impaired</b> in insulin-dependent tissues."],
+  ["d","Decreased fatty acid release from adipose tissue","FFA release <mark>increases</mark> (unopposed lipolysis)."],
+  ["e","Indirect depression of glucose utilization due to excess fatty acids","This is a <b>result</b>, not a cause, of the shift to fat use."]],
+ pdf:"The answer is b. (Ganong, pp 340–343. Stead et al., pp 63–68.) α-Glycerophosphate is produced during normal use of glucose. In the absence of adequate α-glycerophosphate — a normal acceptor of free fatty acids in triglyceride synthesis — lipolysis becomes the predominant process in adipose tissue, and fatty acids are released into the blood. The prevailing insulin level is decisive in substrate selection: insulin promotes carbohydrate use, and a lack of it causes use of fat, except by brain tissue. Indirect depression of glucose utilization by excess fatty acids is a result, not a cause.",
+ lec:"Insulin-deficiency physio (DKA): no insulin → ↓glucose uptake, ↓glycolysis → ↓α-glycerophosphate → <mark>unopposed lipolysis → FFA → ketogenesis</mark>. Brain still uses glucose (± ketones)."},
+
+{id:489, stem:"A 24-year-old with slightly elevated BP has high plasma T3, cortisol, and renin activity but no thyrotoxicosis or Cushing's. What is the most likely explanation?",
+ hint:"What raises binding globulins (TBG) and CRH/renin but keeps you clinically normal?",
+ correct:"d",
+ opts:[
+  ["a","She has been treated with ACTH and TSH","Wouldn't raise renin or reliably keep her asymptomatic."],
+  ["b","She has been treated with T3 and cortisol","Exogenous T3/cortisol would cause symptoms and suppress renin/ACTH."],
+  ["c","She has an adrenocortical tumor","Would produce signs of Cushing's."],
+  ["d","She is in the third trimester of pregnancy","Correct — estrogen ↑TBG (↑total T3/T4, free normal), placental CRH ↑cortisol, and renin rises — all with a euthyroid, non-Cushingoid state."],
+  ["e","She has been subjected to chronic stress","Wouldn't raise total T3 via TBG the same way, and doesn't fit."]],
+ pdf:"The answer is d. (Ganong, pp 322, 449–450, 456, 777.) Thyroxine-binding globulin (TBG) is increased in estrogen-treated patients and during pregnancy, increasing total plasma T3 and T4 but with normal free hormone, so the clinical state is euthyroid. Cortisol levels also increase during pregnancy due to increased CRH production by the placenta (and the fetal hypothalamus). Pregnancy is associated with increased renin levels arising from tissue renin-angiotensin components in the uterus, placenta, and fetal membranes; amniotic fluid contains large amounts of prorenin.",
+ lec:"Physio: <mark>estrogen (pregnancy/OCP) raises TBG</mark> → ↑total T3/T4 but normal <b>free</b> → euthyroid. Placental CRH raises cortisol; renin also rises — clinically normal because free hormone is unchanged."},
+
+{id:490, stem:"Which of the following hormones initiates its biological effects by activation of cell-membrane receptors?",
+ hint:"Which one is water-soluble and can't cross the membrane?",
+ correct:"e",
+ opts:[
+  ["a","Progesterone","A steroid — acts on intracellular/nuclear receptors."],
+  ["b","Estrogens","Steroid — intracellular receptor."],
+  ["c","Cortisol","Steroid — intracellular receptor."],
+  ["d","Thyroxine","Lipophilic — acts on a nuclear receptor."],
+  ["e","Epinephrine","Correct — a catecholamine that acts on membrane (adrenergic GPCR) receptors."]],
+ pdf:"The answer is e. (Ganong, pp 37–49.) Due to their relatively low solubility in the lipid portions of the cell membrane, peptide hormones and catecholamines (epinephrine) must interact with receptors located on the cell membrane. Activation of the receptor generates intracellular second messengers that mediate the response. Steroid hormones and thyroid hormones readily pass through the cell membrane and interact with intracellular receptors, producing their effects by regulating gene expression within the nucleus.",
+ lec:"Signalling master table: <mark>catecholamines &amp; peptides → membrane GPCRs</mark> (2nd messengers); <b>steroids &amp; thyroid hormone → intracellular/nuclear receptors</b> (gene transcription)."},
+
+{id:491, stem:"A 13-year-old girl is very short (>3 SD below mean) with suspected anorexia nervosa. Which statement about growth and development is correct?",
+ hint:"GH's receptor is a cytokine receptor.",
+ correct:"a",
+ opts:[
+  ["a","Growth hormone activates the JAK2-STAT pathway","Correct — the GH receptor is a JAK2/STAT-linked cytokine receptor."],
+  ["b","Linear growth ceases earlier in boys than in girls","Reversed — growth ends earlier in <mark>girls</mark>."],
+  ["c","Serum IGF-I levels decrease throughout childhood","IGF-I <b>increases</b> through childhood, peaking at puberty."],
+  ["d","Growth hormone is essential for prenatal linear growth","Fetal growth is driven mainly by <b>IGF-II</b>, largely GH-independent."],
+  ["e","Normal growth during puberty is independent of thyroid function","Thyroid hormone is <b>required</b> for normal growth (synergy with GH)."]],
+ pdf:"The answer is a. (Ganong, pp 44–47, 326, 400–407.) Growth hormone activates many intracellular enzyme cascades, including the JAK2-STAT pathway, which also mediates the effects of various growth factors and prolactin. Secretion of IGF-I increases throughout childhood and stimulates cell proliferation and growth in many cell types, including growth-plate chondrocytes. Linear growth ends earlier in girls than in boys. IGF-II is largely independent of growth hormone and plays a role in fetal growth. Thyroid hormones are essential for normal linear growth and skeletal development, acting synergistically with growth hormone.",
+ lec:"Physio: GH → <mark>JAK2/STAT5</mark>; IGF-I rises through childhood; <b>thyroid hormone is required for growth</b> (synergy with GH); IGF-II drives prenatal growth."},
+
+{id:492, stem:"Which hormone interacts with a cytoplasmic receptor, then localizes in the nucleus and directs protein and nucleotide synthesis?",
+ hint:"Which one is a steroid?",
+ correct:"d",
+ opts:[
+  ["a","Thyrotropin-releasing hormone","A peptide — acts on a membrane (Gq) receptor."],
+  ["b","Epinephrine","A catecholamine — membrane receptor."],
+  ["c","Luteinizing hormone","A glycoprotein — membrane (Gs) receptor."],
+  ["d","Cortisol","Correct — a steroid: cytoplasmic receptor → nucleus → gene transcription."],
+  ["e","Insulin","A peptide — membrane receptor tyrosine kinase."]],
+ pdf:"The answer is d. (Ganong, pp 36–39, 375–376.) Cortisol, like other steroid hormones, diffuses into target cells and interacts with intracellular receptors. The steroid-receptor complex has a high affinity for the steroid-responsive element of DNA. Once bound to DNA, the hormone-receptor complex acts as a transcription factor to regulate gene expression and formation of specific messenger RNAs.",
+ lec:"Signalling master table (nuclear receptors): <mark>cortisol (steroid) → cytoplasmic GR → nucleus → transcription</mark>; slow onset, hours–days. Only steroids, thyroid hormone &amp; vitamin D use intracellular receptors."},
+
+{id:493, stem:"A patient with chronic asthma on glucocorticoid therapy may develop bone loss because glucocorticoids do which of the following?",
+ hint:"Steroids starve osteoblasts and worsen calcium balance.",
+ correct:"a",
+ opts:[
+  ["a","Inhibit bone formation","Correct — glucocorticoids inhibit osteoblast protein synthesis → decreased bone formation."],
+  ["b","Increase calcium absorption from the GI tract","They <mark>decrease</mark> intestinal Ca absorption."],
+  ["c","Increase osteoblast growth","They <b>suppress</b> osteoblasts."],
+  ["d","Inhibit bone resorption","They tend to <b>increase</b> resorption over time."],
+  ["e","Suppress vitamin D activation","Not the primary mechanism (the main hit is on osteoblasts + Ca balance)."]],
+ pdf:"The answer is a. (Ganong, p 395.) Glucocorticoids lower plasma Ca²⁺ by inhibiting osteoclast formation and activity acutely, but over long periods they cause osteoporosis by decreasing bone formation and increasing bone resorption. They decrease bone formation by inhibiting protein synthesis in osteoblasts. Glucocorticoids also decrease absorption of Ca²⁺ and PO₄³⁻ from the intestine and increase renal excretion of these ions. Vitamin D formation is facilitated when plasma Ca²⁺ is low.",
+ lec:"Adrenal/pharm: chronic glucocorticoids → <mark>↓bone formation (osteoblast suppression) + ↑resorption + ↓gut Ca absorption + ↑renal Ca loss</mark> → osteoporosis."},
+
+{id:494, stem:"A 29-year-old with paroxysmal headaches, anxiety, and palpitations; labs show hypercalcemia and elevated urinary catecholamines, suggesting MEN II. Which is the hallmark of pheochromocytoma?",
+ hint:"It's a catecholamine-secreting tumor.",
+ correct:"e",
+ opts:[
+  ["a","Hypoglycemia","Catecholamines cause <b>hyperglycemia</b>, not hypoglycemia."],
+  ["b","Weight gain","Hypermetabolic state → weight loss, not gain."],
+  ["c","Dry skin","Patients are diaphoretic (sweaty), not dry."],
+  ["d","Lethargy","They're anxious/agitated, not lethargic."],
+  ["e","Hypertension","Correct — sustained or paroxysmal hypertension is the hallmark."]],
+ pdf:"The answer is e. (Ganong, pp 360, 642. Kasper et al.; Stead et al., pp 94–95.) The hallmark of pheochromocytoma is either sustained or paroxysmal hypertension. Pheochromocytoma is a rare catecholamine-secreting tumor of the adrenal chromaffin cells. Patients often have episodes of sweating, anxiety, palpitations, headache, diaphoresis, and hyperglycemia. In adults ~80% are unilateral and solitary. The '10% rule' applies: 10% bilateral, 10% extra-adrenal, 10% malignant, 10% familial (though ~25% may be inherited).",
+ lec:"Adrenal medulla physio: pheochromocytoma → catecholamine excess → <mark>episodic/sustained HTN</mark>, headache, palpitations, diaphoresis, hyperglycemia; associated with <b>MEN 2</b>. Diagnose with plasma/urine metanephrines."},
+
+{id:495, stem:"A 36-year-old under corporate-takeover stress has tachycardia, palpitations, and irregular heartbeat at night; plasma catecholamines are increased. This may result from which of the following?",
+ hint:"What enzyme makes epinephrine, and what induces it?",
+ correct:"c",
+ opts:[
+  ["a","An increase in blood pressure","Increased BP would reflexively <b>lower</b> sympathetic drive."],
+  ["b","An increase in blood volume","Volume expansion reduces sympathetic catecholamine drive."],
+  ["c","An increase in plasma cortisol","Correct — cortisol induces PNMT (NE→Epi) and is needed for normal medullary function."],
+  ["d","An increase in blood glucose","Not a stimulus for catecholamine release."],
+  ["e","Changing from the standing to the supine position","Reversed — standing (orthostasis), not lying down, raises catecholamines."]],
+ pdf:"The answer is c. (Ganong, pp 358–359.) Phenylethanolamine-N-methyltransferase (PNMT), the enzyme that catalyzes formation of epinephrine from norepinephrine, is found in appreciable quantities only in the brain and the adrenal medulla. Adrenal medullary PNMT is induced by glucocorticoids, and glucocorticoids are necessary for normal development of the adrenal medulla. Circumstances that increase sympathetic input to the adrenal medulla increase catecholamine secretion. Major stressors include decreased intravascular volume or pressure, fear or rage, a change in posture from supine to standing, and hypoglycemia.",
+ lec:"Catecholamine synthesis (Hormone Synthesis / physio): <mark>PNMT converts NE → Epi and is induced by cortisol</mark> reaching the medulla via the intra-adrenal portal blood — why only the adrenal medulla makes much epinephrine. Sympathetic activation (standing, hypoglycemia, stress) drives release."},
+
+{id:496, stem:"An 18-year-old with hemophilia A, after trauma, has dizziness, abdominal pain, dark elbow/knee patches, and salt cravings — Addison's disease; cortisol is prescribed. Cortisol administration will result in which of the following?",
+ hint:"Cortisol = glucocorticoid → makes glucose; and feeds back to suppress CRH/ACTH.",
+ correct:"e",
+ opts:[
+  ["a","Increased insulin sensitivity in muscle","Cortisol <mark>decreases</mark> insulin sensitivity."],
+  ["b","Enhanced wound healing","Cortisol <b>retards</b> wound healing."],
+  ["c","Increased corticotropin-releasing hormone secretion","Cortisol <b>suppresses</b> CRH (negative feedback)."],
+  ["d","Increased ACTH secretion","Cortisol <b>suppresses</b> ACTH."],
+  ["e","Increased gluconeogenesis","Correct — a defining glucocorticoid action."]],
+ pdf:"The answer is e. (Ganong, pp 366–372. Stead et al., pp 89–91.) Cortisol is a glucocorticoid because it promotes conversion of amino acids to glucose (gluconeogenesis). It also decreases glucose uptake by muscle and adipocytes by decreasing their sensitivity to insulin, providing more glucose to non-insulin-requiring cells. Cortisol retards wound healing and decreases CRH and ACTH secretion by feedback inhibition.",
+ lec:"Adrenal physio: cortisol → <mark>↑gluconeogenesis</mark>, ↓insulin sensitivity, ↓immune/inflammatory response, ↓wound healing, and <b>negative feedback on CRH &amp; ACTH</b> ('BIG FIB')."},
+
+{id:497, stem:"An 80-year-old with exertional dyspnea and normal EF has ANP/BNP ordered to evaluate heart failure. Which statement about atrial natriuretic peptide (ANP) is correct?",
+ hint:"Atrial stretch (volume overload) triggers it; it opposes RAAS and ADH.",
+ correct:"d",
+ opts:[
+  ["a","ANP enhances antidiuretic hormone (ADH) secretion","ANP <mark>inhibits</mark> ADH."],
+  ["b","ANP constricts afferent renal arterioles","ANP <b>dilates the afferent</b> (and constricts the efferent) arteriole."],
+  ["c","ANP acts only on the distal nephron to increase urine flow","It decreases reabsorption along the <b>whole</b> nephron."],
+  ["d","ANP secretion increases when central venous pressure increases","Correct — atrial stretch from volume/pressure overload releases ANP."],
+  ["e","ANP secretion is stimulated by hyponatremia","It's stimulated by <b>hypernatremia</b> and increased CVP, not hyponatremia."]],
+ pdf:"The answer is d. (Ganong, pp 460–462, 723.) Atrial natriuretic peptide (ANP) is synthesized, stored, and secreted by cardiac atrial muscle in response to increased central venous pressure or increased plasma sodium. ANP increases glomerular filtration by simultaneous dilation of afferent and constriction of efferent renal arterioles. It decreases salt and water reabsorption along the entire length of the kidney. Water excretion is enhanced by inhibition of ADH.",
+ lec:"Signalling/RAAS: ANP (from atria on <mark>↑CVP / ↑Na</mark>) → ↑GFR (dilate afferent, constrict efferent), natriuresis, and <b>inhibits ADH, renin &amp; aldosterone</b> — the physiologic 'anti-RAAS'."},
+
+{id:498, stem:"A patient with MEN I and acromegaly has an 11q13 deletion. Growth hormone excess results in which of the following?",
+ hint:"GH is diabetogenic.",
+ correct:"c",
+ opts:[
+  ["a","Decreased gluconeogenesis","GH <b>increases</b> gluconeogenesis."],
+  ["b","Hypoglycemia","GH causes <b>hyper</b>glycemia."],
+  ["c","Insulin resistance","Correct — chronic GH excess causes insulin resistance (can cause secondary diabetes)."],
+  ["d","Decreased protein synthesis","GH <b>increases</b> protein synthesis (tissue growth)."],
+  ["e","Decreased lipolysis","GH <b>increases</b> lipolysis."]],
+ pdf:"The answer is c. (Ganong, pp 400–404. Stead et al., pp 74–75, 233.) Patients with acromegaly have insulin resistance. In addition, they manifest increased lipolysis and increased gluconeogenesis due to their high growth hormone levels. The combination of enhanced glucose production and insulin resistance can produce hyperglycemia and diabetes mellitus. Protein synthesis increases to support tissue growth and proliferation.",
+ lec:"Physio (GH / JAK-STAT): GH is <mark>diabetogenic</mark> — ↑gluconeogenesis, ↑lipolysis, insulin resistance, ↑protein synthesis. Acromegaly commonly produces secondary diabetes."},
+
+{id:499, stem:"Sulfonylurea treatment drops a diabetic's plasma glucose to 45 mg/dL. Which is a sign/symptom of hypoglycemia?",
+ hint:"Two symptom groups — sympathetic (sweating/tremor) and neuroglycopenic (confusion, poor coordination).",
+ correct:"d",
+ opts:[
+  ["a","Dry skin","Hypoglycemia causes <b>sweating</b> (diaphoresis), not dry skin."],
+  ["b","Bradycardia","Sympathetic surge causes <b>tachycardia</b>."],
+  ["c","Insomnia","Not a hypoglycemia sign."],
+  ["d","Loss of fine motor skills","Correct — neuroglycopenia impairs coordination/fine motor control."],
+  ["e","Satiety","Hypoglycemia causes <b>hunger</b>, not satiety."]],
+ pdf:"The answer is d. (Ganong, pp 353–354, 344–346. Stead et al., pp 69–70.) Hypoglycemia can lead to loss of fine motor skills. Hypoglycemia refers to abnormally low blood glucose and is dangerous because glucose is the primary energy source for brain cells. Dysfunction of the nervous system can lead to dizziness, headache, mental confusion, convulsion, and loss of consciousness. Increased sympathetic activity can produce sweating, tachycardia, hunger, and anxiety.",
+ lec:"Physio: hypoglycemia = <b>sympathetic</b> signs (sweating, tachycardia, tremor, hunger, anxiety) + <mark>neuroglycopenic</mark> signs (confusion, poor coordination/fine-motor loss, seizures). Sulfonylureas are a classic cause."},
+
+{id:500, stem:"Radiation for a pituitary tumor in an 8-year-old causes complete loss of pituitary function. The child is likely to experience which symptom?",
+ hint:"Lose all pituitary output → no downstream stimulation of any target gland.",
+ correct:"b",
+ opts:[
+  ["a","Hypothyroidism and goiter","Hypothyroid yes, but <b>no goiter</b> — a goiter needs TSH, which is gone."],
+  ["b","Absent sexual maturation","Correct — loss of FSH/LH (and GH) → no pubertal development."],
+  ["c","Accelerated growth spurts","Loss of GH → <mark>impaired growth</mark>, not acceleration."],
+  ["d","Increased ACTH","ACTH is <b>decreased</b> (pituitary destroyed)."],
+  ["e","Increased TSH levels","TSH is <b>decreased</b>."]],
+ pdf:"The answer is b. (Ganong, pp 398, 406, 408–409. Stead et al., pp 72–74, 75–76.) Radiation treatment likely produced panhypopituitarism in the young child. Sexual maturation and growth during development will not occur because of low levels of GH, FSH, LH, IGF-1, TSH and thyroid hormones, and gonadal hormones. The cortisol response to stress is decreased due to low ACTH. A goiter cannot develop in the absence of thyroid hormone [without TSH drive].",
+ lec:"HP-axis physio: panhypopituitarism → ↓GH (short stature), <mark>↓FSH/LH (no puberty)</mark>, ↓TSH (central hypothyroid, <b>no goiter</b>), ↓ACTH (↓cortisol/stress response)."},
+
+{id:501, stem:"A 49-year-old with AIDS develops sick-euthyroid syndrome (↓T4/T3). With normal thyroid function, which of the following is correct?",
+ hint:"What does the pituitary 'sense' to turn TSH down, and where does TSH come from?",
+ correct:"b",
+ opts:[
+  ["a","TSH initiates thyroid hormone secretion via activation of nuclear receptors in thyroid cells","TSH acts on <b>cell-membrane</b> receptors (Gs → cAMP), not nuclear receptors."],
+  ["b","Secretion of TSH is regulated primarily by the pituitary level of T3","Correct — local pituitary T3 (from T4 deiodination) drives feedback on TSH."],
+  ["c","TSH is secreted from the posterior pituitary","TSH is from the <mark>anterior</mark> pituitary."],
+  ["d","T4 is the physiologically active hormone","<b>T3</b> is the active hormone; T4 is the prohormone."],
+  ["e","T4 is formed from T3 by monodeiodination","Reversed — <b>T3 is formed from T4</b> by deiodination."]],
+ pdf:"The answer is b. (Ganong, pp 317–332. Kasper et al., pp 2107–2109.) Secretion of TSH is regulated primarily by the pituitary levels of T3. As plasma thyroid hormone increases, pituitary T3 rises and inhibits TSH synthesis and secretion. TSH stimulates thyroid function by binding specific cell-membrane receptors and increasing intracellular cAMP. The thyroid secretes T4 and T3; the latter is the physiologically active hormone. The majority of T3 is formed in peripheral tissues by deiodination of T4.",
+ lec:"Thyroid physio: <mark>TSH (anterior pituitary, Gs→cAMP)</mark> drives synthesis; negative feedback is set by <b>pituitary T3</b> (from local T4→T3 deiodination). T3 is the active hormone."},
+
+{id:502, stem:"Second-year medical students go on a hunger strike. After 3 days of fasting, they will most likely manifest which of the following?",
+ hint:"By day 3, ketones spare glucose and protein.",
+ correct:"c",
+ opts:[
+  ["a","Decreased lipolysis","Fasting <b>increases</b> lipolysis."],
+  ["b","Increased urinary excretion of nitrogen","Nitrogen excretion <mark>falls</mark> (protein-sparing as ketones take over)."],
+  ["c","Decreased gluconeogenesis","Correct — by day 3, rising ketones/FFA spare glucose, so gluconeogenesis declines."],
+  ["d","Increased glucose utilization by the brain","The brain <b>shifts to ketones</b>, using less glucose."],
+  ["e","Increased secretion of insulin","Insulin <b>falls</b> during fasting."]],
+ pdf:"The answer is c. (Ganong, pp 290–291, 298.) With prolonged fasting of 3 days or more, gluconeogenesis is decreased partly due to increased ketogenesis and lipolysis. The increased availability of ketones and fatty acids as fuel for brain cells decreases the brain's demand for glucose. The decreased gluconeogenesis is reflected in a nitrogen excretion level at or below normal. Insulin levels decrease beginning as early as 24 hours after a meal.",
+ lec:"Fasting metabolism physio: prolonged fast → ↑lipolysis/ketogenesis, <mark>brain switches to ketones</mark> → ↓glucose demand → ↓gluconeogenesis and ↓protein breakdown (↓urinary N); insulin low, glucagon high."},
+];
+
+/* ================= engine ================= */
+const KEY="physioQuiz_v1";
+let state=load();
+function load(){ try{const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.ans) return s;}catch(e){} return {i:0, ans:{}, hints:{}}; }
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+const wrap=document.getElementById('wrap');
+const palette=document.getElementById('palette');
+const progBar=document.getElementById('progBar');
+const progLbl=document.getElementById('progLbl');
+const scoreEl=document.getElementById('score');
+
+function scored(){ let c=0,w=0; Object.keys(state.ans).forEach(id=>{ const q=DATA.find(x=>x.id==id); if(!q)return; if(state.ans[id]===q.correct) c++; else w++; }); return {c,w,done:c+w}; }
+
+function renderPalette(){
+  palette.innerHTML="";
+  DATA.forEach((q,idx)=>{
+    const b=document.createElement('button'); b.className='pnum'; b.textContent=idx+1;
+    if(state.ans[q.id]) b.classList.add(state.ans[q.id]===q.correct?'ok':'no');
+    if(idx===state.i) b.classList.add('cur');
+    b.onclick=()=>{ state.i=idx; save(); render(); window.scrollTo({top:0,behavior:'smooth'}); };
+    palette.appendChild(b);
+  });
+}
+
+function render(){
+  const q=DATA[state.i];
+  const answered=!!state.ans[q.id];
+  const sel=state.ans[q.id];
+  const hintOpen=!!state.hints[q.id];
+  const optsHtml=q.opts.map(o=>{
+    let cls='opt';
+    if(answered){
+      if(o[0]===q.correct) cls+=' correct';
+      else if(o[0]===sel) cls+=' wrong';
+    }
+    const mk = answered ? (o[0]===q.correct?'✓':(o[0]===sel?'✗':'')) : '';
+    return `<button class="${cls}" data-k="${o[0]}" ${answered?'disabled':''}>
+      <span class="key">${o[0]}</span>
+      <span class="txt">${o[1]}<span class="why">${o[2]}</span></span>
+      <span class="mk">${mk}</span>
+    </button>`;
+  }).join('');
+  const noteHtml=q.note?`<div class="block note"><h4>⚠ Answer-key note</h4>${q.note}</div>`:'';
+  wrap.innerHTML=`
+    <div class="card ${answered?'answered':''}" id="card">
+      <div class="qnum">Question ${state.i+1} of ${DATA.length} &nbsp;·&nbsp; #${q.id}</div>
+      <div class="stem">${q.stem}${q.fig?`<span class="fig">${q.fig}</span>`:''}</div>
+      <div class="hintrow">
+        <button class="hintbtn" id="hintBtn">💡 ${hintOpen?'Hide':'Show'} hint</button>
+        <div class="hint ${hintOpen?'on':''}" id="hint">${q.hint}</div>
+      </div>
+      <div class="opts" id="opts">${optsHtml}</div>
+      <div class="expl">
+        ${noteHtml}
+        <div class="block pdf"><h4>📄 Verbatim explanation (source PDF)</h4>${q.pdf}</div>
+        <div class="block lec"><h4>🎓 From your lectures (physio table)</h4><div class="body">${q.lec}</div></div>
+      </div>
+      <div class="nav">
+        <button class="btn" id="prevBtn" ${state.i===0?'disabled':''}>← Prev</button>
+        <div class="sp"></div>
+        <button class="btn" id="nextBtn" ${state.i===DATA.length-1?'disabled':''}>Next →</button>
+      </div>
+    </div>`;
+  // wire
+  document.getElementById('hintBtn').onclick=()=>{ state.hints[q.id]=!state.hints[q.id]; save(); render(); };
+  if(!answered){
+    document.querySelectorAll('#opts .opt').forEach(b=>b.onclick=()=>{ state.ans[q.id]=b.dataset.k; save(); render(); renderPalette(); updateProg(); });
+  }
+  document.getElementById('prevBtn').onclick=()=>{ if(state.i>0){state.i--; save(); render(); window.scrollTo({top:0,behavior:'smooth'});} };
+  document.getElementById('nextBtn').onclick=()=>{ if(state.i<DATA.length-1){state.i++; save(); render(); window.scrollTo({top:0,behavior:'smooth'});} };
+  renderPalette(); updateProg();
+}
+function updateProg(){
+  const s=scored();
+  progBar.style.width=(s.done/DATA.length*100)+'%';
+  progLbl.textContent=`${s.done} / ${DATA.length} answered`;
+  scoreEl.innerHTML=`Score: <b>${s.c}</b> correct · <span class="w">${s.w}</span> wrong`;
+}
+document.getElementById('resetBtn').onclick=()=>{
+  if(!confirm('Reset all answers and progress?')) return;
+  state={i:0,ans:{},hints:{}}; save(); render();
+};
+// keyboard
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT') return;
+  const q=DATA[state.i];
+  if(!state.ans[q.id] && /^[a-eA-E]$/.test(e.key)){ state.ans[q.id]=e.key.toLowerCase(); save(); render(); }
+  else if(e.key==='ArrowRight' && state.i<DATA.length-1){ state.i++; save(); render(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else if(e.key==='ArrowLeft' && state.i>0){ state.i--; save(); render(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else if(e.key==='h'||e.key==='H'){ state.hints[q.id]=!state.hints[q.id]; save(); render(); }
+});
+render();
+</script>
+
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none} table.mobreflow>thead{display:none}
+    table.mobreflow>tbody,table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,table.mobreflow>tbody>tr.row.compare>td,table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px} table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['lecture_recall.html','Lecture Recall'],
+    ['physio_quiz.html','Physio Quiz'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase(); if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){ var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1]; if(p[0].toLowerCase()===here) a.className='sk-here'; nav.appendChild(a); });
+  document.body.insertBefore(nav, document.body.firstChild);
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){ var t=e.target; if(!t||!t.closest) return; var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){ e.preventDefault(); openLb(href, img.getAttribute('alt')||''); } });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+  function reflow(){ [].slice.call(document.querySelectorAll('table')).filter(function(t){return !t.closest('td');}).forEach(function(t){
+    var hasRows=t.querySelector(':scope > tbody > tr.row');
+    if(hasRows){ t.classList.add('mobreflow'); var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+      if(heads.length){ [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){ var tds=[].slice.call(tr.querySelectorAll(':scope > td')); if(tds.length===heads.length){ tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); }); } }); } }
+    else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){ var w=document.createElement('div'); w.className='tscroll'; t.parentElement.insertBefore(w,t); w.appendChild(t); } }); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+</body>
+</html>
