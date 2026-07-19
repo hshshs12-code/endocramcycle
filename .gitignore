@@ -1,0 +1,22 @@
+# ===== macOS junk (never upload) =====
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+*.tmp
+
+# ===== source lecture material — NOT part of the website =====
+# Skipped by default: large (~386 MB) and copyrighted lecture slides/decks.
+# The website works fully without these. (The planner's optional
+# "source lecture PDF" links are the only thing that needs them.)
+# To publish them anyway, delete the relevant lines below.
+Anatomy, Imaging - Repro/
+Axis & Pituitary/
+Embryo - Repro:Histo/
+Genetics:Biochem/
+Pancreas, Diabetes, Metabolic/
+Thyroid, Parathyroid, Adrenal/
+summaries/
+*.apkg
+*.pdf

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENRE Study Hub — Endocrine &amp; Reproductive Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec; --surface:#ffffff; --ink:#1c2024; --muted:#6c7077;
+    --line:#e3ded3; --line-strong:#cdc6b6;
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  header{max-width:1200px;margin:0 auto;padding:38px 28px 0}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,5vw,50px);line-height:1.02;margin:0;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:66ch;margin:14px 0 0;font-size:15px}
+  .wrap{max-width:1200px;margin:26px auto 60px;padding:0 28px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+  a.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;padding:18px 19px;
+    transition:.14s;position:relative;overflow:hidden}
+  a.card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  a.card .ic{font-size:22px;margin-bottom:10px}
+  a.card h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 5px;letter-spacing:-.005em}
+  a.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+  a.card .tag{margin-top:11px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--gene-ink);background:var(--gene-bg);align-self:flex-start;
+    padding:3px 8px;border-radius:6px}
+  a.card.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:18px}
+  a.card.wide .ic{margin:0}
+  a.card.wide .body{flex:1}
+  a.card.plan .tag{color:var(--exam-strong);background:var(--exam-bg)}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:30px 0 12px;border-bottom:1px solid var(--line-strong);padding-bottom:8px}
+  footer{max-width:1200px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Endocrine &amp; Reproductive Unit · Study Hub</p>
+  <h1>Everything for the ENRE exam,<br><em>one click</em> away.</h1>
+  <p class="sub">Your complete Endo/Repro reference set — physiology, pathology, pharmacology, biochemistry, embryology &amp; anatomy, plus an interactive review planner. Every table is searchable, filterable, mobile-friendly, and cross-linked. Tap any figure to enlarge it.</p>
+</header>
+
+<div class="wrap">
+
+  <a class="card plan wide" href="review_planner.html">
+    <div class="ic">🗓️</div>
+    <div class="body">
+      <h2>2-Day Review Planner &amp; Tracker</h2>
+      <p>Start here before an exam. Builds a triage-first, clock-time study schedule across your remaining days, weighted by exam yield and how shaky you feel — with active-recall blocks, spaced-repetition touch-ups, a live progress tracker and a final sweep of your weak spots.</p>
+      <span class="tag">interactive · start here</span>
+    </div>
+  </a>
+
+  <p class="kicker">Core reference tables</p>
+  <div class="grid">
+    <a class="card" href="master_table.html">
+      <div class="ic">📚</div>
+      <h2>Master Reference</h2>
+      <p>The whole unit's high-yield facts on one combined grid — the fastest single-page review.</p>
+      <span class="tag">everything</span>
+    </a>
+    <a class="card" href="pathology_table.html">
+      <div class="ic">🔬</div>
+      <h2>Pathology</h2>
+      <p>Every disorder: buzzwords, differentiators, and the fact most likely to anchor a question stem.</p>
+      <span class="tag">disease</span>
+    </a>
+    <a class="card" href="physio_table.html">
+      <div class="ic">🔄</div>
+      <h2>Physiology</h2>
+      <p>Axes, feedback loops, and a signalling-molecule master table grouped by receptor pathway.</p>
+      <span class="tag">normal function</span>
+    </a>
+    <a class="card" href="drugs_table.html">
+      <div class="ic">💊</div>
+      <h2>Drugs &amp; Pharmacology</h2>
+      <p>Every drug by mechanism, filterable by MOA, with treatment ladders and a Sketchy watch-list.</p>
+      <span class="tag">pharm</span>
+    </a>
+    <a class="card" href="biochem_table.html">
+      <div class="ic">🧬</div>
+      <h2>Biochemistry</h2>
+      <p>Hormone synthesis, enzyme pathways, and the biochem the exam actually tests.</p>
+      <span class="tag">pathways</span>
+    </a>
+    <a class="card" href="embryo_anatomy_table.html">
+      <div class="ic">🩻</div>
+      <h2>Embryology &amp; Anatomy</h2>
+      <p>Development, pelvic anatomy &amp; imaging — plus an interactive Cram Trainer tab for active recall.</p>
+      <span class="tag">structure · cram</span>
+    </a>
+    <a class="card" href="pattern_recognition.html">
+      <div class="ic">🔎</div>
+      <h2>Pattern Recognition</h2>
+      <p>Reverse-lookup grids: "if you see <em>this</em> → think <em>that</em>," and the classic lab patterns side by side.</p>
+      <span class="tag">reverse lookup</span>
+    </a>
+    <a class="card" href="gi_path_table.html">
+      <div class="ic">🩺</div>
+      <h2>GI Pathology</h2>
+      <p>Companion high-yield GI pathology grid, in the same format.</p>
+      <span class="tag">bonus unit</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Self-contained study reference set compiled from lecture material. Runs entirely in the browser — no accounts, no tracking. Use the dark bar at the top to move between tools on any page.
+</footer>
+
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){
+    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+    if(p[0].toLowerCase()===here) a.className='sk-here';
+    nav.appendChild(a);
+  });
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+</body>
+</html>

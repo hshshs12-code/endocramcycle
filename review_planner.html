@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENRE Review Planner &amp; Tracker — 2-Day Sprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    /* mode colors */
+    --learn-bg:#d8efe9;  --learn-ink:#0c5247;
+    --recall-bg:#fdeceb; --recall-ink:#9a1f2e;
+    --quest-bg:#e5e0f4;  --quest-ink:#463b7a;
+    --skim-bg:#eceadf;   --skim-ink:#5c5647;
+    --sweep-bg:#ffeaa7;  --sweep-ink:#5c4400;
+    --touch-bg:#e0eef4;  --touch-ink:#1d5a76;
+    --ok:#0c7a52;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--exam-strong)}
+
+  /* ---------- header ---------- */
+  header{padding:26px 26px 0;max-width:1500px;margin:0 auto}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4vw,44px);
+    line-height:1.02;margin:0;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:70ch;margin:12px 0 0;font-size:14.5px}
+
+  .countdown{
+    display:flex;flex-wrap:wrap;gap:10px 22px;align-items:baseline;margin:18px 0 2px;
+    padding:14px 18px;background:var(--surface);border:1px solid var(--line-strong);
+    border-radius:12px;border-left:5px solid var(--exam-strong);
+  }
+  .countdown .cd-num{font-family:'Fraunces',serif;font-weight:700;font-size:26px;color:var(--exam-strong);letter-spacing:-.01em}
+  .countdown .cd-lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .countdown .cd-when{margin-left:auto;font-size:12.5px;color:var(--muted)}
+
+  .wrap{max-width:1500px;margin:20px auto 60px;padding:0 26px}
+
+  /* ---------- generic panel ---------- */
+  .panel{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;padding:20px 22px;margin:16px 0}
+  .panel h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
+  .panel h2 .n{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);font-weight:500;margin-left:8px;letter-spacing:.04em}
+  .panel .lead{color:var(--muted);font-size:13.5px;margin:0 0 16px;max-width:80ch}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+
+  /* ---------- buttons ---------- */
+  .btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 15px;
+    border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);color:var(--ink);
+    cursor:pointer;transition:.12s;user-select:none;display:inline-flex;align-items:center;gap:7px}
+  .btn:hover{border-color:var(--ink)}
+  .btn.primary{background:var(--exam-strong);border-color:var(--exam-strong);color:#fff}
+  .btn.primary:hover{background:var(--exam-ink)}
+  .btn.ghost{background:transparent}
+  .btn.sm{padding:5px 10px;font-size:12px;border-radius:7px}
+  .btn.tiny{padding:3px 8px;font-size:11px;border-radius:6px}
+  .btn-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+
+  /* ---------- setup form ---------- */
+  .formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px 18px;margin-bottom:18px}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 5px}
+  .field input,.field textarea{width:100%;padding:9px 11px;border:1px solid var(--line-strong);border-radius:8px;
+    background:var(--paper);font:inherit;color:var(--ink)}
+  .field input:focus,.field textarea:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .field .hint{font-size:11px;color:var(--muted);margin-top:4px}
+
+  .conf-table{width:100%;border-collapse:collapse;margin-top:6px}
+  .conf-table td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .conf-table tr:last-child td{border-bottom:none}
+  .conf-block{font-weight:600;font-size:13.4px}
+  .conf-block .disc{display:block;font-weight:400;color:var(--muted);font-size:11px;margin-top:2px;font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .conf-choices{display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap}
+  .conf-opt{border:1px solid var(--line-strong);background:var(--paper);border-radius:8px;padding:5px 9px;cursor:pointer;font-size:14px;line-height:1;transition:.1s}
+  .conf-opt:hover{border-color:var(--ink)}
+  .conf-opt.on[data-v="🔴"]{background:var(--recall-bg);border-color:var(--exam-strong);box-shadow:0 0 0 1px var(--exam-strong) inset}
+  .conf-opt.on[data-v="🟡"]{background:var(--buzz-hl);border-color:var(--buzz-ink);box-shadow:0 0 0 1px var(--buzz-ink) inset}
+  .conf-opt.on[data-v="🟢"]{background:var(--gene-bg);border-color:var(--gene-ink);box-shadow:0 0 0 1px var(--gene-ink) inset}
+  .conf-opt:not(.on){opacity:.5}
+  .cross-flag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;
+    background:var(--exam-bg);color:var(--exam-strong);border:1px solid #f3cfd0;border-radius:5px;padding:1px 5px;margin-left:6px;vertical-align:middle;font-weight:600}
+
+  /* ---------- report ---------- */
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:2px 0 18px}
+  .stat{background:var(--paper);border:1px solid var(--line-strong);border-radius:11px;padding:13px 15px}
+  .stat .v{font-family:'Fraunces',serif;font-weight:700;font-size:26px;letter-spacing:-.01em}
+  .stat .k{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .stat.warn{border-color:var(--exam-strong);background:var(--exam-bg)}
+  .stat.warn .v{color:var(--exam-strong)}
+  .stat.good{border-color:var(--gene-ink)}
+  .stat.good .v{color:var(--ok)}
+
+  .grouping{display:grid;gap:10px}
+  .gblock{border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:var(--paper)}
+  .gblock .gt{font-weight:700;font-size:14px}
+  .gblock .gt .em{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);font-weight:500;margin-left:6px}
+  .gblock .gd{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gene-ink);letter-spacing:.02em;margin:5px 0 6px}
+  .gblock .gx{font-size:12.5px;color:#33373d;line-height:1.5}
+  .gblock .gx b{color:var(--exam-strong)}
+
+  .droplist{list-style:none;margin:10px 0 0;padding:0}
+  .droplist li{padding:8px 12px;border:1px dashed var(--line-strong);border-radius:9px;margin-bottom:7px;font-size:12.7px;background:var(--paper)}
+  .droplist li b{color:var(--exam-strong)}
+  .droplist li .why{color:var(--muted);display:block;margin-top:2px;font-size:11.7px}
+
+  /* ---------- two-day schedule ---------- */
+  .days{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  @media (max-width:920px){.days{grid-template-columns:1fr}}
+  .daycol{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;overflow:hidden}
+  .dayhead{padding:15px 18px 13px;border-bottom:1px solid var(--line-strong);position:sticky;top:0;background:var(--surface);z-index:5}
+  .dayhead .dt{font-family:'Fraunces',serif;font-weight:600;font-size:20px}
+  .dayhead .dsub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .dayhead.is-today .dt em{font-style:normal;color:var(--exam-strong)}
+  .dayhead .todaytag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+    background:var(--exam-strong);color:#fff;border-radius:5px;padding:2px 6px;margin-left:8px;vertical-align:middle}
+  .progline{height:7px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+  .progline i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+  .progtxt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:5px;letter-spacing:.03em}
+
+  .items{padding:12px 12px 16px}
+  .item{border:1px solid var(--line);border-radius:11px;padding:11px 12px;margin-bottom:9px;position:relative;transition:.12s}
+  .item.study:hover{border-color:var(--line-strong)}
+  .item.now{border-color:var(--exam-strong);box-shadow:0 0 0 2px var(--exam-bg)}
+  .item.done{opacity:.62;background:var(--paper)}
+  .item.done .it-title{text-decoration:line-through}
+  .item .it-top{display:flex;gap:10px;align-items:flex-start}
+  .it-time{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);white-space:nowrap;padding-top:2px;min-width:104px}
+  .it-time b{color:var(--ink)}
+  .it-main{flex:1;min-width:0}
+  .it-title{font-weight:700;font-size:13.8px;letter-spacing:-.005em}
+  .it-sys{color:var(--muted);font-weight:400;font-size:11.5px}
+  .mode-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:6px;margin-right:6px;vertical-align:middle}
+  .mode-LEARN{background:var(--learn-bg);color:var(--learn-ink)}
+  .mode-RECALL{background:var(--recall-bg);color:var(--recall-ink)}
+  .mode-QUESTIONS{background:var(--quest-bg);color:var(--quest-ink)}
+  .mode-SKIM{background:var(--skim-bg);color:var(--skim-ink)}
+  .mode-SWEEP{background:var(--sweep-bg);color:var(--sweep-ink)}
+  .mode-TOUCH{background:var(--touch-bg);color:var(--touch-ink)}
+  .it-note{font-size:11.7px;color:var(--muted);margin:5px 0 0;line-height:1.45}
+  .it-note b{color:#33373d}
+  .it-links{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .lk{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-decoration:none;color:var(--gene-ink);
+    background:var(--gene-bg);border:1px solid transparent;border-radius:6px;padding:2px 7px;white-space:nowrap}
+  .lk:hover{border-color:var(--gene-ink)}
+  .lk.pdf{color:var(--muted);background:var(--paper);border-color:var(--line-strong)}
+  .lk.pdf:hover{color:var(--ink);border-color:var(--ink)}
+  details.pdfs{margin-top:6px}
+  details.pdfs summary{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);cursor:pointer;letter-spacing:.03em}
+  details.pdfs .it-links{margin-top:6px}
+
+  .it-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
+  .chk{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:600;user-select:none}
+  .chk input{width:16px;height:16px;accent-color:var(--ok)}
+  .timer{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted)}
+  .timer .tval{color:var(--ink);font-weight:600;min-width:44px;display:inline-block}
+  .rate{display:inline-flex;gap:4px;align-items:center;margin-left:auto}
+  .rate .rlbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  .rdot{width:23px;height:23px;border-radius:7px;border:1px solid var(--line-strong);background:var(--paper);cursor:pointer;font-size:11px;font-weight:700;color:var(--muted)}
+  .rdot:hover{border-color:var(--ink)}
+  .rdot.on1{background:var(--exam-bg);border-color:var(--exam-strong);color:var(--exam-strong)}
+  .rdot.on2{background:var(--buzz-hl);border-color:var(--buzz-ink);color:var(--buzz-ink)}
+  .rdot.on3{background:var(--gene-bg);border-color:var(--gene-ink);color:var(--gene-ink)}
+
+  .item.brk,.item.meal{border-style:dashed;background:var(--paper);padding:8px 12px}
+  .item.brk .it-top,.item.meal .it-top{align-items:center}
+  .item.brk .it-title,.item.meal .it-title{font-weight:600;font-size:12.5px;color:var(--muted)}
+  .item.meal .it-title{color:var(--buzz-ink)}
+  .item.sweepblock{border-color:var(--buzz-ink);background:#fffdf3}
+  .item.sleep{border:none;text-align:center;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;padding:6px}
+
+  /* ---------- shaky panel ---------- */
+  .shaky-wrap{display:grid;grid-template-columns:1fr;gap:0}
+  #shakyList{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  #shakyList li{background:var(--exam-bg);border:1px solid #f3cfd0;color:var(--exam-ink);border-radius:9px;
+    padding:7px 11px;font-size:12.5px;font-weight:600}
+  #shakyList li .rz{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--exam-strong);margin-left:6px;font-weight:500}
+  .shaky-empty{color:var(--muted);font-style:italic;font-size:13px}
+
+  .msgbar{margin:12px 0 0;padding:11px 14px;border-radius:10px;font-size:13px;display:none}
+  .msgbar.show{display:block}
+  .msgbar.info{background:var(--touch-bg);border:1px solid #b9d7e4;color:var(--touch-ink)}
+  .msgbar.warn{background:var(--exam-bg);border:1px solid #f3cfd0;color:var(--exam-ink)}
+  .msgbar ul{margin:6px 0 0;padding-left:18px}
+
+  .tool-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .hide{display:none!important}
+  footer{max-width:1500px;margin:10px auto 50px;padding:0 26px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">ENRE Unit · 2-Day Review Sprint</p>
+  <h1>Two days. Ten blocks. <em>Test yourself</em>, don't re-read.</h1>
+  <p class="sub">A triage-first plan built from <b>your actual lecture folder</b> — physiology reviewed right before the pathology that breaks it and the drugs that fix it. Time is allocated by exam weight × how shaky you are, not evenly. What doesn't fit gets named out loud, not quietly dropped.</p>
+  <div class="countdown" id="countdown">
+    <span><span class="cd-num" id="cdVal">—</span> <span class="cd-lbl">to exam</span></span>
+    <span class="cd-when" id="cdWhen"></span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ SETUP ============ -->
+  <section class="panel" id="setupPanel">
+    <h2>Setup <span class="n">— fill in, then generate</span></h2>
+    <p class="lead">Everything below drives the schedule. Change anything and hit <b>Generate</b> again — it's one click.</p>
+
+    <div class="formgrid">
+      <div class="field">
+        <label>Exam date</label>
+        <input type="date" id="examDate">
+      </div>
+      <div class="field">
+        <label>Exam time</label>
+        <input type="time" id="examTime">
+      </div>
+      <div class="field">
+        <label>Today — start studying at</label>
+        <input type="time" id="todayStart">
+      </div>
+      <div class="field">
+        <label>Today — study hours available</label>
+        <input type="number" id="todayHours" min="0" max="16" step="0.5">
+        <div class="hint">Real hours, not wishful ones.</div>
+      </div>
+      <div class="field">
+        <label>Today — hard stop / bedtime</label>
+        <input type="time" id="todayBed">
+        <div class="hint">Sleep is non-negotiable before an exam.</div>
+      </div>
+      <div class="field">
+        <label>Monday — start studying at</label>
+        <input type="time" id="monStart">
+      </div>
+      <div class="field">
+        <label>Monday — study hours available</label>
+        <input type="number" id="monHours" min="0" max="16" step="0.5">
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:18px">
+      <label>Lecturer-flagged high-yield / “guaranteed” topics (comma-separated keywords)</label>
+      <textarea id="highYield" rows="2" placeholder="e.g. DKA, Cushing, thyroid function tests, CAH, Prader-Willi"></textarea>
+      <div class="hint">Any block whose title/system matches these gets bumped up in the triage.</div>
+    </div>
+
+    <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 4px">
+      Confidence per topic block &nbsp;·&nbsp; 🔴 shaky · 🟡 okay · 🟢 solid</label>
+    <table class="conf-table" id="confTable"></table>
+
+    <div class="btn-row" style="margin-top:18px">
+      <button class="btn primary" id="genBtn">⚙︎ Generate my schedule</button>
+      <button class="btn ghost" id="resetBtn">↺ Reset everything</button>
+    </div>
+  </section>
+
+  <!-- ============ REPORT ============ -->
+  <section class="panel hide" id="reportPanel">
+    <h2>The plan <span class="n">— grouping, triage &amp; coverage</span></h2>
+    <div class="stat-row" id="statRow"></div>
+    <div id="fitMsg" class="msgbar"></div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:20px 0 8px">Topic-block grouping &amp; the cross-links to emphasize</h3>
+    <div class="grouping" id="grouping"></div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:22px 0 6px">Deliberately <span style="color:var(--exam-strong)">not</span> covering (and why)</h3>
+    <ul class="droplist" id="dropList"></ul>
+  </section>
+
+  <!-- ============ CONTROLS ============ -->
+  <div class="panel hide" id="ctrlPanel" style="padding:15px 18px">
+    <div class="btn-row">
+      <button class="btn" id="editBtn">✎ Edit setup</button>
+      <button class="btn" id="behindBtn">⏱ I'm behind — re-flow</button>
+      <button class="btn" id="aheadBtn">⚡ I'm ahead</button>
+      <span style="flex:1"></span>
+      <div class="progtxt" id="overallProg" style="font-size:12px"></div>
+    </div>
+    <div class="progline" style="margin-top:11px"><i id="overallBar"></i></div>
+    <div id="reflowMsg" class="msgbar"></div>
+  </div>
+
+  <!-- ============ SCHEDULE ============ -->
+  <div class="days hide" id="daysWrap">
+    <div class="daycol" id="dayTodayCol">
+      <div class="dayhead" id="dayTodayHead"></div>
+      <div class="items" id="dayTodayItems"></div>
+    </div>
+    <div class="daycol" id="dayMonCol">
+      <div class="dayhead" id="dayMonHead"></div>
+      <div class="items" id="dayMonItems"></div>
+    </div>
+  </div>
+
+  <!-- ============ SHAKY LIST ============ -->
+  <section class="panel hide" id="shakyPanel">
+    <h2>Shaky list <span class="n">— feeds the final SWEEP, stays visible</span></h2>
+    <p class="lead">Anything you marked 🔴, or rated <b>1–2</b> after a block, lands here so nothing quietly slips. The last block before your exam sweeps exactly this list.</p>
+    <ul id="shakyList"></ul>
+  </section>
+
+  <!-- ============ EXISTING TOOLS ============ -->
+  <section class="panel">
+    <h2>Your other tools</h2>
+    <p class="lead">Each schedule block links straight into the relevant one. Jump in directly:</p>
+    <div class="tool-links">
+      <a class="btn sm" href="pathology_table.html">Pathology table</a>
+      <a class="btn sm" href="drugs_table.html">Drugs table</a>
+      <a class="btn sm" href="biochem_table.html">Biochem table</a>
+      <a class="btn sm" href="physio_table.html">Physio table</a>
+      <a class="btn sm" href="embryo_anatomy_table.html">Embryo / Anatomy table</a>
+      <a class="btn sm" href="embryo_anatomy_table.html">Cram Trainer</a>
+    </div>
+  </section>
+
+  <footer>
+    <hr>
+    Built from your ENRE lecture folder — 36 primary PDFs across 6 subject folders. Runs entirely offline; all progress, ratings, timers &amp; the shaky list are saved in this browser (localStorage). This file is standalone and never modifies your other tools.
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA — topic blocks grounded in the actual lecture folder
+   ============================================================ */
+const F = {
+  AX:"Axis & Pituitary",
+  TPA:"Thyroid, Parathyroid, Adrenal",
+  PDM:"Pancreas, Diabetes, Metabolic",
+  ERH:"Embryo - Repro:Histo",
+  AIR:"Anatomy, Imaging - Repro",
+  GB:"Genetics:Biochem",
+  SUM:"summaries"
+};
+const TOOL = {
+  path:{label:"Pathology", href:"pathology_table.html"},
+  drugs:{label:"Drugs", href:"drugs_table.html"},
+  biochem:{label:"Biochem", href:"biochem_table.html"},
+  physio:{label:"Physio", href:"physio_table.html"},
+  embryo:{label:"Embryo/Anat", href:"embryo_anatomy_table.html"},
+  cram:{label:"Cram Trainer", href:"embryo_anatomy_table.html"}
+};
+function pdfHref(folder,file){ return encodeURIComponent(folder)+"/"+encodeURIComponent(file); }
+
+// yield 1–5 = my estimate of exam weight for this ENRE unit; cross = appears across ≥3 disciplines (high-priority)
+const BLOCKS = [
+ {id:"found", emoji:"🧬", title:"Hormone Foundations", system:"Endocrine signaling", yield:4, cross:false,
+  disc:["biochem","physio"], tools:["biochem"],
+  x:"Hormone classes (peptide / steroid / amine) and their second messengers underlie <b>every</b> downstream axis. The steroid-synthesis pathway you learn here reappears in the <b>Adrenal</b> block (Cushing / CAH) and gonads; prostaglandins reappear in repro. Do this first — it's the grammar for everything after.",
+  lec:[["Hormone Synthesis","biochem",49,F.AX,"Hormone Synthesis.pdf"],
+       ["Prostaglandin Biochemistry","biochem",40,F.GB,"Prostaglandin Biochemistry.pdf"],
+       ["Hormones (summary)","biochem",6,F.SUM,"Hormones.pdf"]]},
+
+ {id:"pit", emoji:"🧠", title:"Hypothalamic–Pituitary Axis", system:"HP axis", yield:5, cross:true,
+  disc:["physio","path","pharm"], tools:["physio","path","drugs"],
+  x:"Learn the <b>normal feedback loop first</b>, then read each disorder as a broken loop — the axis physiology directly explains the lab pattern in Disorders 1 &amp; 2, and the pharmacology targets those same receptors. This is the template for Thyroid, Adrenal and Gonadal axes too.",
+  lec:[["Hypothalamus/Pituitary Structure & Function","physio",56,F.AX,"Hypothalamus_Pituitary_Structure & Function.pdf"],
+       ["…Structure & Function (Notes)","physio",57,F.AX,"Hypothalamus_Pituitary_Structure & Function_Notes.pdf"],
+       ["Disorders of Hypothalamus & Pituitary 1","path",42,F.AX,"Disorders of the Hypothalamus & Pituitary Gland 1.pdf"],
+       ["Disorders of Hypothalamus & Pituitary 2","path",40,F.AX,"Disorders of the Hypothalamus & Pituitary Gland 2.pdf"],
+       ["Hypothalamus-Pituitary Pharmacology","pharm",54,F.AX,"Hypothalamus-Pituitary_Pharmacology.pdf"]]},
+
+ {id:"thy", emoji:"🦋", title:"Thyroid", system:"Thyroid", yield:5, cross:true,
+  disc:["biochem","physio","path","pharm"], tools:["biochem","physio","path","drugs"],
+  x:"One chain: <b>synthesis (biochem) → TFT interpretation (physio) → hyper/hypo &amp; nodules (path) → thionamides / levothyroxine (pharm)</b>. The TSH/T4 feedback pattern is the single highest-yield lab set in the unit — build the grid and every disorder falls out of it.",
+  lec:[["Thyroid Anatomy, Histology & Biochemistry","biochem",50,F.TPA,"Thyroid Anatomy, Histology and Biochemistry.pdf"],
+       ["Thyroid Physiology (Slides)","physio",30,F.TPA,"Thyroid Physiology Slides.pdf"],
+       ["Thyroid Physiology (Notes)","physio",30,F.TPA,"Thyroid Physiology Notes.pdf"],
+       ["Endocrine Pathology & Physio (summary)","path",43,F.SUM,"Endocrine Pathology & Physio.pdf"],
+       ["ENRE TABLES (summary)","path",8,F.SUM,"ENRE TABLES .pdf"]]},
+
+ {id:"para", emoji:"🦴", title:"Parathyroid & Calcium", system:"Ca / PO₄ / PTH", yield:5, cross:false,
+  disc:["physio","path"], tools:["physio","path"],
+  x:"The <b>PTH – vitamin D – calcium – phosphate</b> loop drives primary / secondary / tertiary hyperPTH, hypoPTH and the whole Ca/PO₄ lab grid. Memorize the grid (Ca ↑↓ × PO₄ ↑↓ × PTH ↑↓) and everything — including CKD-MBD — reads straight off it.",
+  lec:[["Function & Disorders of the Parathyroid Gland","physio+path",91,F.TPA,"Function and Disorders of the Parathyroid Gland.pdf"]]},
+
+ {id:"adr", emoji:"🔺", title:"Adrenal", system:"Adrenal cortex & medulla", yield:5, cross:true,
+  disc:["biochem","physio","path","pharm"], tools:["biochem","physio","path","drugs"],
+  x:"Carry the <b>steroidogenesis pathway from Hormone Foundations</b> into zona-specific products → then Cushing / Addison / Conn / CAH / pheo fall out of it. CAH enzyme blocks are pure pathway logic (up above the block ↑, below ↓). The ACTH feedback links right back to the Pituitary block.",
+  lec:[["Structure & Function of the Adrenal Gland","physio",47,F.TPA,"Structure and Function of the Adrenal Gland.pdf"],
+       ["Disorders of the Adrenal Gland","path",66,F.TPA,"Disorders of the Adrenal Gland.pdf"]]},
+
+ {id:"dm", emoji:"🩸", title:"Pancreas & Diabetes", system:"Endocrine pancreas", yield:5, cross:true,
+  disc:["physio","path","pharm"], tools:["physio","path","drugs"],
+  x:"Islet physiology (insulin / glucagon) → T1 / T2DM &amp; <b>DKA vs HHS</b> (path) → insulin regimens + oral agents (pharm). Match each drug to the <b>physiologic defect it fixes</b>. DKA vs HHS is a guaranteed vignette — nail the labs and precipitants.",
+  lec:[["Diabetes & Other Disorders of Endocrine Pancreas","path+physio",106,F.PDM,"Diabetes & Other Disorders of Endocrine Pancreas.pdf"],
+       ["Treatment of Diabetes with Insulin","pharm",23,F.PDM,"Treatment of Diabetes with Insulin.pdf"],
+       ["Oral Hypoglycemic Drugs","pharm",35,F.PDM,"Oral Hypoglycemic Drugs.pdf"],
+       ["Nutrition in Diabetes","clinical",3,F.PDM,"Nutrition in Diabetes.pdf"],
+       ["Diabetes Drugs (summary)","pharm",1,F.SUM,"Diabetes Drugs.pdf"]]},
+
+ {id:"obes", emoji:"⚖️", title:"Obesity & Metabolic Syndrome", system:"Metabolic", yield:3, cross:false,
+  disc:["path","pharm","clinical"], tools:["path","drugs"],
+  x:"Insulin resistance ties this straight to <b>Diabetes (previous block)</b> — review them adjacent. The testable pieces are the <b>metabolic-syndrome criteria</b> and the weight-loss pharmacology; the epidemiology is lower yield.",
+  lec:[["Obesity and Metabolic Syndrome","path",40,F.PDM,"Obesity and Metabolic Syndrome.pdf"],
+       ["Obesity Treatment: Lifestyle, Behavioral & Medications","pharm",55,F.PDM,"Obesity Treatment Lifestyle, Behavioral and Medications.pdf"],
+       ["Obesity: Complications, Comorbidities & Weight Loss","clinical",36,F.PDM,"Obesity_Epidemic Complications and Comorbidities, Impact of Weight Loss.pdf"]]},
+
+ {id:"male", emoji:"♂", title:"Male Reproductive (Embryo → Clinical)", system:"Male repro", yield:4, cross:true,
+  disc:["embryo","histo","physio","path","clinical"], tools:["embryo","physio","path","drugs"],
+  x:"Vertical chain: <b>embryo (SRY, ducts) → histology (seminiferous tubule) → HPG-axis physiology → pathology (cryptorchidism, testicular tumors, BPH / prostate) → clinical approach</b>. The embryologic duct derivatives are what explain the anomalies — learn them once, up front.",
+  lec:[["Embryology of the Reproductive System","embryo",19,F.ERH,"Embryology of the Reproductive System.pdf"],
+       ["Histology of Male Reproductive System","histo",55,F.ERH,"Histology of Male Reproductive System.pdf"],
+       ["Male Reproductive Physiology & Pharmacology","physio+pharm",45,F.ERH,"Male Reproductive Physiology and Pharmacology.pdf"],
+       ["Pathology of Male Reproductive System","path",53,F.ERH,"Pathology of Male Reproductive System.pdf"],
+       ["Clinical Approach to the Male Patient","clinical",43,F.ERH,"Clinical Approach to the Male Patient.pdf"]]},
+
+ {id:"anat", emoji:"🩻", title:"Pelvic Anatomy & Imaging", system:"Pelvis / perineum", yield:3, cross:false,
+  disc:["anatomy","imaging"], tools:["cram","embryo"],
+  x:"Vasculature / lymphatics and duct derivatives connect back to <b>Male Repro</b>. This is pure recall of labeled structures — use the <b>Cram Trainer</b> for active recall rather than re-reading 200+ slides. Triage hard: know the high-yield relations, skim the rest.",
+  lec:[["ENRE ANATOMY","anatomy",25,F.AIR,"ENRE ANATOMY.pdf"],
+       ["Gross Anatomy: Pelvis & Perineum 1","anatomy",99,F.AIR,"Gross Anatomy_Pelvis and Perineum 1.pdf"],
+       ["Pelvis & Perineum 2 — Female External Genitalia & Pelvic Organs","anatomy",72,F.AIR,"Pelvis and Perineum 2 - Part 1_Female External Genitalia and Pelvic Organs.pdf"],
+       ["Pelvis & Perineum 2 — Male External Genitalia & Pelvic Organs","anatomy",52,F.AIR,"Pelvis and Perineum 2 - Part 2_Male External Genitalia and Pelvic Organs.pdf"],
+       ["Medical Imaging of the Pelvis","imaging",40,F.AIR,"Medical Imaging of the Pelvis.pdf"],
+       ["Additional Medical Images — Imaging of the Pelvis","imaging",3,F.AIR,"Additional Medical Images- Imaging of the Pelvis.pdf"]]},
+
+ {id:"gen", emoji:"🧫", title:"Genetics & Biochem Cases", system:"Genetics", yield:4, cross:false,
+  disc:["genetics","biochem"], tools:["biochem"],
+  x:"<b>Imprinting (Prader-Willi / Angelman)</b> links to Repro; trinucleotide <b>anticipation</b> and Bayesian risk are formulaic, guaranteed points — <b>do the Bayesian problems by hand</b>, don't just read them. Cases integrate biochem + genetics the way the exam will.",
+  lec:[["Chromosome Structure and Disease","genetics",70,F.GB,"Chromosome Structure and Disease.pdf"],
+       ["Genetics of Trinucleotide Diseases","genetics",37,F.GB,"Genetics of Trinucleotide Diseases.pdf"],
+       ["Imprinting","genetics",38,F.GB,"Imprinting.pdf"],
+       ["Bayesian Calculation in Medical Genetics","genetics",12,F.GB,"Bayesian Calculation Application of Medical Genetics.pdf"],
+       ["Cases in Biochemistry and Genetics","biochem",37,F.GB,"Cases in Biochemistry and Genetics.pdf"],
+       ["Genetics — Imprinting (summary)","genetics",3,F.SUM,"Genetics - Imprinting.pdf"],
+       ["Genetics — Trinucleotide (summary)","genetics",2,F.SUM,"Genetics - Trinucleotide.pdf"]]}
+];
+BLOCKS.forEach(b=>{ b.pages = b.lec.reduce((s,l)=>s+l[2],0); });
+const TOTAL_BLOCKS = BLOCKS.length;
+
+/* ============================================================
+   STATE + persistence
+   ============================================================ */
+const KEY = "enreReviewPlanner_v1";
+let state = load();
+let schedule = null;       // last generated schedule
+let reflowNote = null;     // transient reflow message
+
+function defaults(){
+  const now = new Date();
+  const mon = new Date(now); // default exam = day after Monday (Tuesday if run Sunday), since Sun+Mon are both prep days
+  mon.setDate(now.getDate()+2);
+  const pad=n=>String(n).padStart(2,"0");
+  const dstr=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  // start = next half hour
+  let sh=now.getHours(), sm=now.getMinutes()<30?30:0; if(now.getMinutes()>=30){sh++;}
+  const conf={}; BLOCKS.forEach(b=>conf[b.id]="🟡");
+  return {
+    inputs:{
+      examDate:dstr(mon), examTime:"09:00",
+      todayStart:`${pad(sh%24)}:${pad(sm)}`, todayHours:6, todayBed:"23:00",
+      monStart:"08:00", monHours:5
+    },
+    confidence:conf, highYield:"",
+    done:{}, ratings:{}, timers:{}, setupDone:false
+  };
+}
+function load(){
+  try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.inputs){
+    const d=defaults(); // fill any missing keys
+    return Object.assign(d,s,{inputs:Object.assign(d.inputs,s.inputs),confidence:Object.assign(d.confidence,s.confidence||{}),
+      done:s.done||{},ratings:s.ratings||{},timers:s.timers||{}});
+  }}catch(e){}
+  return defaults();
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+/* ============================================================
+   SCHEDULE GENERATION
+   ============================================================ */
+const SH_FACTOR = {"🔴":3.0,"🟡":1.55,"🟢":0.65};
+function userFlagged(b, hy){
+  if(!hy) return false;
+  const kws = hy.toLowerCase().split(/[,;\n]/).map(s=>s.trim()).filter(Boolean);
+  const hay = (b.title+" "+b.system+" "+b.disc.join(" ")).toLowerCase();
+  return kws.some(k=>k && hay.includes(k));
+}
+function fmtClock(mins){
+  mins=((Math.round(mins)%1440)+1440)%1440;
+  let h=Math.floor(mins/60), m=mins%60; const ap=h<12?"AM":"PM";
+  let hh=h%12; if(hh===0) hh=12;
+  return `${hh}:${String(m).padStart(2,"0")} ${ap}`;
+}
+function toMin(hhmm){ const [h,m]=hhmm.split(":").map(Number); return h*60+m; }
+
+function generate(nowOverride){
+  const inp = state.inputs, conf = state.confidence;
+  const hy = state.highYield;
+
+  // ---- weights ----
+  let sumW=0;
+  BLOCKS.forEach(b=>{
+    const sh = SH_FACTOR[conf[b.id]]||1.55;
+    const yieldF = b.yield/3;
+    const pageF = 1 + b.pages/90;
+    const flag = (b.cross?1.22:1) * (userFlagged(b,hy)?1.45:1);
+    b._sh=sh; b._w = sh*yieldF*pageF*flag; sumW+=b._w;
+  });
+
+  // ---- day windows on the clock (computed first, so budgets can't exceed them) ----
+  const now = nowOverride!=null ? nowOverride : nowMinIfToday();
+  const todayStartMin = Math.max(toMin(inp.todayStart), now);   // today can't start in the past
+  const todayEndMin = toMin(inp.todayBed);
+  const examMin = toMin(inp.examTime);
+  const examIsMonday = sameDay(day2Date(), examDateObj());
+  const monStartMin = toMin(inp.monStart);
+  const monEndMin = examIsMonday ? (examMin - 35) : toMin("22:00"); // if exam is Monday, stop 35m before it; else Monday is a full day
+  const todayWin = Math.max(0, todayEndMin - todayStartMin);
+  const monWin   = Math.max(0, monEndMin - monStartMin);
+
+  // ---- budgets: the SMALLER of "hours you told me" and "what the clock window can hold" ----
+  // (~18% of the window goes to breaks + a meal, so usable study time ≈ 0.82 × window)
+  const todayCap = Math.max(0, Math.min(Math.round((+inp.todayHours||0)*60), Math.floor(todayWin*0.82)));
+  const monCapRaw = Math.max(0, Math.min(Math.round((+inp.monHours||0)*60), Math.floor(monWin*0.82)));
+  const sweepReserve = monCapRaw>20 ? Math.min(28, Math.max(15, Math.round(monCapRaw*0.12))) : 0;
+  const monCap = Math.max(0, monCapRaw - sweepReserve);
+  const allocBudget = todayCap + monCap;
+
+  // ---- allocate block minutes greedily by weight, name what won't fit ----
+  const ordered = [...BLOCKS].sort((a,b)=>b._w-a._w);
+  let left = allocBudget;
+  const covered=[], dropped=[];
+  ordered.forEach(b=>{
+    const floor = conf[b.id]==="🟢"?12:22;
+    const ideal = Math.round(b._w/sumW * allocBudget);
+    let give = Math.min(Math.max(ideal, floor), 105);
+    if(left >= floor){
+      give = Math.min(give, left);
+      b._min = give; left -= give; covered.push(b);
+    } else {
+      b._min = 0;
+      dropped.push({block:b, full:true, reason: conf[b.id]==="🟢"
+        ? "You marked this 🟢 solid — with only 2 days it's cheaper to protect weaker topics. Do a 5-min glance the morning of; no full pass scheduled."
+        : "Lowest (exam-weight × your-confidence) once the budget ran out. Not enough hours to give it a real pass — pull it back in with “I'm ahead”, or raise your hours in Edit setup."});
+    }
+  });
+
+  // ---- build sessions from covered blocks ----
+  // dayPref: "today" (LEARN/first RECALL) or "monday" (QUESTIONS, touch-ups)
+  const sessions=[]; // {sid, blockId, mode, min, dayPref, protect}
+  covered.forEach(b=>{
+    const m=b._min, c=conf[b.id];
+    const mk=(mode,min,dayPref,protect)=>({sid:`${b.id}|${mode}`, blockId:b.id, mode, min:Math.max(10,Math.round(min)), dayPref, protect:!!protect});
+    if(c==="🔴"){
+      sessions.push(mk("LEARN", m*0.42, "today", false));
+      sessions.push(mk("RECALL", m*0.30, "today", true));
+      sessions.push(mk("QUESTIONS", m*0.28, "monday", true));
+      sessions.push(mk("TOUCH", 12, "monday", true)); // spaced repetition
+    } else if(c==="🟡"){
+      sessions.push(mk("RECALL", m*0.55, "today", true));
+      sessions.push(mk("QUESTIONS", m*0.45, "monday", false));
+      sessions.push(mk("TOUCH", 10, "monday", false));
+    } else { // 🟢
+      sessions.push(mk("SKIM", m, "monday", false));
+    }
+  });
+
+  // ---- pack sessions into day windows (using the clock-aware caps) ----
+  const wById = {}; BLOCKS.forEach(b=>wById[b.id]=b._w);
+  let todayLeft=todayCap, monLeft=monCap;
+  const todaySess=[], monSess=[];
+  const sessDropped=[];   // session-level (a covered block that lost one of its passes)
+
+  // today-preferred first, by block weight then LEARN before RECALL
+  const todayPref = sessions.filter(s=>s.dayPref==="today")
+    .sort((a,b)=> wById[b.blockId]-wById[a.blockId] || modeRank(a.mode)-modeRank(b.mode));
+  todayPref.forEach(s=>{
+    if(s.min<=todayLeft){ todaySess.push(s); todayLeft-=s.min; }
+    else if(s.min<=monLeft){ s._moved=true; monSess.push(s); monLeft-=s.min; }
+    else sessDropped.push({block:byId(s.blockId), mode:s.mode, reason:`its ${label(s.mode)} pass didn't fit either day's hours`});
+  });
+  // monday-preferred: touch-ups first (spaced rep early), then questions/skim by weight
+  const monPref = sessions.filter(s=>s.dayPref==="monday")
+    .sort((a,b)=> touchRank(a.mode)-touchRank(b.mode) || wById[b.blockId]-wById[a.blockId]);
+  monPref.forEach(s=>{
+    if(s.min<=monLeft){ monSess.push(s); monLeft-=s.min; }
+    else if(s.protect && s.min<=todayLeft){ s._moved="today"; todaySess.push(s); todayLeft-=s.min; }
+    else sessDropped.push({block:byId(s.blockId), mode:s.mode, reason:`its ${label(s.mode)} pass didn't fit Monday's remaining hours`});
+  });
+
+  // ---- lay out each day on the clock (caps guarantee sessions fit, but layout also guards) ----
+  const todayLayout = layoutDay(todaySess, todayStartMin, todayEndMin, false, sessDropped);
+  const monInnerEnd = monEndMin - sweepReserve - (sweepReserve?6:0);
+  const monLayout = layoutDay(monSess, monStartMin, monInnerEnd, true, sessDropped);
+  // append final SWEEP + buffer (only if there's room reserved for it)
+  if(sweepReserve>0){
+    let cur = monLayout.length ? monLayout[monLayout.length-1].end : monStartMin;
+    cur = Math.max(cur, monInnerEnd);
+    if(cur+6 < monEndMin){ monLayout.push({type:"brk", start:cur, end:cur+6, title:"Reset — hydrate, walk"}); cur+=6; }
+    monLayout.push({type:"sweep", start:cur, end:Math.min(cur+sweepReserve,monEndMin), mode:"SWEEP",
+      title:"Final SWEEP — everything still on your shaky list", sid:"final|SWEEP",
+      note:"High-yield only. Auto-populated below from every 🔴 block + anything you rated 1–2. Don't learn new material here — just re-fire the weak points."});
+  }
+  if(examIsMonday) monLayout.push({type:"exam", start:examMin, end:examMin, title:"🎯 EXAM"});
+
+  const scheduledMin = todaySess.concat(monSess).reduce((s,x)=>s+x.min,0)+sweepReserve;
+
+  // fold session-level drops into the deprioritized list (deduped; only for blocks NOT already fully dropped)
+  const fullIds = new Set(dropped.map(d=>d.block.id));
+  const sessByBlock={};
+  sessDropped.forEach(d=>{ if(fullIds.has(d.block.id)) return; (sessByBlock[d.block.id]=sessByBlock[d.block.id]||[]).push(d.reason); });
+  const partialDrops = Object.keys(sessByBlock).map(id=>({block:byId(id), full:false,
+    reason:"Covered, but "+[...new Set(sessByBlock[id])].join("; ")+". The block is still scheduled — this pass got cut to protect higher-priority time."}));
+
+  schedule = {
+    today:todayLayout, mon:monLayout,
+    covered, dropped:dropped.concat(partialDrops),
+    stats:{ scheduledMin, todayCap, monCap:monCap+sweepReserve, totalBudget:allocBudget+sweepReserve,
+            covered:covered.length, total:TOTAL_BLOCKS, fullDrops:dropped.length },
+    examIsMonday,
+    overflow: (todayLayout.overflow||0)+(monLayout.overflow||0),
+    todayStartMin, todayEndMin, monStartMin, monEndMin
+  };
+  return schedule;
+}
+function modeRank(m){ return {LEARN:0,RECALL:1,QUESTIONS:2,SKIM:3,TOUCH:4}[m]??5; }
+function touchRank(m){ return m==="TOUCH"?0:1; }
+function label(m){ return {LEARN:"Learn",RECALL:"Active-recall",QUESTIONS:"Questions",SKIM:"Skim",TOUCH:"Touch-up",SWEEP:"Sweep"}[m]||m; }
+function byId(id){ return BLOCKS.find(b=>b.id===id); }
+
+/* lay out an ordered session list from startMin, inserting breaks + one meal.
+   Returns array of items; sets .overflow = minutes of sessions that didn't fit. */
+function layoutDay(sess, startMin, endMin, isMonday, packDropped){
+  const items=[]; let t=startMin, overflow=0, sinceBreak=0, mealDone=false;
+  const window=endMin-startMin;
+  const mealTrigger = startMin + Math.min(window*0.5, 210); // ~ mid-window or 3.5h in
+  const wantMeal = window >= 200;
+  for(let i=0;i<sess.length;i++){
+    const s=sess[i];
+    // meal break
+    if(wantMeal && !mealDone && t>=mealTrigger && t+40<=endMin){
+      items.push({type:"meal", start:t, end:t+40, title:isMonday?"Lunch — real food, off screens":"Meal break — step away, no notes"});
+      t+=40; mealDone=true; sinceBreak=0;
+    }
+    let remaining=s.min, first=true;
+    while(remaining>0){
+      if(t>=endMin){ overflow+=remaining;
+        if(packDropped) packDropped.push({block:byId(s.blockId), reason:`Ran past your stop time (${fmtClock(endMin)}) — protect your sleep instead.`, mode:s.mode});
+        remaining=0; break; }
+      const room=endMin-t;
+      let chunk=Math.min(remaining, 50, room);
+      if(chunk<10 && remaining>=10){ overflow+=remaining;
+        if(packDropped) packDropped.push({block:byId(s.blockId), reason:`Not enough contiguous time left before ${fmtClock(endMin)}.`, mode:s.mode});
+        remaining=0; break; }
+      items.push({type:"study", start:t, end:t+chunk, mode:s.mode, blockId:s.blockId, min:chunk,
+        sid: s.min<=50 ? s.sid : `${s.sid}#${Math.round(t)}`, moved:s._moved, partOf:s.sid});
+      t+=chunk; remaining-=chunk; sinceBreak+=chunk; first=false;
+      // break after chunk (unless we just finished the very last session)
+      const lastOfAll = (i===sess.length-1 && remaining<=0);
+      if(!lastOfAll){
+        let brk = remaining>0 ? 8 : (sinceBreak>=90?12: (s.mode==="TOUCH"?4:6));
+        if(t+brk<=endMin){
+          items.push({type:"brk", start:t, end:t+brk, title: brk>=12?"Longer break — stretch, snack":"Short break — eyes off screen"});
+          t+=brk; if(remaining>0||brk>=12) sinceBreak=0;
+        }
+      }
+    }
+  }
+  items.overflow=overflow;
+  return items;
+}
+
+/* today/day2 helpers vs real clock */
+function examDateObj(){ const [Y,M,D]=state.inputs.examDate.split("-").map(Number); const [h,m]=state.inputs.examTime.split(":").map(Number); return new Date(Y,M-1,D,h,m); }
+function day1Date(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+function day2Date(){ const d=day1Date(); d.setDate(d.getDate()+1); return d; }
+function sameDay(a,b){ return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+function isTodayDay1(){ return true; } // day1 column is always "today"
+function isTodayDay2(){ return false; }
+function nowMinIfToday(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderSetup(){
+  const inp=state.inputs;
+  document.getElementById("examDate").value=inp.examDate;
+  document.getElementById("examTime").value=inp.examTime;
+  document.getElementById("todayStart").value=inp.todayStart;
+  document.getElementById("todayHours").value=inp.todayHours;
+  document.getElementById("todayBed").value=inp.todayBed;
+  document.getElementById("monStart").value=inp.monStart;
+  document.getElementById("monHours").value=inp.monHours;
+  document.getElementById("highYield").value=state.highYield;
+
+  const tb=document.getElementById("confTable"); tb.innerHTML="";
+  BLOCKS.forEach(b=>{
+    const tr=document.createElement("tr");
+    const cur=state.confidence[b.id];
+    tr.innerHTML=`<td><div class="conf-block">${b.emoji} ${b.title}${b.cross?'<span class="cross-flag">CROSS-DISCIPLINE</span>':''}
+        <span class="disc">${b.disc.join(" · ")} · ${b.pages} pg · yield ${"★".repeat(b.yield)}</span></div></td>
+      <td><div class="conf-choices">
+        ${["🔴","🟡","🟢"].map(v=>`<button class="conf-opt ${cur===v?'on':''}" data-b="${b.id}" data-v="${v}">${v}</button>`).join("")}
+      </div></td>`;
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll(".conf-opt").forEach(btn=>{
+    btn.onclick=()=>{ state.confidence[btn.dataset.b]=btn.dataset.v; save();
+      tb.querySelectorAll(`.conf-opt[data-b="${btn.dataset.b}"]`).forEach(x=>x.classList.toggle("on", x.dataset.v===btn.dataset.v));
+    };
+  });
+}
+function readInputs(){
+  const g=id=>document.getElementById(id).value;
+  state.inputs={ examDate:g("examDate"), examTime:g("examTime"),
+    todayStart:g("todayStart"), todayHours:g("todayHours"), todayBed:g("todayBed"),
+    monStart:g("monStart"), monHours:g("monHours") };
+  state.highYield=g("highYield");
+}
+
+function renderAll(){
+  generate();
+  renderReport();
+  renderDays();
+  renderShaky();
+  renderProgress();
+  renderCountdown();
+  document.querySelectorAll(".conf-opt"); // noop
+}
+
+function renderReport(){
+  const st=schedule.stats;
+  const rawAvailH = ((+state.inputs.todayHours||0)+(+state.inputs.monHours||0));
+  const capH = st.totalBudget/60;                 // what the clock windows can actually hold
+  const schedH = st.scheduledMin/60;
+  const fullDrops = st.fullDrops;
+  const partials = schedule.dropped.length - fullDrops;
+  const windowLimited = (rawAvailH - capH) > 0.5;  // stated hours exceed clock room
+  const sr=document.getElementById("statRow"); sr.innerHTML="";
+  const stat=(v,k,cls="")=>`<div class="stat ${cls}"><div class="v">${v}</div><div class="k">${k}</div></div>`;
+  sr.innerHTML =
+    stat(`${st.covered}/${st.total}`, "topic blocks covered", st.covered===st.total?"good":"warn") +
+    stat(`${schedH.toFixed(1)}h`, "study time scheduled") +
+    stat(`${rawAvailH.toFixed(1)}h`, "hours you gave me") +
+    stat(`${fullDrops}`, "blocks triaged out", fullDrops?"warn":"good");
+
+  const fm=document.getElementById("fitMsg");
+  const short = st.covered<st.total || schedule.overflow>0 || partials>0;
+  if(short){
+    fm.className="msgbar warn show";
+    fm.innerHTML=`<b>Straight talk:</b> ${st.covered<st.total
+        ? `your hours don't cover all ${st.total} blocks at exam depth — I triaged ${fullDrops} lower-priority one(s) out completely`
+        : `all ${st.total} blocks get a pass, but ${partials} had a secondary pass trimmed to protect higher-priority time`}. `+
+      `Time went to your 🔴 / high-yield blocks first; everything cut is listed below — nothing dropped silently. `+
+      (windowLimited?`<br><b>Note:</b> you told me ${rawAvailH.toFixed(1)}h but only ~${capH.toFixed(1)}h fits between your start and stop times — widen the window (earlier start / later stop) to use all your hours. `:``)+
+      `Raise hours or the window in <b>Edit setup</b>, then Generate again.`;
+  } else {
+    fm.className="msgbar info show";
+    fm.innerHTML=`<b>Good news:</b> your hours cover all ${st.total} blocks. The plan still front-loads active recall &amp; questions over re-reading — that's the efficient use of the slack.`;
+  }
+
+  const g=document.getElementById("grouping"); g.innerHTML="";
+  BLOCKS.forEach((b,i)=>{
+    const conf=state.confidence[b.id];
+    const div=document.createElement("div"); div.className="gblock";
+    div.innerHTML=`<div class="gt">${i+1}. ${b.emoji} ${b.title}
+        <span class="em">${conf} · ${b.pages} pg · ${b._min>0?(b._min+' min'):'triaged out'}${b.cross?' · cross-discipline ⚑':''}</span></div>
+      <div class="gd">${b.lec.map(l=>l[0]).join("  •  ")}</div>
+      <div class="gx">${b.x}</div>`;
+    g.appendChild(div);
+  });
+
+  const dl=document.getElementById("dropList"); dl.innerHTML="";
+  if(!schedule.dropped.length){ dl.innerHTML=`<li>Nothing dropped — everything fits. Keep the pace and you'll get a full pass on all ten blocks.</li>`; }
+  // full drops first, then partials
+  [...schedule.dropped].sort((a,b)=>(a.full===b.full)?0:(a.full?-1:1)).forEach(d=>{
+    const li=document.createElement("li");
+    const tag = d.full ? `` : `<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--buzz-hl);color:var(--buzz-ink);border-radius:5px;padding:1px 5px;margin-left:6px">PARTIAL</span>`;
+    li.innerHTML=`<b>${d.block.emoji} ${d.block.title}</b>${tag}<span class="why">${d.reason}</span>`;
+    dl.appendChild(li);
+  });
+}
+
+function renderDays(){
+  const d1=day1Date(), d2=day2Date();
+  const fmtD=d=>d.toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric"});
+  const wd=d=>d.toLocaleDateString(undefined,{weekday:"long"});
+  // heads — day 1 is always the real "today"
+  document.getElementById("dayTodayHead").className="dayhead is-today";
+  document.getElementById("dayTodayHead").innerHTML=
+    `<div class="dt"><em>${wd(d1)}</em> <span class="todaytag">TODAY</span></div><div class="dsub">${fmtD(d1)} · start ${fmtClock(schedule.todayStartMin)} · stop ${fmtClock(schedule.todayEndMin)}</div>
+     <div class="progline"><i id="barToday"></i></div><div class="progtxt" id="progTextToday"></div>`;
+  const examHere = schedule.examIsMonday;
+  const monLabel = examHere ? `${wd(d2)} — EXAM DAY` : wd(d2);
+  const monEndLbl = examHere ? `exam ${fmtClock(toMin(state.inputs.examTime))}` : `stop ${fmtClock(schedule.monEndMin)}`;
+  document.getElementById("dayMonHead").className="dayhead"+(examHere?" is-today":"");
+  document.getElementById("dayMonHead").innerHTML=
+    `<div class="dt">${monLabel}</div><div class="dsub">${fmtD(d2)} · start ${fmtClock(schedule.monStartMin)} · ${monEndLbl}</div>
+     <div class="progline"><i id="barMon"></i></div><div class="progtxt" id="progTextMon"></div>`;
+
+  renderItems("dayTodayItems", schedule.today, true);
+  renderItems("dayMonItems", schedule.mon, false);
+}
+
+function renderItems(containerId, items, isTodayCol){
+  const c=document.getElementById(containerId); c.innerHTML="";
+  const nowM = nowMinIfToday();
+  items.forEach(it=>{
+    if(it.type==="brk"||it.type==="meal"){
+      const div=document.createElement("div"); div.className="item "+(it.type);
+      div.innerHTML=`<div class="it-top"><div class="it-time">${fmtClock(it.start)}–${fmtClock(it.end)}</div>
+        <div class="it-main"><div class="it-title">${it.type==="meal"?"🍽 ":"☕ "}${it.title} <span style="color:var(--muted);font-weight:400">(${it.end-it.start} min)</span></div></div></div>`;
+      c.appendChild(div); return;
+    }
+    if(it.type==="exam"){
+      const div=document.createElement("div"); div.className="item sleep";
+      div.style.cssText="border:2px solid var(--exam-strong);color:var(--exam-strong);font-weight:700;padding:12px;letter-spacing:.1em";
+      div.textContent=`🎯 EXAM — ${fmtClock(it.start)}`;
+      c.appendChild(div); return;
+    }
+    const b=byId(it.blockId);
+    const isSweep=it.type==="sweep";
+    const div=document.createElement("div");
+    const done = state.done[it.sid];
+    const isNow = isTodayCol && nowM>=it.start && nowM<it.end && !done;
+    div.className="item study"+(isSweep?" sweepblock":"")+(done?" done":"")+(isNow?" now":"");
+    const mode=it.mode;
+    const title = isSweep ? "Final SWEEP" : `${b.emoji} ${b.title}`;
+    const sys = isSweep ? "" : `<span class="it-sys"> · ${b.system}</span>`;
+    // links
+    let links="";
+    if(isSweep){
+      links=`<a class="lk" href="embryo_anatomy_table.html">Cram Trainer</a>`;
+    } else {
+      links = b.tools.map(t=>`<a class="lk" href="${TOOL[t].href}">${TOOL[t].label}</a>`).join("");
+    }
+    const pdfLinks = isSweep? "" : b.lec.map(l=>`<a class="lk pdf" href="${pdfHref(l[3],l[4])}" title="${l[1]} · ${l[2]} pg">${l[0].length>34?l[0].slice(0,32)+"…":l[0]}</a>`).join("");
+    const note = it.note ? `<p class="it-note">${it.note}</p>`
+      : `<p class="it-note">${modeNote(mode,b)}</p>`;
+    const movedTag = it.moved ? `<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--touch-bg);color:var(--touch-ink);border-radius:5px;padding:1px 5px;margin-left:5px">${it.moved==="today"?"pulled to today":"moved to Mon"}</span>` : "";
+    const secs = state.timers[it.sid]||0;
+    const rating = state.ratings[it.sid]||0;
+
+    div.innerHTML=`
+      <div class="it-top">
+        <div class="it-time"><b>${fmtClock(it.start)}</b><br>–${fmtClock(it.end)} <span style="opacity:.7">(${it.end-it.start}m)</span></div>
+        <div class="it-main">
+          <div class="it-title"><span class="mode-pill mode-${mode}">${label(mode)}</span>${title}${sys}${movedTag}</div>
+          ${note}
+          <div class="it-links">${links}</div>
+          ${pdfLinks?`<details class="pdfs"><summary>▸ source lecture PDFs</summary><div class="it-links">${pdfLinks}</div></details>`:""}
+          <div class="it-controls">
+            <label class="chk"><input type="checkbox" ${done?"checked":""} data-sid="${it.sid}" class="doneChk"> done</label>
+            <span class="timer">⏱ <span class="tval" data-sid="${it.sid}">${fmtTimer(secs)}</span>
+              <button class="btn tiny timerBtn" data-sid="${it.sid}">start</button></span>
+            <span class="rate"><span class="rlbl">recall</span>
+              ${[1,2,3].map(r=>`<button class="rdot ${rating===r?'on'+r:''}" data-sid="${it.sid}" data-r="${r}" title="${r===1?'blanked':r===2?'shaky':'solid'}">${r}</button>`).join("")}
+            </span>
+          </div>
+        </div>
+      </div>`;
+    c.appendChild(div);
+  });
+
+  // wire controls
+  c.querySelectorAll(".doneChk").forEach(chk=>chk.onchange=()=>{
+    if(chk.checked) state.done[chk.dataset.sid]=true; else delete state.done[chk.dataset.sid];
+    save(); renderProgress(); renderShaky();
+    chk.closest(".item").classList.toggle("done", chk.checked);
+  });
+  c.querySelectorAll(".rdot").forEach(dot=>dot.onclick=()=>{
+    const sid=dot.dataset.sid, r=+dot.dataset.r;
+    state.ratings[sid]= state.ratings[sid]===r ? 0 : r; save();
+    dot.parentElement.querySelectorAll(".rdot").forEach(x=>{x.className="rdot"; if(+x.dataset.r===state.ratings[sid]) x.classList.add("on"+state.ratings[sid]);});
+    renderShaky();
+  });
+  c.querySelectorAll(".timerBtn").forEach(btn=>btn.onclick=()=>toggleTimer(btn.dataset.sid, btn));
+}
+function modeNote(mode,b){
+  switch(mode){
+    case "LEARN": return `First pass. Read + build/annotate your notes. End by writing the <b>one feedback loop or pathway</b> that ties this block together from memory.`;
+    case "RECALL": return `Close the notes. Self-test using the ⭐ columns / Cram Trainer. If you can't say it out loud, it isn't learned — flag it 1–2 below.`;
+    case "QUESTIONS": return `Practice Qs, then <b>review every wrong one</b> and trace it back to the concept. Wrong answers are the highest-yield minutes you have.`;
+    case "SKIM": return `Fast confirm-only pass — you marked this 🟢 solid. Scan headings + your own highlights; if a gap appears, drop the rating to 2 and it joins the sweep.`;
+    case "TOUCH": return `Spaced-repetition touch-up of what you learned yesterday. 10 min, recall-only, no re-reading. Locks it into Monday.`;
+    default: return "";
+  }
+}
+
+/* ---------- progress ---------- */
+function studyItems(items){ return items.filter(i=>i.type==="study"||i.type==="sweep"); }
+function renderProgress(){
+  const t=studyItems(schedule.today), m=studyItems(schedule.mon);
+  const doneCount=arr=>arr.filter(i=>state.done[i.sid]).length;
+  set("barToday", t.length?doneCount(t)/t.length:0);
+  set("barMon", m.length?doneCount(m)/m.length:0);
+  const pt=document.getElementById("progTextToday"), pm=document.getElementById("progTextMon");
+  if(pt) pt.textContent=`${doneCount(t)} / ${t.length} blocks done`;
+  if(pm) pm.textContent=`${doneCount(m)} / ${m.length} blocks done`;
+  const all=t.concat(m), dc=doneCount(all);
+  set("overallBar", all.length?dc/all.length:0);
+  const op=document.getElementById("overallProg");
+  if(op) op.textContent=`Overall: ${dc} / ${all.length} study blocks complete · ${Math.round(all.length?dc/all.length*100:0)}%`;
+  function set(id,frac){ const el=document.getElementById(id); if(el) el.style.width=(frac*100)+"%"; }
+}
+
+/* ---------- shaky list ---------- */
+function renderShaky(){
+  const ul=document.getElementById("shakyList"); ul.innerHTML="";
+  const shaky=[];
+  BLOCKS.forEach(b=>{
+    let reason=null;
+    if(state.confidence[b.id]==="🔴") reason="marked 🔴";
+    // any session of this block rated 1–2
+    const lowRate=Object.keys(state.ratings).some(sid=>sid.startsWith(b.id+"|") && state.ratings[sid]&&state.ratings[sid]<=2);
+    if(lowRate) reason = reason? reason+" · rated low" : "rated 1–2";
+    if(reason && b._min>0) shaky.push({b,reason});
+  });
+  if(!shaky.length){ ul.innerHTML=`<span class="shaky-empty">Nothing shaky yet. Mark blocks 🔴 in setup, or rate a block 1–2 after doing it, and it'll appear here and feed the final SWEEP.</span>`; return; }
+  shaky.forEach(s=>{ const li=document.createElement("li"); li.innerHTML=`${s.b.emoji} ${s.b.title}<span class="rz">${s.reason}</span>`; ul.appendChild(li); });
+}
+
+/* ---------- timers ---------- */
+let activeTimer=null; // {sid, btn, iv, base}
+function fmtTimer(s){ const m=Math.floor(s/60), ss=s%60; return `${m}:${String(ss).padStart(2,"0")}`; }
+function toggleTimer(sid,btn){
+  if(activeTimer && activeTimer.sid===sid){ stopTimer(); return; }
+  if(activeTimer) stopTimer();
+  const start=Date.now(); const base=state.timers[sid]||0;
+  activeTimer={sid,btn,base,start, iv:setInterval(()=>{
+    const el=document.querySelector(`.tval[data-sid="${CSS.escape(sid)}"]`);
+    const cur=base+Math.floor((Date.now()-start)/1000);
+    if(el) el.textContent=fmtTimer(cur);
+  },1000)};
+  btn.textContent="pause"; btn.classList.add("primary");
+}
+function stopTimer(){
+  if(!activeTimer) return;
+  clearInterval(activeTimer.iv);
+  state.timers[activeTimer.sid]=activeTimer.base+Math.floor((Date.now()-activeTimer.start)/1000);
+  save();
+  if(activeTimer.btn){ activeTimer.btn.textContent="start"; activeTimer.btn.classList.remove("primary"); }
+  activeTimer=null;
+}
+
+/* ---------- countdown ---------- */
+function renderCountdown(){
+  const ex=examDateObj(), now=new Date();
+  let ms=ex-now;
+  const el=document.getElementById("cdVal"), when=document.getElementById("cdWhen");
+  if(ms<=0){ el.textContent="0h"; when.textContent="Exam time — go get it. 🎯"; return; }
+  const h=Math.floor(ms/3600000), m=Math.floor(ms%3600000/60000);
+  const d=Math.floor(h/24), hr=h%24;
+  el.textContent = d>=1 ? `${d}d ${hr}h ${m}m` : `${hr}h ${m}m`;
+  when.textContent = "Exam · "+ex.toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric"})+" at "+fmtClock(toMin(state.inputs.examTime));
+}
+
+/* ============================================================
+   RE-FLOW  (behind / ahead)
+   ============================================================ */
+function reflow(direction){
+  const nowM=nowMinIfToday();
+  // remaining, not-done study sessions today from now on
+  const remaining = studyItems(schedule.today).filter(i=>!state.done[i.sid] && i.end>nowM);
+  const msg=document.getElementById("reflowMsg");
+  if(!remaining.length){
+    msg.className="msgbar info show";
+    msg.innerHTML=`<b>Today's list is clear.</b> ${direction==="behind"?"Nothing left to compress today — focus on Monday's plan.":"You're ahead with nothing left today — start a Monday block early, or rest. Rest counts."}`;
+    return;
+  }
+  const endMin = toMin(state.inputs.todayBed);
+  let avail = endMin - Math.max(nowM, schedule.today[0]?.start||nowM);
+  const needed = remaining.reduce((s,i)=>s+i.min,0) + Math.ceil(remaining.length*0.15)*6; // + rough breaks
+
+  const changes=[]; let dropped=[];
+  if(direction==="behind"){
+    let deficit = needed - avail;
+    if(deficit<=0){
+      msg.className="msgbar info show";
+      msg.innerHTML=`You've got <b>${Math.round(avail)} min</b> left and only need ~${Math.round(needed)}. You're fine — keep the current order, protect the breaks.`;
+      return;
+    }
+    // 1) compress SKIM to 10
+    remaining.filter(i=>i.mode==="SKIM"&&i.min>10).forEach(i=>{ const save=i.min-10; i.min=10; deficit-=save; changes.push(`Compressed SKIM · ${byId(i.blockId).title} to 10 min`); });
+    // 2) trim non-protected QUESTIONS/TOUCH by 30%
+    if(deficit>0) remaining.filter(i=>(i.mode==="QUESTIONS"||i.mode==="TOUCH") && state.confidence[i.blockId]!=="🔴").forEach(i=>{
+      if(deficit<=0) return; const cut=Math.round(i.min*0.3); i.min-=cut; deficit-=cut; changes.push(`Trimmed ${label(i.mode)} · ${byId(i.blockId).title} by ${cut} min`); });
+    // 3) drop lowest-weight non-🔴, non-RECALL sessions
+    if(deficit>0){
+      const droppable=remaining.filter(i=>state.confidence[i.blockId]!=="🔴" && i.mode!=="RECALL")
+        .sort((a,b)=>byId(a.blockId)._w-byId(b.blockId)._w);
+      for(const i of droppable){ if(deficit<=0) break; dropped.push(i); deficit-=i.min; }
+    }
+    // rebuild today from now
+    const keep=remaining.filter(i=>!dropped.includes(i));
+    const newLayout=layoutDay(keep.map(i=>({sid:i.sid,blockId:i.blockId,mode:i.mode,min:i.min})), Math.max(nowM, schedule.today[0].start), endMin, false, null);
+    // preserve already-done + past items
+    const past=schedule.today.filter(i=>(i.type==="study"||i.type==="sweep") ? (state.done[i.sid]||i.end<=nowM) : i.end<=nowM);
+    schedule.today=past.concat(newLayout);
+    renderItemsRefresh();
+    msg.className="msgbar warn show";
+    msg.innerHTML=`<b>Re-flowed the rest of today from ${fmtClock(nowM)}.</b> Protected your 🔴 topics and every ACTIVE-RECALL block.`+
+      (changes.length?`<ul>${changes.map(c=>`<li>${c}</li>`).join("")}</ul>`:"")+
+      (dropped.length?`<div style="margin-top:6px"><b>Dropped to make it fit (not silently):</b><ul>${dropped.map(i=>`<li>${byId(i.blockId).emoji} ${byId(i.blockId).title} — ${label(i.mode)}. It stays on your radar; catch it Monday if you can.</li>`).join("")}</ul></div>`:"");
+  } else {
+    // ahead: try to pull back a triaged-out block, or note slack
+    const slack = avail - needed;
+    const pull = schedule.dropped.find(d=>d.block._min===0);
+    msg.className="msgbar info show";
+    if(slack>25 && pull){
+      msg.innerHTML=`<b>You have ~${Math.round(slack)} min of slack.</b> Best use: pull <b>${pull.block.emoji} ${pull.block.title}</b> (currently triaged out) back in for a ${Math.min(slack-10,40)|0}-min QUESTIONS pass, or bank the time and sleep. To make it permanent, raise today's hours in Edit setup and Generate.`;
+    } else if(slack>25){
+      msg.innerHTML=`<b>~${Math.round(slack)} min of slack.</b> Spend it on QUESTIONS for your top 🔴 block, or an extra Cram Trainer round — <i>not</i> passive re-reading. Or bank it: rest before an exam is high-yield.`;
+    } else {
+      msg.innerHTML=`You're roughly on pace — small margin. Keep going and re-check with “I'm behind” if you slip.`;
+    }
+  }
+  renderProgress();
+}
+function renderItemsRefresh(){ renderItems("dayTodayItems", schedule.today, true); renderProgress(); }
+
+/* ============================================================
+   WIRING
+   ============================================================ */
+function showPlan(show){
+  ["reportPanel","ctrlPanel","daysWrap","shakyPanel"].forEach(id=>document.getElementById(id).classList.toggle("hide",!show));
+  document.getElementById("setupPanel").classList.toggle("hide",show);
+}
+document.getElementById("genBtn").onclick=()=>{
+  readInputs();
+  if(!(+state.inputs.todayHours>0)&&!(+state.inputs.monHours>0)){ alert("Give me at least some study hours for today or Monday."); return; }
+  state.setupDone=true; save();
+  reflowNote=null; document.getElementById("reflowMsg").className="msgbar";
+  renderAll(); showPlan(true);
+  window.scrollTo({top:document.getElementById("reportPanel").offsetTop-20,behavior:"smooth"});
+};
+document.getElementById("editBtn").onclick=()=>{ stopTimer(); showPlan(false); renderSetup(); window.scrollTo({top:0,behavior:"smooth"}); };
+document.getElementById("behindBtn").onclick=()=>reflow("behind");
+document.getElementById("aheadBtn").onclick=()=>reflow("ahead");
+document.getElementById("resetBtn").onclick=()=>{
+  if(!confirm("Reset ALL progress, ratings, timers, confidence and inputs? This can't be undone.")) return;
+  stopTimer(); localStorage.removeItem(KEY); state=defaults(); renderSetup(); showPlan(false);
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+/* live tickers */
+setInterval(renderCountdown, 30000);
+setInterval(()=>{ if(state.setupDone){ // refresh "now" highlight each minute
+  if(schedule){ renderItems("dayTodayItems", schedule.today, true); renderProgress(); }
+}}, 60000);
+
+/* boot */
+renderSetup();
+if(state.setupDone){ renderAll(); showPlan(true); } else { showPlan(false); }
+renderCountdown();
+window.addEventListener("beforeunload", stopTimer);
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){
+    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+    if(p[0].toLowerCase()===here) a.className='sk-here';
+    nav.appendChild(a);
+  });
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>

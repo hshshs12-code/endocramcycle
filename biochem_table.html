@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biochemistry — Endo/Repro Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .secpick{position:relative;flex:0 0 auto}
+  .secpick select{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:9px 34px 9px 13px;border:1px solid var(--line-strong);border-radius:9px;
+    background:var(--surface);color:var(--ink);cursor:pointer;appearance:none;-webkit-appearance:none;
+    max-width:340px;
+  }
+  .secpick select:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .secpick svg{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th.img-h{background:#3a3f45}
+  td.img{text-align:center}
+  td.img a{display:inline-block;margin:1px}
+  td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle}
+  /* ---------- numbered pathway steps ---------- */
+  tr.pathway td{padding:0;border-bottom:1px solid var(--line)}
+  .steps{padding:14px 18px;background:#fbfaf6}
+  .steps ol{margin:0;padding-left:22px;counter-reset:step}
+  .steps li{margin:0 0 10px;padding-left:4px;line-height:1.5;font-size:13.3px;color:#33373d}
+  .steps li b{color:var(--ink)}
+  .steps .stepimg{margin:8px 0 14px}
+  .steps .stepimg img{max-width:100%;max-height:340px;border-radius:8px;border:1px solid var(--line-strong)}
+  .steps .stepnote{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:14%}
+  col.c-gene{width:16%}
+  col.c-buzz{width:25%}
+  col.c-diff{width:17%}
+  col.c-exam{width:17%}
+  col.c-img{width:11%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Endo / Repro Unit · Biochemistry · Rapid Reference</p>
+  <h1>The enzymes, the pathways,<br>and the things that <em>will</em> be tested.</h1>
+  <p class="sub">Every enzyme, pathway, and inherited metabolic disorder taught across the Endo/Repro lectures — one section per lecture, ordered by folder then filename. True biochemical sequences (steroidogenesis, heme synthesis, catecholamine synthesis…) are rendered as numbered steps instead of rows where that reviews better — noted per section. Teal = enzyme/gene. Highlighted = the key buzzword/metabolite/finding. The crimson rail is the single fact most likely to anchor a question stem. Summary files are grouped at the end, tagged [summary].</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search enzyme, pathway, metabolite, disorder…" autocomplete="off">
+    </div>
+    <div class="secpick">
+      <select id="secpick"></select>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Enzyme / gene</span>
+      <span><i class="sw b"></i>Key metabolite / finding</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Enzyme / Pathway / Disorder</th>
+          <th>Defect / Deficiency</th>
+          <th>Buzzwords &amp; Findings</th>
+          <th>Key Differentiator</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No entry matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Compiled from the lecture PDFs on your drive (biochemistry content only). Pathway figures are cropped directly from the source slides. Verify against your primary notes where they differ.
+</footer>
+
+<script>
+const DATA = [
+{sec:"Hormone Synthesis — Concepts & Disorders", tag:"biochem", rows:[
+  {n:"Hormone classes & carrier proteins", g:"—", b:"<mark>Amino-acid-derived</mark> (catecholamines, T3/T4, serotonin/melatonin), <mark>steroid/lipid-derived</mark> (mineralo-/glucocorticoids, androgens/estrogens, eicosanoids), <mark>peptide/protein</mark> (insulin, GH, ADH, oxytocin). Specific carriers: <mark>TBG</mark> (thyroxine), <mark>GHBP</mark> (growth hormone, a cleaved GH-receptor fragment), <mark>SHBG</mark> (androgens/estrogens), <mark>transcortin/CBG</mark> (cortisol + progestins).", d:"Bound hormone = reservoir, longer half-life, inactive; <b>free hormone = active</b>, binds receptors, shorter half-life.", e:"<span class='star'>⭐</span>Total level ≈ bound level (easiest to measure); <b>free level is the physiologically relevant, hardest-to-measure form</b> (equilibrium dialysis/ultrafiltration)."},
+  {n:"BH4 (tetrahydrobiopterin) deficiency", g:"<span class='pill'>Dihydropteridine reductase</span> — recycles BH4", b:"BH4 is a required cofactor for <mark>aromatic amino acid hydroxylases</mark> (phenylalanine, tyrosine, tryptophan hydroxylase) and NO synthase. Deficiency → <mark>hyperphenylalaninemia (a 'malignant' PKU)</mark> + failure to make dopamine/NE/serotonin.", d:"Unlike classic PKU (PAH enzyme defect), BH4 deficiency does NOT improve on a low-phenylalanine diet alone — the cofactor itself must be repleted.", e:"<span class='star'>⭐</span>PKU that fails dietary therapy → suspect <b>BH4/DHPR deficiency</b>; treat with sapropterin + neurotransmitter precursors.", img:"<a href=\"biochem_images/hormone_synthesis/hormone_synthesis_p012_bh4_deficiency.png\" target=\"_blank\"><img src=\"biochem_images/hormone_synthesis/hormone_synthesis_p012_bh4_deficiency.png\" loading=\"lazy\"></a>"},
+  {n:"Parkinson disease (biochem view)", g:"<span class='pill'>α-synuclein</span> misfolding (gains β-sheets)", b:"Loss of <mark>dopaminergic neurons in the substantia nigra</mark>; <mark>Lewy bodies</mark> (α-synuclein fibrils) on histology. <mark>TRAP</mark>: Tremor, Rigidity, Akinesia, Postural instability.", d:"A protein-misfolding disease, not a primary enzyme deficiency — but treated by restoring the dopamine synthesis pathway.", e:"<span class='star'>⭐</span>Give <b>L-DOPA</b> (crosses the BBB, then decarboxylated to dopamine) — dopamine itself cannot cross the BBB.", img:"<a href=\"biochem_images/hormone_synthesis/hormone_synthesis_p012_parkinson_disease.png\" target=\"_blank\"><img src=\"biochem_images/hormone_synthesis/hormone_synthesis_p012_parkinson_disease.png\" loading=\"lazy\"></a>"},
+  {n:"Catecholamine degradation enzymes", g:"<span class='pill'>MAO</span> (needs FAD) + <span class='pill'>COMT</span> (needs SAM)", b:"MAO deaminates catecholamines; COMT methylates them. <mark>MAO-A</mark> (also liver/gut/placenta) degrades serotonin, dopamine, epinephrine, NE; <mark>MAO-B</mark> (also platelets) degrades phenethylamine and dopamine.", d:"Two independent inactivation routes — clinically exploited by MAO inhibitors (antidepressants) and by measuring their urinary metabolites.", e:"<span class='star'>⭐</span>Pheochromocytoma screening measures the <b>degradation products</b>: <mark>VMA</mark> and <mark>metanephrines</mark>, not the parent catecholamines."},
+  {n:"Apparent mineralocorticoid excess (licorice)", g:"<span class='pill'>11β-hydroxysteroid dehydrogenase (11β-HSD2)</span> inhibited", b:"11β-HSD2 normally converts cortisol → inactive cortisone in the kidney, protecting the mineralocorticoid receptor from cortisol. <mark>Glycyrrhizic acid (licorice)</mark> blocks this enzyme → cortisol accumulates and acts as a mineralocorticoid.", d:"Labs: <mark>hypertension, hypokalemia, alkalosis, LOW plasma renin AND LOW plasma aldosterone</mark> — the enzyme block, not aldosterone excess, drives the phenotype.", e:"<span class='star'>⭐</span>HTN + hypokalemia with <b>both renin and aldosterone LOW</b> + licorice history = AME.", img:"<a href=\"biochem_images/hormone_synthesis/hormone_synthesis_p018_apparent_mineralocorticoid_excess.png\" target=\"_blank\"><img src=\"biochem_images/hormone_synthesis/hormone_synthesis_p018_apparent_mineralocorticoid_excess.png\" loading=\"lazy\"></a>"},
+  {n:"CAH — 21-hydroxylase deficiency", g:"<span class='pill'>CYP21A2</span>, <span class='inh'>AR</span>", b:"↓cortisol, ↓aldosterone (↓Na⁺, ↑K⁺), ↑androgens. Clinical: <mark>salt wasting, hypotension</mark>, male precocious puberty, masculinized female genitalia.", d:"The most common CAH enzyme deficiency — the only one with BOTH salt-wasting and virilization.", e:"<span class='star'>⭐</span>Newborn + ambiguous genitalia + hyponatremia/hyperkalemia → check <b>17-OH-progesterone</b> (the accumulated substrate).", img:"<a href=\"biochem_images/hormone_synthesis/hormone_synthesis_p021_cah_21_hydroxylase_deficiency.png\" target=\"_blank\"><img src=\"biochem_images/hormone_synthesis/hormone_synthesis_p021_cah_21_hydroxylase_deficiency.png\" loading=\"lazy\"></a>"},
+  {n:"CAH — 11β-hydroxylase deficiency", g:"<span class='pill'>CYP11B1</span>, <span class='inh'>AR</span>", b:"↑androgens, ↑11-deoxycortisol & <mark>11-deoxycorticosterone (DOC)</mark> — a weak mineralocorticoid, ↓cortisol, ↓aldosterone. Clinical: <mark>low-renin HYPERTENSION</mark> + fluid retention, male precocious puberty, masculinized female genitalia.", d:"Virilization <b>with</b> hypertension — DOC accumulates upstream of the block and substitutes for aldosterone's effect.", e:"<span class='star'>⭐</span>Virilized + hypertensive newborn = 11β-hydroxylase, not 21-hydroxylase.", img:"<a href=\"biochem_images/hormone_synthesis/hormone_synthesis_p021_cah_11_hydroxylase_deficiency.png\" target=\"_blank\"><img src=\"biochem_images/hormone_synthesis/hormone_synthesis_p021_cah_11_hydroxylase_deficiency.png\" loading=\"lazy\"></a>"},
+  {n:"CAH — 17α-hydroxylase deficiency", g:"<span class='pill'>CYP17A1</span>, <span class='inh'>AR</span>", b:"↓sex hormones & ↓glucocorticoids, ↑mineralocorticoids/DOC, ↑K⁺ excretion → ↓K⁺, ↑Na⁺. Clinical: <mark>low-renin hypertension, hypogonadism</mark> — ALL patients have female external genitalia regardless of karyotype.", d:"The only CAH with hypertension AND <b>under</b>-virilization (both androgens and estrogens are lost).", e:"<span class='star'>⭐</span>Phenotypic female who never enters puberty + hypertension = 17α-hydroxylase deficiency.", img:"<a href=\"biochem_images/hormone_synthesis/hormone_synthesis_p021_cah_17_hydroxylase_deficiency.png\" target=\"_blank\"><img src=\"biochem_images/hormone_synthesis/hormone_synthesis_p021_cah_17_hydroxylase_deficiency.png\" loading=\"lazy\"></a>"},
+  {n:"5α-reductase deficiency", g:"<span class='pill'>SRD5A2</span>, <span class='inh'>AR</span>", b:"Cannot convert testosterone → <mark>dihydrotestosterone (DHT)</mark>. 46,XY: ambiguous genitalia (clitoral-like phallus) at birth → <mark>virilization at puberty</mark> as testosterone (not DHT) surges.", d:"Testosterone (internal Wolffian ducts) is preserved; only the DHT-dependent external genitalia/prostate development fails.", e:"<span class='star'>⭐</span>Linked to pharmacology: <b>finasteride</b> inhibits 5α-reductase — used for BPH and alopecia; PSA is the marker to follow for BPH."},
+  {n:"Aromatase deficiency", g:"<span class='pill'>CYP19A1</span>", b:"Cannot convert androgens → estrogens. <mark>Clitoromegaly, labioscrotal fusion</mark> (maternal virilization during pregnancy too), primary amenorrhea, hirsutism, insulin resistance, <mark>tall stature, osteoporosis</mark>.", d:"Estrogen normally closes the epiphyses — its absence gives continued growth (tall stature) and unopposed bone loss (osteoporosis) in both sexes.", e:"<span class='star'>⭐</span>Linked to pharmacology: <b>aromatase inhibitors</b> (anastrozole, letrozole) treat estrogen-responsive breast cancer by blocking this same enzyme.", img:"<a href=\"biochem_images/enre_tables/enre_tables_p001_aromatase_deficiency.png\" target=\"_blank\"><img src=\"biochem_images/enre_tables/enre_tables_p001_aromatase_deficiency.png\" loading=\"lazy\"></a>"},
+  {n:"Estrogen & androgen potency ranking", g:"—", b:"Androgen potency: <mark>DHT &gt; testosterone &gt; androstenedione</mark>. Estrogen potency: <mark>estradiol (E2) &gt; estrone (E1) &gt; estriol (E3) &gt; estetrol (E4)</mark>. Only 6–8% of testosterone converts to DHT, and only 0.3% to estradiol, in males.", d:"Premenopausal women mainly make E1/E2 (E2 dominant); postmenopausal women mainly make E1; E3 is the placental estrogen of pregnancy.", e:"Know which estrogen dominates at which life stage — a classic multiple-choice discriminator.", img:"<a href=\"biochem_images/endocrinology_biochem/endocrinology_biochem_p005_estrogen_potency_aromatase.png\" target=\"_blank\"><img src=\"biochem_images/endocrinology_biochem/endocrinology_biochem_p005_estrogen_potency_aromatase.png\" loading=\"lazy\"></a>"},
+  {n:"POMC-derived peptides", g:"<span class='pill'>Prohormone convertase (PC1/PC2)</span> — tissue-specific cleavage", b:"POMC is the precursor of <mark>ACTH, MSH, and β-endorphin</mark>. Pituitary corticotrophs (PC1 only) → ACTH + β-lipotropin. Hypothalamic arcuate neurons (PC2) → α/β/γ-MSH + β-endorphin, NOT ACTH.", d:"Same precursor gene, different final peptides — determined entirely by which convertase is expressed in that tissue.", e:"<span class='star'>⭐</span><b>Leptin activates POMC neurons</b> → ↑α-MSH → satiety; β-endorphin is more potent than morphine (endogenous opioid)."},
+  {n:"Cushing syndrome — biochemical regulation", g:"HPA axis: <span class='pill'>CRH → ACTH (cAMP) → cortisol</span>", b:"Hypercortisolism. Causes: <mark>iatrogenic/exogenous (most common overall)</mark>, ACTH-secreting pituitary adenoma (68% of endogenous — Cushing disease), adrenal tumor (17%), ectopic ACTH (15%, often malignant).", d:"CRH and ACTH are both released pulsatile with a circadian rhythm — sample timing matters for interpretation.", e:"<span class='star'>⭐</span>Diagnostic tests: <b>24-h urinary free cortisol</b> and the <b>dexamethasone suppression test</b>. Untreated Cushing syndrome carries ~50% 5-year mortality.", img:"<a href=\"biochem_images/enre_tables/enre_tables_p007_cushing_syndrome.png\" target=\"_blank\"><img src=\"biochem_images/enre_tables/enre_tables_p007_cushing_syndrome.png\" loading=\"lazy\"></a>"},
+ ]},
+ {sec:"Catecholamine Synthesis Pathway", tag:"biochem — pathway sequence", pathway:true, steps:[
+  {t:"<b>Tyrosine</b> — the precursor amino acid; taken up into chromaffin cells of the adrenal medulla and CNS neurons."},
+  {t:"<b>Tyrosine → L-DOPA</b> by <mark>tyrosine hydroxylase</mark> — the rate-limiting step; requires <b>tetrahydrobiopterin (BH4)</b> as cofactor."},
+  {t:"<b>L-DOPA → Dopamine</b> by <mark>DOPA decarboxylase</mark> (PLP/vitamin B6-dependent)."},
+  {t:"<b>Dopamine → Norepinephrine</b> by <mark>dopamine β-hydroxylase</mark> (needs vitamin C)."},
+  {t:"<b>Norepinephrine → Epinephrine</b> by <mark>phenylethanolamine-N-methyltransferase (PNMT)</mark>, using <b>S-adenosylmethionine (SAM)</b> as the methyl donor — epinephrine and norepinephrine differ by exactly one methyl group.", img:"<a href=\"biochem_images/hormone_synthesis/hormone_synthesis_p09_catecholamine_biosynthesis.png\" target=\"_blank\"><img src=\"biochem_images/hormone_synthesis/hormone_synthesis_p09_catecholamine_biosynthesis.png\" loading=\"lazy\"></a>"},
+ ], pathwayNote:"PNMT activity depends on high local cortisol draining from the adrenal cortex to the medulla — this is why Addison disease (adrenal cortex failure) can blunt epinephrine synthesis (↓cortisol → ↓PNMT expression). Degradation: MAO (deamination) and COMT (methylation) → VMA and metanephrines, the clinical markers for pheochromocytoma."},
+ {sec:"Steroidogenesis Pathway", tag:"biochem — pathway sequence", pathway:true, steps:[
+  {t:"<b>Cholesterol</b> is the universal steroid precursor, synthesized de novo or taken up via LDL receptor-mediated endocytosis."},
+  {t:"<b>StAR (Steroidogenic Acute Regulatory protein)</b> transports cholesterol from the outer to the inner mitochondrial membrane — the <mark>rate-limiting step</mark>. StAR synthesis is stimulated by LH, ACTH, and angiotensin II, all acting through cAMP."},
+  {t:"<b>Desmolase (CYP11A1, side-chain cleavage enzyme)</b> converts cholesterol → <mark>pregnenolone</mark> inside the mitochondrion — the first committed enzymatic step. All steroidogenic CYP450 enzymes are heme-containing and require O₂ + NADPH.", img:"<a href=\"biochem_images/hormsyn/hormsyn_p18_steroidogenesis.png\" target=\"_blank\"><img src=\"biochem_images/hormsyn/hormsyn_p18_steroidogenesis.png\" loading=\"lazy\"></a>"},
+  {t:"<b>Zona glomerulosa</b> (outermost): pregnenolone → progesterone → 11-deoxycorticosterone → <mark>corticosterone → aldosterone</mark> (via CYP21A2, then CYP11B2/aldosterone synthase). Stimulus = angiotensin II + K⁺."},
+  {t:"<b>Zona fasciculata</b> (middle): pregnenolone → 17-OH-pregnenolone → 17-OH-progesterone → 11-deoxycortisol → <mark>cortisol</mark> (via CYP17A1, CYP21A2, CYP11B1). Stimulus = ACTH."},
+  {t:"<b>Zona reticularis</b> (innermost): 17-OH-pregnenolone → <mark>DHEA → androstenedione</mark> (via CYP17A1's 17,20-lyase activity). Stimulus = ACTH (little/no long-loop feedback)."},
+  {t:"<b>Peripherally</b>: testosterone → <mark>DHT</mark> (5α-reductase, most potent androgen) or → <mark>estradiol</mark> (aromatase/CYP19A1, most potent estrogen)."},
+ ], pathwayNote:"Mnemonic for the cortex: 'GFR — the deeper you go, the sweeter it gets' (Glomerulosa=salt, Fasciculata=sugar, Reticularis=sex). Every enzyme in this pathway maps to a CAH deficiency (21-, 11β-, 17α-hydroxylase) — trace the block to predict which hormones rise and which fall."},
+
+ {sec:"Cases in Biochemistry & Genetics", tag:"biochem", rows:[
+  {n:"Mitochondrial DNA & heteroplasmy", g:"<span class='pill'>mtDNA</span>, <span class='inh'>Maternal (mitochondrial) inheritance</span>", b:"mtDNA is circular, has no introns, encodes 13 oxidative-phosphorylation proteins + rRNA/tRNA. <mark>Heteroplasmy</mark> = a mix of mutant and normal mtDNA within one cell; severity depends on the mutant load ('threshold effect'). Tissues with high energy demand (muscle, brain, retina, cardiac) are hit hardest.", d:"Only the egg contributes mitochondria at fertilization — fathers never transmit mtDNA disease to offspring.", e:"<span class='star'>⭐</span>Random segregation of mitochondria during mitosis → variable heteroplasmy between siblings, even from the same affected mother."},
+  {n:"MELAS syndrome", g:"<span class='pill'>MT-TL1</span> (mitochondrial tRNA-Leu) mutation, <span class='inh'>Maternal</span>", b:"<mark>M</mark>itochondrial <mark>E</mark>ncephalomyopathy, <mark>L</mark>actic <mark>A</mark>cidosis, <mark>S</mark>troke-like episodes. Muscle biopsy: <mark>ragged red fibers</mark> (subsarcolemmal mitochondrial proliferation, modified Gomori trichrome stain).", d:"Stroke-like episodes do NOT respect vascular territories — a key distinguishing clue from a true ischemic stroke.", e:"<span class='star'>⭐</span>Ragged red fibers on histology = mitochondrial myopathy; think MELAS, MERRF, Kearns-Sayre.", img:"<a href=\"biochem_images/cases_biochem_genetics/cases_biochem_genetics_p09_ragged_red_fibers.png\" target=\"_blank\"><img src=\"biochem_images/cases_biochem_genetics/cases_biochem_genetics_p09_ragged_red_fibers.png\" loading=\"lazy\"></a>"},
+  {n:"Lead poisoning (heme synthesis)", g:"Inhibits <span class='pill'>ALA dehydratase</span> and <span class='pill'>ferrochelatase</span>", b:"↑<mark>δ-ALA</mark> and ↑<mark>protoporphyrin</mark> accumulate; also degrades mRNA. Clinical: <mark>microcytic anemia with basophilic stippling</mark>, abdominal pain, peripheral neuropathy (wrist/foot drop), <mark>lead lines on gums</mark>, cognitive decline in children.", d:"Unlike iron deficiency (also microcytic), lead poisoning gives basophilic stippling and normal/high ferritin.", e:"<span class='star'>⭐</span>Microcytic anemia + abdominal pain + neuropathy in a child (paint exposure) = <b>lead poisoning</b>; treat with chelation (EDTA, succimer).", img:"<a href=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p019_lead_poisoning.png\" target=\"_blank\"><img src=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p019_lead_poisoning.png\" loading=\"lazy\"></a>"},
+  {n:"Acute intermittent porphyria (AIP)", g:"<span class='pill'>Porphobilinogen (PBG) deaminase</span> deficiency, <span class='inh'>AD</span>", b:"↑<mark>PBG and δ-ALA</mark> (both are neurotoxic — no skin findings since these precede the photosensitizing porphyrins). Classic pentad: <mark>Painful abdomen, Port-wine urine, Polyneuropathy, Psychiatric disturbance, Precipitated by drugs</mark> (CYP450 inducers, e.g. barbiturates, OCPs, alcohol).", d:"AIP has NO cutaneous photosensitivity — distinguishes it from PCT/EPP/variegate porphyria, which involve downstream, light-reactive porphyrins.", e:"<span class='star'>⭐</span>Abdominal pain + neuropsychiatric symptoms + dark urine on standing, NO skin findings = AIP.", img:"<a href=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p014_acute_intermittent_porphyria.png\" target=\"_blank\"><img src=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p014_acute_intermittent_porphyria.png\" loading=\"lazy\"></a>"},
+  {n:"Porphyria cutanea tarda (PCT)", g:"<span class='pill'>Uroporphyrinogen decarboxylase</span> deficiency, <span class='inh'>AD (with low penetrance) or acquired</span>", b:"↑<mark>uroporphyrin</mark>. Clinical: <mark>blistering photosensitivity, skin fragility</mark> on sun-exposed skin, hyperpigmentation, hypertrichosis. Strongly associated with <mark>Hepatitis C, alcohol use, and iron overload</mark>.", d:"The MOST COMMON porphyria; unlike AIP, has prominent cutaneous but minimal/no neurovisceral symptoms.", e:"<span class='star'>⭐</span>Sun-exposed blistering + HCV/alcohol history = PCT; treat by phlebotomy or hydroxychloroquine.", img:"<a href=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p014_porphyria_cutanea_tarda.png\" target=\"_blank\"><img src=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p014_porphyria_cutanea_tarda.png\" loading=\"lazy\"></a>"},
+  {n:"Erythropoietic protoporphyria (EPP) / X-linked protoporphyria (XLP)", g:"<span class='pill'>Ferrochelatase</span> deficiency (EPP, AD) or <span class='pill'>ALAS2</span> gain-of-function (XLP, <span class='inh'>X-linked</span>)", b:"↑<mark>protoporphyrin</mark>. Clinical: <mark>acute, painful photosensitivity (burning, not blistering) within minutes of sun exposure</mark>, onset in childhood; can cause liver disease (protoporphyrin is hepatotoxic).", d:"Photosensitivity is immediate and painful (vs the delayed blistering of PCT) — protoporphyrin is water-insoluble and doesn't cause the same bullae.", e:"<span class='star'>⭐</span>Child with painful sun sensitivity (no blisters) = EPP/XLP, not PCT.", img:"<a href=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p019_erythropoietic_protoporphyria.png\" target=\"_blank\"><img src=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p019_erythropoietic_protoporphyria.png\" loading=\"lazy\"></a>"},
+  {n:"Hemophilia A / B / C", g:"<span class='pill'>Factor VIII</span> (A) / <span class='pill'>Factor IX</span> (B), <span class='inh'>X-linked recessive</span>; <span class='pill'>Factor XI</span> (C), <span class='inh'>AR</span>", b:"↑<mark>PTT</mark> (intrinsic pathway), normal PT, normal platelet count/bleeding time. Deep tissue bleeding: <mark>hemarthroses, muscle hematomas</mark>.", d:"Hemophilia A and B are clinically identical — distinguished only by factor assay; Hemophilia C (Factor XI) is milder and enriched in Ashkenazi Jewish populations.", e:"<span class='star'>⭐</span>Isolated ↑PTT with normal PT in a male with joint bleeds = Hemophilia A/B; mixing study corrects if factor-deficient.", img:"<a href=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p029_hemophilia_a_b_c.png\" target=\"_blank\"><img src=\"biochem_images/cases_in_biochemistry_and_gene/cases_in_biochemistry_and_gene_p029_hemophilia_a_b_c.png\" loading=\"lazy\"></a>"},
+  {n:"Anticoagulant regulators", g:"<span class='pill'>Antithrombin III</span>, <span class='pill'>Protein C & S</span>, <span class='pill'>TFPI</span>", b:"Antithrombin III inhibits thrombin + factors IXa/Xa/XIa (potentiated by <mark>heparin</mark>). Protein C (activated by thrombin-thrombomodulin) + cofactor Protein S degrade factors <mark>Va and VIIIa</mark>. TFPI inhibits the factor VIIa-tissue factor complex.", d:"Protein C/S deficiency causes hypercoagulability; <mark>warfarin skin necrosis</mark> occurs because Protein C (short half-life) drops before the procoagulant factors do, causing a transient hypercoagulable state at treatment onset.", e:"<span class='star'>⭐</span>Factor V Leiden = factor Va resistant to degradation by Protein C → most common inherited hypercoagulable state."},
+  {n:"Fibrinolysis", g:"<span class='pill'>tPA → Plasminogen → Plasmin</span>", b:"Plasmin degrades fibrin into <mark>D-dimer</mark> and fibrin degradation products. <mark>α2-antiplasmin</mark> inhibits free plasmin.", d:"D-dimer is sensitive but not specific for clot — elevated in DIC, PE/DVT, pregnancy, malignancy, recent surgery.", e:"tPA is the pharmacologic clot-buster (alteplase) used in acute ischemic stroke/MI within the treatment window."},
+ ]},
+ {sec:"Heme Synthesis Pathway", tag:"biochem — pathway sequence", pathway:true, steps:[
+  {t:"<b>Glycine + Succinyl-CoA → δ-Aminolevulinic acid (ALA)</b> by <mark>ALA synthase (ALAS)</mark> — the rate-limiting, PLP (B6)-dependent step; occurs in mitochondria; inhibited by heme (negative feedback)."},
+  {t:"<b>ALA → Porphobilinogen (PBG)</b> by <mark>ALA dehydratase</mark> (cytoplasm) — inhibited by lead."},
+  {t:"<b>PBG → Hydroxymethylbilane</b> by <mark>PBG deaminase (HMB synthase)</mark> — deficient in Acute Intermittent Porphyria."},
+  {t:"<b>→ Uroporphyrinogen III → Coproporphyrinogen III</b> by <mark>uroporphyrinogen decarboxylase</mark> — deficient in Porphyria Cutanea Tarda."},
+  {t:"<b>Coproporphyrinogen III → Protoporphyrinogen IX → Protoporphyrin IX</b> (mitochondria) — protoporphyrinogen oxidase deficiency causes Variegate Porphyria."},
+  {t:"<b>Protoporphyrin IX + Fe²⁺ → Heme</b> by <mark>ferrochelatase</mark> (mitochondria) — inhibited by lead; deficient in Erythropoietic Protoporphyria.", img:"<a href=\"biochem_images/cases/cases_p12_heme_synthesis_pathway.png\" target=\"_blank\"><img src=\"biochem_images/cases/cases_p12_heme_synthesis_pathway.png\" loading=\"lazy\"></a>"},
+ ], pathwayNote:"Heme synthesis alternates between mitochondria (steps 1, 5-6) and cytoplasm (steps 2-4). Lead poisoning hits two non-adjacent enzymes (ALA dehydratase + ferrochelatase), causing both ALA and protoporphyrin to accumulate — a distinctive dual-substrate buildup unique to lead toxicity."},
+ {sec:"Coagulation Cascade", tag:"biochem — pathway sequence", pathway:true, steps:[
+  {t:"<b>Intrinsic pathway</b> (measured by <mark>PTT</mark>): Factor XII → XI → IX (with VIII as cofactor) → X. Activated by contact with negatively charged surfaces (collagen)."},
+  {t:"<b>Extrinsic pathway</b> (measured by <mark>PT/INR</mark>): Tissue factor (released by damaged endothelium) + Factor VII → activates Factor X. This is the faster, in-vivo-dominant initiator."},
+  {t:"<b>Common pathway</b>: Factor Xa (with Va as cofactor) converts <mark>Prothrombin (II) → Thrombin (IIa)</mark>.", img:"<a href=\"biochem_images/cases/cases_p25_coagulation_cascade.png\" target=\"_blank\"><img src=\"biochem_images/cases/cases_p25_coagulation_cascade.png\" loading=\"lazy\"></a>"},
+  {t:"<b>Thrombin</b> converts <mark>Fibrinogen (I) → Fibrin</mark>, activates Factor XIII (cross-links fibrin), activates platelets, and activates Protein C (anticoagulant negative feedback)."},
+  {t:"<b>Factor XIIIa</b> cross-links soluble fibrin into a stable, insoluble clot."},
+ ], pathwayNote:"Vitamin K is required for γ-carboxylation of Factors II, VII, IX, X and Proteins C/S — warfarin blocks vitamin K epoxide reductase, prolonging PT/INR first (Factor VII has the shortest half-life). Heparin instead potentiates antithrombin III, prolonging PTT."},
+
+ {sec:"Prostaglandin Biochemistry", tag:"biochem", rows:[
+  {n:"Essential fatty acids — omega-6 vs omega-3", g:"<span class='pill'>Linoleic acid</span> (ω-6) and <span class='pill'>α-linolenic acid</span> (ω-3) — both essential, diet-only", b:"ω-6 linoleic acid → <mark>arachidonic acid (AA)</mark> → 2-series PGs/TXs + 4-series LTs (pro-inflammatory). ω-3 (fish oil, EPA/DHA) → 3-series PGs/TXs + 5-series LTs (less inflammatory) + resolvins/protectins.", d:"Same enzymes (COX, LOX) act on both families — the omega-3 vs omega-6 substrate ratio determines how inflammatory the resulting eicosanoid pool is.", e:"<span class='star'>⭐</span>High dietary ω-3:ω-6 ratio (fish oil) shifts eicosanoid production toward LESS inflammatory mediators — basis for fish-oil supplementation in cardiovascular/inflammatory disease."},
+  {n:"Phospholipase A2 (PLA2)", g:"<span class='pill'>PLA2</span> — releases arachidonic acid from membrane phospholipids", b:"The <mark>committed, rate-limiting step</mark> of eicosanoid synthesis. Inhibited by <mark>corticosteroids</mark> (via induction of annexin-1/lipocortin).", d:"Corticosteroids block the pathway one step earlier (upstream) than NSAIDs — this is why steroids suppress BOTH prostaglandins AND leukotrienes, while NSAIDs only block the COX branch.", e:"<span class='star'>⭐</span>Steroids inhibit PLA2 (broadest anti-inflammatory effect); NSAIDs inhibit only COX downstream."},
+  {n:"COX-1 vs COX-2", g:"<span class='pill'>COX-1</span> (constitutive) vs <span class='pill'>COX-2</span> (inducible)", b:"COX-1: <mark>gastric mucosal protection (PGE2/PGI2), platelet TXA2, renal blood flow</mark> — housekeeping. COX-2: induced by inflammatory cytokines at sites of injury — <mark>pain, fever, inflammation</mark>.", d:"Selective COX-2 inhibitors (celecoxib) spare gastric mucosa/platelets but raise cardiovascular thrombotic risk (lose the COX-1-driven antiplatelet PGI2:TXA2 balance).", e:"<span class='star'>⭐</span>Aspirin irreversibly acetylates COX-1 in platelets (no nucleus to resynthesize) → antiplatelet effect lasts the platelet's ~10-day lifespan."},
+  {n:"Thromboxane A2 (TXA2)", g:"Made by <span class='pill'>Thromboxane synthase</span> in platelets", b:"<mark>Vasoconstriction + platelet aggregation</mark> — promotes clot formation.", d:"Direct functional opposite of prostacyclin (PGI2) — the balance between the two, made by different cells (platelet vs endothelium), sets thrombotic tone.", e:"<span class='star'>⭐</span>Low-dose aspirin selectively suppresses TXA2 (platelets can't resynthesize COX) while sparing endothelial PGI2 (nucleated cells resynthesize COX) — the rationale for cardioprotective dosing."},
+  {n:"Prostacyclin (PGI2)", g:"Made by <span class='pill'>Prostacyclin synthase</span> in vascular endothelium", b:"<mark>Vasodilation + inhibits platelet aggregation</mark> — opposes TXA2.", d:"Endothelial injury tips the balance toward TXA2 dominance, favoring clot formation at the site of damage.", e:"Synthetic PGI2 analogs (epoprostenol) are used to treat pulmonary arterial hypertension."},
+  {n:"PGE2", g:"Made by <span class='pill'>PGE synthase</span>", b:"<mark>Vasodilation, fever (hypothalamus), pain sensitization, uterine contraction, maintains ductus arteriosus patency, protects gastric mucosa (↓acid secretion, ↑mucus)</mark>.", d:"NSAID-induced peptic ulcers occur because COX inhibition removes this protective gastric PGE2.", e:"<span class='star'>⭐</span>Misoprostol (a PGE1 analog) is used to prevent NSAID-induced ulcers and to ripen the cervix/induce labor; <b>indomethacin</b> closes a patent ductus arteriosus by blocking PGE2."},
+  {n:"PGF2α", g:"Made by <span class='pill'>PGF synthase</span>", b:"<mark>Uterine and bronchial smooth muscle contraction</mark>, luteolysis (regresses corpus luteum).", d:"Clinically used (carboprost) for postpartum hemorrhage due to uterine atony.", e:"Contraindicated in asthma due to bronchoconstriction."},
+  {n:"Leukotrienes (LTB4, LTC4-E4)", g:"Made by <span class='pill'>5-lipoxygenase (5-LOX)</span>", b:"<mark>LTB4</mark>: neutrophil chemotaxis. <mark>LTC4, LTD4, LTE4</mark> (cysteinyl leukotrienes): bronchoconstriction, ↑vascular permeability, mucus secretion — the mediators of the <mark>slow-reacting substance of anaphylaxis</mark>.", d:"Zileuton blocks 5-LOX directly (blocks all leukotrienes); montelukast/zafirlukast block the CysLT1 receptor (blocks only LTC4/D4/E4 effects) — both used in asthma.", e:"<span class='star'>⭐</span>Aspirin-exacerbated respiratory disease: blocking COX shunts arachidonic acid toward the LOX pathway → leukotriene surge → bronchospasm."},
+  {n:"Lipoxins, Resolvins & Protectins", g:"Made via <span class='pill'>12/15-LOX</span> (lipoxins) or from ω-3 precursors (resolvins/protectins)", b:"<mark>Pro-resolution mediators</mark> — actively terminate inflammation (promote macrophage clearance of debris, block neutrophil recruitment) rather than just being inflammation's absence.", d:"A newer concept: inflammation resolution is an active, separately-regulated biochemical program, not passive dilution of pro-inflammatory mediators.", e:"High-yield modern concept: 'inflammation doesn't just fade — it is actively resolved.'"},
+ ]},
+ {sec:"Eicosanoid Synthesis Pathway", tag:"biochem — pathway sequence", pathway:true, steps:[
+  {t:"<b>Membrane phospholipids → Arachidonic acid</b> by <mark>Phospholipase A2</mark> — the committed step; inhibited by corticosteroids."},
+  {t:"<b>Cyclooxygenase branch</b>: Arachidonic acid → <mark>PGG2 → PGH2</mark> by <mark>COX-1/COX-2</mark> — inhibited by NSAIDs (reversible) and aspirin (irreversible)."},
+  {t:"<b>PGH2</b> is converted by tissue-specific synthases into <mark>TXA2</mark> (platelets), <mark>PGI2</mark> (endothelium), <mark>PGE2</mark>, or <mark>PGF2α</mark>.", img:"<a href=\"biochem_images/prostaglandin_biochem/prostaglandin_biochem_p11_eicosanoid_synthesis_pathway.png\" target=\"_blank\"><img src=\"biochem_images/prostaglandin_biochem/prostaglandin_biochem_p11_eicosanoid_synthesis_pathway.png\" loading=\"lazy\"></a>"},
+  {t:"<b>Lipoxygenase branch</b>: Arachidonic acid → <mark>5-HPETE</mark> by <mark>5-lipoxygenase</mark> → <mark>LTA4</mark> → LTB4 or the cysteinyl leukotrienes (LTC4/D4/E4) — inhibited by zileuton.", img:"<a href=\"biochem_images/prostaglandin_biochem/prostaglandin_biochem_p15_cox_cyclization_pathway.png\" target=\"_blank\"><img src=\"biochem_images/prostaglandin_biochem/prostaglandin_biochem_p15_cox_cyclization_pathway.png\" loading=\"lazy\"></a>"},
+ ], pathwayNote:"One substrate (arachidonic acid), two enzymatic branches (COX vs LOX) — nearly every drug in this pathway is named for which branch and which enzyme it blocks: corticosteroids (PLA2, both branches), NSAIDs/aspirin (COX only), zileuton (5-LOX only), montelukast (downstream CysLT1 receptor only)."},
+ {sec:"Thyroid Hormone Biochemistry", tag:"biochem", rows:[
+  {n:"Thyroid hormone transport proteins", g:"<span class='pill'>TBG</span> (~70%), <span class='pill'>transthyretin</span> (~10-20%), <span class='pill'>albumin</span> (~15-20%)", b:"&gt;99% of circulating T3/T4 is protein-bound; only the free fraction is active. TBG has the highest affinity and carries most hormone despite normal levels.", d:"Pregnancy/OCPs raise TBG (estrogen effect) → total T4 rises but free T4 stays normal — a classic mimic of thyroid disease on labs.", e:"<span class='star'>⭐</span>Always interpret free T4/T3, not total, when TBG-altering states (pregnancy, liver disease, nephrotic syndrome) are present."},
+  {n:"Peripheral deiodinases (D1, D2, D3)", g:"<span class='pill'>Selenium-dependent deiodinases</span>", b:"<mark>D1</mark> (liver, kidney): T4→T3 and T4→rT3. <mark>D2</mark> (pituitary, brain, brown fat): T4→T3 only — provides local intracellular T3 for TSH feedback. <mark>D3</mark> (placenta, fetal tissue, brain): T4→rT3 (inactivates) — dominant in illness/starvation.", d:"D3 dominance in 'sick euthyroid syndrome' (non-thyroidal illness) explains low T3/high rT3 with normal TSH during severe illness — an adaptive, not pathologic, state.", e:"<span class='star'>⭐</span>Selenium deficiency impairs deiodinase activity — relevant in combined iodine + selenium-deficient regions."},
+  {n:"TRH–TSH–thyroid axis", g:"<span class='pill'>TRH (hypothalamus) → TSH (pituitary, Gs-cAMP) → T3/T4</span>", b:"T3/T4 provide negative feedback at both hypothalamus and pituitary. TSH binds the <mark>TSH receptor (Gs-coupled)</mark> on thyroid follicular cells, stimulating every step of hormone synthesis.", d:"Graves disease: TSH-receptor stimulating autoantibodies mimic TSH → hyperthyroidism with suppressed (not elevated) TSH.", e:"<span class='star'>⭐</span>Primary hypothyroidism = ↑TSH, ↓free T4; central (secondary) hypothyroidism = ↓/inappropriately-normal TSH, ↓free T4."},
+ ]},
+ {sec:"Thyroid Hormone Synthesis Pathway", tag:"biochem — pathway sequence", pathway:true, steps:[
+  {t:"<b>Iodide trapping</b>: Dietary iodide is actively transported into the follicular cell by the <mark>Na+/I- symporter (NIS)</mark> — stimulated by TSH."},
+  {t:"<b>Iodide efflux into the colloid</b> via <mark>pendrin</mark> — mutated in Pendred syndrome (congenital deafness + goiter)."},
+  {t:"<b>Organification</b>: <mark>Thyroid peroxidase (TPO)</mark> oxidizes iodide and iodinates tyrosine residues on <mark>thyroglobulin</mark>, forming MIT (mono-iodotyrosine) and DIT (di-iodotyrosine) — requires H2O2 as oxidant; blocked by <mark>methimazole/PTU</mark>.", img:"<a href=\"biochem_images/thyanat/thyanat_p25_thyroid_synthesis.png\" target=\"_blank\"><img src=\"biochem_images/thyanat/thyanat_p25_thyroid_synthesis.png\" loading=\"lazy\"></a>"},
+  {t:"<b>Coupling</b> (also TPO-catalyzed): MIT + DIT → <mark>T3</mark>; DIT + DIT → <mark>T4</mark> — still attached to thyroglobulin, stored in the follicular colloid."},
+  {t:"<b>Endocytosis & proteolysis</b>: TSH stimulates pinocytosis of iodinated thyroglobulin back into the follicular cell; lysosomal proteolysis releases free <mark>T3 and T4</mark> into the bloodstream (T4 in ~10-20x excess over T3, via MCT8/MCT10 transporters)."},
+  {t:"<b>Peripheral conversion</b>: T4 (mostly a prohormone) is deiodinated to the far more potent <mark>T3</mark> by peripheral deiodinases, or inactivated to reverse T3 (rT3)."},
+ ], pathwayNote:"PTU blocks both TPO (organification/coupling) AND peripheral D1 deiodination (T4→T3) — giving it a theoretical edge over methimazole in thyroid storm, though methimazole is preferred outside pregnancy's first trimester for its lower hepatotoxicity risk."},
+
+ {sec:"Adrenal Gland Biochemistry", tag:"biochem", rows:[
+  {n:"Adrenal cortex zonation & products", g:"<span class='pill'>Zona glomerulosa / fasciculata / reticularis</span>", b:"<mark>Glomerulosa → aldosterone</mark> (mineralocorticoid, no 17α-hydroxylase, lacks a distinct fasciculata-type stimulus — driven by angiotensin II/K+). <mark>Fasciculata → cortisol</mark> (glucocorticoid, ACTH-driven). <mark>Reticularis → DHEA/androstenedione</mark> (androgens, ACTH-driven).", d:"Only the glomerulosa expresses aldosterone synthase (CYP11B2); only the fasciculata/reticularis express 17α-hydroxylase (CYP17A1) — this is WHY each zone makes only its designated hormone class.", e:"<span class='star'>⭐</span>'GFR — the deeper you go, the sweeter it gets' (salt, sugar, sex).", img:"<a href=\"biochem_images/adrsf/adrsf_p9_adrenal_cortex_zones.png\" target=\"_blank\"><img src=\"biochem_images/adrsf/adrsf_p9_adrenal_cortex_zones.png\" loading=\"lazy\"></a>"},
+  {n:"Catecholamine release from the adrenal medulla", g:"<span class='pill'>Chromaffin cells</span> — modified postganglionic sympathetic neurons", b:"Preganglionic sympathetic fibers release ACh → binds <mark>nicotinic receptors</mark> on chromaffin cells → depolarization → voltage-gated Ca2+ influx → exocytosis of catecholamine-containing granules. Adrenal medulla secretes epinephrine:norepinephrine in about a <mark>4:1</mark> ratio (reflecting high local PNMT activity, cortisol-dependent).", d:"The adrenal medulla is functionally a specialized sympathetic ganglion — its cells never grew axons, secreting hormonally into blood instead.", e:"<span class='star'>⭐</span>Pheochromocytoma arises from these chromaffin cells — episodic catecholamine surges cause paroxysmal hypertension, palpitations, diaphoresis, headache."},
+  {n:"Aldosterone actions in the kidney", g:"<span class='pill'>Mineralocorticoid receptor (MR)</span> — cytoplasmic, translocates to nucleus", b:"Upregulates <mark>ENaC</mark> (apical Na+ reabsorption), <mark>Na+/K+-ATPase</mark> (basolateral), and <mark>H+-ATPase</mark> in the collecting duct → net Na+/water retention, K+ and H+ secretion.", d:"11β-HSD2 normally inactivates cortisol locally so only aldosterone (not the much-higher-concentration cortisol) activates renal MR — the basis of Apparent Mineralocorticoid Excess when this enzyme is inhibited.", e:"<span class='star'>⭐</span>Aldosterone excess → hypertension, hypokalemia, metabolic alkalosis (Conn syndrome).", img:"<a href=\"biochem_images/adrsf/adrsf_p24_raas.png\" target=\"_blank\"><img src=\"biochem_images/adrsf/adrsf_p24_raas.png\" loading=\"lazy\"></a>"},
+  {n:"Natriuretic peptides (ANP/BNP)", g:"<span class='pill'>ANP</span> (atrial myocytes) / <span class='pill'>BNP</span> (ventricular myocytes) — released by wall stretch", b:"Oppose RAAS: <mark>vasodilation, natriuresis/diuresis, inhibit renin and aldosterone release</mark>.", d:"BNP is clinically used as a heart failure biomarker — ventricular stretch from volume overload drives its release.", e:"<span class='star'>⭐</span>ANP/BNP are the physiologic counterbalance to the RAAS axis — think of them as the body's 'anti-aldosterone.'"},
+  {n:"Glucocorticoid (HPA axis) regulation", g:"<span class='pill'>CRH → ACTH (Gs-cAMP) → cortisol</span>", b:"Circadian rhythm: cortisol peaks early morning, troughs at night. Cortisol negative-feedbacks at both hypothalamus (↓CRH) and pituitary (↓ACTH).", d:"Chronic exogenous steroid use suppresses the entire HPA axis — abrupt withdrawal risks adrenal insufficiency because the axis needs time to reactivate.", e:"<span class='star'>⭐</span>Give stress-dose steroids before surgery in patients on chronic steroids — their HPA axis cannot mount its own cortisol surge."},
+  {n:"11β-HSD1 vs 11β-HSD2", g:"<span class='pill'>11β-HSD1</span> (activates cortisone→cortisol, most tissues) vs <span class='pill'>11β-HSD2</span> (inactivates cortisol→cortisone, kidney/placenta)", b:"Opposite-direction isoenzymes of the same reaction, tissue-specific — this dual system lets the body use one circulating glucocorticoid pool while protecting select tissues (kidney MR, fetus) from cortisol excess.", d:"11β-HSD2 deficiency (or licorice inhibition) = Apparent Mineralocorticoid Excess.", e:"11β-HSD1 is a drug target of interest in obesity/metabolic syndrome research (local cortisol regeneration in fat/liver)."},
+ ]},
+ {sec:"Parathyroid & Calcium Biochemistry", tag:"biochem", rows:[
+  {n:"PTH synthesis & secretion", g:"<span class='pill'>Chief cells</span> of parathyroid; sensed by <span class='pill'>Calcium-sensing receptor (CaSR)</span>", b:"↓serum Ca2+ → CaSR senses drop → ↑PTH secretion. PTH: ↑bone resorption (osteoclast activation via RANKL), ↑renal Ca2+ reabsorption, ↓renal phosphate reabsorption, ↑renal <mark>1α-hydroxylase</mark> activity (activates vitamin D).", d:"PTH's net effect is to raise serum calcium while LOWERING serum phosphate — the opposite phosphate direction from vitamin D's direct action, a common exam discriminator.", e:"<span class='star'>⭐</span>Primary hyperparathyroidism: ↑Ca2+, ↓phosphate, ↑PTH — most often from a solitary parathyroid adenoma.", img:"<a href=\"biochem_images/endocrine_pathology_physio/endocrine_pathology_physio_p028_pth_physiology_calcitonin.png\" target=\"_blank\"><img src=\"biochem_images/endocrine_pathology_physio/endocrine_pathology_physio_p028_pth_physiology_calcitonin.png\" loading=\"lazy\"></a>"},
+  {n:"Calcitonin", g:"<span class='pill'>Parafollicular (C) cells</span> of the thyroid", b:"Released in response to <mark>hypercalcemia</mark>; inhibits osteoclast activity, lowering serum Ca2+ — a minor physiologic counter-regulator (much weaker effect than PTH's).", d:"Clinically used as a tumor marker for medullary thyroid carcinoma (arises from these same C cells) and pharmacologically for Paget disease/hypercalcemia/osteoporosis.", e:"Mnemonic: calcitonin 'tones down' calcium."},
+  {n:"Calcium-sensing receptor (CaSR)", g:"<span class='pill'>CaSR</span> — GPCR on parathyroid chief cells and renal tubule cells", b:"Directly senses extracellular Ca2+; high Ca2+ suppresses PTH release, low Ca2+ stimulates it.", d:"Inactivating CaSR mutations → Familial Hypocalciuric Hypercalcemia (FHH): mild hypercalcemia with inappropriately low urine calcium, PTH normal/mildly high — mimics primary hyperparathyroidism but does NOT need surgery.", e:"<span class='star'>⭐</span>Distinguish FHH from primary hyperparathyroidism using the urine calcium/creatinine clearance ratio (low in FHH, high in 1° HPT).", img:"<a href=\"biochem_images/endocrine_pathology_physio/endocrine_pathology_physio_p031_familial_hypocalciuric_hypercalcemia.png\" target=\"_blank\"><img src=\"biochem_images/endocrine_pathology_physio/endocrine_pathology_physio_p031_familial_hypocalciuric_hypercalcemia.png\" loading=\"lazy\"></a>"},
+ ]},
+ {sec:"Vitamin D Activation Pathway", tag:"biochem — pathway sequence", pathway:true, steps:[
+  {t:"<b>Skin</b>: 7-dehydrocholesterol → <mark>Vitamin D3 (cholecalciferol)</mark>, catalyzed non-enzymatically by UVB light. Alternatively obtained from diet (D3 from animal sources, D2/ergocalciferol from plants/fortified foods)."},
+  {t:"<b>Liver</b>: Vitamin D3 → <mark>25-hydroxyvitamin D (calcidiol)</mark> by <mark>25-hydroxylase</mark> — this is the major circulating storage form and the one measured clinically to assess vitamin D status."},
+  {t:"<b>Kidney</b>: 25-OH-vitamin D → <mark>1,25-dihydroxyvitamin D (calcitriol)</mark> by <mark>1α-hydroxylase</mark> — the ACTIVE hormone form. This step is stimulated by PTH and by hypophosphatemia, and is the tightly-regulated rate-limiting step."},
+  {t:"<b>Calcitriol actions</b>: ↑intestinal Ca2+ AND phosphate absorption, ↑renal Ca2+ reabsorption, permits PTH-driven bone resorption; net effect raises BOTH serum calcium and phosphate (unlike PTH, which raises Ca2+ but lowers phosphate)."},
+ ], pathwayNote:"Chronic kidney disease impairs 1α-hydroxylation → low calcitriol → hypocalcemia → secondary hyperparathyroidism, a key link between renal failure and CKD-mineral bone disease."},
+ {sec:"Endocrine Pancreas Biochemistry", tag:"biochem", rows:[
+  {n:"Insulin secretion mechanism (β-cell)", g:"<span class='pill'>GLUT2</span> → glucokinase → <span class='pill'>K-ATP channel</span> closure", b:"↑Glucose enters via GLUT2 → glucokinase phosphorylates it (rate-limiting, glucose sensor) → ↑ATP:ADP ratio → closes <mark>K-ATP channels</mark> → membrane depolarization → opens <mark>voltage-gated Ca2+ channels</mark> → Ca2+ influx triggers exocytosis of insulin granules.", d:"Sulfonylureas (glyburide, glipizide) directly bind and close the K-ATP channel, bypassing the glucose-sensing step entirely — this is why they can cause hypoglycemia even without a meal.", e:"<span class='star'>⭐</span>K-ATP channel = the pharmacologic target shared by sulfonylureas (close it, ↑insulin) and diazoxide (opens it, ↓insulin — used for insulinoma/hyperinsulinism)."},
+  {n:"Proinsulin processing & C-peptide", g:"<span class='pill'>Prohormone convertases 1/2 + carboxypeptidase E</span>", b:"Preproinsulin → proinsulin (signal peptide cleaved) → cleaved into <mark>insulin + C-peptide</mark> in equimolar amounts, co-secreted.", d:"C-peptide is NOT present in exogenous insulin — measuring it distinguishes endogenous overproduction (insulinoma, sulfonylurea use — C-peptide high) from exogenous/factitious insulin injection (C-peptide LOW, insulin high).", e:"<span class='star'>⭐</span>Hypoglycemia workup: high insulin + high C-peptide = endogenous (insulinoma/sulfonylurea); high insulin + LOW C-peptide = exogenous insulin administration."},
+  {n:"Glucagon", g:"<span class='pill'>α-cells</span> of the pancreatic islets", b:"Released in hypoglycemia/fasting; stimulates <mark>hepatic glycogenolysis and gluconeogenesis</mark> via glucagon receptor-Gs-cAMP-PKA signaling.", d:"Functional antagonist of insulin at the liver — the insulin:glucagon ratio, not either hormone alone, sets whether the liver is in a fed (glycogen-storing) or fasted (glucose-releasing) state.", e:"Glucagonoma: necrolytic migratory erythema, diabetes, weight loss, DVT — classic tetrad."},
+ ]},
+ {sec:"Obesity & Appetite Regulation Biochemistry", tag:"biochem", rows:[
+  {n:"Leptin–melanocortin pathway", g:"<span class='pill'>Leptin</span> (adipocytes) → hypothalamic arcuate nucleus", b:"Leptin (proportional to fat mass) activates <mark>POMC/CART neurons</mark> (→ α-MSH → MC4R → satiety, ↑energy expenditure) and inhibits <mark>NPY/AgRP neurons</mark> (orexigenic, would otherwise stimulate hunger).", d:"Most human obesity is a state of <mark>leptin resistance</mark> (high leptin, blunted response), not leptin deficiency — congenital leptin deficiency (rare) causes severe early-onset obesity and DOES respond to leptin replacement.", e:"<span class='star'>⭐</span>MC4R mutations are the most common monogenic cause of severe childhood obesity.", img:"<a href=\"biochem_images/obesity_and_metabolic_syndrome/obesity_and_metabolic_syndrome_p012_leptin_appetite_dysregulation.png\" target=\"_blank\"><img src=\"biochem_images/obesity_and_metabolic_syndrome/obesity_and_metabolic_syndrome_p012_leptin_appetite_dysregulation.png\" loading=\"lazy\"></a>"},
+  {n:"Ghrelin", g:"<span class='pill'>Ghrelin</span> — stomach (gastric fundus)", b:"'The hunger hormone' — rises before meals, falls after eating; stimulates NPY/AgRP neurons (opposes leptin's satiety signal), stimulates GH release from the pituitary.", d:"Ghrelin is one of the few gut hormones that RISES with fasting rather than falling — after bariatric (sleeve) surgery, removal of the ghrelin-producing fundus contributes to reduced appetite.", e:"Ghrelin also acts as a GH secretagogue via the GHS-receptor, independent of its appetite role."},
+ ]},
+ {sec:"Insulin Receptor Signaling", tag:"biochem", rows:[
+  {n:"Insulin receptor mechanism", g:"<span class='pill'>Receptor tyrosine kinase</span> (α2β2 tetramer)", b:"Insulin binding → autophosphorylation of the β-subunits → phosphorylates <mark>IRS (insulin receptor substrate)</mark> proteins → two branching cascades: <mark>PI3K/Akt pathway</mark> (metabolic effects — GLUT4 translocation, glycogen/lipid/protein synthesis) and <mark>Ras/MAPK pathway</mark> (mitogenic/growth effects).", d:"This is the same receptor tyrosine kinase superfamily as IGF-1 and EGF receptors — explains why extreme insulin/IGF-1 crosstalk occurs in states like acromegaly and severe insulin resistance syndromes.", e:"<span class='star'>⭐</span>GLUT4 (insulin-responsive glucose transporter in muscle/fat) translocation to the membrane is the key PI3K/Akt-driven metabolic effect — GLUT4 is absent from insulin-INdependent tissues like brain (GLUT1/3) and liver (GLUT2).", img:"<a href=\"biochem_images/obesity_and_metabolic_syndrome/obesity_and_metabolic_syndrome_p027_insulin_resistance.png\" target=\"_blank\"><img src=\"biochem_images/obesity_and_metabolic_syndrome/obesity_and_metabolic_syndrome_p027_insulin_resistance.png\" loading=\"lazy\"></a>"},
+ ]},
+ {sec:"Male Reproductive Steroid Biochemistry", tag:"biochem", rows:[
+  {n:"Testosterone peripheral conversion", g:"<span class='pill'>5α-reductase</span> (→DHT) / <span class='pill'>Aromatase (CYP19A1)</span> (→estradiol)", b:"~6-8% of testosterone converts to <mark>DHT</mark> (more potent, drives external genitalia/prostate/hair); a much smaller fraction (~0.3%) converts to <mark>estradiol</mark> (drives epiphyseal closure even in males).", d:"Testosterone itself drives Wolffian duct differentiation, muscle mass, spermatogenesis, libido — DHT and estradiol are downstream, tissue-specific amplifications of the same hormone.", e:"<span class='star'>⭐</span>Even in males, epiphyseal plate closure is estrogen (not testosterone/DHT)-dependent — aromatase deficiency in males causes continued linear growth past normal puberty end.", img:"<a href=\"biochem_images/male_reproductive_physiology_a/male_reproductive_physiology_a_p022_5_reductase_deficiency.png\" target=\"_blank\"><img src=\"biochem_images/male_reproductive_physiology_a/male_reproductive_physiology_a_p022_5_reductase_deficiency.png\" loading=\"lazy\"></a>"},
+  {n:"Androgen receptor signaling", g:"<span class='pill'>Androgen receptor (AR)</span> — nuclear hormone receptor", b:"Testosterone/DHT bind cytoplasmic AR → translocates to nucleus → acts as a transcription factor at androgen response elements. DHT binds AR with higher affinity than testosterone.", d:"Complete Androgen Insensitivity Syndrome: 46,XY with a non-functional AR — testes present (produce testosterone, normal MIF suppresses Müllerian structures) but no androgen response → phenotypically female external genitalia, blind vaginal pouch, absent uterus.", e:"<span class='star'>⭐</span>CAIS patients are raised female, phenotypically female at puberty (breast development from peripheral aromatization of testosterone to estrogen) but primary amenorrhea (no uterus).", img:"<a href=\"biochem_images/male_reproductive_physiology_a/male_reproductive_physiology_a_p017_complete_androgen_insensitivity.png\" target=\"_blank\"><img src=\"biochem_images/male_reproductive_physiology_a/male_reproductive_physiology_a_p017_complete_androgen_insensitivity.png\" loading=\"lazy\"></a>"},
+ ]},
+
+ {sec:"Endocrinology Biochem [summary]", tag:"[summary]", rows:[
+  {n:"Thyroid cell embryologic origin", g:"<span class='pill'>Follicular cells</span> — endoderm; <span class='pill'>Parafollicular (C) cells</span> — neural crest", b:"Follicular cells make T3/T4; C cells make calcitonin. Different embryologic origins explain why C-cell tumors (medullary thyroid carcinoma) behave and are worked up differently from follicular-cell-derived thyroid cancers.", d:"Neural-crest origin of C cells links medullary thyroid carcinoma to MEN2 syndromes (also neural-crest-derived pheochromocytoma).", e:"⭐ endoderm→follicle→T3/T4; neural crest→C cell→calcitonin."},
+  {n:"Leptin regulation of the thyroid axis", g:"<span class='pill'>Leptin</span> stimulates hypothalamic TRH/TSH secretion", b:"During starvation/severe weight loss, falling leptin suppresses TRH → ↓thyroid hormone production → ↓basal metabolic rate — an adaptive energy-conservation response.", d:"Explains the low-T3 ('euthyroid sick') pattern sometimes seen with severe caloric restriction, distinct from primary thyroid disease.", e:"Ties obesity/starvation physiology directly to thyroid axis regulation — a favorite integrative exam link."},
+  {n:"Dinoprostone & 15-deoxy-PGJ2", g:"<span class='pill'>PGE2 derivatives</span>", b:"<mark>Dinoprostone</mark> (naturally-occurring PGE2): oxytocic — used for labor induction, controlling postpartum bleeding, and pregnancy termination. <mark>15-deoxy-PGJ2</mark>: a PPAR-γ agonist — pro-apoptotic, anti-inflammatory, antiangiogenic, antimetastatic, and insulin-sensitizing.", d:"15d-PGJ2 is the biochemical link between prostaglandin metabolism and PPAR-γ, the same nuclear receptor targeted by thiazolidinedione diabetes drugs.", e:"⭐ PGE2 also keeps the ductus arteriosus patent — indomethacin (blocks synthesis) closes it; alprostadil (PGE1) keeps it open pre-op in duct-dependent congenital heart disease."},
+  {n:"PGE2 in periodontitis", g:"—", b:"PGE2 is a potent mediator of periodontal disease pathogenesis — it stimulates osteoclast production, driving alveolar bone and tooth loss. NSAIDs measurably decrease periodontal disease progression.", d:"An applied example of PGE2's bone-resorptive action outside the classic renal/GI/uterine contexts.", e:"Shows COX-pathway relevance is broader than the 'GI ulcer / antiplatelet' exam reflex."},
+  {n:"PYY (peptide YY)", g:"<span class='pill'>PYY</span> — an NPY analog, released from the ileum/colon (L cells) postprandially", b:"Binds inhibitory receptors on arcuate-nucleus neurons → reduces NPY/AgRP secretion → suppresses appetite.", d:"Functions opposite to its structural relative NPY — same peptide family, opposite appetite direction, illustrating receptor-context-dependent signaling.", e:"Part of the gut-brain satiety axis alongside leptin, GLP-1, and CCK."},
+  {n:"Amylin", g:"<span class='pill'>Amylin (IAPP)</span> — co-secreted with insulin from pancreatic β-cells", b:"Inhibits glucagon secretion, delays gastric emptying, and acts as a satiety agent. Deficient in diabetes mellitus (β-cell loss/dysfunction parallels insulin deficiency).", d:"Basis for pramlintide (synthetic amylin analog) as an adjunct injectable in diabetes management.", e:"⭐ Amylin and insulin are co-secreted in a fixed ratio — amylin deficiency tracks with insulin deficiency in both T1DM and advanced T2DM."},
+  {n:"Adiponectin vs Resistin", g:"<span class='pill'>Adipokines</span> secreted by adipose tissue", b:"<mark>Adiponectin</mark>: increases insulin sensitivity — paradoxically DECREASED in obesity. <mark>Resistin</mark>: decreases insulin sensitivity — INCREASED in obesity.", d:"Two adipose-derived hormones with opposite effects on insulin sensitivity, both dysregulated in the same direction of harm as fat mass increases — a key mechanistic link between obesity and insulin resistance.", e:"⭐ Low adiponectin + high resistin = the adipokine signature of obesity-driven insulin resistance."},
+  {n:"TNF-α and insulin resistance", g:"<span class='pill'>TNF-α</span> activates serine/threonine kinases", b:"These kinases phosphorylate <mark>IRS-1 on serine</mark> (instead of the normal activating tyrosine phosphorylation) → uncouples insulin receptor signaling → cellular insulin resistance. Occurs alongside adipose tissue inflammation/macrophage infiltration in obesity.", d:"Serine phosphorylation of IRS-1 is an INHIBITORY modification — contrasts directly with the activating tyrosine phosphorylation cascade of normal insulin signaling.", e:"⭐ The molecular link between chronic low-grade inflammation (obesity) and type 2 diabetes: TNF-α → Ser-phosphorylated IRS-1 → insulin resistance."},
+  {n:"CD36", g:"<span class='pill'>CD36</span> — scavenger receptor", b:"Mediates high-affinity uptake of long-chain fatty acids into tissues; contributes to lipotoxicity and reduced mitochondrial biogenesis in obesity.", d:"Part of the broader theme that excess fatty-acid flux (not just excess glucose) drives cellular metabolic dysfunction in obesity/T2DM.", e:"Minor but recurring exam detail on fatty-acid uptake receptors."},
+ ]},
+];
+const tbody=document.getElementById('tbody');
+const secpickEl=document.getElementById('secpick');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.pathway?grp.steps.length+" steps":grp.rows.length+" entries"}${grp.tag?" · "+grp.tag:""}</span></span></td>`;
+  tbody.appendChild(secRow);
+
+  if(grp.pathway){
+    total+=grp.steps.length;
+    const tr=document.createElement('tr');
+    tr.className='row pathway';
+    tr.dataset.sec=gi;
+    const txt=(grp.sec+' '+grp.steps.map(s=>s.t).join(' ')).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const stepsHtml=grp.steps.map(s=>`<li>${s.t}${s.img?`<div class="stepimg">${s.img}</div>`:''}</li>`).join('');
+    tr.innerHTML=`<td colspan="6"><div class="steps"><ol>${stepsHtml}</ol>${grp.pathwayNote?`<div class="stepnote">${grp.pathwayNote}</div>`:''}</div></td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td>
+      <td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// section picker (dropdown)
+const optAll=document.createElement('option');
+optAll.value='all';optAll.textContent='All lectures';
+secpickEl.appendChild(optAll);
+DATA.forEach((grp,gi)=>{
+  const o=document.createElement('option');
+  o.value=gi;
+  const n = grp.pathway ? grp.steps.length : grp.compare ? grp.items.length : grp.rows.length;
+  o.textContent=`${grp.sec}  (${n})`;
+  secpickEl.appendChild(o);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> entries`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+secpickEl.addEventListener('change',()=>{
+  activeSec=secpickEl.value;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + section picker). Measured live so fullscreen, resize, and
+// font-load changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){
+    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+    if(p[0].toLowerCase()===here) a.className='sk-here';
+    nav.appendChild(a);
+  });
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>

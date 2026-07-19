@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GI Pathology — High-Yield Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:6px 11px;border:1px solid var(--line-strong);border-radius:99px;
+    background:var(--surface);color:var(--muted);cursor:pointer;user-select:none;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:14%}
+  col.c-gene{width:16%}
+  col.c-buzz{width:30%}
+  col.c-diff{width:21%}
+  col.c-exam{width:19%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">GI Pathology · Rapid Reference</p>
+  <h1>The differentiators, the buzzwords,<br>and the things that <em>will</em> be tested.</h1>
+  <p class="sub">Every pathology from your GINU deck on one scannable grid. Teal = genetics & inheritance. Highlighted = the classic buzzword/finding. The crimson rail on the right is the single fact most likely to anchor a question stem.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search pathology, gene, finding…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Gene / inheritance</span>
+      <span><i class="sw b"></i>Buzzword finding</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Pathology</th>
+          <th>Gene / Mutation / Inheritance</th>
+          <th>Buzzwords &amp; Classic Findings</th>
+          <th>Key Differentiator</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No pathology matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Study reference compiled from your GINU Pathology deck. High-yield associations reflect standard USMLE Step 1 GI pathology — verify against your lecture material where they differ. Not a substitute for the primary notes.
+</footer>
+
+<script>
+const DATA = [
+ {sec:"Intro / Clinical Correlates", rows:[
+  {n:"Peritonitis", g:"—", b:"Rebound tenderness, <mark>rigid board-like abdomen</mark>, guarding. Parietal = sharp/localized; visceral = dull/referred.", d:"Inflammation of peritoneum from infection/gas/feces entering the cavity.", e:"<b>SBP</b> in cirrhotics → E. coli; ascitic fluid <b>PMN &gt;250/µL</b> is diagnostic."},
+  {n:"Ascites", g:"—", b:"<mark>Shifting dullness</mark>, fluid wave, distended flanks.", d:"Excess fluid in peritoneal cavity.", e:"<b>SAAG ≥1.1</b> g/dL → portal hypertension (transudate); &lt;1.1 → malignancy/infection."},
+  {n:"Kwashiorkor", g:"—", b:"<mark>Edema</mark> + <mark>fatty liver/hepatomegaly</mark>, 'flaky paint' dermatosis, hair depigmentation, distended belly.", d:"Protein-deficient with adequate calories. Mnemonic = <b>MEAL</b>.", e:"<span class='star'>⭐</span>Edema + hepatomegaly = kwashiorkor (protein, not calorie, lack)."},
+  {n:"Marasmus", g:"—", b:"Total wasting, <mark>'broomstick' extremities</mark>, loss of subcutaneous fat, <b>NO edema</b>.", d:"Total calorie deficiency; body breaks down muscle/organs.", e:"<span class='star'>⭐</span>Emaciation <b>without</b> edema distinguishes it from kwashiorkor."},
+ ]},
+ {sec:"Congenital GI Birth Defects", rows:[
+  {n:"Meckel's Diverticulum", g:"<span class='pill'>Persistent vitelline duct</span>", b:"<mark>Rule of 2's</mark>; ectopic gastric/pancreatic tissue → painless lower GI bleed in a child.", d:"<b>TRUE</b> diverticulum (all 3 layers). Most common congenital GI anomaly.", e:"<span class='star'>⭐</span><b>Tc-99m pertechnetate scan</b>; 2% pop, 2 ft from ileocecal valve, 2 in, age 2, 2 tissue types."},
+  {n:"Hirschsprung Disease", g:"<span class='pill'>RET</span>", b:"Failure to pass meconium &gt;48h, <mark>absent ganglion cells</mark> (Auerbach + Meissner), failed neural crest migration.", d:"Dilated proximal / narrow aganglionic distal (rectum) segment.", e:"<span class='star'>⭐</span><b>Rectal suction biopsy</b> = absent ganglia; strongly assoc. <b>Down syndrome</b>."},
+  {n:"Mixed Rotation & Volvulus", g:"—", b:"Twisted bowel, <mark>bilious vomiting</mark>.", d:"Incomplete rotation predisposes midgut to twist.", e:"<b>Whirlpool sign</b> / corkscrew duodenum on imaging."},
+  {n:"Nonrotation of Midgut", g:"—", b:"Cecum sits inferior to pylorus; <mark>left-sided small bowel</mark>.", d:"Only the initial 90° rotation occurs.", e:"Predisposes to volvulus."},
+  {n:"Reversed Rotation", g:"—", b:"<mark>Clockwise</mark> rotation (normal is anti-clockwise).", d:"Transverse colon passes behind duodenum/SMA.", e:"Rare; defined by the reversed direction of rotation."},
+  {n:"Omphalocele", g:"<span class='pill'>Trisomy 13/18</span>", b:"<mark>Midline</mark> herniation <b>covered</b> by peritoneum/amnion, at the umbilicus.", d:"Membrane-covered; failure of intestines to return wk 10.", e:"<span class='star'>⭐</span><b>Covered sac</b> + assoc. chromosomal anomalies / Beckwith-Wiedemann."},
+  {n:"Umbilical Hernia", g:"—", b:"Intestines return then re-herniate; <mark>covered by skin</mark>.", d:"Skin-covered, unlike omphalocele.", e:"Usually self-resolves."},
+  {n:"Gastroschisis", g:"—", b:"Bowel <b>NOT covered</b>, defect to the <mark>right of umbilicus</mark>.", d:"No sac; <b>no</b> chromosomal association.", e:"<span class='star'>⭐</span>Exposed bowel + paraumbilical (right) defect = gastroschisis vs covered omphalocele."},
+  {n:"Annular Pancreas", g:"<span class='pill'>Down syndrome</span>", b:"Pancreatic ring encircles duodenum; <mark>double-bubble sign</mark>.", d:"Abnormal migration of ventral pancreatic bud.", e:"<b>Duodenal obstruction</b> with double-bubble on x-ray."},
+  {n:"Heterotopic / Accessory Pancreatic Tissue", g:"—", b:"Ectopic pancreatic tissue (stomach/duodenum), normal histology.", d:"Normal tissue, abnormal location.", e:"Usually an incidental finding."},
+  {n:"Short Esophagus", g:"—", b:"Failure of esophagus to elongate → part of stomach pulled into thorax.", d:"Congenital shortening.", e:"Predisposes to <b>hiatal hernia / GERD</b>."},
+  {n:"Barrett's Esophagus", g:"—", b:"<mark>Goblet cells</mark> — squamous → nonciliated <b>columnar (intestinal metaplasia)</b>; salmon-pink mucosa.", d:"Consequence of chronic GERD/acid exposure (distal esophagus).", e:"<span class='star'>⭐</span>↑ risk <b>esophageal ADENOcarcinoma</b>; metaplasia with goblet cells."},
+  {n:"Congenital Hypertrophic Pyloric Stenosis", g:"—", b:"<mark>Nonbilious projectile vomiting</mark> at 3–6 wks, palpable 'olive', visible peristalsis, curdled milk.", d:"Hypertrophy of pyloric muscularis; firstborn males, erythromycin link.", e:"<span class='star'>⭐</span><b>Hypochloremic hypokalemic metabolic alkalosis</b>."},
+ ]},
+ {sec:"Obstruction & Vascular", rows:[
+  {n:"Bowel Obstruction", g:"—", b:"↑ luminal pressure → compromised supply. <mark>Mural/mucosal</mark> vs <mark>transmural infarction</mark>.", d:"Watershed zones (splenic flexure) most vulnerable.", e:"Transmural infarction → <b>perforation</b>; air-fluid levels on x-ray."},
+  {n:"Peritoneal Adhesions", g:"—", b:"<mark>Fibrous bands</mark> after surgery/inflammation.", d:"Acquired post-op fibrosis.", e:"<span class='star'>⭐</span><b>#1 cause of small bowel obstruction</b> in adults."},
+  {n:"Paralytic Ileus", g:"—", b:"<mark>Failure of peristalsis</mark>, adynamic, <b>no</b> mechanical block, absent bowel sounds.", d:"Functional, not anatomic, obstruction.", e:"Triggered by post-op state, <b>hypokalemia</b>, opiates."},
+  {n:"Intussusception", g:"—", b:"<mark>Telescoping bowel</mark>, 'currant jelly' stools, target/coiled-spring sign, sausage mass.", d:"Ileocolic; lead point — viral/Peyer hypertrophy (kids), tumor (adults).", e:"<span class='star'>⭐</span><b>#1 obstruction &lt;2 yo</b>; air/contrast enema diagnoses & treats; assoc rotavirus vaccine, HSP."},
+  {n:"Volvulus", g:"—", b:"Twisting around mesentery; <mark>coffee-bean sign</mark>.", d:"Sigmoid (elderly) vs cecal (younger).", e:"<b>Sigmoid volvulus</b> in elderly/bedridden; high mortality in elderly."},
+  {n:"Ischemic Bowel Disease", g:"—", b:"<mark>Pain out of proportion to exam</mark>, watershed (splenic flexure, rectosigmoid), thumbprinting.", d:"Acute (embolic/thrombotic SMA) vs chronic (intestinal angina, postprandial pain).", e:"<span class='star'>⭐</span><b>SMA occlusion</b>; 'pain out of proportion' is the stem."},
+  {n:"Angiodysplasia (Vascular Ectasia)", g:"—", b:"Tortuous dilated submucosal vessels in <mark>cecum / right colon</mark>, elderly.", d:"Most common vascular lesion of GI tract.", e:"<span class='star'>⭐</span>Hematochezia in elderly; assoc <b>aortic stenosis (Heyde)</b> & vWF."},
+ ]},
+ {sec:"Gastroenteritis / Diarrheal Disease", rows:[
+  {n:"Cholera (Vibrio cholerae)", g:"<span class='pill'>Cholera toxin ↑cAMP</span>", b:"<mark>Rice-water stools</mark>, small intestine, <b>no lesions</b>, massive dehydration.", d:"Toxin-mediated Cl⁻ secretion; no mucosal invasion.", e:"Severe secretory watery diarrhea → fatal dehydration/electrolyte loss."},
+  {n:"Campylobacter jejuni", g:"—", b:"Bloody diarrhea, <mark>comma/S-shaped</mark>, crypt abscesses, colon.", d:"Most common antecedent of Guillain-Barré.", e:"<span class='star'>⭐</span>→ <b>Guillain-Barré</b> & reactive arthritis; undercooked poultry."},
+  {n:"Shigella", g:"<span class='pill'>Shiga toxin</span>", b:"Bloody diarrhea, <mark>left colon</mark>, ulcers + pseudomembranes, can mimic IBD.", d:"Very low infectious dose; dysentery.", e:"<span class='star'>⭐</span>→ <b>HUS</b> & Reiter (reactive) arthritis, urethritis, conjunctivitis."},
+  {n:"Salmonellosis (non-typhoid)", g:"—", b:"Profuse diarrhea, colon, acute colitis (like Campylobacter/Shigella).", d:"Poultry, eggs, reptiles.", e:"<span class='star'>⭐</span>Assoc <b>sickle cell → osteomyelitis</b>; worsens neoplastic disease."},
+  {n:"Yersinia enterocolitica", g:"—", b:"<mark>Pseudoappendicitis</mark> (RLQ pain), ileum/appendix, lymphoid hyperplasia + granulomas.", d:"Granulomas mimic Crohn; pork, contaminated milk.", e:"<span class='star'>⭐</span><b>Pseudoappendicitis</b> + Crohn-like granulomas."},
+ ]},
+ {sec:"Inflammatory & Functional Bowel", rows:[
+  {n:"Crohn's Disease", g:"<span class='pill'>NOD2/CARD15</span><span class='pill'>ATG16L1</span>", b:"<mark>Skip lesions</mark>, <mark>transmural</mark>, <mark>non-caseating granulomas</mark>, cobblestone, creeping fat, string sign, terminal ileum.", d:"Mouth-to-anus; transmural → fistulas/strictures.", e:"<span class='star'>⭐</span>Non-caseating granulomas + skip lesions; ↑ in <b>smokers</b>; calcium oxalate stones, B12 deficiency, gallstones."},
+  {n:"Ulcerative Colitis", g:"—", b:"<mark>Continuous</mark>, mucosa/submucosa only, starts at rectum, pseudopolyps, crypt abscesses, lead-pipe colon, backwash ileitis.", d:"Colon only; no granulomas; disease of <b>non-smokers</b>.", e:"<span class='star'>⭐</span>↑ <b>colorectal adenocarcinoma</b> (pancolitis), <b>p-ANCA</b>, <b>PSC</b>; toxic megacolon."},
+  {n:"Inflammatory Bowel Disease (overview)", g:"—", b:"Extraintestinal: <mark>erythema nodosum</mark>, pyoderma gangrenosum, uveitis/episcleritis, arthritis, PSC.", d:"Umbrella for UC + CD; immunosuppression raises cancer/infection risk.", e:"<span class='star'>⭐</span>Know the <b>UC vs CD</b> comparison cold — shared extraintestinal signs."},
+  {n:"Microscopic Colitis", g:"—", b:"Chronic watery diarrhea with <mark>normal endoscopy</mark>. Lymphocytic (intraepithelial lymphocytes) vs collagenous (thick subepithelial collagen band).", d:"Diagnosis by biopsy only; middle-aged women.", e:"<span class='star'>⭐</span><b>Normal colonoscopy, abnormal biopsy</b>; assoc celiac/autoimmune."},
+  {n:"Diverticular Disease / Diverticulitis", g:"—", b:"<mark>FALSE diverticula</mark> (mucosa/submucosa herniate through muscularis), sigmoid, low-fiber diet.", d:"Diverticulosis (painless bleed) vs diverticulitis (LLQ pain + fever).", e:"<span class='star'>⭐</span><b>LLQ pain + fever</b>; obstruction by fecalith; sigmoid colon."},
+  {n:"Acute Appendicitis", g:"—", b:"<mark>Periumbilical → RLQ (McBurney)</mark> pain, fecalith obstruction, neutrophils in muscularis.", d:"Differentiate from Yersinia & Meckel.", e:"<span class='star'>⭐</span><b>Fecalith</b> #1 cause; can rupture → suppurative peritonitis."},
+  {n:"Hemorrhoids", g:"—", b:"Dilated hemorrhoidal venous plexus. <mark>Internal</mark> (above dentate, painless bleed) vs <mark>external</mark> (below dentate, painful).", d:"Portal–caval collateral connection.", e:"Bright red blood per rectum; worsened by straining, pregnancy, <b>portal HTN</b>."},
+  {n:"Anal Fissure", g:"—", b:"Tear in anal lining, <mark>posterior midline</mark>, severe pain + bleeding with hard stool.", d:"Below the dentate line (somatic = painful).", e:"<b>Posterior midline</b> location; heals in 4–6 wks."},
+  {n:"Irritable Bowel Syndrome", g:"—", b:"Abdominal pain + altered bowel habits, <b>no organic findings</b>; young women; <mark>relieved by defecation</mark>.", d:"Diagnosis of exclusion (Rome criteria).", e:"<span class='star'>⭐</span>Red flags (weight loss, blood, anemia, age) = <b>work it up, not IBS</b>."},
+ ]},
+ {sec:"Malabsorption", rows:[
+  {n:"Malabsorption (overview)", g:"—", b:"<mark>Steatorrhea</mark>, bloating, weight loss, <mark>fat-soluble (ADEK) vitamin deficiency</mark>.", d:"Disturbance in ≥1 phase of nutrient absorption (4 categories).", e:"Steatorrhea + ADEK deficiency is the core picture."},
+  {n:"Celiac Disease", g:"<span class='pill'>HLA-DQ2/DQ8</span>", b:"<mark>Anti-tTG</mark> / anti-endomysial / anti-gliadin Abs, <mark>villous atrophy + crypt hyperplasia</mark>, intraepithelial lymphocytes, duodenum.", d:"Gluten (gliadin) sensitivity, proximal small bowel.", e:"<span class='star'>⭐</span><b>Anti-tTG IgA</b> screen; <b>dermatitis herpetiformis</b>; ↑ risk <b>EATL</b> (T-cell lymphoma)."},
+  {n:"Disaccharidase Deficiency / Lactose Intolerance", g:"<span class='pill'>Lactase ↓</span>", b:"<mark>Osmotic diarrhea</mark> + bloating after dairy, low stool pH, ↑ breath hydrogen, <b>normal villi</b>.", d:"Congenital vs acquired (post-viral).", e:"<span class='star'>⭐</span><b>Positive hydrogen breath test</b> with normal biopsy."},
+  {n:"Atypical Mycobacteriosis (MAI/MAC)", g:"—", b:"<mark>Foamy macrophages stuffed with acid-fast bacilli</mark>; mimics Whipple.", d:"Immunosuppressed / transplant / autoimmune-treated patients.", e:"<span class='star'>⭐</span><b>Disseminated MAC in AIDS, CD4 &lt;50</b>."},
+  {n:"Whipple Disease", g:"<span class='pill'>Tropheryma whipplei</span>", b:"<mark>PAS-positive foamy macrophages</mark> in lamina propria; middle-aged <b>Caucasian male</b>; arthralgia, weight loss, lymphadenopathy, cardiac/CNS.", d:"PAS+ but <b>acid-fast NEGATIVE</b> (vs MAC = PAS+ & acid-fast+).", e:"<span class='star'>⭐</span>PAS+ macrophages + <b>T. whipplei</b>; foamy 'whipped cream' — Cardiac, Arthralgia, Neuro."},
+  {n:"Abetalipoproteinemia", g:"<span class='pill'>MTP</span><span class='inh'>AR</span>", b:"Enterocytes can't assemble/secrete chylomicrons & VLDL → <mark>acanthocytes</mark>, fat malabsorption, ADEK deficiency in infancy.", d:"Absent apoB-containing lipoproteins; intracellular lipid accumulation.", e:"<span class='star'>⭐</span><b>Acanthocytes + ↓ADEK</b>; MTP mutation; vit E loss → ataxia / retinitis pigmentosa."},
+  {n:"Cystic Fibrosis", g:"<span class='pill'>CFTR ΔF508</span><span class='inh'>AR · chr 7</span>", b:"<mark>Meconium ileus</mark>, pancreatic insufficiency, <mark>↑ sweat chloride</mark>, recurrent lung infections (Pseudomonas).", d:"Defective Cl⁻ channel → thick secretions.", e:"<span class='star'>⭐</span><b>Sweat chloride test</b>; meconium ileus in newborn; ADEK deficiency."},
+ ]},
+ {sec:"Liver — Failure, Vascular & Metabolic", rows:[
+  {n:"Liver Failure (acute & chronic)", g:"—", b:"Acute = <mark>massive hepatic necrosis</mark>, encephalopathy + coagulopathy &lt;26 wks. Chronic = cirrhosis.", d:"Hepatorenal syndrome = renal failure without kidney lesions.", e:"<span class='star'>⭐</span><b>Acetaminophen = #1 cause of acute liver failure</b>; asterixis, ↑ ammonia."},
+  {n:"Portal Hypertension", g:"—", b:"<mark>Ascites</mark>, <mark>esophageal/gastric varices</mark>, caput medusae, splenomegaly, hemorrhoids.", d:"Cirrhosis is #1 cause.", e:"<span class='star'>⭐</span>Varices can bleed → death; <b>nonselective β-blockers</b> for prophylaxis."},
+  {n:"Cirrhosis", g:"—", b:"<mark>Regenerative nodules + bridging fibrosis</mark>; stellate cells → myofibroblasts.", d:"Micronodular (alcohol) vs macronodular (viral).", e:"<span class='star'>⭐</span><b>Spider angiomas, palmar erythema, gynecomastia</b> from impaired estrogen metabolism."},
+  {n:"Alcoholic Liver Disease (spectrum)", g:"—", b:"Steatosis → steatohepatitis → cirrhosis; <mark>AST:ALT &gt; 2:1</mark>.", d:"Reversible early, irreversible once cirrhotic.", e:"<span class='star'>⭐</span><b>AST &gt; ALT</b> ('toAST with alcohol')."},
+  {n:"Alcoholic Steatosis", g:"—", b:"<mark>Fatty change</mark>, lipid droplets; <b>NAD depletion</b> blocks lipid oxidation, asymptomatic.", d:"Earliest, fully reversible with abstinence.", e:"Reversible; mild enzyme elevation, no jaundice."},
+  {n:"Alcoholic Steatohepatitis", g:"—", b:"<mark>Mallory-Denk bodies</mark> (eosinophilic), neutrophilic infiltrate, hepatocyte ballooning.", d:"Inflammation present → may progress to fibrosis.", e:"<span class='star'>⭐</span><b>Mallory bodies + neutrophils</b>."},
+  {n:"Acute Alcoholic Hepatitis", g:"—", b:"Flare of jaundice + ↑ AST on background of steatosis/steatohepatitis.", d:"Common ED presentation.", e:"<b>AST &gt; ALT</b>; can precipitate decompensation."},
+  {n:"Non-Alcoholic Fatty Liver Disease (NAFLD)", g:"—", b:"<mark>Steatosis without alcohol</mark>; obesity, T2DM, metabolic syndrome.", d:"Histology mirrors alcoholic disease but no alcohol history.", e:"<span class='star'>⭐</span>Most common chronic liver disease; <b>NASH</b> progresses to cirrhosis."},
+  {n:"Hereditary Hemochromatosis", g:"<span class='pill'>HFE C282Y</span><span class='inh'>AR · chr 6</span>", b:"<mark>Bronze diabetes</mark>, <mark>Prussian blue iron stain</mark>, ↑ ferritin/transferrin sat, ↓ hepcidin.", d:"Triad: cirrhosis + diabetes + skin pigmentation.", e:"<span class='star'>⭐</span>Treat with <b>phlebotomy</b>; ↑ HCC, restrictive cardiomyopathy, arthropathy."},
+  {n:"Wilson Disease", g:"<span class='pill'>ATP7B</span><span class='inh'>AR · chr 13</span>", b:"<mark>↓ ceruloplasmin</mark>, <mark>Kayser-Fleischer rings</mark>, copper deposition, neuropsychiatric signs.", d:"Young patient with liver + basal ganglia disease.", e:"<span class='star'>⭐</span><b>KF rings + ↓ ceruloplasmin + ↑ urine copper</b>; tx penicillamine/trientine."},
+  {n:"α1-Antitrypsin Deficiency", g:"<span class='pill'>SERPINA1 (PiZZ)</span><span class='inh'>AR · chr 14</span>", b:"<mark>PAS-positive, diastase-resistant globules</mark> in hepatocytes; <b>panacinar emphysema</b> (lower lobes) + cirrhosis.", d:"Misfolded A1AT accumulates in liver; deficiency lets proteases destroy lung.", e:"<span class='star'>⭐</span>Young <b>non-smoker</b> with emphysema + liver disease; chromosome 14."},
+ ]},
+ {sec:"Jaundice", rows:[
+  {n:"Jaundice (overview)", g:"—", b:"<mark>Scleral icterus</mark> earliest sign; bilirubin &gt; 2–3 mg/dL.", d:"Unconjugated (pre/hepatic) vs conjugated (post-hepatic).", e:"Localize by conjugated vs unconjugated split."},
+  {n:"Prehepatic Jaundice", g:"—", b:"<mark>Hemolysis</mark> → ↑ <b>unconjugated (indirect)</b> bilirubin, <b>no</b> bilirubinuria.", d:"Overproduction overwhelms conjugation.", e:"Hemolytic anemia / ineffective erythropoiesis."},
+  {n:"Posthepatic Jaundice", g:"—", b:"<mark>Obstruction</mark> → ↑ <b>conjugated (direct)</b>, ↑ ALP, dark urine, pale stool, pruritus.", d:"Dilated ducts on ultrasound.", e:"<span class='star'>⭐</span><b>ALP ≫ AST/ALT</b>; stone or tumor obstruction."},
+  {n:"Gilbert Syndrome", g:"<span class='pill'>UGT1A1 ↓ (mild)</span>", b:"Mild <mark>unconjugated</mark> hyperbilirubinemia; <b>jaundice with stress / fasting / illness</b>; otherwise asymptomatic.", d:"Reduced (not absent) UGT activity; benign.", e:"<span class='star'>⭐</span>Benign; jaundice triggered by stress, fasting, dehydration."},
+  {n:"Crigler-Najjar Type 1", g:"<span class='pill'>UGT1A1 absent</span><span class='inh'>AR</span>", b:"Severe <mark>unconjugated</mark> hyperbilirubinemia from birth → <b>kernicterus</b>; fatal if untreated.", d:"Complete loss of UGT → does <b>NOT</b> respond to phenobarbital.", e:"<span class='star'>⭐</span>Fatal kernicterus; tx phototherapy/plasmapheresis, liver transplant."},
+  {n:"Crigler-Najjar Type 2", g:"<span class='pill'>UGT1A1 ↓ (partial)</span>", b:"Milder, intermittent <mark>unconjugated</mark> jaundice with fasting/illness.", d:"Partial UGT activity remains.", e:"<span class='star'>⭐</span><b>Responds to phenobarbital</b> (induces UGT) — the Type I vs II distinction."},
+  {n:"Dubin-Johnson / Rotor Syndrome", g:"<span class='pill'>MRP2 (DJ)</span><span class='pill'>OATP1B (Rotor)</span>", b:"<mark>Conjugated</mark> hyperbilirubinemia; Dubin-Johnson = <b>black liver</b>; Rotor = no pigmentation.", d:"Impaired hepatocyte excretion of conjugated bilirubin into bile.", e:"<span class='star'>⭐</span><b>Dubin-Johnson = black liver</b>; Rotor = benign, milder, no black liver."},
+ ]},
+ {sec:"Biliary Tract", rows:[
+  {n:"Primary Biliary Cirrhosis (Cholangitis)", g:"<span class='pill'>Anti-mitochondrial Ab</span>", b:"<mark>AMA+</mark>, middle-aged <b>women</b>, destruction of small <b>intrahepatic</b> ducts, granulomas, pruritus.", d:"Intrahepatic only; assoc Sjögren & Hashimoto.", e:"<span class='star'>⭐</span><b>AMA + middle-aged woman + pruritus</b>."},
+  {n:"Primary Sclerosing Cholangitis", g:"<span class='pill'>p-ANCA</span>", b:"<mark>'Beads on a string'</mark>, onion-skin fibrosis, intra- + <b>extrahepatic</b> ducts, young <b>men</b>.", d:"Diagnosed by <b>MRCP/ERCP</b>, not biopsy; strong <b>UC</b> link.", e:"<span class='star'>⭐</span>UC + beading; ↑ <b>cholangiocarcinoma</b> risk."},
+  {n:"Cholelithiasis (Gallstones)", g:"—", b:"<mark>4 F's</mark> (female, fat, forty, fertile). Cholesterol stones (radiolucent) vs pigment stones (bilirubin).", d:"Cholesterol = most common; impaired gallbladder emptying.", e:"<span class='star'>⭐</span><b>Pigment stones</b> with hemolysis / sickle cell; cholesterol = radiolucent."},
+  {n:"Acute Cholecystitis", g:"—", b:"<mark>Murphy's sign</mark>, RUQ pain, fever; stone in cystic duct; prostaglandin-mediated.", d:"Acute inflammation, less common than chronic.", e:"<span class='star'>⭐</span><b>Positive Murphy's sign</b>; US shows thickened edematous wall."},
+  {n:"Chronic Cholecystitis", g:"—", b:"<mark>Rokitansky-Aschoff sinuses</mark>, thickened wall, <mark>porcelain gallbladder</mark>.", d:"Repeated low-grade inflammation.", e:"<span class='star'>⭐</span><b>Porcelain gallbladder</b> → ↑ gallbladder cancer risk."},
+  {n:"Adenocarcinoma of Gallbladder", g:"—", b:"<mark>Porcelain gallbladder</mark> + gallstones, elderly women.", d:"Poor prognosis, often late.", e:"Porcelain gallbladder is the precursor association."},
+  {n:"Cholangiocarcinoma", g:"<span class='pill'>PSC · Clonorchis · Thorotrast</span>", b:"Bile-duct epithelial cancer; <mark>Klatskin tumor</mark> (perihilar, R/L hepatic duct junction); desmoplastic; painless jaundice; BilIN precursor.", d:"Arises from cholangiocytes; risk from chronic inflammation/cholestasis.", e:"<span class='star'>⭐</span><b>PSC & Clonorchis sinensis → cholangiocarcinoma</b>; Klatskin most common; very poor prognosis."},
+  {n:"Choledocholithiasis", g:"—", b:"<mark>Stone in common bile duct</mark>; ↑ ALP + conjugated bilirubin, dilated CBD on US.", d:"Obstruction of the CBD.", e:"<span class='star'>⭐</span>Complications: <b>ascending cholangitis & gallstone pancreatitis</b>."},
+  {n:"Ascending Cholangitis", g:"—", b:"<mark>Charcot triad</mark> (fever, RUQ pain, jaundice); <mark>Reynolds pentad</mark> (+ hypotension, confusion); E. coli.", d:"Infection of an obstructed biliary tree.", e:"<span class='star'>⭐</span><b>Charcot triad / Reynolds pentad</b> = life-threatening emergency."},
+ ]},
+ {sec:"Pancreas", rows:[
+  {n:"Acute Pancreatitis", g:"—", b:"<mark>↑ lipase (specific)</mark> & amylase (early), epigastric pain → back, <mark>Cullen/Grey-Turner signs</mark>.", d:"Gallstones & alcohol = top causes (GET SMASHED).", e:"<span class='star'>⭐</span><b>Lipase most specific</b>; complications: ARDS, DIC, <b>hypocalcemia</b>, pseudocyst."},
+  {n:"Chronic Pancreatitis", g:"—", b:"<mark>Pancreatic calcifications</mark>, 'chain of lakes' duct dilation, exocrine insufficiency, steatorrhea.", d:"Alcohol #1 in adults; CF #1 in kids.", e:"<span class='star'>⭐</span>Calcifications; ↑ <b>pancreatic cancer</b> & diabetes risk; loss of acinar cells blunts amylase rise."},
+  {n:"Pancreatic Pseudocyst", g:"—", b:"<b>No epithelial lining</b>, <mark>amylase-rich fluid</mark>, in lesser/omental sac; post-pancreatitis or trauma.", d:"'Pseudo' = lacks epithelium.", e:"<span class='star'>⭐</span>Can <b>erode splenic artery</b> → hemorrhage."},
+  {n:"Cystic Neoplasms of Pancreas", g:"—", b:"<mark>Serous = benign</mark>; mucinous cystic neoplasm & <mark>IPMN = precancerous</mark>.", d:"&lt;5% of pancreatic neoplasms.", e:"<b>IPMN & MCN are precancerous</b>; serous is benign."},
+  {n:"Pancreatic Carcinoma (ductal adenocarcinoma)", g:"<span class='pill'>KRAS</span><span class='pill'>p16</span><span class='pill'>SMAD4</span><span class='pill'>BRCA2</span>", b:"<mark>Head of pancreas</mark>, <mark>Courvoisier sign</mark> + painless jaundice, <mark>Trousseau migratory thrombophlebitis</mark>, CA 19-9, perineural invasion, desmoplasia, PanIN.", d:"Smoking, chronic pancreatitis; very poor 5-yr survival (~5%).", e:"<span class='star'>⭐</span><b>Painless jaundice + palpable nontender gallbladder (Courvoisier)</b>; <b>CA 19-9</b>."},
+ ]},
+ {sec:"Liver Tumors & Nodular Lesions", rows:[
+  {n:"Bile Duct Hamartoma (von Meyenburg complex)", g:"—", b:"Incidental small white nodules; <mark>dilated irregular bile ducts</mark>.", d:"Benign; marker of fibropolycystic disease.", e:"Incidental benign finding."},
+  {n:"Focal Nodular Hyperplasia", g:"—", b:"<mark>Central stellate scar</mark> with radiating fibrous septa, well-demarcated, young-middle women.", d:"Hyperplastic response to altered blood flow — <b>not a neoplasm</b>.", e:"<span class='star'>⭐</span><b>Central scar</b>; benign, no malignant potential."},
+  {n:"Hepatic Hemangioma", g:"—", b:"<mark>Most common benign liver tumor</mark>; red-blue blood-filled, cavernous form.", d:"Vascular channels in fibroconnective tissue.", e:"<span class='star'>⭐</span><b>Do NOT biopsy</b> — hemorrhage risk; can mimic malignancy on imaging."},
+  {n:"Hepatoblastoma", g:"<span class='pill'>WNT pathway</span>", b:"<mark>Most common liver tumor of early childhood</mark>, <mark>↑ AFP</mark>, M&gt;F infants.", d:"Assoc Beckwith-Wiedemann, FAP, trisomy 18, Wilms.", e:"<span class='star'>⭐</span><b>Infant + ↑ AFP</b>; right lobe, epithelial + mesenchymal elements."},
+  {n:"Hepatocellular Adenoma", g:"<span class='pill'>HNF1α</span><span class='pill'>β-catenin</span>", b:"<mark>Oral contraceptives / anabolic steroids</mark>, women; can <mark>rupture & bleed</mark>; no portal triads.", d:"Regresses with OCP cessation; β-catenin subtype = malignant risk.", e:"<span class='star'>⭐</span><b>OCP-associated</b>; risk of rupture/hemorrhage (surgical emergency)."},
+  {n:"Hepatocellular Carcinoma ('hepatoma')", g:"<span class='pill'>HBV/HCV</span><span class='pill'>aflatoxin → p53</span>", b:"<mark>↑ AFP</mark>, arises in <mark>cirrhosis</mark>; HBV (vertical transmission), aflatoxin (Aspergillus).", d:"Most common primary liver malignancy.", e:"<span class='star'>⭐</span><b>↑ AFP + cirrhosis</b>; HBV #1 worldwide; can cause Budd-Chiari."},
+  {n:"Hepatic Angiosarcoma", g:"—", b:"<mark>Vinyl chloride</mark>, arsenic, <mark>Thorotrast (thorium)</mark>, radium.", d:"Malignant endothelial tumor.", e:"<span class='star'>⭐</span><b>Vinyl chloride / arsenic / Thorotrast</b> exposure."},
+  {n:"Secondary (Metastatic) Hepatic Tumors", g:"—", b:"<mark>More common than primary</mark>; from colon, breast, lung, pancreas. Multiple nodules.", d:"Metastases far outnumber primary liver tumors.", e:"<span class='star'>⭐</span><b>Liver metastases &gt; primary liver tumors.</b>"},
+ ]},
+ {sec:"Polyposis & Colorectal Cancer Syndromes", rows:[
+  {n:"Familial Adenomatous Polyposis (FAP)", g:"<span class='pill'>APC</span><span class='inh'>AD · chr 5q</span>", b:"<mark>100s–1000s of colonic adenomas</mark>; β-catenin dysregulation.", d:"<b>100% → colorectal cancer</b> if untreated.", e:"<span class='star'>⭐</span><b>Prophylactic colectomy</b>; APC mutation."},
+  {n:"Lynch Syndrome (HNPCC)", g:"<span class='pill'>MSH2/MLH1/MSH6</span><span class='pill'>EPCAM</span><span class='inh'>AD</span>", b:"<mark>Few polyps</mark>, <mark>proximal/right colon</mark>, younger age, <mark>microsatellite instability</mark>.", d:"DNA mismatch-repair defect.", e:"<span class='star'>⭐</span><b>MSI</b>; Amsterdam criteria; ↑ endometrial & ovarian cancer."},
+  {n:"Juvenile Polyps / Juvenile Polyposis", g:"<span class='pill'>SMAD4/BMPR1A</span>", b:"<mark>Hamartomatous polyps</mark>, children &lt;5, rectal bleeding/prolapse.", d:"Solitary = benign; syndromic = malignancy risk.", e:"Solitary juvenile polyp is benign; syndrome carries cancer risk."},
+  {n:"Peutz-Jeghers Syndrome", g:"<span class='pill'>STK11 (LKB1)</span><span class='inh'>AD</span>", b:"Hamartomatous polyps + <mark>mucocutaneous hyperpigmentation</mark> (lips/buccal/hands).", d:"Polyps benign, but markedly ↑ cancer risk overall.", e:"<span class='star'>⭐</span><b>STK11 + pigmented lips</b>; ↑ breast, GI, pancreatic cancers."},
+  {n:"Gardner Syndrome", g:"<span class='pill'>APC</span><span class='inh'>variant of FAP</span>", b:"FAP + <mark>osteomas</mark>, desmoid tumors, epidermoid cysts, supernumerary teeth.", d:"Extra-intestinal manifestations of FAP.", e:"<span class='star'>⭐</span><b>FAP + osteomas / desmoid tumors.</b>"},
+  {n:"Turcot Syndrome", g:"<span class='pill'>APC or MMR</span>", b:"Colonic polyps/cancer + <mark>primary CNS tumor</mark> (medulloblastoma with APC; glioblastoma with MMR).", d:"Variant of FAP or Lynch.", e:"<span class='star'>⭐</span><b>Colorectal cancer + brain tumor</b> ('Turcot = Turban')."},
+  {n:"MUTYH-Associated Polyposis (MAP)", g:"<span class='pill'>MUTYH (biallelic)</span><span class='inh'>AR</span>", b:"FAP-like polyposis but <mark>autosomal recessive</mark>; base-excision repair defect.", d:"Recessive — unlike AD FAP/Lynch.", e:"<span class='star'>⭐</span>The <b>autosomal recessive</b> polyposis syndrome."},
+  {n:"Colorectal Adenocarcinoma", g:"<span class='pill'>APC→KRAS→p53</span><span class='pill'>MSI (Lynch)</span>", b:"<mark>Apple-core lesion</mark> on barium; left-sided = obstruction/napkin-ring; right-sided = <b>iron-deficiency anemia</b>, occult bleed.", d:"Adenoma-carcinoma sequence (chromosomal instability) or MSI pathway.", e:"<span class='star'>⭐</span>Right-sided → <b>iron-deficiency anemia</b> in elderly; <b>CEA</b> for recurrence (not screening)."},
+ ]},
+];
+
+const tbody=document.getElementById('tbody');
+const chipsEl=document.getElementById('chips');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="5"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}</span></span></td>`;
+  tbody.appendChild(secRow);
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// chips
+const chipAll=document.createElement('div');
+chipAll.className='chip active';chipAll.textContent='All systems';chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach((grp,gi)=>{
+  const c=document.createElement('div');
+  c.className='chip';c.dataset.sec=gi;
+  c.textContent=grp.sec.replace(/ \(.*?\)/,'').replace(' / ',' / ');
+  chipsEl.appendChild(c);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> pathologies`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active');
+  activeSec=c.dataset.sec;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + chips). Measured live so fullscreen, resize, font load, and
+// chip-wrapping changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){
+    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+    if(p[0].toLowerCase()===here) a.className='sk-here';
+    nav.appendChild(a);
+  });
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>

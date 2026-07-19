@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physiology — Endo/Repro Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .secpick{position:relative;flex:0 0 auto}
+  .secpick select{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:9px 34px 9px 13px;border:1px solid var(--line-strong);border-radius:9px;
+    background:var(--surface);color:var(--ink);cursor:pointer;appearance:none;-webkit-appearance:none;
+    max-width:340px;
+  }
+  .secpick select:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .secpick svg{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th.img-h{background:#3a3f45}
+  td.img{text-align:center}
+  td.img a{display:inline-block;margin:1px}
+  td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle}
+  /* ---------- numbered sequence / feedback-loop chain ---------- */
+  tr.pathway td{padding:0;border-bottom:1px solid var(--line)}
+  .steps{padding:14px 18px;background:#fbfaf6}
+  .steps ol{margin:0;padding-left:22px;counter-reset:step}
+  .steps li{margin:0 0 10px;padding-left:4px;line-height:1.5;font-size:13.3px;color:#33373d}
+  .steps li b{color:var(--ink)}
+  .steps .stepimg{margin:8px 0 14px}
+  .steps .stepimg img{max-width:100%;max-height:340px;border-radius:8px;border:1px solid var(--line-strong)}
+  .steps .stepnote{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px}
+  tr.flow .steps{border-left:4px solid #4a7a8c}
+  tr.flow .steps li{position:relative}
+  .flowloop{margin-top:10px;padding:9px 12px;background:#eef4f5;border:1px dashed #4a7a8c;border-radius:8px;font-size:12.3px;color:#284b56}
+  .flowloop b{color:#1d3940}
+  /* ---------- compare & contrast ---------- */
+  tr.compare td{padding:0;border-bottom:1px solid var(--line)}
+  .cmp{padding:14px 18px;background:#fbfaf6}
+  .cmp-note{font-size:12px;color:var(--muted);font-style:italic;margin:0 0 10px}
+  .cmp-grid{display:grid;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+  .cmp-row{display:grid;grid-template-columns:subgrid;grid-column:1/-1}
+  .cmp-facet{background:#eceadf;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-top:1px solid var(--line-strong);display:flex;align-items:center}
+  .cmp-val{padding:8px 12px;border-top:1px solid var(--line);border-left:1px solid var(--line);font-size:12.8px;color:#33373d}
+  .cmp-head{font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--ink);padding:9px 12px;border-left:1px solid var(--line-strong);background:#f4f2ec}
+  .cmp-headfacet{background:#e2ded0}
+  .cmp-img{margin-top:4px}
+  .cmp-img img{max-height:56px;border-radius:6px;border:1px solid var(--line-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:13%}
+  col.c-gene{width:17%}
+  col.c-buzz{width:26%}
+  col.c-diff{width:18%}
+  col.c-exam{width:15%}
+  col.c-img{width:11%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  /* ---------- signalling-molecule master table ---------- */
+  tr.signal td{padding:0;border-bottom:1px solid var(--line)}
+  .sigwrap{padding:14px 18px;background:#fbfaf6}
+  .sig-note{font-size:12.5px;color:#284b56;margin:0 0 16px;line-height:1.55;background:#eef4f5;border:1px dashed #4a7a8c;border-radius:8px;padding:11px 13px}
+  .sig-note b{color:#1d3940}
+  .sig-class{margin:0 0 15px;border:1px solid var(--line-strong);border-radius:9px;overflow:hidden}
+  .sig-class-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;padding:8px 12px;border-left:5px solid var(--accent,#6c7077);background:#f1eee6}
+  .sig-cls{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;letter-spacing:.02em;color:var(--ink)}
+  .sig-casc{font-size:11.5px;color:var(--muted)}
+  table.sigtable{width:100%;border-collapse:collapse;font-size:12.8px;table-layout:fixed}
+  table.sigtable th{background:#f4f2ec;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:6px 10px;border-bottom:1px solid var(--line-strong)}
+  table.sigtable td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top;color:#33373d;line-height:1.45}
+  table.sigtable tr:last-child td{border-bottom:none}
+  table.sigtable td.sm{font-weight:700;color:var(--ink)}
+  table.sigtable col.cm{width:19%} table.sigtable col.cr{width:42%} table.sigtable col.ce{width:39%}
+  table.sigtable b{color:var(--gene-ink)}
+  .sig-class.gs{--accent:#0c7a52} .sig-class.gi{--accent:#1d5a76} .sig-class.gq{--accent:#b8901f}
+  .sig-class.rtk{--accent:#7a3b8c} .sig-class.jak{--accent:#a83277} .sig-class.nuc{--accent:#9a1f2e}
+  .sig-class.cgmp{--accent:#2a8a8a} .sig-class.serthr{--accent:#6c7077} .sig-class.lgic{--accent:#8a5a2b} .sig-class.tnf{--accent:#455a64}
+  @media (max-width:760px){
+    table.sigtable,table.sigtable thead,table.sigtable tbody,table.sigtable tr,table.sigtable td{display:block;width:auto}
+    table.sigtable thead{display:none}
+    table.sigtable td{border-bottom:none;padding:2px 12px}
+    table.sigtable tr{border-bottom:1px solid var(--line-strong);padding:8px 0}
+    table.sigtable td.sm{padding-top:8px}
+    table.sigtable td.cr-cell::before{content:"↳ ";color:var(--muted)}
+  }
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Endo / Repro Unit · Physiology · Rapid Reference</p>
+  <h1>The axes, the feedback loops,<br>and the things that <em>will</em> be tested.</h1>
+  <p class="sub">Every pathology from your GINU deck on one scannable grid. Teal = genetics & inheritance. Highlighted = the classic buzzword/finding. The crimson rail on the right is the single fact most likely to anchor a question stem.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search hormone, axis, receptor, effect…" autocomplete="off">
+    </div>
+    <div class="secpick">
+      <select id="secpick"></select>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Hormone / receptor</span>
+      <span><i class="sw b"></i>Key value / buzzword</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Hormone</th>
+          <th>Axis &amp; Regulation</th>
+          <th>Actions &amp; Targets</th>
+          <th>Excess vs Deficiency</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No entry matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Study reference compiled from your Endo/Repro physiology lectures. High-yield associations reflect standard physiology teaching (Guyton &amp; Hall / Molina Endocrine Physiology conventions used by these lectures) — verify against your lecture material where they differ. Not a substitute for the primary notes.
+</footer>
+
+<script>
+const DATA = [
+{sec:"Signalling Molecules — Receptor & Pathway Master Table", tag:"physio — master synthesis · grouped by transduction mechanism", signal:true,
+ signalNote:"<b>Every signalling molecule in the Endo/Repro lectures, grouped by HOW it transduces its signal</b> — the fastest way to review, because you learn one bucket and instantly know the second messenger + receptor family for every hormone in it. Anchors: <b>Gs ↑cAMP / Gi ↓cAMP</b> (same messenger, opposite directions) · <b>Gq → IP₃/DAG/Ca²⁺</b> · <b>steroids + thyroid hormone + vitamin D</b> are the ONLY intracellular/nuclear (gene-transcription) receptors · <b>insulin & IGF-1</b> = receptor tyrosine kinases · <b>GH, prolactin, leptin</b> = the JAK/STAT trio · <b>ANP/BNP & NO</b> = the cGMP pair. A molecule listed in two buckets (catecholamines, ADH, PGE₂) does so because it acts on different receptor <i>subtypes</i>.",
+ groups:[
+  {cls:"Gs → adenylyl cyclase → ↑cAMP → PKA", accent:"gs", casc:"stimulatory GPCR", rows:[
+    {m:"CRH", r:"<b>CRH-R1</b> · anterior-pituitary corticotrope", e:"↑ACTH release (POMC-derived)"},
+    {m:"GHRH", r:"<b>GHRH-R</b> · somatotrope", e:"↑GH synthesis & release"},
+    {m:"ACTH", r:"<b>MC2R</b> · adrenal zona fasciculata/reticularis", e:"↑cortisol & adrenal-androgen synthesis + cortex growth"},
+    {m:"TSH", r:"<b>TSH-R</b> · thyroid follicular cell", e:"↑every step of T3/T4 synthesis + follicular hyperplasia"},
+    {m:"LH", r:"<b>LHCGR</b> · Leydig (♂) / theca &amp; granulosa (♀)", e:"↑testosterone/androgen synthesis (StAR); triggers ovulation"},
+    {m:"FSH", r:"<b>FSH-R</b> · Sertoli (♂) / granulosa (♀)", e:"spermatogenesis support, <mark>inhibin B</mark>, aromatase → estrogen"},
+    {m:"Glucagon", r:"<b>Glucagon-R</b> · hepatocyte", e:"↑glycogenolysis, gluconeogenesis, ketogenesis → <mark>↑glucose</mark>"},
+    {m:"PTH", r:"<b>PTH1R</b> (Gs <i>and</i> Gq) · osteoblast, renal tubule", e:"↑resorption (RANKL), ↑Ca²⁺ reabsorption, ↑1α-hydroxylase → <mark>↑Ca²⁺, ↓PO₄</mark>"},
+    {m:"Calcitonin", r:"<b>Calcitonin-R</b> · osteoclast", e:"⊣osteoclasts → ↓serum Ca²⁺ (minor in humans)"},
+    {m:"ADH — V2", r:"<b>V2</b> · renal collecting-duct principal cell", e:"<mark>aquaporin-2</mark> insertion → water reabsorption"},
+    {m:"Epinephrine / NE — β", r:"<b>β1 / β2 / β3</b> · heart, bronchi, fat, liver", e:"↑HR/contractility, bronchodilation, lipolysis, glycogenolysis"},
+    {m:"GLP-1 / GIP", r:"<b>GLP-1R / GIP-R</b> · pancreatic β-cell", e:"<mark>glucose-dependent</mark> insulin release (incretin effect)"},
+    {m:"α-MSH", r:"<b>MC4R</b> · hypothalamic 2nd-order neurons", e:"<mark>satiety</mark>, ↑energy expenditure"},
+    {m:"PGI₂ (prostacyclin)", r:"<b>IP</b> · endothelium, platelets, vascular SM", e:"vasodilation + <mark>⊣platelet aggregation</mark> (opposes TXA₂)"},
+    {m:"PGE₂ (protective)", r:"<b>EP2 / EP4</b> · gastric mucosa, ductus arteriosus", e:"gastric mucus/HCO₃⁻, <mark>maintains PDA patency</mark>, vasodilation"},
+  ]},
+  {cls:"Gi → ⊣adenylyl cyclase → ↓cAMP", accent:"gi", casc:"inhibitory GPCR", rows:[
+    {m:"Somatostatin (GHIH)", r:"<b>SSTR2/5</b> · somatotrope + widespread", e:"⊣GH, TSH, insulin, glucagon, gastrin (universal 'off-switch')"},
+    {m:"Dopamine", r:"<b>D2</b> · pituitary lactotrope", e:"<mark>tonic ⊣prolactin</mark> (the one axis under inhibitory control)"},
+    {m:"Epinephrine / NE — α2", r:"<b>α2</b> · presynaptic terminal, pancreatic β-cell", e:"⊣NE release, ⊣insulin secretion"},
+    {m:"NPY / AgRP", r:"<b>Y1/Y5</b> · hypothalamus; AgRP = <mark>MC4R antagonist</mark>", e:"orexigenic — drives hunger"},
+    {m:"PYY", r:"<b>Y2</b> · arcuate NPY/AgRP neurons", e:"⊣NPY/AgRP → reinforces satiety (postprandial)"},
+  ]},
+  {cls:"Gq → PLC → IP₃ + DAG → ↑Ca²⁺ / PKC", accent:"gq", casc:"calcium-mobilizing GPCR", rows:[
+    {m:"TRH", r:"<b>TRH-R</b> · thyrotrope (also lactotrope)", e:"↑TSH (and prolactin) release"},
+    {m:"GnRH", r:"<b>GnRH-R</b> · gonadotrope", e:"↑LH/FSH — <mark>pulsatile stimulates, continuous suppresses</mark>"},
+    {m:"Oxytocin", r:"<b>OXTR</b> · myometrium, breast myoepithelium, vas deferens", e:"→Ca²⁺/MLCK → uterine contraction, milk let-down"},
+    {m:"ADH — V1", r:"<b>V1</b> · vascular smooth muscle", e:"vasoconstriction (pressor at high dose)"},
+    {m:"Angiotensin II", r:"<b>AT1</b> · arteriole, zona glomerulosa", e:"vasoconstriction + <mark>↑aldosterone</mark>, thirst/ADH"},
+    {m:"Epinephrine / NE — α1", r:"<b>α1</b> · vascular &amp; GU smooth muscle", e:"vasoconstriction → ↑BP"},
+    {m:"Ghrelin", r:"<b>GHS-R</b> · hypothalamus, pituitary", e:"↑NPY/AgRP (hunger, rises pre-meal); GH secretagogue"},
+    {m:"TXA₂ (thromboxane)", r:"<b>TP</b> · platelets, vascular smooth muscle", e:"<mark>vasoconstriction + platelet aggregation</mark>"},
+    {m:"PGF₂α", r:"<b>FP</b> · uterine/bronchial SM, corpus luteum", e:"contraction, <mark>luteolysis</mark>"},
+    {m:"PGE₂ (EP1)", r:"<b>EP1</b> · smooth muscle, hypothalamus", e:"contraction, pain sensitization, fever"},
+    {m:"Cysteinyl-LTs (LTC4/D4/E4)", r:"<b>CysLT1</b> · airway smooth muscle/endothelium", e:"<mark>bronchoconstriction</mark>, ↑permeability, mucus (SRS-A)"},
+    {m:"Ca²⁺ (extracellular, sensed)", r:"<b>CaSR</b> · parathyroid chief cell, renal tubule", e:"senses ↑Ca²⁺ → <mark>⊣PTH release</mark> (calcimimetic target)"},
+  ]},
+  {cls:"Receptor tyrosine kinase (RTK)", accent:"rtk", casc:"autophosphorylation → IRS → PI3K-Akt &amp; MAPK", rows:[
+    {m:"Insulin", r:"<b>Insulin receptor</b> (α₂β₂) · muscle, fat, liver", e:"<mark>GLUT4</mark> insertion; glycogen/lipid/protein synthesis → ↓glucose"},
+    {m:"IGF-1 (somatomedin)", r:"<b>IGF-1R</b> · epiphyseal plate, muscle", e:"linear bone growth, protein synthesis (mediates GH's growth effect)"},
+  ]},
+  {cls:"JAK / STAT (cytokine receptor)", accent:"jak", casc:"receptor-associated JAK → STAT → gene transcription", rows:[
+    {m:"Growth hormone (GH)", r:"<b>GH-R</b> (JAK2/STAT5) · liver &amp; tissues", e:"↑IGF-1, lipolysis, <mark>diabetogenic (↑glucose)</mark>"},
+    {m:"Prolactin", r:"<b>PRL-R</b> · breast", e:"milk protein synthesis; ↑PRL ⊣GnRH → hypogonadism/galactorrhea"},
+    {m:"Leptin", r:"<b>LEP-R (Ob-R)</b> · arcuate nucleus", e:"⊣NPY/AgRP, ↑POMC → satiety; obesity = <mark>leptin resistance</mark>"},
+  ]},
+  {cls:"Intracellular / nuclear receptors (lipophilic → gene transcription)", accent:"nuc", casc:"slow onset, hours–days · the only non-membrane receptors here", rows:[
+    {m:"Cortisol", r:"<b>GR</b> · cytoplasm→nucleus, ubiquitous", e:"<mark>BIG FIB</mark>: ↑glucose/gluconeogenesis, anti-inflammatory; ⊣bone/fibroblast/immune"},
+    {m:"Aldosterone", r:"<b>MR</b> · distal-nephron principal cell", e:"↑ENaC &amp; Na⁺/K⁺-ATPase → Na⁺ reabsorption, K⁺/H⁺ secretion"},
+    {m:"Testosterone / DHT", r:"<b>Androgen receptor</b> · widespread (DHT ↑affinity)", e:"virilization; DHT → external genitalia, prostate, hair"},
+    {m:"Estradiol", r:"<b>ER</b> · bone, brain, reproductive tract", e:"<mark>epiphyseal closure</mark>, maintains bone density (even in ♂)"},
+    {m:"T3 (T4 = prohormone)", r:"<b>Nuclear thyroid-hormone receptor</b> (DNA-bound) · ubiquitous", e:"↑basal metabolic rate, Na⁺/K⁺-ATPase, β-receptor expression"},
+    {m:"Calcitriol (1,25-vit D)", r:"<b>VDR</b> · gut, bone, parathyroid", e:"↑intestinal Ca²⁺ &amp; PO₄ absorption; <mark>directly ⊣PTH gene</mark>"},
+    {m:"Adrenal androgens (DHEA/-S)", r:"no intrinsic activity → peripheral conversion → <b>AR</b>", e:"precursor pool; main androgen source in ♀ (hirsutism in CAH)"},
+  ]},
+  {cls:"Guanylyl cyclase → ↑cGMP → PKG", accent:"cgmp", casc:"membrane (NPR) or soluble (NO) cyclase", rows:[
+    {m:"ANP / BNP", r:"<b>NPR-A</b> (membrane guanylyl cyclase) · kidney, vessels", e:"natriuresis, vasodilation, <mark>⊣renin &amp; aldosterone</mark> (anti-RAAS)"},
+    {m:"Nitric oxide (NO)", r:"<b>Soluble guanylyl cyclase</b> · vascular &amp; cavernosal SM", e:"vasodilation, <mark>erection</mark> (cGMP degraded by PDE5)"},
+  ]},
+  {cls:"Serine/threonine-kinase receptors (TGF-β superfamily → SMADs)", accent:"serthr", casc:"", rows:[
+    {m:"Inhibin B", r:"<b>Inhibin/activin receptor</b> · pituitary gonadotrope", e:"<mark>selectively ⊣FSH</mark> (Sertoli/granulosa feedback, not LH)"},
+    {m:"AMH / MIS", r:"<b>AMHR2</b> · fetal Müllerian ducts (Sertoli-derived)", e:"<mark>Müllerian-duct regression</mark> in the male fetus"},
+  ]},
+  {cls:"Ligand-gated ion channel", accent:"lgic", casc:"direct ion flux (fastest)", rows:[
+    {m:"Acetylcholine (nicotinic)", r:"<b>Nicotinic AChR</b> · adrenal-medulla chromaffin cell", e:"Na⁺/Ca²⁺ influx → <mark>catecholamine exocytosis</mark> (epi/NE)"},
+  ]},
+  {cls:"TNF-receptor superfamily", accent:"tnf", casc:"", rows:[
+    {m:"RANKL", r:"<b>RANK</b> · osteoclast precursor (PTH signals via osteoBLAST RANKL)", e:"<mark>osteoclast differentiation/activation</mark> → bone resorption"},
+  ]},
+ ]},
+
+{sec:"Hypothalamic-Pituitary Axes — Hormone Overview", tag:"physio — hormone table (list of entities)", rows:[
+  {n:"TRH → TSH (HPT axis initiator)", g:"<span class='pill'>TRH</span> Gq GPCR on thyrotropes", b:"Parvocellular neurons (PVN) release TRH into hypophyseal portal system → stimulates <mark>TSH</mark> synthesis/release from anterior pituitary thyrotropes.", d:"Tonically secreted; <b>cold ↑TRH</b>, stress/sympathetic stimulation ↓TRH. Full HPT loop detailed in the Thyroid axis section.", e:"⭐T3/T4 negative-feedback at both hypothalamus (↓TRH) and pituitary (↓TSH)."},
+  {n:"GnRH → LH/FSH (HPG axis initiator)", g:"<span class='pill'>GnRH</span> Gq GPCR on gonadotropes", b:"Parvocellular neurons release GnRH <mark>pulsatile</mark> → stimulates <mark>LH &amp; FSH</mark> from gonadotropes → gonads (testes/ovaries).", d:"Continuous (non-pulsatile) GnRH DOWN-regulates its own receptors → ↓LH/FSH — the pharmacologic basis of GnRH agonists used for chemical castration/precocious puberty suppression.", e:"⭐Full male HPG loop (Leydig/Sertoli, inhibin B, feedback) detailed in the Male Reproductive Physiology section."},
+  {n:"CRH → ACTH (HPA axis initiator)", g:"<span class='pill'>CRH</span> Gs GPCR on corticotropes", b:"Parvocellular neurons release CRH → stimulates <mark>ACTH</mark> from corticotropes → adrenal cortex growth + cortisol secretion.", d:"Full HPA loop (circadian rhythm, stress response, cortisol actions) detailed in the Adrenal Gland section.", e:"⭐ACTH also derives from the same POMC precursor as MSH/β-endorphin."},
+  {n:"GHRH/GHIH → GH", g:"<span class='pill'>GHRH</span> Gs GPCR (arcuate nucleus) / <span class='pill'>GHIH (somatostatin)</span> Gi GPCR (paraventricular nucleus) on somatotropes", b:"GH is a 191-aa protein, ~50% bound to <mark>GH-binding protein (GHBP)</mark>, t½ ~20 min. Receptor = <mark>JAK/STAT-linked cytokine receptor</mark>. Direct effects: ↑IGF-1, ↑muscle protein synthesis, ↑plasma FFAs (lipolytic), ↑blood glucose (diabetogenic — antagonizes insulin). Secreted in <mark>pulsatile, nocturnal (deep sleep)</mark> bursts.", d:"↑GH: exercise, sleep, stress, fasting, hypoglycemia, high-protein meals, arginine. ↓GH: hyperglycemia, high FFAs, aging, obesity.", e:"⭐<b>Short-loop</b> neg. feedback: GH→↑GHIH→↓GH. <b>Long-loop</b> neg. feedback: GH→↑IGF-1→↓GH. Deficiency (childhood)=dwarfism; excess (childhood)=gigantism, (adult)=acromegaly."},
+  {n:"IGF-1 (somatomedin)", g:"<span class='pill'>IGF receptor</span> — receptor tyrosine kinase (insulin-receptor family)", b:"70-aa protein made mainly in <mark>liver</mark> under GH stimulation; transported bound to IGFBP, t½ 12h (vs GH's 20 min). Stimulates chondrocyte proliferation at epiphyseal plates (linear bone growth), osteoblast activity, muscle protein synthesis.", d:"IGF-2 is the fetal-predominant form; IGF-1 dominates postnatally, peaking at puberty.", e:"⭐<b>Laron syndrome</b> = GH insensitivity → normal/high GH, LOW IGF-1, dwarfism — distinguishes receptor-level defect from a GH-deficiency defect."},
+  {n:"Dopamine ⊣ Prolactin (PRL)", g:"<span class='pill'>Dopamine</span> Gi GPCR (D2) on lactotropes; <span class='pill'>PRL receptor</span> JAK/STAT cytokine receptor", b:"PRL is under <mark>tonic inhibitory control</mark> by hypothalamic dopamine (unlike the other 5 axes, which are stimulus-driven). Nipple stimulation → ↓dopamine → ↑PRL → breast duct/alveolar development, milk production.", d:"Positive feedback: suckling → ↓DA → ↑PRL. Short-loop negative feedback: PRL → ↑DA → ↓PRL.", e:"⭐High PRL → ↓GnRH → ↓LH/FSH → hypogonadism/infertility/galactorrhea; prolactinoma = most common pituitary tumor (~30%); antipsychotics (↓DA) are a common iatrogenic cause."},
+  {n:"Oxytocin (OXY)", g:"<span class='pill'>OXY receptor</span> Gq GPCR → PLC → IP3+DAG → Ca²⁺ → calmodulin → MLCK", b:"Synthesized in PVN/SON magnocellular neurons, released from <b>posterior</b> pituitary (t½ 3-5 min, unbound). Targets: <mark>uterine myometrium</mark> (contraction) &amp; <mark>breast myoepithelial cells</mark> (milk ejection/let-down). Also mediates vas deferens/seminal vesicle contraction in male ejaculation.", d:"Both stimuli operate by <b>positive feedback</b>: cervical distension → OXY → contraction → more distension (Ferguson reflex); nipple stimulation → OXY → milk ejection.", e:"⭐Pitocin = synthetic OXY analog for labor induction/augmentation &amp; postpartum hemorrhage control."},
+  {n:"Antidiuretic hormone (ADH, Vasopressin)", g:"<span class='pill'>V1</span> Gq GPCR (vascular smooth muscle) / <span class='pill'>V2</span> Gs GPCR (renal collecting duct)", b:"Synthesized in PVN/SON, released from posterior pituitary (t½ 20 min). <mark>V1</mark>: vasoconstriction. <mark>V2</mark>: → ↑cAMP/PKA → Aquaporin-2 insertion into apical membrane of principal cells → water reabsorption.", d:"Primary stimulus = <b>↑plasma osmolarity &gt;285 mOsm/L</b> (osmoreceptors, ~1% change triggers response) — far more sensitive than the secondary stimuli of ↓blood volume (&gt;15% change needed, atrial stretch receptors) or ↓BP (&gt;10-15% change, baroreceptors).", e:"⭐Deficiency/insensitivity = <b>Diabetes Insipidus</b> (dilute polyuria); excess = <b>SIADH</b> (hyponatremia, concentrated urine). Water-deprivation test + desmopressin challenge distinguish central vs nephrogenic DI."},
+ ]},
+ {sec:"Hypothalamic-Pituitary Feedback Loop Logic", tag:"physio — feedback flow (relationship, not a list)", pathway:true, flow:true, steps:[
+  {t:"<b>Worked example — the hypothalamic-pituitary-testicular axis.</b> Hypothalamus releases <mark>GnRH</mark> → stimulates anterior pituitary gonadotropes → release <mark>LH</mark> → stimulates testicular Leydig cells → release <mark>testosterone (T)</mark>.", img:"<a href=\"physio_images/hypothalamus_pituitary_structure_function/hp_p22_parvocellular_magnocellular_neurons.png\" target=\"_blank\"><img src=\"physio_images/hypothalamus_pituitary_structure_function/hp_p22_parvocellular_magnocellular_neurons.png\" loading=\"lazy\"></a>"},
+  {t:"<b>Long-loop feedback</b> — target-tissue hormone (T) travels back to regulate BOTH the hypothalamus and pituitary. In this axis it is <mark>negative</mark> (T ⊣ GnRH and T ⊣ LH). Long-loop feedback can also be <mark>positive</mark> in other axes — e.g. in the female HPG axis, estradiol positively feeds back on GnRH/LH at mid-cycle to trigger the LH surge/ovulation."},
+  {t:"<b>Short-loop feedback</b> — the pituitary hormone itself feeds back on the hypothalamus, one level up rather than two. Example: GH → ↑hypothalamic GHIH (somatostatin) → ↓further GH release. Less common than long-loop feedback."},
+  {t:"<b>Tertiary hyposecretion</b> (problem at the <mark>hypothalamus</mark>): ↓GnRH → ↓LH → ↓T. All three levels read low — nothing to trigger a compensatory rise anywhere upstream."},
+  {t:"<b>Secondary hyposecretion</b> (problem at the <mark>pituitary</mark>): ↓LH → ↓T, but GnRH is HIGH because there is no negative feedback onto an intact hypothalamus (the defect is downstream of it)."},
+  {t:"<b>Primary hyposecretion</b> (problem at the <mark>target gland</mark>, e.g. testes): ↓T despite normal/high LH and GnRH — neither the hypothalamus nor the pituitary receives negative feedback, so both compensate upward."},
+  {t:"<b>Hypersecretion mirrors this logic in reverse</b>: primary excess (↑T, low LH, low GnRH — high T suppresses both upstream levels); secondary excess (↑LH → ↑T, but GnRH is low because only the hypothalamus still receives negative feedback — the pituitary defect itself doesn't respond); tertiary excess (↑GnRH → ↑LH → ↑T — every level reads high)."},
+ ], pathwayNote:"This same primary/secondary/tertiary logic applies to EVERY hypothalamic-pituitary-target axis (thyroid, adrenal, gonadal) — identify which level fails, then predict whether the upstream hormones will be high (no feedback reaching an intact axis) or low (the defect IS that upstream level)."},
+
+ {sec:"Hypothalamic-Pituitary-Testicular (HPG) Axis", tag:"physio — feedback flow (relationship, not a list)", pathway:true, flow:true, steps:[
+  {t:"<b>Hypothalamus</b> releases <mark>GnRH</mark> in a pulsatile fashion from the arcuate nucleus. Pulsatility is essential — continuous GnRH down-regulates its own pituitary receptors and SUPPRESSES LH/FSH (the basis of GnRH-agonist chemical castration/puberty-blocker therapy).", img:"<a href=\"physio_images/male_reproductive_physiology_a/mrp_p09_pulsatile_vs_continuous_gnrh.png\" target=\"_blank\"><img src=\"physio_images/male_reproductive_physiology_a/mrp_p09_pulsatile_vs_continuous_gnrh.png\" loading=\"lazy\"></a>"},
+  {t:"GnRH → anterior pituitary <mark>gonadotropes</mark> → release <mark>LH</mark> and <mark>FSH</mark>.", img:"<a href=\"physio_images/male_reproductive_physiology_a/mrp_p08_hpg_axis_feedback.png\" target=\"_blank\"><img src=\"physio_images/male_reproductive_physiology_a/mrp_p08_hpg_axis_feedback.png\" loading=\"lazy\"></a>"},
+  {t:"<mark>LH</mark> → binds LH receptors on <b>Leydig cells</b> (interstitial tissue) → stimulates <mark>testosterone</mark> synthesis."},
+  {t:"<mark>FSH</mark> → binds FSH receptors on <b>Sertoli cells</b> (seminiferous tubules) → supports spermatogonia, maintains the blood-testis barrier, and stimulates secretion of <mark>Inhibin B</mark>."},
+  {t:"Testosterone (locally, paracrine) also acts on Sertoli cells to support spermatogenesis — Leydig and Sertoli cells functionally cooperate even though they respond to different gonadotropins."},
+  {t:"<b>Negative feedback</b>: Testosterone (and its derivatives DHT/estrogen) feed back on BOTH the hypothalamus (⊣GnRH) and pituitary (⊣LH) — long-loop negative feedback. <mark>Inhibin B</mark> feeds back selectively on the pituitary gonadotropes to ⊣FSH only, leaving LH unaffected.", img:"<a href=\"physio_images/male_reproductive_physiology_a/mrp_p07_seminiferous_tubule_sertoli_leydig.png\" target=\"_blank\"><img src=\"physio_images/male_reproductive_physiology_a/mrp_p07_seminiferous_tubule_sertoli_leydig.png\" loading=\"lazy\"></a>"},
+ ], pathwayNote:"Because testosterone and inhibin B suppress DIFFERENT pituitary hormones (LH vs FSH respectively), primary testicular failure that selectively damages Sertoli cells (e.g. chemotherapy) can present with an isolated ↑FSH + normal LH/testosterone — a distinct pattern from global Leydig+Sertoli failure, where both LH and FSH rise."},
+ {sec:"Sertoli Cell vs Leydig Cell", tag:"physio — compare/contrast", compare:true,
+  compareNote:"Both reside in the testis but respond to different gonadotropins and serve opposite functional roles — germ-cell support vs steroidogenesis.",
+  facets:["Gonadotropin receptor","Location","Secretes","Key structural role","Feedback hormone"],
+  items:[
+   {label:"Sertoli Cell", vals:["<span class='pill'>FSH receptor</span>","Seminiferous tubules (lines the tubule)","<mark>Inhibin B</mark>, Müllerian Inhibiting Substance (MIS/AMH), androgen-binding protein","Forms the <b>blood-testis barrier</b> (tight junctions); nurses/supports developing spermatogonia","Inhibin B ⊣ FSH only (selective)"], img:"<a href=\"physio_images/male_reproductive_physiology_a/mrp_p07_seminiferous_tubule_sertoli_leydig.png\" target=\"_blank\"><img src=\"physio_images/male_reproductive_physiology_a/mrp_p07_seminiferous_tubule_sertoli_leydig.png\" loading=\"lazy\"></a>"},
+   {label:"Leydig Cell", vals:["<span class='pill'>LH receptor</span>","Interstitial tissue (between tubules)","<mark>Testosterone</mark>","No barrier function — steroidogenic, cholesterol → testosterone via StAR/CYP450 enzymes","Testosterone (+DHT/estrogen) ⊣ GnRH AND LH (long-loop)"]},
+  ]},
+ {sec:"Testosterone vs DHT vs Estrogen — Effects in the Male", tag:"physio — compare/contrast", compare:true,
+  compareNote:"One precursor (testosterone) is peripherally converted by two different enzymes into two functionally distinct hormones — each dominates a different set of target tissues.",
+  facets:["Converting enzyme","Embryonic/fetal role","Pubertal role","Adult maintenance role","Receptor"],
+  items:[
+   {label:"Testosterone", vals:["— (parent hormone, from Leydig cells)","Differentiates <mark>Wolffian ducts</mark> → seminal vesicles, epididymis, vas deferens, ejaculatory duct (SEED)","Growth of penis/seminal vesicles/larynx, voice deepening, supports spermatogenesis (via Sertoli cells)","Protein-anabolic effect on muscle, stimulates erythropoiesis, libido/erectile function, inhibits breast development","Androgen receptor (AR)"]},
+   {label:"DHT", vals:["<span class='pill'>5α-reductase</span> (non-aromatizable, more potent than T)","Differentiates <b>external genitalia</b> (scrotum, penis, prostate)","Facial/body hair, penis growth, scrotal darkening/folding, prostate differentiation, ↑sebaceous activity","Male-pattern hair distribution &amp; balding","Androgen receptor (AR) — higher affinity than T"]},
+   {label:"Estrogen", vals:["<span class='pill'>Aromatase (CYP19A1)</span>","Masculinization of the brain during development","Growth spurt, periosteal apposition, <b>epiphyseal closure</b> (even in males)","Maintains bone density (↑osteoblast survival, ↑osteoclast apoptosis); concentrates sperm via luminal fluid reabsorption in rete testis","Estrogen receptor (ER)"]},
+  ]},
+
+ {sec:"Prostaglandin/Thromboxane Receptors & Target-Organ Physiology", tag:"physio — hormone table (list of entities)", rows:[
+  {n:"EP receptors (PGE2)", g:"<span class='pill'>EP1-EP4</span> — all GPCRs, subtype-specific 2nd messengers (EP1: Gq; EP2/EP4: Gs; EP3: Gi)", b:"Different EP subtypes in different tissues let ONE prostaglandin (PGE2) produce opposite effects depending on location: <mark>vasodilation</mark>, gastric mucus/bicarbonate secretion (protective), uterine contraction, fever (hypothalamus), pain sensitization, maintains ductus arteriosus patency (EP4).", d:"NSAID-induced peptic ulcers occur because COX inhibition removes PGE2's protective EP-mediated gastric action.", e:"⭐Indomethacin closes a patent ductus arteriosus by blocking PGE2 synthesis; alprostadil (PGE1) keeps a duct-dependent lesion open pre-op.", img:"<a href=\"physio_images/prostaglandin_biochem/prostaglandin_biochem_p11_eicosanoid_synthesis_pathway.png\" target=\"_blank\"><img src=\"physio_images/prostaglandin_biochem/prostaglandin_biochem_p11_eicosanoid_synthesis_pathway.png\" loading=\"lazy\"></a>"},
+  {n:"IP receptor (PGI2, prostacyclin)", g:"<span class='pill'>IP receptor</span> — Gs GPCR, endothelium", b:"<mark>Vasodilation + inhibits platelet aggregation</mark> — physiologic opposite of TXA2, maintaining a non-thrombotic vascular surface.", d:"Endothelial injury shifts local balance toward TXA2 dominance, favoring clot formation right at the site of damage.", e:"⭐Synthetic PGI2 analogs (epoprostenol) treat pulmonary arterial hypertension via this same receptor."},
+  {n:"TP receptor (TXA2, thromboxane)", g:"<span class='pill'>TP receptor</span> — Gq GPCR, platelets &amp; vascular smooth muscle", b:"<mark>Vasoconstriction + platelet aggregation</mark> — promotes clot formation at sites of vascular injury.", d:"Made by COX-1 in platelets, which lack nuclei and cannot resynthesize COX after aspirin's irreversible acetylation — the basis of aspirin's antiplatelet duration (~platelet lifespan, 7-10 days).", e:"⭐Low-dose aspirin selectively suppresses TXA2 (platelets, no resynthesis) while sparing endothelial PGI2 (nucleated cells resynthesize COX) — the pharmacologic rationale for cardioprotective dosing.", img:"<a href=\"physio_images/prostaglandin_biochem/prostaglandin_biochem_p15_cox_cyclization_pathway.png\" target=\"_blank\"><img src=\"physio_images/prostaglandin_biochem/prostaglandin_biochem_p15_cox_cyclization_pathway.png\" loading=\"lazy\"></a>"},
+  {n:"FP receptor (PGF2α)", g:"<span class='pill'>FP receptor</span> — Gq GPCR, uterine/bronchial smooth muscle, corpus luteum", b:"<mark>Uterine and bronchial smooth muscle contraction</mark>, luteolysis (regresses the corpus luteum, terminating progesterone support if no pregnancy).", d:"Contraindicated (as a drug, carboprost) in asthma due to FP-mediated bronchoconstriction.", e:"⭐Carboprost (PGF2α analog) treats postpartum hemorrhage from uterine atony via this receptor."},
+  {n:"CysLT1 receptor (LTC4/D4/E4)", g:"<span class='pill'>CysLT1</span> — Gq GPCR, airway smooth muscle/endothelium", b:"<mark>Bronchoconstriction, ↑vascular permeability, mucus secretion</mark> — the receptor target of the 'slow-reacting substance of anaphylaxis'.", d:"Montelukast/zafirlukast block this receptor selectively (only cysteinyl-LT effects); zileuton blocks 5-LOX upstream (blocks ALL leukotrienes, including LTB4 neutrophil chemotaxis).", e:"⭐Aspirin-exacerbated respiratory disease: COX blockade shunts arachidonic acid toward the 5-LOX/CysLT1 pathway → bronchospasm."},
+ ]},
+ {sec:"Insulin vs Glucagon — Glucose Homeostasis", tag:"physio — compare/contrast", compare:true,
+  compareNote:"Reciprocally-regulated hormones from adjacent islet cell types — the insulin:glucagon RATIO, not either hormone alone, sets whether the body is in a fed (storage) or fasted (mobilization) state.",
+  facets:["Source cell","Stimulus for release","Receptor / signaling","Effect on liver","Effect on muscle/fat","Net effect on blood glucose"],
+  items:[
+   {label:"Insulin", vals:["Pancreatic <mark>β-cells</mark>","↑Glucose (via GLUT2/glucokinase/ATP → K-ATP channel closure → Ca²⁺ influx → exocytosis); also ↑amino acids, GLP-1/GIP (incretin effect)","<span class='pill'>Insulin receptor</span> — receptor tyrosine kinase → IRS → PI3K/Akt","↑Glycogen synthesis, ↑lipogenesis, ⊣gluconeogenesis","↑GLUT4 translocation → ↑glucose uptake, ↑glycogen/protein/fat synthesis","<b>↓ blood glucose</b> (the only hypoglycemic hormone)"]},
+   {label:"Glucagon", vals:["Pancreatic <mark>α-cells</mark>","↓Glucose, ↑amino acids (protein meal), sympathetic stimulation, stress/exercise","<span class='pill'>Glucagon receptor</span> — Gs GPCR → ↑cAMP/PKA","↑Glycogenolysis, ↑gluconeogenesis, ↑ketogenesis","Minimal direct effect (few glucagon receptors in skeletal muscle)","<b>↑ blood glucose</b>"]},
+  ]},
+ {sec:"Appetite Regulation — Leptin-Ghrelin-Melanocortin Axis", tag:"physio — feedback flow (relationship, not a list)", pathway:true, flow:true, steps:[
+  {t:"<b>Leptin</b> is released from adipocytes <mark>in proportion to fat mass</mark> — a long-term adiposity signal, distinct from the meal-to-meal signals below."},
+  {t:"Leptin acts on the hypothalamic <b>arcuate nucleus</b>, where it ACTIVATES <mark>POMC/CART neurons</mark> and INHIBITS <mark>NPY/AgRP neurons</mark>."},
+  {t:"POMC/CART activation → release of <mark>α-MSH</mark> → binds <b>MC4R</b> (melanocortin-4 receptor) on second-order neurons → <b>satiety</b>, ↑energy expenditure."},
+  {t:"NPY/AgRP inhibition removes an orexigenic (hunger-driving) drive — AgRP itself is an MC4R antagonist, so its suppression further reinforces the satiety signal."},
+  {t:"<b>Ghrelin</b> (from the gastric fundus) does the opposite: rises before meals, stimulates NPY/AgRP neurons directly, and is a GH secretagogue. Insulin release (postprandial) suppresses ghrelin."},
+  {t:"<b>PYY</b> (ileum/colon L-cells, co-released with GLP-1 postprandially) is structurally an NPY analog but binds INHIBITORY receptors on NPY/AgRP neurons — reinforcing satiety rather than hunger."},
+ ], pathwayNote:"Most human obesity is a state of LEPTIN RESISTANCE (high leptin, blunted hypothalamic response) rather than leptin deficiency — rare congenital leptin deficiency is the exception that DOES respond to leptin replacement. MC4R mutations are the most common monogenic cause of severe childhood obesity, since they block the satiety signal downstream of leptin entirely."},
+
+ {sec:"Hypothalamic-Pituitary-Adrenal (HPA) Axis", tag:"physio — feedback flow (relationship, not a list)", pathway:true, flow:true, steps:[
+  {t:"<b>Hypothalamus</b> (PVN) releases <mark>CRH</mark> — pulsatile with a <b>circadian rhythm</b> (peak early morning, trough at night) — into the hypophyseal portal system."},
+  {t:"CRH → anterior pituitary <mark>corticotropes</mark> (Gs GPCR) → release <mark>ACTH</mark> (a POMC-derived peptide, co-released with β-endorphin)."},
+  {t:"ACTH → binds MC2 receptors on the <b>zona fasciculata</b> (and, to a lesser degree, zona reticularis) → stimulates <mark>cortisol</mark> synthesis and adrenal cortex growth."},
+  {t:"<b>Stress</b> (physical, emotional, hypoglycemia, hemorrhage, infection/proinflammatory cytokines) overrides the circadian rhythm, driving additional CRH release from higher CNS centers."},
+  {t:"<b>Negative feedback</b>: cortisol feeds back at BOTH the hypothalamus (⊣CRH) and pituitary (⊣ACTH) — long-loop negative feedback, the fastest and most complete of the classical HP axes."},
+ ], pathwayNote:"Chronic exogenous steroid use suppresses this entire axis via negative feedback — the adrenal cortex atrophies from disuse. Abrupt withdrawal (or acute stress without stress-dose steroid coverage) risks adrenal insufficiency because the axis cannot rapidly reactivate; this is why patients on chronic steroids get stress-dose steroids peri-operatively."},
+ {sec:"Adrenal Cortex & Medulla Hormones", tag:"physio — hormone table (list of entities)", rows:[
+  {n:"Cortisol", g:"<span class='pill'>Glucocorticoid receptor (GR)</span> — intracellular, alters gene transcription", b:"Zona fasciculata; 90% bound to CBG/transcortin (t½ ~70 min). <b>BIG FIB</b> actions: ↑<mark>B</mark>lood glucose (gluconeogenesis, ⊣glucose uptake), ↑<mark>I</mark>mmunosuppression/anti-inflammatory, ↑<mark>G</mark>luconeogenic enzyme permissiveness for glucagon/catecholamines; ⊣<mark>F</mark>ibroblast activity (poor wound healing, striae), ⊣<mark>I</mark>mmune response, ⊣<mark>B</mark>one formation (↓osteoblasts).", d:"At high concentration, cortisol can activate the mineralocorticoid receptor (equal affinity to aldosterone) — normally prevented by 11β-HSD2 inactivating cortisol to cortisone in MR-expressing tissue.", e:"⭐Stimulus: hypoglycemia, hemorrhage, stress, proinflammatory cytokines → ↑CRH. Deficiency = hypocortisolism (fatigue, hypoglycemia, weight loss). Excess = Cushing syndrome (most common cause: exogenous steroids).", img:"<a href=\"physio_images/structure_and_function_of_the_adrenal/adr_p27_hpa_axis_circadian_rhythm.png\" target=\"_blank\"><img src=\"physio_images/structure_and_function_of_the_adrenal/adr_p27_hpa_axis_circadian_rhythm.png\" loading=\"lazy\"></a>"},
+  {n:"Aldosterone", g:"<span class='pill'>Mineralocorticoid receptor (MR)</span> — intracellular, alters gene transcription", b:"Zona glomerulosa; weakly protein-bound (t½ ~20 min). Targets <mark>principal cells of the distal nephron/collecting duct</mark>: ↑ENaC &amp; Na⁺/K⁺-ATPase (Na⁺ reabsorption), ↑H⁺-ATPase (K⁺/H⁺ secretion).", d:"Regulated primarily by <b>RAAS</b> (↓blood volume → ↑renin) and directly by <mark>↑serum K⁺</mark>; ACTH has only a minor permissive effect. Opposed by ANP.", e:"⭐Deficiency = hyperkalemia, hyponatremia, hypotension, metabolic acidosis (life-threatening). Excess = Conn syndrome (HTN, hypokalemia, metabolic alkalosis).", img:"<a href=\"physio_images/adrsf/adrsf_p9_adrenal_cortex_zones.png\" target=\"_blank\"><img src=\"physio_images/adrsf/adrsf_p9_adrenal_cortex_zones.png\" loading=\"lazy\"></a>"},
+  {n:"Adrenal androgens (DHEA, DHEA-S, androstenedione)", g:"No direct androgen-receptor activity of their own", b:"Zona reticularis, stimulated by ACTH (CRH→ACTH→DHEA); onset ~age 6 = <mark>adrenarche</mark>, peaks mid-20s. Function as <b>precursors</b> peripherally converted to the more potent testosterone/DHT/estradiol.", d:"Unlike cortisol/aldosterone, adrenal androgens do NOT feed back on CRH/ACTH secretion.", e:"⭐In males, effects are masked by the much larger testicular androgen pool; in females, they are the primary source of androgen — excess causes hirsutism/virilization (e.g. in CAH)."},
+  {n:"Epinephrine & Norepinephrine (adrenal medulla)", g:"<span class='pill'>α- and β-adrenoceptors</span> (target-tissue specific GPCRs)", b:"Chromaffin cells (modified postganglionic sympathetic neurons); released via ACh-nicotinic-receptor stimulation → Ca²⁺ influx → exocytosis, t½ 1-2 min. Targets: heart, bronchioles, blood vessels, liver, adipose tissue, pancreatic islets — the <mark>fight-or-flight</mark> response.", d:"Only ~30% of circulating norepinephrine comes from the adrenal medulla; ~70% comes from sympathetic postganglionic nerve terminal spillover — the adrenal medulla is NOT essential for life, unlike the cortex.", e:"⭐Excess = pheochromocytoma (episodic HTN, headache, sweating, palpitations); diagnosed via urine/serum metanephrines.", img:"<a href=\"physio_images/hormone_synthesis/hormone_synthesis_p09_catecholamine_biosynthesis.png\" target=\"_blank\"><img src=\"physio_images/hormone_synthesis/hormone_synthesis_p09_catecholamine_biosynthesis.png\" loading=\"lazy\"></a>"},
+ ]},
+ {sec:"Renin-Angiotensin-Aldosterone System (RAAS)", tag:"physio — feedback flow (relationship, not a list)", pathway:true, flow:true, steps:[
+  {t:"<b>Trigger</b>: ↓renal perfusion pressure, ↓Na⁺ delivery to the macula densa, or ↑sympathetic tone on juxtaglomerular (JG) cells → JG cells release <mark>renin</mark>."},
+  {t:"Renin cleaves hepatic <mark>angiotensinogen → Angiotensin I</mark>."},
+  {t:"<b>ACE</b> (pulmonary/renal endothelium) cleaves <mark>Angiotensin I → Angiotensin II</mark> — the primary effector.", img:"<a href=\"physio_images/adrsf/adrsf_p24_raas.png\" target=\"_blank\"><img src=\"physio_images/adrsf/adrsf_p24_raas.png\" loading=\"lazy\"></a>"},
+  {t:"Angiotensin II acts on AT1 receptors: <mark>direct arteriolar vasoconstriction</mark> (↑BP), stimulates <mark>aldosterone</mark> release from the zona glomerulosa, stimulates thirst/ADH release, and promotes renal Na⁺ reabsorption directly at the proximal tubule."},
+  {t:"Aldosterone → distal nephron principal cells → ↑Na⁺/water reabsorption, ↑K⁺/H⁺ excretion → restores blood volume and pressure."},
+  {t:"<b>Negative feedback</b>: restored blood volume/pressure/Na⁺ delivery shuts off renin release. <b>Counter-regulation</b>: ANP/BNP (released by atrial/ventricular stretch from volume overload) directly inhibit renin and aldosterone release — the physiologic 'anti-RAAS'."},
+ ], pathwayNote:"ACE inhibitors/ARBs block this cascade at the Angiotensin II step; aldosterone antagonists (spironolactone) block the final MR step — know where in the chain each drug class acts."},
+
+ {sec:"Calcium Homeostasis — PTH / Vitamin D / Calcitonin Loop", tag:"physio — feedback flow (relationship, not a list)", pathway:true, flow:true, steps:[
+  {t:"<b>Sensor</b>: parathyroid <b>chief cells</b> express the <mark>calcium-sensing receptor (CaSR)</mark> — a GPCR that directly detects extracellular Ca²⁺. ↓Serum Ca²⁺ → CaSR senses the drop → ↑<mark>PTH</mark> secretion (an 84-aa peptide, cleaved from an 110-aa preprohormone).", img:"<a href=\"physio_images/endocrine_pathology_physio/endocrine_pathology_physio_p028_pth_physiology_calcitonin.png\" target=\"_blank\"><img src=\"physio_images/endocrine_pathology_physio/endocrine_pathology_physio_p028_pth_physiology_calcitonin.png\" loading=\"lazy\"></a>"},
+  {t:"PTH binds <b>PTH1R</b> (Gs/Gq GPCR, cAMP + PLC/PKC) on three target tissues simultaneously:"},
+  {t:"→ <b>Bone</b>: PTH binds osteoBLASTS (osteoclasts lack PTH receptors) → osteoblasts signal osteoclasts via <mark>RANKL</mark> → osteoclastic bone resorption → releases Ca²⁺ (and phosphate) into blood."},
+  {t:"→ <b>Kidney</b>: directly ↑Ca²⁺ reabsorption (thick ascending loop + distal convoluted tubule) and ↓phosphate reabsorption (proximal tubule) — a net PHOSPHATURIC effect. Also stimulates <mark>1α-hydroxylase</mark>, converting 25-OH-vitamin D → active <mark>calcitriol</mark>."},
+  {t:"→ <b>Gut</b> (indirect only — enterocytes lack PTH receptors): calcitriol acts on intestinal cells to ↑Ca²⁺ AND phosphate absorption."},
+  {t:"<b>Net effect of PTH</b>: ↑serum Ca²⁺, ↓serum phosphate. <b>Net effect of calcitriol</b>: ↑serum Ca²⁺ AND ↑serum phosphate (opposite phosphate direction from PTH alone) — restores Ca²⁺ to the CaSR, shutting off further PTH release (negative feedback)."},
+  {t:"<b>Calcitonin</b> (thyroid C-cells, released by hypercalcemia) opposes this whole loop by inhibiting osteoclasts — a minor, non-essential counter-regulator in humans (much weaker than PTH's effect)."},
+ ], pathwayNote:"CKD blunts renal 1α-hydroxylase → low calcitriol → hypocalcemia → secondary (then tertiary, autonomous) hyperparathyroidism — a direct consequence of this loop's kidney-dependent step failing."},
+ {sec:"Hypothalamic-Pituitary-Thyroid (HPT) Axis", tag:"physio — feedback flow (relationship, not a list)", pathway:true, flow:true, steps:[
+  {t:"<b>Hypothalamus</b> (PVN parvocellular neurons) releases <mark>TRH</mark> → hypophyseal portal system → anterior pituitary <b>thyrotropes</b> (Gq GPCR → PLC → IP3/DAG → ↑Ca²⁺ → TSH exocytosis).", img:"<a href=\"physio_images/thyanat/thyanat_p25_thyroid_synthesis.png\" target=\"_blank\"><img src=\"physio_images/thyanat/thyanat_p25_thyroid_synthesis.png\" loading=\"lazy\"></a>"},
+  {t:"<mark>TSH</mark> (glycoprotein, shares an α-subunit with LH/FSH/hCG) → thyroid follicular cells (Gs GPCR → ↑cAMP) → stimulates EVERY step of hormone synthesis: iodide uptake, organification, coupling, endocytosis/proteolysis, AND follicular cell growth (hyperplasia)."},
+  {t:"Follicular cells release <mark>T4 (90%) and T3 (10%)</mark> into circulation, &gt;99% protein-bound (TBG, transthyretin, albumin) — only free hormone is active."},
+  {t:"Peripheral <mark>deiodinases</mark> convert T4 (weak, prohormone-like) → T3 (10x higher receptor affinity) inside target cells; T3 binds nuclear thyroid hormone receptors already bound to DNA response elements → alters gene transcription."},
+  {t:"<b>Negative feedback</b>: free T3/T4 inhibit BOTH TRH (hypothalamus) and TSH (pituitary) release — classical long-loop negative feedback."},
+  {t:"<b>Modulators</b>: cold exposure → ↑TRH; stress/sympathetic stimulation → ↓TRH (cortisol can suppress TSH directly)."},
+ ], pathwayNote:"T3/T4 have SLOW onset, LONG duration action (genomic mechanism) — latent period of 2-3 days after a large T4 dose, peak effect at 10-12 days, effects persisting up to 2 months — contrast with the fast GPCR-mediated axes (HPA, RAAS) that act in minutes."},
+ {sec:"Primary vs Secondary vs Tertiary Thyroid Dysfunction", tag:"physio — compare/contrast", compare:true,
+  compareNote:"The SAME logic used for the testicular axis (see Hypothalamic-Pituitary Feedback Loop Logic section) applied to the HPT axis — locate the failing level, then predict whether TSH/TRH read high (intact feedback with nothing to suppress) or low (the defect IS that level).",
+  facets:["Level of problem","Thyroid hormone (TH)","TSH","TRH"],
+  items:[
+   {label:"1° Hypothyroid", vals:["Thyroid gland (e.g. Hashimoto's, iodine deficiency)","↓","↑ (no feedback)","↑ (no feedback)"]},
+   {label:"2° Hypothyroid", vals:["Pituitary (tumor, trauma)","↓","↓ (the defect)","↑ (no feedback)"]},
+   {label:"3° Hypothyroid", vals:["Hypothalamus (tumor, trauma)","↓","↓","↓ (the defect)"]},
+   {label:"1° Hyperthyroid", vals:["Thyroid gland (e.g. Graves', toxic adenoma)","↑","↓ (feedback)","↓ (feedback)"]},
+   {label:"2° Hyperthyroid", vals:["Pituitary (TSH-secreting tumor)","↑","↑ (the defect)","↓ (feedback)"]},
+   {label:"3° Hyperthyroid", vals:["Hypothalamus (tumor)","↑","↑","↑ (the defect)"]},
+  ]},
+
+ {sec:"Hormones [summary]", tag:"[summary]", rows:[
+  {n:"Adrenal cortex mnemonic — 'GFR: salt, sugar, sex'", g:"—", b:"<mark>G</mark>lomerulosa→salt (aldosterone), <mark>F</mark>asciculata→sugar (cortisol), <mark>R</mark>eticularis→sex (DHEA/androstenedione) — the deeper the zone, the 'sweeter' (less water-related) the hormone.", d:"A fast way to reconstruct which zone makes what without re-deriving the enzyme pathway.", e:"⭐Also reconstructs the CAH enzyme-block logic: 21-OH/11β-OH block salt+sugar (virilizing), 17α-OH blocks sugar+sex (hypertensive, under-virilized)."},
+  {n:"Cortisol actions mnemonic — 'BIG FIB'", g:"—", b:"Cortisol INCREASES: <mark>B</mark>lood glucose, <mark>I</mark>mmunosuppression (permits glucagon/catecholamine action), <mark>G</mark>luconeogenesis. Cortisol DECREASES: <mark>F</mark>ibroblast activity, <mark>I</mark>mmune response, <mark>B</mark>one formation.", d:"Splits cortisol's diffuse multi-system action list into a rememberable increase/decrease pair.", e:"⭐Decreased fibroblast activity is why chronic hypercortisolism causes visible striae and poor wound healing."},
+  {n:"ADH receptor mnemonic — V1 vs V2", g:"<span class='pill'>V1</span> Gq → vessels; <span class='pill'>V2</span> Gs → kidney", b:"'V-<mark>1</mark> = <mark>1</mark> blood Vessel' (vasoconstriction, Gq/IP3/Ca²⁺); 'V-<mark>2</mark> = <mark>2</mark>-kidneys' (Gs/cAMP/aquaporin-2 water reabsorption).", d:"Both receptors respond to the same hormone but drive completely different downstream cascades.", e:"⭐High-dose ADH (as in severe hypovolemia) recruits V1 vasoconstriction — this is why vasopressin is used as a pressor in refractory shock."},
+  {n:"Catecholamine synthesis order", g:"Tyrosine → L-DOPA → Dopamine → Norepinephrine → Epinephrine", b:"Each arrow is one enzyme: <mark>tyrosine hydroxylase</mark> (rate-limiting, needs BH4) → <mark>DOPA decarboxylase</mark> (B6) → <mark>dopamine β-hydroxylase</mark> (vitamin C) → <mark>PNMT</mark> (SAM, cortisol-dependent).", d:"PNMT is the only step confined to the adrenal medulla (and needs local high cortisol from the adjacent cortex) — this is why extra-adrenal chromaffin tissue makes norepinephrine but not epinephrine.", e:"⭐Addison disease (↓cortisol) can blunt epinephrine synthesis specifically, via loss of PNMT stimulation."},
+  {n:"Oxytocin's second target — male ejaculation", g:"—", b:"Beyond labor and lactation, oxytocin also mediates <mark>contraction of the vas deferens and seminal vesicles</mark> during male ejaculation — the same Gq/PLC/Ca²⁺ smooth-muscle mechanism, different target organ.", d:"Easy to forget oxytocin has a male physiologic role at all, since it's taught almost exclusively in the labor/lactation context.", e:"Pitocin = the synthetic oxytocin analog used clinically for labor induction/augmentation and postpartum hemorrhage."},
+ ]},
+ {sec:"Endocrine Pathology & Physio [summary]", tag:"[summary]", rows:[
+  {n:"Calcitriol's direct feedback on PTH", g:"<span class='pill'>Vitamin D receptor (VDR)</span> — intracellular, nuclear", b:"Calcitriol doesn't just raise serum Ca²⁺ (indirectly shutting off CaSR-driven PTH release) — it also crosses the chief-cell membrane, binds the intracellular VDR, and the complex translocates to the nucleus to <mark>directly suppress PTH gene transcription</mark>.", d:"A second, calcium-independent feedback arm on top of the CaSR-mediated one described in the Calcium Homeostasis flow section.", e:"⭐This is why vitamin D analogs (calcitriol, paricalcitol) are used to suppress PTH in secondary hyperparathyroidism of CKD, independent of correcting serum calcium."},
+  {n:"Hungry bone syndrome", g:"—", b:"After parathyroidectomy for longstanding hyperparathyroidism, chronically PTH-stimulated osteoblasts abruptly resume rapid bone mineralization, pulling <mark>Ca²⁺, phosphate, and Mg²⁺</mark> out of the blood faster than they can be replaced.", d:"A physiologic 'overshoot' — the bone remodeling machinery was upregulated by years of PTH excess and doesn't downshift instantly when PTH is removed.", e:"⭐Presents as severe post-op hypocalcemia, hypophosphatemia, and hypomagnesemia — anticipate and monitor after parathyroidectomy for severe/longstanding hyperparathyroidism."},
+  {n:"RAIU (radioactive iodine uptake) testing logic", g:"—", b:"RAIU reflects how much iodine the thyroid gland is actively trapping via NIS — a direct functional readout of thyroid axis activity, not just hormone levels. <mark>High RAIU, diffuse</mark> = Graves (TSH-receptor stimulation drives uptake). <mark>High RAIU, focal</mark> = toxic adenoma/multinodular goiter. <mark>Low RAIU</mark> = thyroiditis (preformed hormone leaking from a damaged gland, not new synthesis) or exogenous hormone intake.", d:"Distinguishes hyperthyroidism states that all present with ↑TH/↓TSH but arise from opposite mechanisms — active overproduction (high uptake) vs passive release from a damaged/non-functioning gland (low uptake).", e:"⭐Low RAIU + thyrotoxicosis = don't rely on the gland to fix itself — think thyroiditis or factitious (exogenous) thyroid hormone use."},
+ ]},
+]
+
+const tbody=document.getElementById('tbody');
+const secpickEl=document.getElementById('secpick');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  let n, kind;
+  if(grp.pathway){ n=grp.steps.length; kind=(grp.flow?' steps · feedback loop':' steps · sequence'); }
+  else if(grp.compare){ n=grp.items.length; kind=' compared'; }
+  else if(grp.signal){ n=grp.groups.reduce((s,gr)=>s+gr.rows.length,0); kind=' molecules · grouped by pathway'; }
+  else { n=grp.rows.length; kind=' entries'; }
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${n}${kind}${grp.tag?' · '+grp.tag:''}</span></span></td>`;
+  tbody.appendChild(secRow);
+
+  if(grp.pathway){
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row pathway'+(grp.flow?' flow':'');
+    tr.dataset.sec=gi;
+    const allTxt=grp.steps.map(s=>s.t).join(' ')+' '+(grp.pathwayNote||'')+' '+grp.sec;
+    tr.dataset.txt=allTxt.replace(/<[^>]+>/g,'').toLowerCase();
+    const stepsHtml=grp.steps.map(s=>`<li>${s.t}${s.img?`<div class="stepimg">${s.img}</div>`:''}</li>`).join('');
+    const noteHtml=grp.pathwayNote?`<div class="${grp.flow?'flowloop':'stepnote'}">${grp.flow?'<b>Feedback:</b> ':''}${grp.pathwayNote}</div>`:'';
+    tr.innerHTML=`<td colspan="6"><div class="steps"><ol>${stepsHtml}</ol>${noteHtml}</div></td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  if(grp.compare){
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row compare';
+    tr.dataset.sec=gi;
+    const allTxt=grp.items.map(it=>it.label+' '+it.vals.join(' ')).join(' ')+' '+(grp.compareNote||'')+' '+grp.sec;
+    tr.dataset.txt=allTxt.replace(/<[^>]+>/g,'').toLowerCase();
+    const nCols=grp.items.length;
+    const noteHtml=grp.compareNote?`<p class="cmp-note">${grp.compareNote}</p>`:'';
+    const headRow=`<div class="cmp-row"><div class="cmp-facet cmp-headfacet"></div>`+
+      grp.items.map(it=>`<div class="cmp-head">${it.label}${it.img?`<div class="cmp-img">${it.img}</div>`:''}</div>`).join('')+`</div>`;
+    const facetRows=grp.facets.map((f,fi)=>`<div class="cmp-row"><div class="cmp-facet">${f}</div>`+
+      grp.items.map(it=>`<div class="cmp-val">${it.vals[fi]!==undefined?it.vals[fi]:''}</div>`).join('')+`</div>`).join('');
+    tr.innerHTML=`<td colspan="6"><div class="cmp">${noteHtml}<div class="cmp-grid" style="grid-template-columns:150px repeat(${nCols},1fr)">${headRow}${facetRows}</div></div></td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  if(grp.signal){
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row signal';
+    tr.dataset.sec=gi;
+    const allTxt=grp.sec+' '+(grp.signalNote||'')+' '+grp.groups.map(gr=>gr.cls+' '+gr.casc+' '+gr.rows.map(x=>x.m+' '+x.r+' '+x.e).join(' ')).join(' ');
+    tr.dataset.txt=allTxt.replace(/<[^>]+>/g,'').toLowerCase();
+    const groupsHtml=grp.groups.map(gr=>`
+      <div class="sig-class ${gr.accent}">
+        <div class="sig-class-head"><span class="sig-cls">${gr.cls}</span><span class="sig-casc">${gr.casc}</span></div>
+        <table class="sigtable"><colgroup><col class="cm"><col class="cr"><col class="ce"></colgroup>
+        <thead><tr><th>Molecule</th><th>Receptor · tissue (pathway nuance)</th><th>End-stream effect</th></tr></thead>
+        <tbody>${gr.rows.map(x=>`<tr><td class="sm">${x.m}</td><td class="cr-cell">${x.r}</td><td>${x.e}</td></tr>`).join('')}</tbody></table>
+      </div>`).join('');
+    const noteHtml=grp.signalNote?`<div class="sig-note">${grp.signalNote}</div>`:'';
+    tr.innerHTML=`<td colspan="6"><div class="sigwrap">${noteHtml}${groupsHtml}</div></td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td>
+      <td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// section picker (dropdown)
+const optAll=document.createElement('option');
+optAll.value='all';optAll.textContent='All lectures';
+secpickEl.appendChild(optAll);
+DATA.forEach((grp,gi)=>{
+  const o=document.createElement('option');
+  o.value=gi;
+  const n = grp.pathway ? grp.steps.length : grp.compare ? grp.items.length : grp.signal ? grp.groups.reduce((s,gr)=>s+gr.rows.length,0) : grp.rows.length;
+  o.textContent=`${grp.sec}  (${n})`;
+  secpickEl.appendChild(o);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> entries`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+secpickEl.addEventListener('change',()=>{
+  activeSec=secpickEl.value;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + section picker). Measured live so fullscreen, resize, and
+// font-load changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){
+    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+    if(p[0].toLowerCase()===here) a.className='sk-here';
+    nav.appendChild(a);
+  });
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>

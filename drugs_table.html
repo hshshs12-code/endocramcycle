@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drugs & Pharmacology — Endo/Repro Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  .viewtabs{display:flex;gap:8px;margin:18px 0 0}
+  .vtab{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.03em;
+    padding:9px 16px;border:1px solid var(--line-strong);border-radius:9px 9px 0 0;
+    background:var(--surface);color:var(--muted);cursor:pointer;border-bottom:none;
+    position:relative;top:1px;
+  }
+  .vtab:hover{color:var(--ink)}
+  .vtab.active{background:var(--paper);color:var(--exam-strong);border-color:var(--line-strong);font-weight:600}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .secpick{position:relative;flex:0 0 auto}
+  .secpick select{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:9px 34px 9px 13px;border:1px solid var(--line-strong);border-radius:9px;
+    background:var(--surface);color:var(--ink);cursor:pointer;appearance:none;-webkit-appearance:none;
+    max-width:300px;
+  }
+  .secpick select:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .secpick svg{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th.img-h{background:#3a3f45}
+  td.img{text-align:center}
+  td.img a{display:inline-block;margin:1px}
+  td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:13%}
+  col.c-gene{width:20%}
+  col.c-buzz{width:21%}
+  col.c-diff{width:18%}
+  col.c-exam{width:17%}
+  col.c-img{width:11%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  /* ---------- treatment ladders ---------- */
+  .ladderswrap{max-width:1500px;margin:26px auto 60px;padding:0 28px}
+  .ladders-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:28px;margin:4px 0 0;letter-spacing:-.01em}
+  .ladders-head .sub{margin-top:8px}
+  #ladderCount{font-family:'IBM Plex Mono',monospace;color:var(--exam-strong)}
+  .laddergrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-top:22px}
+  .laddercard{
+    background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;
+    padding:16px 18px 12px;display:flex;flex-direction:column;
+  }
+  .laddercard.hide{display:none}
+  .laddercard h3{
+    font-family:'Fraunces',serif;font-size:17px;font-weight:600;margin:0 0 4px;letter-spacing:-.005em;
+    border-left:4px solid var(--sec-bar);padding-left:10px;
+  }
+  .rung{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+  .laddercard .rung:first-of-type{border-top:none;margin-top:6px}
+  .rung .tier{
+    flex:0 0 76px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+    font-weight:700;padding:4px 6px;border-radius:6px;text-align:center;white-space:nowrap;margin-top:1px;
+  }
+  .rung.t1 .tier{background:var(--exam-bg);color:var(--exam-strong)}
+  .rung.t2 .tier{background:var(--gene-bg);color:var(--gene-ink)}
+  .rung.t3 .tier{background:#eee7d6;color:#7a5c12}
+  .rung.tx .tier{background:#f0ebe0;color:var(--muted)}
+  .rung .rc{flex:1;font-size:13px;line-height:1.45;color:#33373d}
+  .rung .rc b{color:var(--ink)}
+  .rung .rc mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  .rung .rc .note{display:block;color:var(--muted);font-size:12px;margin-top:3px;font-style:italic}
+  .ladder-noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  /* ---------- sketchy badge + view ---------- */
+  .sk-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;
+    letter-spacing:.04em;background:#f3e7c9;color:#7a5c12;border:1px solid #e2d3a4;border-radius:5px;
+    padding:1px 5px;margin-left:6px;vertical-align:middle;white-space:nowrap}
+  .skcard .vidmeta{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin:2px 0 0;letter-spacing:.03em}
+  .skcard .druglist{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .skdrug{font-size:12px;background:var(--paper);border:1px solid var(--line-strong);border-radius:7px;padding:4px 9px;color:#33373d}
+  .skcard h3{border-left-color:#b8901f}
+  .sk-note{max-width:82ch}
+  .sk-uncovered{max-width:1500px;margin:8px auto 0;padding:0 28px}
+  .sk-uncovered h3{font-family:'Fraunces',serif;font-weight:600;font-size:17px;margin:26px 0 4px;letter-spacing:-.005em}
+  .sk-uncovered p{color:var(--muted);font-size:12.5px;margin:0 0 12px;max-width:82ch}
+  .sk-uncovered .druglist{display:flex;flex-wrap:wrap;gap:6px}
+  .sk-uncovered .skdrug{opacity:.7}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Endo / Repro Unit · Drugs & Pharmacology · Rapid Reference</p>
+  <h1>The mechanisms, the lines,<br>and the things that <em>will</em> be tested.</h1>
+  <p class="sub">Every drug taught across the Endo/Repro lectures on one scannable grid — one section per lecture, ordered by folder then filename. Treatment drugs pulled out of pathology and physiology lectures too. Teal = drug class / target. Highlighted = the key MOA or adverse effect. First-line vs second-line is marked wherever the lecture says so. The crimson rail is the single fact most likely to anchor a question stem. Summary files are grouped at the end, tagged [summary].</p>
+  <div class="viewtabs" id="viewtabs">
+    <button class="vtab active" data-view="table">Drug Table</button>
+    <button class="vtab" data-view="ladders">Treatment Ladders</button>
+    <button class="vtab" data-view="sketchy">▶ On Sketchy</button>
+  </div>
+</header>
+
+<div class="stickytop" id="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search drug, class, mechanism, adverse effect…" autocomplete="off">
+    </div>
+    <div class="secpick">
+      <select id="secpick"></select>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+    <div class="secpick">
+      <select id="condpick"></select>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+    <div class="secpick">
+      <select id="moapick"></select>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Drug class / target</span>
+      <span><i class="sw b"></i>Key MOA / adverse effect</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+</div><!-- /.stickytop -->
+
+<div class="wrap" id="tableView">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Drug / Class</th>
+          <th>Mechanism (MOA)</th>
+          <th>Clinical Use &amp; Line</th>
+          <th>Adverse / Caution</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No drug matches that search.</div>
+  </div>
+</div>
+
+<div class="ladderswrap" id="laddersView" style="display:none">
+  <div class="ladders-head">
+    <p class="eyebrow">If the patient has&hellip;</p>
+    <h2>Treatment ladders</h2>
+    <p class="sub">One condition per card — first-line down to what you reach for when it fails, refractory, or contraindicated. Pulled straight from the "Clinical Use &amp; Line" column of the table. <span id="ladderCount"></span></p>
+    <div class="search" style="max-width:420px;margin-top:14px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="lq" type="search" placeholder="Search a condition…" autocomplete="off">
+    </div>
+  </div>
+  <div class="laddergrid" id="laddergrid"></div>
+</div>
+
+<div class="ladderswrap" id="sketchyView" style="display:none">
+  <div class="ladders-head">
+    <p class="eyebrow">Build your watch-list</p>
+    <h2>On Sketchy Pharm</h2>
+    <p class="sub sk-note">Every drug in this deck that maps to a <b>Sketchy Pharmacology</b> video, grouped by the video that covers it — so you can pull up the ones worth watching. <span id="sketchyCount"></span> <br><span style="font-size:12px">⚠︎ Sketchy's library and video titles change over time; treat this as a <b>watch-list to verify</b> against your current Sketchy account, not an official index. Titles are approximate.</span></p>
+    <div class="search" style="max-width:420px;margin-top:14px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="skq" type="search" placeholder="Search a drug or Sketchy video…" autocomplete="off">
+    </div>
+  </div>
+  <div class="laddergrid" id="sketchygrid"></div>
+  <div class="sk-uncovered" id="skUncovered"></div>
+</div>
+
+<footer>
+  <hr>
+  Compiled from the lecture PDFs on your drive (drug content only). MOA figures are cropped directly from the source slides. Verify doses/lines against your primary notes.
+</footer>
+
+<script>
+const DATA = [
+ {sec:"Disorders of the Hypothalamus & Pituitary Gland 2", tag:"pathology lecture — treatment content", rows:[
+  {n:"Cabergoline / Bromocriptine", g:"<span class='pill'>Dopamine D2 agonist</span> — D2 on lactotrophs inhibits <mark>prolactin release</mark> and shrinks the tumour", b:"<mark>FIRST-LINE for prolactinoma</mark> — <b>even for macroadenomas</b>. Cabergoline preferred (better tolerated, weekly dosing). Surgery only if drug-refractory.", d:"Nausea, orthostatic hypotension, headache; <mark>cabergoline — cardiac valve fibrosis</mark> at high dose; bromocriptine — more nausea, psychosis.", e:"<span class='star'>⭐</span><b>The one pituitary tumour you treat medically first, not surgically.</b> Always exclude pregnancy, hypothyroidism, renal failure and drugs before calling it a prolactinoma.", cond:["Prolactinoma"]},
+  {n:"Octreotide", g:"<span class='pill'>Somatostatin analog</span> — inhibits <mark>GH</mark> (and TSH, insulin, glucagon, gastrin)", b:"<mark>Acromegaly</mark> after failed surgery (<mark>2nd-line</mark>); also carcinoid, VIPoma, glucagonoma, variceal bleeding.", d:"<mark>Gallstones/biliary sludge</mark> (↓CCK), steatorrhea, nausea, bradycardia, hyperglycemia.", e:"<span class='star'>⭐</span>Surgery is 1st-line for acromegaly; octreotide is the main medical option after.", cond:["Acromegaly"]},
+  {n:"Desmopressin (DDAVP)", g:"<span class='pill'>V2-selective</span> ADH analog → aquaporin-2 insertion in collecting duct", b:"<mark>FIRST-LINE for CENTRAL diabetes insipidus</mark>. Also von Willebrand disease / mild hemophilia A, nocturnal enuresis.", d:"<mark>Hyponatremia</mark>/water intoxication; headache. <b>Ineffective in nephrogenic DI</b>.", e:"<span class='star'>⭐</span>The <b>water deprivation test</b>: give desmopressin — <b>central DI concentrates urine (&gt;800), nephrogenic does not</b>.", cond:["Central Diabetes Insipidus"]},
+  {n:"Tolvaptan / Conivaptan", g:"<span class='pill'>Vasopressin V2 antagonist</span> ('vaptans') → <mark>free water diuresis (aquaresis)</mark>", b:"<mark>SIADH</mark> and euvolemic/hypervolemic hyponatremia when <mark>fluid restriction (1st-line) fails</mark>. Tolvaptan = oral, V2-selective; conivaptan = IV, non-selective V1a/V2.", d:"<mark>Overly rapid Na⁺ correction → osmotic demyelination</mark>; thirst, polyuria; <mark>tolvaptan — hepatotoxicity</mark>.", e:"<span class='star'>⭐</span>SIADH ladder: <b>fluid restriction → salt/urea → vaptans</b>; hypertonic saline only if seizing.", cond:["SIADH"]},
+  {n:"Demeclocycline", g:"<span class='pill'>Tetracycline</span> — induces <mark>nephrogenic DI</mark> (blocks ADH action on the collecting duct)", b:"<mark>Chronic SIADH</mark>, second-line when fluid restriction fails.", d:"Photosensitivity, nephrotoxicity, teeth discolouration; avoid in children/pregnancy.", e:"<span class='star'>⭐</span>Deliberately causing nephrogenic DI to treat ADH excess.", cond:["SIADH"]},
+  {n:"Hydrocortisone (stress dosing)", g:"<span class='pill'>Glucocorticoid</span> replacement", b:"Panhypopituitarism / pituitary apoplexy. <mark>Replace glucocorticoid BEFORE levothyroxine</mark>.", d:"Adrenal crisis if under-dosed at times of stress; Cushingoid features if over-replaced.", e:"<span class='star'>⭐</span><b>Give steroid before thyroid hormone</b> — thyroxine first ↑ metabolic clearance of cortisol and can precipitate adrenal crisis.", cond:["Adrenal Insufficiency","Hypopituitarism"]},
+ ]},
+ {sec:"Hormone Synthesis", tag:"biochem lecture — drug content", rows:[
+  {n:"Levodopa + Carbidopa", g:"Levodopa = dopamine precursor crossing the BBB; <span class='pill'>carbidopa</span> = peripheral <mark>DOPA decarboxylase inhibitor</mark>", b:"<mark>Parkinson disease</mark> (dopamine cannot cross the BBB, so the precursor is given instead).", d:"Carbidopa reduces peripheral conversion → less nausea/hypotension; dyskinesias, on-off phenomena.", e:"<span class='star'>⭐</span><b>Carbidopa cannot cross the BBB</b> — that is exactly why it works (blocks peripheral conversion only).", cond:["Parkinson Disease"]},
+  {n:"Metyrosine", g:"<span class='pill'>Tyrosine hydroxylase inhibitor</span> — blocks the <mark>rate-limiting step</mark> of catecholamine synthesis", b:"<mark>Pheochromocytoma</mark> — adjunct for pre-operative control / inoperable disease.", d:"Sedation, extrapyramidal symptoms, crystalluria.", e:"<span class='star'>⭐</span>Tyrosine hydroxylase = rate-limiting enzyme (tyrosine → DOPA); needs <b>BH4</b>.", cond:["Pheochromocytoma"]},
+  {n:"Finasteride / Dutasteride", g:"<span class='pill'>5α-reductase inhibitor</span> → blocks testosterone → <mark>DHT</mark>", b:"<mark>BPH</mark> and <mark>androgenetic alopecia</mark>. Finasteride blocks type 2; dutasteride blocks types 1 & 2.", d:"↓libido, ED, gynecomastia; <mark>lowers PSA by ~50%</mark> — double the value when screening.", e:"<span class='star'>⭐</span><b>DHT drives external genitalia, prostate and hair</b>; teratogenic — pregnant women must not handle crushed tablets.", cond:["BPH","Androgenetic Alopecia"]},
+  {n:"Anastrozole / Letrozole / Exemestane", g:"<span class='pill'>Aromatase inhibitor</span> — blocks androgen → <mark>estrogen</mark> conversion", b:"<mark>Postmenopausal ER-positive breast cancer</mark>; also off-label for aromatase excess.", d:"<mark>Osteoporosis/fractures</mark> (estrogen closes epiphyses & maintains bone), hot flushes, arthralgia.", e:"<span class='star'>⭐</span>Only effective <b>postmenopausally</b> — in premenopausal women ovarian estrogen dominates. Aromatase lives in adipose/granulosa cells.", cond:["Breast Cancer"]},
+  {n:"Tetrahydrobiopterin (sapropterin)", g:"<span class='pill'>BH4</span> cofactor replacement for PAH / TH / TrpH", b:"<mark>BH4-deficient ('malignant') PKU</mark> — with neurotransmitter precursors; also BH4-responsive PKU.", d:"Headache, rhinorrhea; must still monitor phenylalanine.", e:"<span class='star'>⭐</span>PKU that <b>fails to improve on a low-phenylalanine diet</b> = BH4 deficiency, not classic PKU.", cond:["PKU (Phenylketonuria)"]},
+  {n:"Licorice (glycyrrhetinic acid) — toxicology", g:"<span class='pill'>11β-HSD2 inhibitor</span> → cortisol not inactivated → floods the <mark>mineralocorticoid receptor</mark>", b:"Not therapeutic — a classic <mark>exam toxicology cause</mark> of apparent mineralocorticoid excess.", d:"<mark>Hypertension, hypokalemia, metabolic alkalosis</mark>.", e:"<span class='star'>⭐</span>HTN + hypokalemia with <b>LOW renin AND LOW aldosterone</b> = licorice/AME.", cond:["— Not therapeutic (toxicology) —"]},
+ ]},
+ {sec:"Hypothalamus–Pituitary: Pharmacology", tag:"pharmacology", rows:[
+  {n:"Somatropin (recombinant GH)", g:"<span class='pill'>Recombinant GH</span> → hepatic <mark>IGF-1</mark>; acts on the GH receptor (JAK/STAT)", b:"<mark>GH deficiency</mark> in children & adults; Turner syndrome, Prader-Willi, chronic renal insufficiency, SHOX deficiency, AIDS wasting. Given SC.", d:"<mark>Insulin resistance / hyperglycemia</mark>, intracranial hypertension, scoliosis progression, slipped capital femoral epiphysis, edema, arthralgia.", e:"<span class='star'>⭐</span><b>Useless in Laron syndrome (GH receptor defect)</b> — there you must give IGF-1 (mecasermin). GH is diabetogenic.", img:"<a href=\"drug_images/hp_pharmacology/hp_pharmacology_p16_gh_regulation.png\" target=\"_blank\"><img src=\"drug_images/hp_pharmacology/hp_pharmacology_p16_gh_regulation.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"GH regulation\"></a>", cond:["GH Deficiency","Turner Syndrome","Prader-Willi Syndrome"]},
+  {n:"Mecasermin (recombinant IGF-1)", g:"<span class='pill'>Recombinant IGF-1</span> — bypasses the GH receptor entirely", b:"<mark>GH insensitivity / Laron syndrome</mark>; severe primary IGF-1 deficiency; patients with <mark>GH-neutralising antibodies</mark>.", d:"<mark>HYPOglycemia</mark> (IGF-1 has insulin-like activity) — <b>give with food</b>; tonsillar hypertrophy, intracranial hypertension.", e:"<span class='star'>⭐</span><b>Laron = ↑↑GH but ↓IGF-1</b> → treat with mecasermin, NOT somatropin. Hypoglycemia is the signature adverse effect.", cond:["GH Insensitivity (Laron Syndrome)"]},
+  {n:"Pegvisomant", g:"<span class='pill'>GH receptor antagonist</span> — pegylated GH analog that blocks receptor dimerization → <mark>↓IGF-1</mark>", b:"<mark>Acromegaly</mark> refractory to surgery/octreotide (<mark>later-line</mark>).", d:"<mark>Hepatotoxicity (monitor LFTs)</mark>, injection-site lipohypertrophy; <mark>tumour itself may keep growing</mark> (GH stays high).", e:"<span class='star'>⭐</span>Monitor <b>IGF-1, not GH</b> — pegvisomant blocks the receptor so serum GH rises and becomes useless as a marker.", cond:["Acromegaly"]},
+  {n:"Octreotide / Lanreotide", g:"<span class='pill'>Somatostatin analog</span> — SST2/SST5 → inhibits <mark>GH, TSH, insulin, glucagon, gastrin, CCK, secretin</mark>", b:"<mark>Acromegaly (2nd-line, after surgery)</mark>; TSH-secreting adenoma; carcinoid syndrome; VIPoma; glucagonoma; oesophageal variceal bleeding.", d:"<mark>Gallstones / biliary sludge</mark> (↓CCK → stasis), steatorrhea, nausea, flatulence, bradycardia, hypo- or hyperglycemia.", e:"<span class='star'>⭐</span>Somatostatin is the universal <b>'off switch'</b> — that breadth is both its use and its side-effect profile. Longer half-life than native somatostatin (~2 min).", cond:["Acromegaly","Carcinoid Syndrome","VIPoma"]},
+  {n:"Bromocriptine / Cabergoline", g:"<span class='pill'>Dopamine D2 agonist</span> — dopamine is the tonic <mark>inhibitor</mark> of prolactin", b:"<mark>FIRST-LINE for prolactinoma</mark> (including macroadenomas) — shrinks tumour and normalises PRL. Also acromegaly (weak), Parkinson disease, and to suppress lactation.", d:"Nausea, orthostatic hypotension, headache, psychosis/hallucinations; <mark>cardiac valve fibrosis</mark> (cabergoline, ergot-derived).", e:"<span class='star'>⭐</span>Cabergoline &gt; bromocriptine (weekly dosing, better tolerated, more effective). <b>Medical therapy beats surgery for prolactinoma.</b>", cond:["Prolactinoma"]},
+  {n:"Oxytocin", g:"<span class='pill'>Gq GPCR</span> → <mark>PLC → IP₃ → ↑Ca²⁺</mark> → uterine smooth-muscle contraction; also releases PGs/LTs that augment contraction", b:"<mark>Induction/augmentation of labour</mark>; <mark>control of postpartum hemorrhage</mark>; milk let-down. IV infusion.", d:"<mark>Uterine tetany/rupture</mark>, fetal distress; <mark>water intoxication/hyponatremia</mark> (structurally similar to ADH → V2 cross-reactivity); hypotension.", e:"<span class='star'>⭐</span>Oxytocin and ADH are both nonapeptides from the posterior pituitary — hence oxytocin's <b>antidiuretic cross-reactivity</b>.", img:"<a href=\"drug_images/hp_pharmacology/hp_pharmacology_p39_oxytocin_moa.png\" target=\"_blank\"><img src=\"drug_images/hp_pharmacology/hp_pharmacology_p39_oxytocin_moa.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Oxytocin mechanism of action\"></a>", cond:["Labor Induction","Postpartum Hemorrhage"]},
+  {n:"Vasopressin (ADH)", g:"<span class='pill'>V1a</span> → vasoconstriction (Gq); <span class='pill'>V2</span> → <mark>aquaporin-2</mark> insertion in the collecting duct (Gs)", b:"<mark>Central DI</mark>; <mark>vasodilatory/septic shock</mark> (V1 pressor); cardiac arrest; oesophageal varices.", d:"Hyponatremia; <mark>V1-mediated vasoconstriction → ischemia</mark> (cardiac, mesenteric, skin), hypertension, abdominal cramps.", e:"<span class='star'>⭐</span><b>V1 = Vasoconstriction; V2 = 'two' waters / aquaporins.</b> Non-selective, so it has pressor effects desmopressin lacks.", cond:["Central Diabetes Insipidus","Septic Shock","Cardiac Arrest"]},
+  {n:"Desmopressin (DDAVP)", g:"<span class='pill'>V2-selective</span> ADH analog — <mark>no V1 pressor activity</mark>, longer acting", b:"<mark>FIRST-LINE central DI</mark>; <mark>von Willebrand disease & mild hemophilia A</mark> (releases vWF/VIII from endothelium); nocturnal enuresis. Intranasal/oral/SC.", d:"<mark>Hyponatremia / water intoxication</mark> — restrict fluids; headache, flushing.", e:"<span class='star'>⭐</span>V2-selective → treats DI <b>without</b> raising blood pressure. Useless in nephrogenic DI (receptor/aquaporin is the problem).", cond:["Central Diabetes Insipidus","Von Willebrand Disease / Hemophilia A"]},
+  {n:"Terlipressin", g:"<span class='pill'>V1-preferring</span> vasopressin prodrug — splanchnic vasoconstriction", b:"<mark>Hepatorenal syndrome</mark>; <mark>bleeding oesophageal varices</mark> (↓portal pressure).", d:"Ischemia (digital, mesenteric, cardiac), hyponatremia, bradycardia.", e:"<span class='star'>⭐</span>V1 preference = the pressor/splanchnic drug; contrast desmopressin (V2, renal).", cond:["Hepatorenal Syndrome","Variceal Bleeding"]},
+  {n:"Conivaptan / Tolvaptan", g:"<span class='pill'>Vasopressin V2 antagonist</span> → <mark>aquaresis</mark> (free water loss without electrolytes)", b:"<mark>SIADH</mark> / euvolemic & hypervolemic hyponatremia when <mark>fluid restriction (1st-line) fails</mark>. <mark>Conivaptan = IV, non-selective V1a/V2</mark>; <mark>tolvaptan = oral, V2-selective</mark>.", d:"<mark>Too-rapid Na⁺ correction → osmotic demyelination (central pontine myelinolysis)</mark>; thirst, polyuria, dry mouth; <mark>tolvaptan hepatotoxicity</mark>; conivaptan is a strong CYP3A4 inhibitor.", e:"<span class='star'>⭐</span>Tolvaptan is oral and <b>selective</b>; conivaptan is IV and <b>non-selective</b>. Correct sodium <b>slowly</b>.", cond:["SIADH"]},
+  {n:"Demeclocycline", g:"<span class='pill'>Tetracycline</span> — antagonises ADH at the collecting duct → <mark>drug-induced nephrogenic DI</mark>", b:"<mark>Chronic SIADH</mark> (second-line/alternative to vaptans).", d:"Photosensitivity, nephrotoxicity, teeth staining; contraindicated in children & pregnancy.", e:"<span class='star'>⭐</span>The therapeutic use <b>is</b> its side effect — induced nephrogenic DI offsets ADH excess.", cond:["SIADH"]},
+ ]},
+ {sec:"Clinical Approach to the Male Patient", tag:"clinical lecture — drug content", rows:[
+  {n:"Sildenafil / Tadalafil (PDE5 inhibitors)", g:"<span class='pill'>PDE5 inhibitor</span> — blocks cGMP breakdown → <mark>↑cGMP → NO-mediated corpus cavernosum smooth-muscle relaxation</mark>", b:"<mark>FIRST-LINE for erectile dysfunction</mark>. Tadalafil has a long half-life ('weekend pill') and also treats BPH; sildenafil also treats pulmonary hypertension.", d:"Headache, flushing, dyspepsia, <mark>blue-tinted vision (sildenafil, PDE6 cross-reactivity)</mark>, priapism, hearing loss.", e:"<span class='star'>⭐</span><b>ABSOLUTELY contraindicated with nitrates → fatal hypotension.</b> Caution with α-blockers. ED can be the sentinel sign of cardiovascular disease.", cond:["Erectile Dysfunction"]},
+  {n:"Alprostadil (PGE1)", g:"<span class='pill'>Prostaglandin E1 analog</span> — direct cavernosal vasodilator (cAMP), NO-independent", b:"<mark>SECOND-LINE ED</mark> after PDE5 inhibitors fail or are contraindicated; intracavernosal injection or intraurethral pellet. Also <mark>maintains a patent ductus arteriosus</mark>.", d:"<mark>Priapism</mark>, penile pain/fibrosis, hypotension; PDA use → apnea in neonates.", e:"<span class='star'>⭐</span>Works independently of NO → useful when PDE5i fail. <b>PGE1 keeps the ductus open; indomethacin closes it.</b>", cond:["Erectile Dysfunction"]},
+ ]},
+ {sec:"Male Reproductive Physiology and Pharmacology", tag:"physiology/pharmacology", rows:[
+  {n:"Testosterone esters (enanthate, cypionate)", g:"<span class='pill'>Androgen receptor agonist</span>; ester ↑ lipophilicity → depot IM release. All delivery routes <mark>bypass first-pass metabolism</mark>", b:"<mark>Male hypogonadism replacement</mark> (primary or secondary); delayed puberty; gender-affirming therapy. IM depot, transdermal gel/patch, buccal, pellet.", d:"<mark>Suppresses LH/FSH → testicular atrophy & infertility</mark>; polycythemia, acne, gynecomastia (aromatization), sleep apnea, dyslipidemia, ↑prostate growth.", e:"<span class='star'>⭐</span><b>Exogenous testosterone is a contraceptive-like infertility risk</b> — it shuts down the axis. In pregnancy it masculinizes a female fetus. Contraindicated in prostate/breast cancer.", cond:["Male Hypogonadism"]},
+  {n:"17α-alkylated androgens (methyltestosterone, oxandrolone)", g:"<span class='pill'>Androgen receptor agonist</span>; 17α-alkylation <mark>resists first-pass metabolism</mark> → orally active", b:"Oral androgen replacement; anabolic uses (rarely appropriate).", d:"<mark>HEPATOTOXICITY</mark> — cholestasis, peliosis hepatis, hepatic adenoma/carcinoma; dyslipidemia (↓HDL).", e:"<span class='star'>⭐</span><b>The 17α-alkyl group buys oral bioavailability at the price of liver toxicity.</b>", cond:["Male Hypogonadism"]},
+  {n:"hCG / hMG (gonadotropins)", g:"<span class='pill'>hCG</span> mimics <mark>LH</mark> (Leydig → testosterone); <span class='pill'>hMG</span> supplies <mark>FSH + LH</mark> (purified from urine of postmenopausal women)", b:"<mark>Secondary (hypogonadotropic) hypogonadism</mark> and <mark>infertility — to restore spermatogenesis</mark>; cryptorchidism; ovulation induction.", d:"Gynecomastia, ovarian hyperstimulation (in females), headache, injection-site reactions.", e:"<span class='star'>⭐</span><b>Testosterone treats symptoms but destroys fertility; gonadotropins restore fertility.</b> hCG = LH analog (shares the α subunit).", cond:["Male Hypogonadism","Infertility"]},
+  {n:"Leuprolide (GnRH agonist)", g:"<span class='pill'>GnRH agonist</span> — <mark>PULSATILE = stimulates; CONTINUOUS = downregulates receptors → suppresses LH/FSH</mark>", b:"<mark>Continuous</mark>: prostate cancer, endometriosis, uterine fibroids, <mark>central precocious puberty</mark>. <mark>Pulsatile</mark>: infertility.", d:"<mark>Initial testosterone FLARE</mark> (~1–2 wk) → can worsen bone pain/cord compression — <mark>cover with an antiandrogen (flutamide)</mark>; then hypogonadism, hot flushes, osteoporosis.", e:"<span class='star'>⭐</span><b>The pulsatile-vs-continuous paradox is the classic question.</b> Give flutamide before/with leuprolide to block the flare.", cond:["Prostate Cancer","Endometriosis","Precocious Puberty","Infertility"]},
+  {n:"Degarelix (GnRH antagonist)", g:"<span class='pill'>GnRH receptor antagonist</span> — <mark>immediate</mark> LH/FSH suppression", b:"<mark>Advanced prostate cancer</mark> — preferred when a flare would be dangerous (cord compression, severe bone mets).", d:"Hot flushes, injection-site reaction, hepatic enzyme rise.", e:"<span class='star'>⭐</span><b>No initial flare</b> — that is the entire advantage over leuprolide.", cond:["Prostate Cancer"]},
+  {n:"Flutamide (and bicalutamide)", g:"<span class='pill'>Non-steroidal androgen receptor antagonist</span> — competitive block at the receptor", b:"<mark>Prostate cancer</mark>, usually with a GnRH agonist to <mark>block the initial testosterone flare</mark>; hirsutism.", d:"<mark>HEPATOTOXICITY (monitor LFTs)</mark>, gynecomastia, hot flushes, diarrhea.", e:"<span class='star'>⭐</span>Given <b>with leuprolide to cover the flare</b>; liver toxicity is the boards association.", cond:["Prostate Cancer"]},
+  {n:"Finasteride", g:"<span class='pill'>5α-reductase type 2 inhibitor</span> → ↓ testosterone → <mark>DHT</mark>", b:"<mark>BPH</mark> — shrinks the gland (takes <mark>6–12 months</mark>; best for large prostates); <mark>androgenetic alopecia</mark> (lower dose).", d:"↓libido, ED, gynecomastia; <mark>halves PSA</mark> — <b>double the measured value</b> when interpreting; teratogenic to a male fetus.", e:"<span class='star'>⭐</span><b>Finasteride shrinks the prostate (slow); α-blockers relax it (fast).</b> DHT drives prostate growth and scalp hair loss.", cond:["BPH","Androgenetic Alopecia"]},
+  {n:"Tamsulosin (α1-blocker)", g:"<span class='pill'>α1A-selective blocker</span> — relaxes <mark>prostatic & bladder-neck smooth muscle</mark>", b:"<mark>FIRST-LINE symptomatic BPH</mark> — rapid relief of obstructive symptoms (days). Non-selective α1 blockers (terazosin, doxazosin) also lower BP.", d:"<mark>Orthostatic hypotension / first-dose syncope</mark>, dizziness, <mark>retrograde ejaculation</mark>, <mark>intraoperative floppy iris syndrome</mark>.", e:"<span class='star'>⭐</span><b>α1A = prostate (tamsulosin, minimal BP effect); α1B = vessels.</b> Tell the ophthalmologist before cataract surgery.", cond:["BPH"]},
+  {n:"PDE5 inhibitors (sildenafil, tadalafil)", g:"<span class='pill'>PDE5 inhibitor</span> → ↑cGMP → cavernosal vasodilation (requires <mark>NO / sexual stimulation</mark>)", b:"<mark>FIRST-LINE erectile dysfunction</mark>; tadalafil also for BPH; sildenafil also for <mark>pulmonary hypertension</mark>.", d:"Headache, flushing, dyspepsia, <mark>cyanopsia (blue vision — PDE6)</mark>, priapism, NAION.", e:"<span class='star'>⭐</span><b>Nitrates are an absolute contraindication</b> — both raise cGMP → catastrophic hypotension.", cond:["Erectile Dysfunction","BPH","Pulmonary Hypertension"]},
+  {n:"Alprostadil (PGE1)", g:"<span class='pill'>PGE1 analog</span> — cAMP-mediated cavernosal vasodilation, <mark>NO-independent</mark>", b:"<mark>SECOND-LINE ED</mark> (intracavernosal/intraurethral) after PDE5i failure; keeps the <mark>ductus arteriosus patent</mark>.", d:"<mark>Priapism</mark>, penile pain/fibrosis.", e:"<span class='star'>⭐</span>Because it bypasses NO, it still works when PDE5 inhibitors don't.", cond:["Erectile Dysfunction"]},
+  {n:"Anabolic steroid abuse", g:"Supraphysiologic <span class='pill'>androgen receptor</span> agonism → <mark>negative feedback shuts off GnRH/LH/FSH</mark>", b:"Not therapeutic — an exam vignette: a muscular young man with infertility.", d:"<mark>Testicular atrophy + azoospermia</mark>, gynecomastia (aromatization), acne, aggression, dyslipidemia, polycythemia, hepatotoxicity (17α-alkylated).", e:"<span class='star'>⭐</span><b>Big muscles + small testes + infertility + LOW LH/FSH</b> = exogenous androgen (secondary hypogonadism).", cond:["— Not therapeutic (exam vignette) —"]},
+ ]},
+ {sec:"Pathology of the Male Reproductive System", tag:"pathology lecture — treatment content", rows:[
+  {n:"α1-blockers (tamsulosin) for BPH", g:"<span class='pill'>α1A blocker</span> — relaxes prostatic smooth muscle (dynamic component)", b:"<mark>FIRST-LINE BPH</mark> — symptom relief within days.", d:"Orthostatic hypotension, dizziness, retrograde ejaculation, floppy iris syndrome.", e:"<span class='star'>⭐</span>Fast symptomatic relief; does not shrink the gland.", cond:["BPH"]},
+  {n:"5α-reductase inhibitors (finasteride) for BPH", g:"<span class='pill'>5α-reductase inhibitor</span> → ↓DHT → <mark>shrinks glandular tissue</mark> (static component)", b:"BPH with a <mark>large gland</mark>; takes <mark>6–12 months</mark>; often <mark>combined with an α1-blocker</mark>.", d:"↓libido, ED, gynecomastia; <mark>↓PSA by ~50%</mark>.", e:"<span class='star'>⭐</span>BPH is <b>not</b> premalignant. Combination (α-blocker + finasteride) beats either alone for large glands.", cond:["BPH"]},
+ ]},
+ {sec:"Chromosome Structure and Disease", tag:"genetics lecture — drug content", rows:[
+  {n:"Imatinib (tyrosine kinase inhibitor)", g:"<span class='pill'>BCR-ABL tyrosine kinase inhibitor</span> — occupies the ATP-binding pocket of the <mark>t(9;22)</mark> fusion kinase", b:"<mark>FIRST-LINE for CML</mark> (Philadelphia-chromosome positive); also GIST (c-KIT).", d:"Fluid retention/edema, myelosuppression, hepatotoxicity, muscle cramps.", e:"<span class='star'>⭐</span>The <b>model targeted therapy</b> — a cytogenetic lesion (Ph chromosome) directly naming its drug. Monitor BCR-ABL transcripts by PCR.", cond:["CML (Chronic Myelogenous Leukemia)"]},
+ ]},
+ {sec:"Prostaglandin Biochemistry", tag:"biochem lecture — drug content", rows:[
+  {n:"NSAIDs (ibuprofen, naproxen, indomethacin)", g:"<span class='pill'>COX-1 & COX-2 inhibitor</span> — <mark>reversible, competitive</mark> block of prostaglandin/thromboxane synthesis", b:"Analgesia, antipyresis, anti-inflammatory. <mark>Indomethacin closes a PDA</mark>.", d:"<mark>Gastric ulcers</mark> (loss of COX-1 mucosal PGE2), <mark>renal failure</mark> (loss of afferent vasodilation), bleeding, ↑CV risk. <mark>Leukotrienes still form</mark> — can worsen aspirin/NSAID-exacerbated asthma.", e:"<span class='star'>⭐</span><b>NSAIDs block COX only — the LOX arm is untouched, so leukotrienes persist.</b> That's why steroids (PLA2) are broader.", img:"<a href=\"drug_images/prostaglandin_biochem/prostaglandin_biochem_p15_cox_cyclization_pathway.png\" target=\"_blank\"><img src=\"drug_images/prostaglandin_biochem/prostaglandin_biochem_p15_cox_cyclization_pathway.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"COX cyclization pathway\"></a>", cond:["Pain / Inflammation","PDA (Patent Ductus Arteriosus)"]},
+  {n:"Aspirin", g:"<span class='pill'>IRREVERSIBLE COX-1/COX-2</span> inhibitor — <mark>acetylates</mark> the enzyme", b:"Low dose → <mark>antiplatelet</mark> (irreversibly blocks platelet <mark>TXA2</mark> for the platelet's 7–10 day life). High dose → anti-inflammatory.", d:"GI ulcers, tinnitus (salicylism), <mark>Reye syndrome in children with viral illness</mark>, bleeding; <mark>respiratory alkalosis → mixed metabolic acidosis</mark> in overdose.", e:"<span class='star'>⭐</span><b>Platelets are anucleate → cannot resynthesise COX</b>, so aspirin's effect lasts the platelet lifespan; endothelium recovers PGI2. Aspirin also triggers <b>lipoxin</b> production.", cond:["Antiplatelet / MI Prevention"]},
+  {n:"COX-2 selective inhibitors (celecoxib)", g:"<span class='pill'>COX-2 selective</span> — spares constitutive <mark>COX-1</mark> (gastric mucosa, platelets)", b:"Anti-inflammatory/analgesic when <mark>GI protection matters</mark>; rheumatoid/osteoarthritis.", d:"<mark>↑thrombotic CV risk</mark> — blocks endothelial PGI2 (anti-aggregatory) while leaving platelet TXA2 intact; renal impairment; sulfa allergy.", e:"<span class='star'>⭐</span><b>COX-1 = constitutive (stomach, platelets, renal flow); COX-2 = inducible (inflammation, pain).</b> The prothrombotic imbalance is the classic explanation.", cond:["Pain / Inflammation"]},
+  {n:"Corticosteroids / SAIDs", g:"<span class='pill'>Steroidal anti-inflammatory</span> — induce <mark>lipocortin/annexin-1 → inhibit PLA2</mark>, blocking release of arachidonic acid", b:"<mark>Asthma</mark>, autoimmune & inflammatory disease — broad suppression.", d:"Cushingoid features, hyperglycemia, osteoporosis, immunosuppression, adrenal suppression on withdrawal.", e:"<span class='star'>⭐</span><b>SAIDs block PLA2 upstream → BOTH prostaglandins AND leukotrienes are lost. NSAIDs block only COX.</b> That single contrast is heavily tested.", img:"<a href=\"drug_images/prostaglandin_biochem/prostaglandin_biochem_p11_eicosanoid_synthesis_pathway.png\" target=\"_blank\"><img src=\"drug_images/prostaglandin_biochem/prostaglandin_biochem_p11_eicosanoid_synthesis_pathway.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Eicosanoid synthesis pathway\"></a>", cond:["Asthma","Inflammation / Autoimmune Disease"]},
+  {n:"Leukotriene antagonists (montelukast, zafirlukast)", g:"<span class='pill'>CysLT1 receptor antagonist</span> — blocks <mark>LTC4/D4/E4</mark> (the 'slow-reacting substance of anaphylaxis')", b:"<mark>Asthma prophylaxis</mark> — especially <mark>aspirin-induced and exercise-induced asthma</mark>; allergic rhinitis.", d:"Neuropsychiatric effects (montelukast — agitation, mood change); zafirlukast/zileuton — hepatotoxicity.", e:"<span class='star'>⭐</span>Leukotrienes cause bronchoconstriction, ↑vascular permeability and mucus — blocking them is the answer in <b>aspirin-exacerbated respiratory disease</b>.", cond:["Asthma"]},
+  {n:"Zileuton", g:"<span class='pill'>5-lipoxygenase (LOX) inhibitor</span> — blocks leukotriene <mark>synthesis</mark>", b:"Asthma prophylaxis (less used).", d:"<mark>Hepatotoxicity — monitor LFTs</mark>.", e:"<span class='star'>⭐</span>Zileuton blocks the <b>enzyme</b>; montelukast blocks the <b>receptor</b>.", cond:["Asthma"]},
+  {n:"Dinoprostone (PGE2)", g:"<span class='pill'>PGE2 analog</span> — <mark>cervical ripening</mark> + uterine contraction", b:"<mark>Labour induction</mark>; bleeding after delivery; <mark>keeps the ductus arteriosus open</mark>.", d:"Uterine hyperstimulation, fetal distress, GI upset, fever.", e:"<span class='star'>⭐</span>PGE2 = ripen the cervix; PGE1 (alprostadil) = keep the PDA open; <b>indomethacin (NSAID) closes it</b>.", cond:["Labor Induction","PDA (Patent Ductus Arteriosus)"]},
+  {n:"Dinoprost (PGF2α) & latanoprost/bimatoprost", g:"<span class='pill'>PGF2α analog</span> — smooth-muscle contraction; ocular analogs ↑ <mark>uveoscleral outflow</mark>", b:"Dinoprost: abortifacient/uterine contraction. <mark>Latanoprost/bimatoprost: open-angle glaucoma</mark>.", d:"<mark>Iris hyperpigmentation (permanent brown eyes)</mark>, <mark>eyelash lengthening/darkening</mark>, conjunctival hyperemia; bronchoconstriction (systemic).", e:"<span class='star'>⭐</span>Bimatoprost's lash-lengthening side effect became a cosmetic drug (Latisse). PGF2α also contracts bronchi — caution in asthma.", cond:["Glaucoma","Labor Induction / Abortion"]},
+  {n:"Misoprostol (PGE1 analog)", g:"<span class='pill'>PGE1 analog</span> — replaces mucosal PGE2 → <mark>↑mucus + bicarbonate, ↓acid</mark>", b:"<mark>Prevention of NSAID-induced gastric ulcers</mark>; cervical ripening / medical abortion (with mifepristone).", d:"Diarrhea, abdominal cramps; <mark>ABORTIFACIENT — contraindicated in pregnancy</mark>.", e:"<span class='star'>⭐</span>Directly replaces the prostaglandin the NSAID removed — the mechanistic antidote to NSAID gastropathy.", cond:["NSAID-Induced Ulcer Prevention","Cervical Ripening / Abortion"]},
+  {n:"Epoprostenol / Iloprost (PGI2 analogs)", g:"<span class='pill'>Prostacyclin (PGI2) analog</span> — <mark>vasodilation + inhibits platelet aggregation</mark>", b:"<mark>Pulmonary arterial hypertension</mark>.", d:"Flushing, headache, jaw pain, hypotension; short half-life (continuous infusion).", e:"<span class='star'>⭐</span><b>PGI2 opposes TXA2</b>: prostacyclin dilates and anti-aggregates; thromboxane constricts and aggregates.", cond:["Pulmonary Hypertension"]},
+  {n:"Omega-3 fatty acids (EPA/DHA)", g:"<span class='pill'>ω-3 substrate</span> — displaces arachidonate → weaker <mark>TXA3/LTB5</mark> and <mark>resolvins/protectins</mark>", b:"<mark>Hypertriglyceridemia</mark>; cardioprotective/anti-inflammatory adjunct.", d:"Fishy aftertaste, GI upset, mild bleeding risk at high dose.", e:"<span class='star'>⭐</span><b>ω-6 (linoleic → arachidonic) = pro-inflammatory/thrombotic; ω-3 (linolenic → EPA/DHA) = weak, anti-inflammatory.</b>", cond:["Hypertriglyceridemia"]},
+ ]},
+ {sec:"Diabetes & Other Disorders of the Endocrine Pancreas", tag:"pathology/clinical lecture — treatment content", rows:[
+  {n:"Insulin (in DKA)", g:"<span class='pill'>Insulin receptor</span> (tyrosine kinase) — halts <mark>lipolysis & ketogenesis</mark>, drives glucose and <mark>K⁺ intracellularly</mark>", b:"<mark>DKA</mark>: IV regular insulin infusion — but <mark>FLUIDS FIRST</mark>, and <mark>replace K⁺ before insulin if K⁺ &lt;3.3</mark>. Continue until the anion gap closes, overlapping with SC insulin.", d:"<mark>Hypokalemia</mark> (the killer), hypoglycemia, cerebral edema (especially children, from too-rapid osmolar correction).", e:"<span class='star'>⭐</span><b>Total-body K⁺ is depleted in DKA even when serum K⁺ looks normal or high.</b> Order: fluids → K⁺ check → insulin. Add dextrose when glucose ~200 while the gap is still open.", cond:["DKA / HHS"]},
+  {n:"Metformin", g:"<span class='pill'>Biguanide</span> — activates <mark>AMPK</mark> → <mark>↓hepatic gluconeogenesis</mark>, ↑insulin sensitivity", b:"<mark>FIRST-LINE for type 2 DM</mark> with lifestyle; also prediabetes and PCOS.", d:"GI upset, <mark>B12 deficiency</mark>, <mark>lactic acidosis</mark> (rare). Hold for <mark>renal failure, contrast studies, sepsis, hypoxia</mark>.", e:"<span class='star'>⭐</span><b>Does NOT cause hypoglycemia and is weight-neutral/weight-losing</b> — the reason it's first-line.", cond:["Type 2 Diabetes","PCOS"]},
+  {n:"Octreotide (islet tumours)", g:"<span class='pill'>Somatostatin analog</span> — inhibits hormone release from islet tumours", b:"Symptom control in <mark>VIPoma, glucagonoma, insulinoma</mark> pending/after resection.", d:"Gallstones, steatorrhea, hyper-/hypoglycemia.", e:"<span class='star'>⭐</span>Surgical resection is curative when localised; octreotide controls the hormone syndrome.", cond:["VIPoma","Glucagonoma","Insulinoma"]},
+  {n:"Diazoxide", g:"<span class='pill'>K<sub>ATP</sub> channel OPENER</span> → hyperpolarises the β cell → <mark>INHIBITS insulin release</mark>", b:"<mark>Inoperable insulinoma</mark>; congenital hyperinsulinism.", d:"<mark>Hyperglycemia</mark> (intended), fluid retention, hirsutism, hypotension.", e:"<span class='star'>⭐</span><b>The exact mechanistic opposite of a sulfonylurea</b> (which closes K<sub>ATP</sub> to release insulin).", cond:["Insulinoma","Hypoglycemia"]},
+  {n:"Glucagon", g:"<span class='pill'>Glucagon receptor</span> (Gs) → ↑cAMP → <mark>glycogenolysis + gluconeogenesis</mark>", b:"<mark>Severe hypoglycemia when the patient cannot take oral glucose</mark> (IM/SC/intranasal); also <mark>β-blocker overdose</mark> (bypasses the β receptor).", d:"Nausea/vomiting; <mark>ineffective if glycogen stores are depleted</mark> (alcoholics, prolonged fasting, liver failure).", e:"<span class='star'>⭐</span>Glucagon needs <b>hepatic glycogen</b> to work — in a starved alcoholic give IV dextrose instead.", cond:["Hypoglycemia","Beta-Blocker Overdose"]},
+  {n:"Streptozocin", g:"<span class='pill'>Nitrosourea</span> — selectively toxic to pancreatic <mark>β cells</mark> (enters via GLUT2)", b:"Metastatic pancreatic islet cell (neuroendocrine) tumours.", d:"Nephrotoxicity, severe nausea/vomiting, hyperglycemia.", e:"<span class='star'>⭐</span>β-cell tropism via GLUT2 — also the classic way diabetes is induced in animal models.", cond:["Pancreatic Neuroendocrine Tumor"]},
+ ]},
+ {sec:"Obesity Treatment: Lifestyle, Behavioral and Medications", tag:"clinical/pharmacology", rows:[
+  {n:"Semaglutide / Liraglutide", g:"<span class='pill'>GLP-1 receptor agonist</span> — central <mark>GLP-1R in the arcuate nucleus (POMC/CART ↑)</mark> + delayed gastric emptying → <mark>satiety</mark>", b:"<mark>Most effective non-surgical weight-loss drugs</mark>; obesity (BMI ≥30, or ≥27 with comorbidity) and type 2 DM. Weekly (semaglutide) vs daily (liraglutide).", d:"Nausea/vomiting/diarrhea, <mark>pancreatitis</mark>, gallstones; <mark>CONTRAINDICATED with personal/family history of medullary thyroid carcinoma or MEN2</mark> (rodent C-cell tumours).", e:"<span class='star'>⭐</span>Acts <b>centrally (satiety) and peripherally (gastric emptying)</b>; the MTC/MEN2 contraindication is a favourite question.", img:"<a href=\"drug_images/obesity_treatment/obesity_treatment_p34_central_moa_anti_obesity_drugs.png\" target=\"_blank\"><img src=\"drug_images/obesity_treatment/obesity_treatment_p34_central_moa_anti_obesity_drugs.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Central mechanisms of anti-obesity drugs\"></a>", cond:["Obesity","Type 2 Diabetes"]},
+  {n:"Tirzepatide", g:"<span class='pill'>Dual GIP + GLP-1 receptor agonist</span>", b:"<mark>Greatest weight loss of the medical options</mark>; obesity and type 2 DM.", d:"Same GI profile as GLP-1 agonists; <mark>MTC/MEN2 contraindication</mark>; pancreatitis.", e:"<span class='star'>⭐</span>The <b>dual incretin</b> — GIP + GLP-1 together outperform GLP-1 alone.", cond:["Obesity","Type 2 Diabetes"]},
+  {n:"Orlistat", g:"<span class='pill'>Pancreatic & gastric lipase inhibitor</span> — blocks hydrolysis of triglycerides → <mark>~30% of dietary fat unabsorbed</mark>", b:"Obesity — works <mark>entirely in the gut lumen</mark> (peripheral mechanism), minimal systemic absorption.", d:"<mark>Steatorrhea, oily spotting, flatus with discharge, fecal urgency</mark>; <mark>malabsorption of fat-soluble vitamins A, D, E, K</mark>.", e:"<span class='star'>⭐</span><b>Supplement fat-soluble vitamins.</b> The GI side effects are the mechanism — unabsorbed fat has to go somewhere.", img:"<a href=\"drug_images/obesity_treatment/obesity_treatment_p34_peripheral_moa_anti_obesity_drugs.png\" target=\"_blank\"><img src=\"drug_images/obesity_treatment/obesity_treatment_p34_peripheral_moa_anti_obesity_drugs.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Peripheral mechanisms of anti-obesity drugs\"></a>", cond:["Obesity"]},
+  {n:"Phentermine", g:"<span class='pill'>Sympathomimetic amine</span> — ↑ norepinephrine (and dopamine) release; blocks the <mark>dopamine transporter (DAT)</mark> → anorexigenic", b:"<mark>Short-term</mark> obesity treatment (appetite suppression).", d:"<mark>Hypertension, tachycardia, palpitations</mark>, insomnia, dry mouth; abuse potential (schedule IV). Avoid in cardiovascular disease, hyperthyroidism, glaucoma, MAOI use.", e:"<span class='star'>⭐</span>Sympathomimetic → don't give it to someone with uncontrolled hypertension or arrhythmia.", cond:["Obesity"]},
+  {n:"Phentermine + Topiramate", g:"Phentermine (<span class='pill'>NE release</span>) + topiramate (<span class='pill'>GABA-A agonist</span> / glutamate & carbonic anhydrase effects) → <mark>appetite suppression + satiety</mark>", b:"Chronic weight management — more effective than either alone at lower doses.", d:"<mark>TERATOGENIC — cleft lip/palate (topiramate)</mark>; paresthesias, cognitive dulling ('dopey'), <mark>kidney stones</mark>, metabolic acidosis, ↑HR.", e:"<span class='star'>⭐</span><b>Pregnancy test before starting; contraception required</b> — topiramate is a proven teratogen.", cond:["Obesity"]},
+  {n:"Naltrexone + Bupropion", g:"Bupropion = <span class='pill'>dopamine/NE reuptake inhibitor</span> → stimulates <mark>POMC</mark>; naltrexone = <span class='pill'>μ-opioid antagonist</span> → blocks the <mark>POMC β-endorphin autoinhibitory loop</mark>", b:"Chronic weight management; useful when depression or smoking cessation coexists.", d:"<mark>Bupropion lowers the seizure threshold</mark> — contraindicated in seizure disorder, <mark>bulimia/anorexia</mark>, and abrupt alcohol/benzo withdrawal. <mark>Naltrexone contraindicated with opioid use</mark> (precipitates withdrawal); ↑BP.", e:"<span class='star'>⭐</span>The pair is synergistic: bupropion turns POMC on, naltrexone <b>removes the brake</b> POMC places on itself.", cond:["Obesity"]},
+  {n:"Bariatric surgery (context)", g:"Restrictive (<mark>sleeve gastrectomy</mark>) vs restrictive + malabsorptive (<mark>Roux-en-Y gastric bypass</mark>); ↑GLP-1/PYY", b:"<mark>BMI ≥40, or ≥35 with comorbidity</mark>; the most durable treatment — remission of type 2 DM often precedes weight loss (incretin effect).", d:"<mark>Deficiencies: iron, B12, folate, calcium, vitamin D, thiamine</mark>; <mark>dumping syndrome</mark>; anastomotic leak, internal hernia.", e:"<span class='star'>⭐</span><b>Lifelong micronutrient supplementation and monitoring.</b> Early dumping = osmotic (15–30 min); late dumping = reactive hypoglycemia (1–3 h).", cond:["Obesity"]},
+ ]},
+ {sec:"Obesity and Metabolic Syndrome", tag:"biochem/physiology lecture — drug content", rows:[
+  {n:"Weight-loss pharmacotherapy (overview)", g:"Targets the <span class='pill'>arcuate nucleus</span>: ↑<mark>POMC/CART</mark> (anorexigenic) or ↓<mark>NPY/AgRP</mark> (orexigenic); or block fat absorption", b:"Adjunct to lifestyle when <mark>BMI ≥30, or ≥27 with a comorbidity</mark>. GLP-1 agonists are the most effective medical option.", d:"Class-dependent; all require ongoing therapy — <mark>weight regain on discontinuation</mark>.", e:"<span class='star'>⭐</span>Obesity is a <b>chronic relapsing disease</b> — drugs work while taken. Even <b>5–10% loss</b> yields dose-dependent metabolic benefit.", cond:["Obesity"]},
+  {n:"Metformin (in metabolic syndrome/PCOS)", g:"<span class='pill'>Biguanide</span> — AMPK → ↓hepatic gluconeogenesis, ↑insulin sensitivity", b:"<mark>Insulin resistance</mark>, prediabetes, <mark>PCOS</mark> (restores ovulation), metabolic syndrome.", d:"GI upset, B12 deficiency, lactic acidosis (renal impairment).", e:"<span class='star'>⭐</span>Targets the <b>insulin resistance</b> at the core of metabolic syndrome; weight-neutral.", cond:["PCOS","Metabolic Syndrome"]},
+ ]},
+ {sec:"Oral Hypoglycemic Drugs", tag:"pharmacology", rows:[
+  {n:"Sulfonylureas (glipizide, glyburide, glimepiride)", g:"<span class='pill'>Insulin secretagogue</span> — <mark>CLOSE the β-cell K<sub>ATP</sub> channel</mark> → depolarization → Ca²⁺ influx → <mark>insulin exocytosis</mark>", b:"Type 2 DM add-on (2nd-line after metformin). <mark>Requires functioning β cells</mark> — useless in type 1 DM.", d:"<mark>HYPOGLYCEMIA</mark> (worst with glyburide, and in renal impairment/elderly), <mark>weight gain</mark>; disulfiram-like reaction (1st-gen).", e:"<span class='star'>⭐</span><b>Sulfonylurea overdose mimics insulinoma: ↑insulin AND ↑C-peptide</b> — the sulfonylurea screen is what distinguishes them.", img:"<a href=\"drug_images/oral_hypoglycemics/oral_hypoglycemics_p06_insulin_secretion_beta_cell_moa.png\" target=\"_blank\"><img src=\"drug_images/oral_hypoglycemics/oral_hypoglycemics_p06_insulin_secretion_beta_cell_moa.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Regulation of insulin secretion from a beta cell\"></a>", cond:["Type 2 Diabetes"]},
+  {n:"Meglitinides (repaglinide, nateglinide)", g:"<span class='pill'>Insulin secretagogue</span> — close K<sub>ATP</sub> at a <mark>different binding site</mark> than sulfonylureas; <mark>rapid, short-acting</mark>", b:"<mark>Postprandial</mark> glucose control; useful in <mark>sulfa allergy</mark> and irregular meal patterns (take with meals, skip if skipping a meal).", d:"Hypoglycemia (less than sulfonylureas), weight gain.", e:"<span class='star'>⭐</span>Same channel, different site → <b>safe in sulfa allergy</b>; fast on/fast off targets the meal spike.", cond:["Type 2 Diabetes"]},
+  {n:"Metformin (biguanide)", g:"<span class='pill'>Biguanide</span> — activates <mark>AMPK</mark> → <mark>↓hepatic gluconeogenesis</mark>, ↑peripheral insulin sensitivity, ↓intestinal glucose absorption", b:"<mark>FIRST-LINE for type 2 DM</mark>; prediabetes; PCOS.", d:"GI upset/diarrhea (dose-limiting), <mark>vitamin B12 deficiency</mark>, <mark>LACTIC ACIDOSIS</mark> — hold with <mark>renal failure (eGFR&lt;30), IV contrast, sepsis, hypoxia, alcoholism, heart failure</mark>.", e:"<span class='star'>⭐</span><b>No hypoglycemia, no weight gain</b> (it isn't a secretagogue) — that's why it's first-line. Lactic acidosis is the boards association.", cond:["Type 2 Diabetes","PCOS"]},
+  {n:"Thiazolidinediones (pioglitazone, rosiglitazone)", g:"<span class='pill'>PPAR-γ agonist</span> — nuclear transcription regulator → <mark>↑adiponectin, ↑GLUT4</mark> → ↓insulin resistance in fat/muscle", b:"Type 2 DM add-on; effective in marked insulin resistance. <mark>Slow onset (weeks)</mark>.", d:"<mark>Fluid retention → edema & heart failure (contraindicated in NYHA III/IV)</mark>, <mark>weight gain</mark>, <mark>fractures/osteoporosis</mark>, hepatotoxicity; bladder cancer risk (pioglitazone).", e:"<span class='star'>⭐</span><b>Never in heart failure</b> — fluid retention is the classic exam trap. Works at the level of gene transcription, hence the slow onset.", cond:["Type 2 Diabetes"]},
+  {n:"Alpha-glucosidase inhibitors (acarbose, miglitol)", g:"<span class='pill'>Intestinal α-glucosidase inhibitor</span> — blocks brush-border breakdown of <mark>disaccharides → delays carbohydrate absorption</mark>", b:"<mark>Postprandial hyperglycemia</mark>; acts locally in the gut; no systemic effect.", d:"<mark>Flatulence, diarrhea, abdominal bloating</mark> (undigested carbohydrate fermented by colonic bacteria).", e:"<span class='star'>⭐</span>If hypoglycemia occurs on a combination, <b>give pure GLUCOSE, not sucrose</b> — sucrose can't be broken down while the drug is on board.", cond:["Type 2 Diabetes"]},
+  {n:"GLP-1 agonists (exenatide, liraglutide, semaglutide)", g:"<span class='pill'>GLP-1 receptor agonist</span> — <mark>glucose-DEPENDENT insulin release</mark>, ↓glucagon, <mark>delays gastric emptying</mark>, central satiety; resists DPP-4", b:"Type 2 DM with <mark>obesity and/or cardiovascular disease</mark> — proven CV benefit; injectable (semaglutide also oral).", d:"Nausea/vomiting, <mark>pancreatitis</mark>, gallstones; <mark>CONTRAINDICATED in medullary thyroid carcinoma / MEN2</mark>.", e:"<span class='star'>⭐</span><b>Glucose-dependent → minimal hypoglycemia alone</b>, and causes <b>weight loss</b> (unlike secretagogues).", img:"<a href=\"drug_images/oral_hypoglycemics/oral_hypoglycemics_p25_gip_glp1_metabolism.png\" target=\"_blank\"><img src=\"drug_images/oral_hypoglycemics/oral_hypoglycemics_p25_gip_glp1_metabolism.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Metabolism of GIP and GLP-1\"></a>", cond:["Type 2 Diabetes","Obesity"]},
+  {n:"DPP-4 inhibitors (sitagliptin, linagliptin, saxagliptin)", g:"<span class='pill'>DPP-4 inhibitor</span> — blocks degradation of <mark>endogenous GLP-1 & GIP</mark> → prolongs incretin effect", b:"Type 2 DM add-on; oral; <mark>weight-neutral</mark>. Linagliptin is safe in renal impairment.", d:"<mark>Nasopharyngitis/URI</mark>, headache, pancreatitis, arthralgia; saxagliptin — heart failure hospitalization.", e:"<span class='star'>⭐</span>DPP-4 inhibitors <b>raise your own incretins</b> (modest effect, weight-neutral); GLP-1 agonists <b>supply</b> a resistant analog (bigger effect, weight loss).", img:"<a href=\"drug_images/oral_hypoglycemics/oral_hypoglycemics_p25_gip_glp1_metabolism.png\" target=\"_blank\"><img src=\"drug_images/oral_hypoglycemics/oral_hypoglycemics_p25_gip_glp1_metabolism.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Metabolism of GIP and GLP-1\"></a>", cond:["Type 2 Diabetes"]},
+  {n:"SGLT2 inhibitors (empagliflozin, canagliflozin, dapagliflozin)", g:"<span class='pill'>SGLT2 inhibitor</span> — blocks proximal tubule glucose reabsorption → <mark>glucosuria</mark>", b:"Type 2 DM with <mark>heart failure and/or chronic kidney disease</mark> — <mark>proven cardiorenal benefit independent of glucose</mark>; weight loss, mild BP reduction.", d:"<mark>Genital mycotic infections & UTIs</mark>, volume depletion/hypotension, <mark>EUGLYCEMIC DKA</mark>, Fournier gangrene, amputation risk (canagliflozin).", e:"<span class='star'>⭐</span><b>Euglycemic DKA</b> — ketoacidosis with a near-normal glucose is the signature trap. Hold before surgery.", cond:["Type 2 Diabetes","Heart Failure"]},
+ ]},
+ {sec:"Treatment of Diabetes with Insulin", tag:"pharmacology", rows:[
+  {n:"Insulin — receptor & mechanism", g:"<span class='pill'>Insulin receptor</span> = <mark>tyrosine kinase</mark>; two α (extracellular, insulin-binding) + two β (transmembrane) subunits → autophosphorylation → IRS/PI3K & MAPK → <mark>GLUT4 vesicle insertion</mark>", b:"Foundation for all insulin therapy; <mark>required in ALL type 1 DM</mark> and in advanced/decompensated type 2.", d:"See adverse effects below.", e:"<span class='star'>⭐</span><b>α subunits bind insulin; β subunits carry the tyrosine kinase.</b> PI3K arm = metabolic (GLUT4); MAPK arm = growth.", img:"<a href=\"drug_images/insulin_therapy/insulin_therapy_p09_insulin_receptor_moa.png\" target=\"_blank\"><img src=\"drug_images/insulin_therapy/insulin_therapy_p09_insulin_receptor_moa.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Insulin receptor mechanism of action\"></a>", cond:["Type 1 Diabetes","Type 2 Diabetes"]},
+  {n:"Rapid-acting (lispro, aspart, glulisine)", g:"<span class='pill'>Rapid-acting analog</span> — amino-acid substitutions <mark>prevent hexamer formation</mark> → fast monomer absorption", b:"<mark>PRANDIAL (mealtime) bolus</mark> — onset ~15 min, peak ~1 h, duration 3–5 h. Give with the meal; used in pumps.", d:"Hypoglycemia if the meal is delayed/skipped.", e:"<span class='star'>⭐</span>The engineering point: <b>disrupting hexamers = speed</b>. Best match for postprandial spikes.", img:"<a href=\"drug_images/insulin_therapy/insulin_therapy_p14_insulin_preparations_curves.png\" target=\"_blank\"><img src=\"drug_images/insulin_therapy/insulin_therapy_p14_insulin_preparations_curves.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Insulin preparation time-action curves\"></a>", cond:["Type 1 Diabetes","Type 2 Diabetes"]},
+  {n:"Short-acting (regular insulin)", g:"<span class='pill'>Regular human insulin</span> — forms hexamers → slower onset", b:"Prandial coverage (give ~30 min before meals); <mark>the ONLY insulin given IV</mark> → <mark>DKA/HHS</mark>; also for hyperkalemia (with dextrose).", d:"Hypoglycemia, <mark>hypokalemia</mark>.", e:"<span class='star'>⭐</span><b>Regular = the IV insulin</b> (DKA, hyperkalemia). Rapid analogs are SC only.", cond:["DKA / HHS","Hyperkalemia","Type 1 Diabetes"]},
+  {n:"Intermediate-acting (NPH)", g:"<span class='pill'>NPH</span> = <mark>Neutral Protamine Hagedorn</mark> — protamine complex slows dissolution", b:"Basal coverage, usually BID; the component of <mark>split-mixed (70/30, 50/50)</mark> regimens.", d:"<mark>Distinct peak (4–10 h) → nocturnal hypoglycemia</mark>; cloudy suspension — must be resuspended; protamine allergy.", e:"<span class='star'>⭐</span>NPH is the only common <b>cloudy</b> insulin and the only one with a big basal peak — hence 3 a.m. hypoglycemia.", img:"<a href=\"drug_images/insulin_therapy/insulin_therapy_p16_split_mixed_regimen.png\" target=\"_blank\"><img src=\"drug_images/insulin_therapy/insulin_therapy_p16_split_mixed_regimen.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Split-mixed insulin regimen\"></a>", cond:["Type 1 Diabetes","Type 2 Diabetes"]},
+  {n:"Long-acting (glargine, detemir, degludec)", g:"<span class='pill'>Long-acting analog</span> — glargine precipitates at neutral tissue pH; detemir binds albumin via a fatty-acid chain → <mark>flat, peakless</mark> release", b:"<mark>BASAL coverage</mark>, once daily (degludec up to 42 h). Basal-bolus regimens.", d:"Hypoglycemia (less nocturnal than NPH), weight gain, injection-site reactions.", e:"<span class='star'>⭐</span><b>Peakless = fewer nocturnal hypos than NPH.</b> Glargine must NOT be mixed with other insulins (pH-dependent).", cond:["Type 1 Diabetes","Type 2 Diabetes"]},
+  {n:"Insulin regimens & therapeutic use", g:"<mark>Basal–bolus</mark> (long-acting + rapid with meals) mimics physiology; <mark>split-mixed</mark> (70/30) = fewer injections", b:"Type 1 DM (always); type 2 DM when orals fail, or in pregnancy, severe hyperglycemia, DKA/HHS, hospitalization.", d:"Regimen complexity vs control trade-off; dawn phenomenon vs <mark>Somogyi effect</mark>.", e:"<span class='star'>⭐</span>Basal–bolus gives best control; split-mixed trades flexibility for fewer injections. Total daily dose split into basal + prandial.", img:"<a href=\"drug_images/insulin_therapy/insulin_therapy_p16_split_mixed_regimen.png\" target=\"_blank\"><img src=\"drug_images/insulin_therapy/insulin_therapy_p16_split_mixed_regimen.png\" loading=\"lazy\" style=\"max-height:64px;border-radius:6px\" alt=\"Split-mixed insulin regimen\"></a>", cond:["Type 1 Diabetes","Type 2 Diabetes"]},
+  {n:"Adverse effects of insulin", g:"Excess insulin action; local tissue effects", b:"Applies to every preparation.", d:"<mark>HYPOGLYCEMIA (the major one)</mark>, <mark>weight gain</mark>, <mark>hypokalemia</mark>, lipohypertrophy/lipoatrophy at injection sites (rotate sites), <mark>hypoglycemia unawareness</mark>, rare allergy.", e:"<span class='star'>⭐</span><b>Insulin drives K⁺ intracellularly</b> — the basis of both its hyperkalemia use and its hypokalemia risk in DKA.", cond:["Type 1 Diabetes","Type 2 Diabetes"]},
+  {n:"Insulin — drug interactions & absorption", g:"Pharmacokinetic and counter-regulatory interference", b:"Absorption ↑ by <mark>exercise, heat/massage, abdominal site</mark>; ↓ by lipohypertrophy. Abdomen &gt; arm &gt; thigh &gt; buttock for speed.", d:"<mark>β-blockers MASK hypoglycemia warning signs</mark> (tremor, palpitations) — sweating is preserved — and blunt glycogenolysis. Alcohol, salicylates → hypoglycemia. <mark>Steroids, thiazides, atypical antipsychotics → hyperglycemia</mark>.", e:"<span class='star'>⭐</span><b>Non-selective β-blockers are the classic hypoglycemia-masking interaction.</b> Exercising a limb speeds absorption from that limb.", cond:["Type 1 Diabetes","Type 2 Diabetes"]},
+ ]},
+ {sec:"Disorders of the Adrenal Gland", tag:"pathology lecture — treatment content", rows:[
+  {n:"Hydrocortisone", g:"<span class='pill'>Glucocorticoid</span> (with intrinsic mineralocorticoid activity at higher dose)", b:"<mark>FIRST-LINE replacement in adrenal insufficiency</mark>; <mark>IV hydrocortisone is the drug of choice in ADRENAL CRISIS</mark> — give immediately with saline + dextrose, <mark>before</mark> confirmatory testing. Double/triple the dose at times of stress ('sick day rules').", d:"Cushingoid features if over-replaced; adrenal crisis if under-dosed; hyperglycemia, osteoporosis, immunosuppression.", e:"<span class='star'>⭐</span><b>Treat adrenal crisis first, test later.</b> Dexamethasone is the alternative if you must not interfere with a cortisol assay.", cond:["Adrenal Insufficiency","Adrenal Crisis"]},
+  {n:"Fludrocortisone", g:"<span class='pill'>Synthetic mineralocorticoid</span> — aldosterone analog at the mineralocorticoid receptor", b:"<mark>Mineralocorticoid replacement in PRIMARY adrenal insufficiency (Addison)</mark> and in hypoaldosteronism / type IV RTA. <mark>NOT needed in secondary AI</mark> (aldosterone is RAAS-driven and intact).", d:"<mark>Hypertension, edema, hypokalemia</mark>, heart failure.", e:"<span class='star'>⭐</span><b>The single fact: fludrocortisone in PRIMARY, not secondary.</b> Titrate to BP, postural symptoms, K⁺ and renin.", cond:["Adrenal Insufficiency","Hypoaldosteronism"]},
+  {n:"Phenoxybenzamine", g:"<span class='pill'>IRREVERSIBLE non-selective α-blocker</span> (α1 & α2)", b:"<mark>Pre-operative preparation for pheochromocytoma — α-blockade FIRST</mark>, started 10–14 days before surgery, then add a β-blocker once α is established.", d:"<mark>Orthostatic hypotension</mark>, reflex tachycardia, nasal congestion, ejaculatory failure.", e:"<span class='star'>⭐</span><b>α BEFORE β — ALWAYS.</b> β-blockade first leaves unopposed α vasoconstriction → hypertensive crisis. Phentolamine is the reversible/IV alternative for acute crisis.", cond:["Pheochromocytoma"]},
+  {n:"β-blockers (propranolol, metoprolol) in pheochromocytoma", g:"<span class='pill'>β-adrenergic antagonist</span> — controls tachycardia/arrhythmia", b:"<mark>ONLY AFTER adequate α-blockade</mark> is established in pheochromocytoma.", d:"<mark>Unopposed α-stimulation → hypertensive crisis if given first</mark>; bronchospasm, bradycardia.", e:"<span class='star'>⭐</span>The most famous sequencing rule in endocrine pharmacology — never β first.", cond:["Pheochromocytoma"]},
+  {n:"Spironolactone / Eplerenone", g:"<span class='pill'>Mineralocorticoid receptor antagonist</span> — <mark>K⁺-sparing diuretic</mark>", b:"<mark>FIRST-LINE medical therapy for BILATERAL adrenal hyperplasia</mark> in primary hyperaldosteronism (Conn); an adenoma instead goes to <mark>adrenalectomy</mark>. Also heart failure, cirrhotic ascites.", d:"<mark>Hyperkalemia</mark>; <mark>spironolactone — gynecomastia, ↓libido, impotence, menstrual irregularity</mark> (antiandrogen effect). Eplerenone is selective → far less gynecomastia.", e:"<span class='star'>⭐</span><b>Adenoma → surgery; hyperplasia → spironolactone.</b> If gynecomastia develops, switch to eplerenone.", cond:["Primary Hyperaldosteronism (Conn)"]},
+  {n:"Metyrosine", g:"<span class='pill'>Tyrosine hydroxylase inhibitor</span> — ↓catecholamine synthesis at the rate-limiting step", b:"Adjunct in pheochromocytoma — inoperable/metastatic disease or refractory pre-op control.", d:"Sedation, extrapyramidal effects, diarrhea, crystalluria.", e:"<span class='star'>⭐</span>Attacks catecholamine <b>synthesis</b>; phenoxybenzamine blocks their <b>receptor</b>.", cond:["Pheochromocytoma"]},
+  {n:"Glucocorticoids in CAH", g:"<span class='pill'>Glucocorticoid</span> — replaces cortisol and <mark>suppresses ACTH</mark>, shutting off the androgen shunt", b:"<mark>All forms of CAH</mark>; add <mark>fludrocortisone (± salt) in salt-wasting 21-hydroxylase deficiency</mark>.", d:"Over-suppression → growth retardation & Cushingoid features; under-treatment → virilization and adrenal crisis.", e:"<span class='star'>⭐</span>The therapeutic trick: giving cortisol <b>restores negative feedback</b> → ↓ACTH → ↓adrenal androgen production.", cond:["Congenital Adrenal Hyperplasia (CAH)"]},
+ ]},
+ {sec:"Function and Disorders of the Parathyroid Gland", tag:"physiology/pathology lecture — treatment content", rows:[
+  {n:"IV calcium gluconate", g:"Direct <span class='pill'>Ca²⁺</span> repletion — restores the membrane depolarization threshold", b:"<mark>SYMPTOMATIC hypocalcemia</mark> — tetany, laryngospasm, seizures, prolonged QT. Oral calcium + vitamin D for chronic/mild disease.", d:"Tissue necrosis on extravasation (gluconate is less irritating than chloride); arrhythmia if pushed fast; <mark>caution with digoxin</mark>.", e:"<span class='star'>⭐</span><b>Correct magnesium FIRST</b> — hypomagnesemia impairs both PTH release and PTH action, so calcium will not correct until Mg is replaced.", cond:["Hypocalcemia"]},
+  {n:"Calcitriol (1,25-(OH)₂ vitamin D)", g:"<span class='pill'>Active vitamin D</span> — ↑intestinal Ca²⁺ & PO₄³⁻ absorption (already 1α-hydroxylated)", b:"<mark>Hypoparathyroidism</mark> (no PTH → no renal 1α-hydroxylation) and <mark>CKD</mark>; with oral calcium.", d:"<mark>Hypercalcemia, hyperphosphatemia</mark>, nephrocalcinosis.", e:"<span class='star'>⭐</span>In hypoPTH and CKD you must give the <b>active</b> form — the patient cannot perform the <b>1α-hydroxylation</b> step (PTH-driven, in the kidney).", cond:["Hypoparathyroidism","CKD-Related Bone Disease"]},
+  {n:"Cinacalcet", g:"<span class='pill'>Calcimimetic</span> — allosteric activator of the <mark>calcium-sensing receptor (CaSR)</mark> → the gland 'thinks' Ca²⁺ is high → <mark>↓PTH</mark>", b:"<mark>Primary hyperparathyroidism when surgery is not an option</mark>; secondary hyperparathyroidism in dialysis; parathyroid carcinoma.", d:"<mark>Hypocalcemia</mark>, nausea/vomiting, QT prolongation.", e:"<span class='star'>⭐</span><b>Parathyroidectomy is the definitive cure for primary hyperparathyroidism</b> — cinacalcet is for non-surgical candidates.", cond:["Primary Hyperparathyroidism","Secondary Hyperparathyroidism"]},
+  {n:"Bisphosphonates (zoledronic acid, pamidronate, alendronate)", g:"<span class='pill'>Pyrophosphate analog</span> — taken up by <mark>osteoclasts → apoptosis</mark>; inhibits farnesyl pyrophosphate synthase", b:"<mark>Hypercalcemia of malignancy</mark> — the <mark>durable agent</mark>, but <mark>slow (2–4 days)</mark>; osteoporosis; Paget disease; bone metastases.", d:"<mark>Osteonecrosis of the jaw</mark>, atypical femoral fractures, oesophagitis (<mark>stay upright 30 min, take with water</mark>), <mark>hypocalcemia</mark>, renal impairment.", e:"<span class='star'>⭐</span>Hypercalcemia sequence: <b>IV normal saline first → calcitonin (fast, tachyphylaxis in 48 h) → bisphosphonate (slow, durable)</b>.", cond:["Hypercalcemia","Osteoporosis"]},
+  {n:"Calcitonin", g:"<span class='pill'>Calcitonin receptor</span> — <mark>inhibits osteoclasts</mark> and ↑renal Ca²⁺ excretion", b:"<mark>Hypercalcemia — the FAST agent</mark> (works within hours), bridging until bisphosphonates act; Paget disease; osteoporosis (weak).", d:"<mark>Tachyphylaxis within ~48 hours</mark>, nausea, flushing, rhinitis (nasal form).", e:"<span class='star'>⭐</span><b>Calcitonin 'tones down' calcium — fast but fades</b>; that is exactly why it is paired with a bisphosphonate.", cond:["Hypercalcemia","Osteoporosis"]},
+  {n:"Phosphate binders (sevelamer, calcium acetate, lanthanum)", g:"Bind dietary phosphate in the <span class='pill'>gut lumen</span> → ↓absorption", b:"<mark>Hyperphosphatemia in CKD</mark> — with dietary phosphate restriction; helps control secondary hyperparathyroidism.", d:"GI upset, constipation; calcium-based binders → hypercalcemia/vascular calcification; aluminium binders → toxicity (avoid).", e:"<span class='star'>⭐</span>Control phosphate to control the <b>secondary hyperparathyroidism</b> of CKD (↑PO₄ → ↓Ca → ↑PTH).", cond:["Hyperphosphatemia"]},
+  {n:"IV normal saline (± loop diuretic)", g:"Volume expansion → <mark>↑renal Ca²⁺ excretion</mark>; loops block Ca²⁺ reabsorption at the thick ascending limb", b:"<mark>FIRST-LINE for acute hypercalcemia</mark> — these patients are profoundly volume-depleted (Ca²⁺ causes nephrogenic DI).", d:"Volume overload; <mark>do NOT give a loop diuretic until volume-replete</mark> — it worsens dehydration.", e:"<span class='star'>⭐</span><b>Saline first, always.</b> Loops (furosemide) only if volume-overloaded — 'loops lose calcium, thiazides retain it'.", cond:["Hypercalcemia"]},
+  {n:"Teriparatide", g:"<span class='pill'>Recombinant PTH 1-34</span> — <mark>INTERMITTENT</mark> dosing paradoxically <mark>stimulates osteoblasts</mark> (anabolic)", b:"<mark>Severe osteoporosis</mark> — the anabolic option when antiresorptives fail.", d:"Hypercalcemia; osteosarcoma risk in rodents (limit duration).", e:"<span class='star'>⭐</span><b>The pulsatile paradox: intermittent PTH BUILDS bone; continuous PTH (as in hyperparathyroidism) DESTROYS it.</b>", cond:["Osteoporosis"]},
+ ]},
+ {sec:"Thyroid Anatomy, Histology and Biochemistry", tag:"biochem lecture — drug content", rows:[
+  {n:"Methimazole", g:"<span class='pill'>Thyroid peroxidase (TPO) inhibitor</span> — blocks <mark>oxidation, organification and coupling</mark>", b:"<mark>FIRST-LINE antithyroid drug for Graves</mark> (more potent, once daily, less hepatotoxic). <mark>Avoid in the 1st trimester</mark>.", d:"<mark>AGRANULOCYTOSIS</mark> (fever/sore throat → check CBC and stop), rash, <mark>cholestatic hepatitis</mark>; <mark>1st-trimester teratogen — aplasia cutis, choanal/oesophageal atresia</mark>.", e:"<span class='star'>⭐</span><b>Methimazole first-line EXCEPT 1st trimester and thyroid storm → use PTU.</b> Agranulocytosis is the boards adverse effect.", cond:["Graves Disease / Hyperthyroidism"]},
+  {n:"Propylthiouracil (PTU)", g:"<span class='pill'>TPO inhibitor</span> <b>PLUS</b> blocks peripheral <span class='pill'>5'-deiodinase</span> → <mark>↓T4 → T3 conversion</mark>", b:"<mark>FIRST TRIMESTER of pregnancy</mark> and <mark>THYROID STORM</mark> — precisely because of the extra peripheral block.", d:"<mark>HEPATOTOXICITY / fulminant hepatic failure</mark> (worse than methimazole), agranulocytosis, <mark>ANCA-associated vasculitis</mark>.", e:"<span class='star'>⭐</span><b>PTU = Peripheral conversion blocked + Pregnancy (1st trimester).</b> Its liver toxicity is why it isn't routine first-line.", cond:["Graves Disease / Hyperthyroidism","Thyroid Storm"]},
+  {n:"Iodide (Lugol solution / SSKI)", g:"High-dose iodide → <mark>Wolff-Chaikoff effect</mark>: transiently inhibits organification and <mark>blocks hormone RELEASE</mark>", b:"<mark>Thyroid storm</mark> and <mark>pre-operative</mark> preparation (also shrinks the gland/↓vascularity). <mark>Give ≥1 hour AFTER PTU/methimazole</mark>.", d:"Escape from the Wolff-Chaikoff effect within ~2 weeks; iodism (metallic taste, rash); <mark>Jod-Basedow</mark> — an iodine load can cause hyperthyroidism in nodular goiter.", e:"<span class='star'>⭐</span><b>Never give iodide first</b> — alone it would supply substrate and fuel synthesis. Antithyroid drug first, iodide second.", cond:["Thyroid Storm","Graves Disease / Hyperthyroidism"]},
+  {n:"Radioactive iodine (I-131)", g:"<span class='pill'>β-emitter</span> concentrated by <mark>NIS</mark> → destroys follicular cells", b:"<mark>Definitive therapy</mark> for Graves, toxic nodular goiter, and thyroid carcinoma (papillary/follicular).", d:"<mark>Permanent hypothyroidism (expected)</mark>, radiation thyroiditis, worsening of Graves ophthalmopathy.", e:"<span class='star'>⭐</span><b>ABSOLUTELY contraindicated in pregnancy and breastfeeding.</b> Useless in medullary carcinoma (C cells are neural-crest and don't take up iodine).", cond:["Graves Disease / Hyperthyroidism","Thyroid Cancer"]},
+  {n:"Levothyroxine (T4)", g:"<span class='pill'>Synthetic T4</span> — a prodrug peripherally deiodinated to <mark>active T3</mark>", b:"<mark>FIRST-LINE for ALL hypothyroidism</mark>; also myxedema coma (IV, <mark>with hydrocortisone</mark>). <mark>Take on an empty stomach</mark>; long half-life (~7 days) → titrate by TSH every 6 weeks.", d:"Iatrogenic thyrotoxicosis (<mark>AF, osteoporosis</mark> in elderly); <mark>can precipitate adrenal crisis or angina if started before steroid/in CAD</mark>. Absorption ↓ by calcium, iron, PPIs.", e:"<span class='star'>⭐</span><b>In panhypopituitarism give hydrocortisone BEFORE levothyroxine.</b> 'Start low, go slow' in the elderly/CAD.", cond:["Hypothyroidism","Myxedema Coma"]},
+  {n:"Perchlorate & thiocyanate", g:"<span class='pill'>NIS (Na⁺/I⁻ symporter) competitive inhibitor</span> — blocks iodide <mark>trapping</mark>", b:"Rarely therapeutic; used conceptually and in iodine-induced hyperthyroidism (e.g. amiodarone).", d:"Aplastic anemia (perchlorate); goiter.", e:"<span class='star'>⭐</span>Maps the synthesis steps to their blockers: <b>perchlorate → NIS (trapping); methimazole/PTU → TPO (organification/coupling); iodide → release</b>.", cond:["Graves Disease / Hyperthyroidism"]},
+ ]},
+ {sec:"Diabetes Drugs", tag:"[summary] — pharmacology", rows:[
+  {n:"Insulin secretagogues (sulfonylureas, meglitinides)", g:"<span class='pill'>Close K<sub>ATP</sub></span> → depolarize β cell → insulin release", b:"Type 2 DM add-on; require functioning β cells.", d:"<mark>Hypoglycemia, weight gain</mark>.", e:"<span class='star'>⭐</span>↑insulin AND ↑C-peptide — mimics insulinoma; the sulfonylurea screen separates them.", cond:["Type 2 Diabetes"]},
+  {n:"Metformin (biguanide)", g:"<span class='pill'>AMPK</span> → ↓hepatic gluconeogenesis, ↑insulin sensitivity", b:"<mark>FIRST-LINE type 2 DM</mark>.", d:"GI upset, <mark>B12 deficiency</mark>, <mark>lactic acidosis</mark> (renal failure, contrast, hypoxia).", e:"<span class='star'>⭐</span>No hypoglycemia, no weight gain.", cond:["Type 2 Diabetes"]},
+  {n:"Thiazolidinediones", g:"<span class='pill'>PPAR-γ agonist</span> → ↑adiponectin, ↑GLUT4 → ↓insulin resistance", b:"Type 2 DM add-on; slow onset.", d:"<mark>Fluid retention → heart failure</mark>, weight gain, fractures, hepatotoxicity.", e:"<span class='star'>⭐</span><b>Contraindicated in heart failure.</b>", cond:["Type 2 Diabetes"]},
+  {n:"GLP-1 agonists", g:"<span class='pill'>GLP-1R agonist</span> — glucose-dependent insulin ↑, glucagon ↓, delayed gastric emptying", b:"Type 2 DM with obesity/CVD; <mark>weight loss + CV benefit</mark>.", d:"Nausea, <mark>pancreatitis</mark>; <mark>MTC/MEN2 contraindication</mark>.", e:"<span class='star'>⭐</span>Glucose-dependent → minimal hypoglycemia.", cond:["Type 2 Diabetes","Obesity"]},
+  {n:"DPP-4 inhibitors", g:"<span class='pill'>DPP-4 inhibitor</span> — prolongs endogenous incretins", b:"Type 2 DM add-on; oral, weight-neutral.", d:"Nasopharyngitis, pancreatitis, arthralgia.", e:"<span class='star'>⭐</span>Milder than GLP-1 agonists; weight-neutral, not weight-losing.", cond:["Type 2 Diabetes"]},
+  {n:"Alpha-glucosidase inhibitors", g:"<span class='pill'>α-glucosidase inhibitor</span> — delays intestinal carbohydrate absorption", b:"Postprandial hyperglycemia.", d:"<mark>Flatulence, diarrhea, bloating</mark>.", e:"<span class='star'>⭐</span>Treat hypoglycemia with <b>glucose, not sucrose</b>.", cond:["Type 2 Diabetes"]},
+  {n:"SGLT2 inhibitors", g:"<span class='pill'>SGLT2 inhibitor</span> — blocks proximal tubular glucose reabsorption → glucosuria", b:"Type 2 DM with <mark>heart failure / CKD</mark> — cardiorenal benefit.", d:"<mark>Genital mycotic infections, UTI, euglycemic DKA</mark>, Fournier gangrene.", e:"<span class='star'>⭐</span><b>Euglycemic DKA</b> is the trap.", cond:["Type 2 Diabetes","Heart Failure"]},
+ ]},
+ {sec:"ENRE TABLES", tag:"[summary] — drug tables", rows:[
+  {n:"Somatropin (recombinant GH)", g:"<span class='pill'>Recombinant GH</span> → ↑IGF-1", b:"GH deficiency, Turner, Prader-Willi.", d:"Insulin resistance, intracranial hypertension, SCFE.", e:"<span class='star'>⭐</span>Useless in Laron (receptor defect).", cond:["GH Deficiency","Turner Syndrome","Prader-Willi Syndrome"]},
+  {n:"Mecasermin (recombinant IGF-1)", g:"<span class='pill'>IGF-1</span> — bypasses the GH receptor", b:"<mark>Laron syndrome</mark> / GH insensitivity.", d:"<mark>Hypoglycemia</mark> — give with food.", e:"<span class='star'>⭐</span>↑↑GH + ↓IGF-1 = Laron → mecasermin.", cond:["GH Insensitivity (Laron Syndrome)"]},
+  {n:"Octreotide", g:"<span class='pill'>Somatostatin analog</span> — ↓GH/TSH/insulin/glucagon/gastrin", b:"Acromegaly (2nd-line), carcinoid, VIPoma, variceal bleed.", d:"<mark>Gallstones</mark>, steatorrhea, bradycardia.", e:"<span class='star'>⭐</span>The universal 'off switch'.", cond:["Acromegaly","Carcinoid Syndrome","VIPoma"]},
+  {n:"Pegvisomant", g:"<span class='pill'>GH receptor antagonist</span>", b:"Refractory acromegaly.", d:"<mark>Hepatotoxicity</mark>; tumour may grow.", e:"<span class='star'>⭐</span>Follow <b>IGF-1</b>, not GH.", cond:["Acromegaly"]},
+  {n:"Bromocriptine / Cabergoline", g:"<span class='pill'>D2 agonist</span> — inhibits prolactin", b:"<mark>1st-line prolactinoma</mark>.", d:"Nausea, orthostasis, <mark>valve fibrosis</mark> (cabergoline).", e:"<span class='star'>⭐</span>Medical therapy beats surgery here.", cond:["Prolactinoma"]},
+  {n:"Oxytocin", g:"<span class='pill'>Gq</span> → IP₃/Ca²⁺ → uterine contraction", b:"Labour induction; postpartum hemorrhage.", d:"Uterine tetany, <mark>water intoxication</mark>.", e:"<span class='star'>⭐</span>ADH cross-reactivity → hyponatremia.", cond:["Labor Induction","Postpartum Hemorrhage"]},
+  {n:"Vasopressin / Desmopressin / Terlipressin", g:"<span class='pill'>V1</span> vasoconstriction; <span class='pill'>V2</span> aquaporin-2", b:"Central DI (desmopressin 1st-line); vWD/hemophilia A; septic shock; varices (terlipressin).", d:"Hyponatremia; V1 ischemia.", e:"<span class='star'>⭐</span>V2-selective desmopressin has no pressor effect.", cond:["Central Diabetes Insipidus","Von Willebrand Disease / Hemophilia A","Septic Shock","Variceal Bleeding"]},
+  {n:"Conivaptan / Tolvaptan", g:"<span class='pill'>V2 antagonist</span> → aquaresis", b:"SIADH when fluid restriction fails.", d:"<mark>Osmotic demyelination</mark> if corrected fast; tolvaptan hepatotoxicity.", e:"<span class='star'>⭐</span>Conivaptan IV/non-selective; tolvaptan oral/selective.", cond:["SIADH"]},
+  {n:"Levothyroxine (T4) / Liothyronine (T3) / Liotrix", g:"<span class='pill'>Thyroid hormone replacement</span>", b:"<mark>Levothyroxine = 1st-line hypothyroidism</mark>; liothyronine (T3) faster but arrhythmogenic; liotrix = T4+T3.", d:"AF, osteoporosis, angina.", e:"<span class='star'>⭐</span>T4 is the standard — long half-life, stable levels.", cond:["Hypothyroidism"]},
+  {n:"Methimazole / Propylthiouracil", g:"<span class='pill'>TPO inhibitor</span>; PTU also blocks <mark>peripheral 5'-deiodinase</mark>", b:"<mark>Methimazole 1st-line</mark>; <mark>PTU in 1st trimester & thyroid storm</mark>.", d:"<mark>Agranulocytosis</mark> (both); PTU <mark>hepatotoxicity</mark>; methimazole 1st-trimester teratogen.", e:"<span class='star'>⭐</span>PTU = Peripheral + Pregnancy (first trimester).", cond:["Graves Disease / Hyperthyroidism","Thyroid Storm"]},
+  {n:"Lugol solution / SSKI (iodide)", g:"<span class='pill'>Wolff-Chaikoff</span> — blocks organification & hormone release", b:"Thyroid storm; pre-op. <mark>Give ≥1 h AFTER PTU</mark>.", d:"Escape in ~2 wk; <mark>Jod-Basedow</mark>.", e:"<span class='star'>⭐</span>Never before the antithyroid drug.", cond:["Thyroid Storm"]},
+  {n:"Radioactive iodine (I-131)", g:"<span class='pill'>β-emitter</span> via NIS destroys follicular cells", b:"Definitive: Graves, toxic nodular goiter, thyroid cancer.", d:"Permanent hypothyroidism; worsens ophthalmopathy.", e:"<span class='star'>⭐</span><b>Contraindicated in pregnancy/breastfeeding.</b>", cond:["Graves Disease / Hyperthyroidism","Thyroid Cancer"]},
+  {n:"Perchlorate", g:"<span class='pill'>NIS inhibitor</span> — blocks iodide trapping", b:"Iodine-induced hyperthyroidism.", d:"Aplastic anemia.", e:"<span class='star'>⭐</span>Blocks the very first step (trapping).", cond:["Graves Disease / Hyperthyroidism"]},
+  {n:"Tirzepatide / Semaglutide / Liraglutide", g:"<span class='pill'>GLP-1</span> (± <span class='pill'>GIP</span>) agonist — central satiety + delayed gastric emptying", b:"Obesity & type 2 DM; tirzepatide most effective.", d:"Nausea, pancreatitis; <mark>MTC/MEN2 contraindication</mark>.", e:"<span class='star'>⭐</span>Dual incretin (tirzepatide) &gt; GLP-1 alone.", cond:["Obesity","Type 2 Diabetes"]},
+  {n:"Phentermine / Topiramate / combination", g:"Phentermine <span class='pill'>NE release</span>; topiramate <span class='pill'>GABA-A</span>", b:"Chronic weight management.", d:"↑BP/HR; topiramate <mark>teratogenic (cleft palate)</mark>, kidney stones, paresthesias.", e:"<span class='star'>⭐</span>Pregnancy test before starting.", cond:["Obesity"]},
+  {n:"Naltrexone + Bupropion", g:"Bupropion → <mark>POMC stimulus</mark>; naltrexone blocks the <mark>β-endorphin autoinhibitory loop</mark>", b:"Chronic weight management.", d:"<mark>Bupropion lowers seizure threshold</mark> — avoid in bulimia/anorexia; naltrexone contraindicated with opioids.", e:"<span class='star'>⭐</span>Synergy = turn POMC on and remove its brake.", cond:["Obesity"]},
+  {n:"Orlistat", g:"<span class='pill'>Lipase inhibitor</span> — ~30% dietary fat unabsorbed", b:"Obesity; acts in the gut lumen.", d:"<mark>Steatorrhea, oily spotting</mark>; <mark>ADEK malabsorption</mark>.", e:"<span class='star'>⭐</span>Supplement fat-soluble vitamins.", cond:["Obesity"]},
+ ]},
+ {sec:"Endocrine Pathology & Physio", tag:"[summary] — treatment content", rows:[
+  {n:"Thyroid storm regimen", g:"Multi-drug, sequenced", b:"<mark>β-blocker (propranolol) → PTU → iodide (≥1 h after PTU) → glucocorticoid</mark>. Propranolol and PTU both block peripheral T4→T3; steroids do too.", d:"Iodide before PTU would fuel synthesis; β-blocker caution in high-output failure.", e:"<span class='star'>⭐</span><b>The order is the question.</b> Steroids also cover relative adrenal insufficiency.", cond:["Thyroid Storm"]},
+  {n:"Myxedema coma regimen", g:"IV <span class='pill'>levothyroxine</span> + <span class='pill'>hydrocortisone</span>", b:"IV T4 (± T3), <mark>hydrocortisone FIRST/alongside</mark>, passive rewarming, supportive care.", d:"Thyroid hormone alone can <mark>precipitate adrenal crisis</mark>.", e:"<span class='star'>⭐</span><b>Always cover with steroid</b> — you cannot exclude coexisting adrenal insufficiency.", cond:["Myxedema Coma"]},
+  {n:"Graves disease — treatment options", g:"<span class='pill'>TPO inhibitor</span> / <span class='pill'>β-blocker</span> / <span class='pill'>I-131</span> / surgery", b:"Methimazole (1st-line drug) + propranolol for symptoms; <mark>I-131 definitive</mark>; thyroidectomy if large goiter/compression or pregnancy intolerance.", d:"I-131 <mark>worsens ophthalmopathy</mark> (steroid cover) and is contraindicated in pregnancy.", e:"<span class='star'>⭐</span>PTU only in 1st trimester and storm; methimazole otherwise.", cond:["Graves Disease / Hyperthyroidism"]},
+  {n:"Hypercalcemia regimen", g:"Saline → calcitonin → bisphosphonate", b:"<mark>IV normal saline first</mark> (volume-deplete), then <mark>calcitonin (fast)</mark> and <mark>bisphosphonate (durable)</mark>; steroids if lymphoma/granulomatous (↓1,25-vit D).", d:"Loop diuretics only once volume-replete; calcitonin tachyphylaxis.", e:"<span class='star'>⭐</span>Fast + durable together is the whole strategy.", cond:["Hypercalcemia"]},
+  {n:"Adrenal crisis regimen", g:"IV <span class='pill'>hydrocortisone</span> + saline + dextrose", b:"<mark>Treat immediately — do not wait for cortisol results</mark>. Dexamethasone if the assay must be preserved.", d:"Delay is fatal; under-replacement at stress causes crisis.", e:"<span class='star'>⭐</span><b>Fludrocortisone only in primary AI</b> — hydrocortisone at stress doses already has mineralocorticoid activity.", cond:["Adrenal Crisis"]},
+ ]},
+ {sec:"Endocrinology Biochem", tag:"[summary] — drug content", rows:[
+  {n:"NSAIDs vs SAIDs", g:"NSAIDs = <span class='pill'>COX inhibitor</span>; SAIDs (steroids) = <span class='pill'>PLA2 inhibitor</span> (via lipocortin)", b:"NSAIDs: analgesia/anti-inflammatory. Steroids: broad anti-inflammatory, asthma.", d:"NSAIDs: ulcers, renal failure, leukotrienes persist. Steroids: Cushingoid, hyperglycemia, immunosuppression.", e:"<span class='star'>⭐</span><b>SAIDs block the WHOLE pathway (PGs + LTs); NSAIDs block only COX.</b>", cond:["Pain / Inflammation","Asthma"]},
+  {n:"Aromatase inhibitors (anastrozole, letrozole)", g:"<span class='pill'>CYP19A1 inhibitor</span> — blocks androgen → estrogen", b:"<mark>Postmenopausal ER+ breast cancer</mark>.", d:"<mark>Osteoporosis</mark>, hot flushes, arthralgia.", e:"<span class='star'>⭐</span>Only works postmenopausally; estrogen closes epiphyses & protects bone.", cond:["Breast Cancer"]},
+  {n:"5α-reductase inhibitors (finasteride)", g:"<span class='pill'>5α-reductase inhibitor</span> → ↓DHT", b:"BPH; androgenetic alopecia.", d:"↓libido, gynecomastia; <mark>halves PSA</mark>; teratogenic.", e:"<span class='star'>⭐</span>DHT = external genitalia, prostate, hair.", cond:["BPH","Androgenetic Alopecia"]},
+  {n:"Sapropterin (BH4)", g:"<span class='pill'>BH4</span> cofactor replacement", b:"BH4-deficient / BH4-responsive PKU.", d:"Must still monitor phenylalanine.", e:"<span class='star'>⭐</span>PKU not responding to diet = BH4 deficiency.", cond:["PKU (Phenylketonuria)"]},
+ ]},
+
+];
+
+const LADDERS = [
+ {cond:"Prolactinoma", rungs:[
+  {tier:1, drug:"Cabergoline / Bromocriptine", note:"Dopamine agonist — <mark>first-line even for macroadenomas</mark>; shrinks the tumour and normalizes PRL. Cabergoline preferred (weekly, better tolerated)."},
+  {tier:3, drug:"Transsphenoidal surgery", note:"Only if refractory to or intolerant of dopamine agonists — the opposite priority from every other pituitary adenoma."},
+ ]},
+ {cond:"Acromegaly", rungs:[
+  {tier:1, drug:"Transsphenoidal surgery", note:"First-line — resection of the somatotroph adenoma."},
+  {tier:2, drug:"Octreotide / Lanreotide", note:"Somatostatin analog — <mark>second-line, after failed surgery</mark>."},
+  {tier:3, drug:"Pegvisomant", note:"GH-receptor antagonist — refractory to surgery <i>and</i> octreotide. Follow IGF-1, not GH (GH rises on this drug)."},
+ ]},
+ {cond:"Central Diabetes Insipidus", rungs:[
+  {tier:1, drug:"Desmopressin (DDAVP)", note:"<mark>V2-selective</mark> — first-line; no pressor (V1) activity."},
+  {tier:"x", drug:"Vasopressin (ADH)", note:"Non-selective — reserved for shock/cardiac arrest where the V1 pressor effect is wanted."},
+ ]},
+ {cond:"SIADH", rungs:[
+  {tier:1, drug:"Fluid restriction", note:"Always first-line (not a drug)."},
+  {tier:2, drug:"Tolvaptan / Conivaptan", note:"Vaptans — used <mark>when fluid restriction fails</mark>. Correct sodium slowly (osmotic demyelination risk)."},
+  {tier:3, drug:"Demeclocycline", note:"Alternative/second-line to vaptans for chronic SIADH — induces nephrogenic DI."},
+ ]},
+ {cond:"Adrenal Insufficiency", rungs:[
+  {tier:1, drug:"Hydrocortisone", note:"Glucocorticoid replacement — first-line in both primary and secondary AI."},
+  {tier:"x", drug:"+ Fludrocortisone", note:"Add mineralocorticoid only in <b>primary</b> AI (Addison) — aldosterone is intact via RAAS in secondary AI."},
+ ]},
+ {cond:"Adrenal Crisis", rungs:[
+  {tier:1, drug:"IV hydrocortisone + saline + dextrose", note:"<mark>Give immediately — do not wait for cortisol results.</mark> Dexamethasone if the assay must be preserved."},
+ ]},
+ {cond:"Hypopituitarism", rungs:[
+  {tier:1, drug:"Hydrocortisone", note:"Replace glucocorticoid <mark>before</mark> levothyroxine — thyroxine first can precipitate adrenal crisis."},
+ ]},
+ {cond:"Parkinson Disease", rungs:[
+  {tier:1, drug:"Levodopa + Carbidopa", note:"Dopamine precursor + peripheral decarboxylase inhibitor (carbidopa can't cross the BBB — that's the point)."},
+ ]},
+ {cond:"Pheochromocytoma", rungs:[
+  {tier:1, drug:"Phenoxybenzamine (α-blockade)", note:"<mark>ALWAYS FIRST</mark> — started 10–14 days pre-op."},
+  {tier:2, drug:"β-blocker (propranolol/metoprolol)", note:"Only <b>after</b> adequate α-blockade — β-first leaves unopposed α → hypertensive crisis."},
+  {tier:"x", drug:"Metyrosine", note:"Adjunct for inoperable/metastatic disease or refractory pre-op control."},
+ ]},
+ {cond:"BPH", rungs:[
+  {tier:1, drug:"Tamsulosin (α1-blocker)", note:"First-line — fast symptom relief (days), doesn't shrink the gland."},
+  {tier:2, drug:"Finasteride / Dutasteride", note:"5α-reductase inhibitor — shrinks the gland (slow, 6–12 months); best for <b>large</b> prostates, often combined with an α-blocker."},
+  {tier:"x", drug:"Tadalafil (PDE5i)", note:"Also approved for BPH symptoms."},
+ ]},
+ {cond:"Androgenetic Alopecia", rungs:[
+  {tier:1, drug:"Finasteride (low dose)", note:"5α-reductase inhibitor — same mechanism as BPH, lower dose."},
+ ]},
+ {cond:"Breast Cancer", rungs:[
+  {tier:1, drug:"Aromatase inhibitors (anastrozole, letrozole, exemestane)", note:"Postmenopausal, ER-positive only — premenopausal ovarian estrogen dominates and defeats them."},
+ ]},
+ {cond:"PKU (Phenylketonuria)", rungs:[
+  {tier:1, drug:"Low-phenylalanine diet", note:"Standard management (not a drug)."},
+  {tier:2, drug:"Sapropterin (BH4)", note:"For <mark>BH4-deficient/BH4-responsive</mark> PKU — diet alone fails to control it. Still must monitor phenylalanine."},
+ ]},
+ {cond:"GH Deficiency", rungs:[
+  {tier:1, drug:"Somatropin (recombinant GH)", note:"First-line replacement in children and adults."},
+ ]},
+ {cond:"GH Insensitivity (Laron Syndrome)", rungs:[
+  {tier:1, drug:"Mecasermin (recombinant IGF-1)", note:"<mark>Bypasses the GH receptor</mark> — somatropin is useless here (↑↑GH but ↓IGF-1)."},
+ ]},
+ {cond:"Turner Syndrome", rungs:[
+  {tier:1, drug:"Somatropin (GH) + estrogen (~age 12)", note:"GH for stature; estrogen timed to induce puberty."},
+ ]},
+ {cond:"Prader-Willi Syndrome", rungs:[
+  {tier:1, drug:"Somatropin (GH)", note:"Approved indication alongside dietary/behavioural management of hyperphagia."},
+ ]},
+ {cond:"Carcinoid Syndrome", rungs:[
+  {tier:1, drug:"Octreotide / Lanreotide", note:"Somatostatin analog controls flushing/diarrhea."},
+ ]},
+ {cond:"VIPoma", rungs:[
+  {tier:1, drug:"Surgical resection", note:"Curative when localized."},
+  {tier:2, drug:"Octreotide", note:"Symptom control pending/after resection ('pancreatic cholera')."},
+ ]},
+ {cond:"Glucagonoma", rungs:[
+  {tier:1, drug:"Surgical resection", note:"Curative when localized."},
+  {tier:2, drug:"Octreotide", note:"Symptom control."},
+ ]},
+ {cond:"Labor Induction", rungs:[
+  {tier:1, drug:"Oxytocin", note:"IV infusion — induction/augmentation."},
+  {tier:"x", drug:"Dinoprostone (PGE2)", note:"Cervical ripening, used ahead of or alongside oxytocin."},
+ ]},
+ {cond:"Postpartum Hemorrhage", rungs:[
+  {tier:1, drug:"Oxytocin", note:"First-line uterotonic."},
+ ]},
+ {cond:"Von Willebrand Disease / Hemophilia A", rungs:[
+  {tier:1, drug:"Desmopressin (DDAVP)", note:"Mild disease only — releases stored vWF/factor VIII from endothelium."},
+ ]},
+ {cond:"Hepatorenal Syndrome", rungs:[
+  {tier:1, drug:"Terlipressin", note:"V1-preferring — splanchnic vasoconstriction."},
+ ]},
+ {cond:"Variceal Bleeding", rungs:[
+  {tier:1, drug:"Terlipressin", note:"↓ portal pressure via splanchnic vasoconstriction."},
+ ]},
+ {cond:"Septic Shock", rungs:[
+  {tier:2, drug:"Vasopressin", note:"Adjunct pressor (V1) in vasodilatory/septic shock refractory to catecholamines."},
+ ]},
+ {cond:"Erectile Dysfunction", rungs:[
+  {tier:1, drug:"PDE5 inhibitors (sildenafil, tadalafil)", note:"First-line. <mark>Absolutely contraindicated with nitrates.</mark>"},
+  {tier:2, drug:"Alprostadil (PGE1)", note:"Second-line, after PDE5i failure/contraindication — intracavernosal or intraurethral; works independent of NO."},
+ ]},
+ {cond:"Male Hypogonadism", rungs:[
+  {tier:1, drug:"Testosterone esters (IM depot, gel, patch)", note:"Standard replacement — but <mark>suppresses fertility</mark> (shuts down LH/FSH)."},
+  {tier:"x", drug:"hCG / hMG", note:"Used instead when <b>fertility must be preserved or restored</b> — mimics LH, doesn't suppress the axis the same way."},
+ ]},
+ {cond:"Prostate Cancer", rungs:[
+  {tier:1, drug:"Leuprolide (GnRH agonist, continuous) + Flutamide", note:"Continuous GnRH agonist causes an initial testosterone <mark>flare</mark> — cover it with an antiandrogen (flutamide)."},
+  {tier:"x", drug:"Degarelix (GnRH antagonist)", note:"No flare — preferred when a flare would be dangerous (cord compression, severe bone mets)."},
+ ]},
+ {cond:"Endometriosis", rungs:[
+  {tier:1, drug:"Leuprolide (continuous GnRH agonist)", note:"Downregulates the axis to induce a hypoestrogenic state."},
+ ]},
+ {cond:"Precocious Puberty", rungs:[
+  {tier:1, drug:"Leuprolide (continuous GnRH agonist)", note:"For central (GnRH-dependent) precocious puberty."},
+ ]},
+ {cond:"CML (Chronic Myelogenous Leukemia)", rungs:[
+  {tier:1, drug:"Imatinib", note:"BCR-ABL tyrosine kinase inhibitor — the model targeted therapy for the Philadelphia chromosome."},
+ ]},
+ {cond:"Asthma", rungs:[
+  {tier:1, drug:"Corticosteroids (SAIDs)", note:"Blocks PLA2 — the <mark>whole</mark> eicosanoid pathway (prostaglandins + leukotrienes)."},
+  {tier:2, drug:"Leukotriene antagonists (montelukast)", note:"Especially aspirin-exacerbated and exercise-induced asthma."},
+  {tier:3, drug:"Zileuton", note:"5-LOX inhibitor — less used; hepatotoxicity."},
+ ]},
+ {cond:"Pulmonary Hypertension", rungs:[
+  {tier:1, drug:"Epoprostenol / Iloprost (PGI2 analogs)", note:"Vasodilation + antiplatelet."},
+  {tier:"x", drug:"Sildenafil (PDE5i)", note:"Also approved for pulmonary hypertension."},
+ ]},
+ {cond:"PDA (Patent Ductus Arteriosus)", rungs:[
+  {tier:"x", drug:"Indomethacin (NSAID)", note:"<b>Closes</b> the duct — used when closure is the goal."},
+  {tier:"x", drug:"Alprostadil / Dinoprostone (PGE1/PGE2)", note:"<b>Keeps the duct open</b> — used in duct-dependent congenital heart disease. Opposite goal, opposite drug class."},
+ ]},
+ {cond:"Glaucoma", rungs:[
+  {tier:1, drug:"Latanoprost / Bimatoprost (PGF2α analogs)", note:"↑ uveoscleral outflow; side effect: iris hyperpigmentation, lash growth."},
+ ]},
+ {cond:"NSAID-Induced Ulcer Prevention", rungs:[
+  {tier:1, drug:"Misoprostol", note:"PGE1 analog — replaces the mucosal PGE2 the NSAID removed."},
+ ]},
+ {cond:"Hypertriglyceridemia", rungs:[
+  {tier:"x", drug:"Omega-3 fatty acids (EPA/DHA)", note:"Adjunct — cardioprotective, anti-inflammatory."},
+ ]},
+ {cond:"DKA / HHS", rungs:[
+  {tier:1, drug:"IV fluids", note:"<mark>Always first</mark> — before insulin."},
+  {tier:2, drug:"Regular insulin (IV)", note:"The only insulin given IV. <mark>Check/replace K⁺ before starting if K⁺ &lt;3.3</mark> — insulin drives it further down."},
+ ]},
+ {cond:"Type 2 Diabetes", rungs:[
+  {tier:1, drug:"Metformin", note:"First-line for essentially everyone — no hypoglycemia, no weight gain."},
+  {tier:2, drug:"GLP-1 agonist or SGLT2 inhibitor", note:"Preferred add-on if obesity, CVD, heart failure, or CKD is present (proven benefit beyond glucose)."},
+  {tier:2, drug:"Sulfonylurea, DPP-4i, or TZD", note:"Alternative add-ons when the above aren't indicated/tolerated."},
+  {tier:3, drug:"Insulin", note:"When oral agents fail, or in pregnancy/severe hyperglycemia/hospitalization."},
+ ]},
+ {cond:"Type 1 Diabetes", rungs:[
+  {tier:1, drug:"Basal-bolus insulin", note:"Long-acting (basal) + rapid-acting at meals — mimics physiology, best control. Always required."},
+  {tier:"x", drug:"Split-mixed (NPH + regular/rapid)", note:"Fewer injections, less flexible — trades control for convenience."},
+ ]},
+ {cond:"PCOS", rungs:[
+  {tier:1, drug:"Metformin", note:"Restores ovulation by addressing the underlying insulin resistance."},
+ ]},
+ {cond:"Insulinoma", rungs:[
+  {tier:1, drug:"Surgical resection", note:"Curative when localized."},
+  {tier:2, drug:"Diazoxide", note:"For inoperable disease — opens K<sub>ATP</sub> channels, the mechanistic <b>opposite</b> of a sulfonylurea."},
+  {tier:"x", drug:"Octreotide", note:"Adjunct symptom control."},
+ ]},
+ {cond:"Hypoglycemia", rungs:[
+  {tier:1, drug:"Oral / IV glucose", note:"First-line whenever the patient can take it."},
+  {tier:2, drug:"Glucagon (IM/SC/intranasal)", note:"When the patient can't take oral glucose. <mark>Needs hepatic glycogen</mark> — ineffective in a starved alcoholic (give dextrose instead)."},
+ ]},
+ {cond:"Beta-Blocker Overdose", rungs:[
+  {tier:1, drug:"Glucagon", note:"Bypasses the β-receptor entirely."},
+ ]},
+ {cond:"Pancreatic Neuroendocrine Tumor", rungs:[
+  {tier:"x", drug:"Streptozocin", note:"For metastatic islet cell tumours — selectively toxic to β cells via GLUT2."},
+ ]},
+ {cond:"Obesity", rungs:[
+  {tier:1, drug:"GLP-1 / dual agonists (semaglutide, liraglutide, tirzepatide)", note:"Most effective non-surgical option; tirzepatide (dual GIP+GLP-1) &gt; GLP-1 alone."},
+  {tier:2, drug:"Phentermine-topiramate or Naltrexone-bupropion", note:"Alternative oral combinations — check pregnancy status/seizure & opioid history first."},
+  {tier:3, drug:"Orlistat", note:"Peripheral (gut-only) mechanism — least effective, GI side effects, needs ADEK vitamin supplementation."},
+  {tier:"x", drug:"Bariatric surgery", note:"BMI ≥40, or ≥35 with a comorbidity — the most durable option; remission of T2DM often precedes weight loss."},
+ ]},
+ {cond:"Metabolic Syndrome", rungs:[
+  {tier:1, drug:"Metformin", note:"Targets the core insulin resistance."},
+ ]},
+ {cond:"Primary Hyperaldosteronism (Conn)", rungs:[
+  {tier:1, drug:"Adrenalectomy", note:"For a unilateral adenoma."},
+  {tier:1, drug:"Spironolactone / Eplerenone", note:"First-line <b>medical</b> therapy for bilateral adrenal hyperplasia. Eplerenone if gynecomastia develops on spironolactone."},
+ ]},
+ {cond:"Congenital Adrenal Hyperplasia (CAH)", rungs:[
+  {tier:1, drug:"Glucocorticoid replacement", note:"Suppresses ACTH → shuts off the androgen shunt."},
+  {tier:"x", drug:"+ Fludrocortisone (± salt)", note:"Added in salt-wasting 21-hydroxylase deficiency."},
+ ]},
+ {cond:"Hypocalcemia", rungs:[
+  {tier:1, drug:"IV calcium gluconate", note:"For symptomatic/acute hypocalcemia (tetany, seizures, prolonged QT). <mark>Correct magnesium first.</mark>"},
+  {tier:"x", drug:"Oral calcium + vitamin D", note:"Chronic/mild disease."},
+ ]},
+ {cond:"Hypoparathyroidism", rungs:[
+  {tier:1, drug:"Calcitriol + oral calcium", note:"Must give the <b>active</b> vitamin D — the patient can't perform renal 1α-hydroxylation without PTH."},
+ ]},
+ {cond:"Primary Hyperparathyroidism", rungs:[
+  {tier:1, drug:"Parathyroidectomy", note:"Definitive/curative."},
+  {tier:2, drug:"Cinacalcet", note:"Calcimimetic — for patients who are not surgical candidates."},
+ ]},
+ {cond:"Secondary Hyperparathyroidism", rungs:[
+  {tier:1, drug:"Cinacalcet + phosphate control", note:"Dialysis-population management."},
+ ]},
+ {cond:"Hypercalcemia", rungs:[
+  {tier:1, drug:"IV normal saline", note:"<mark>Always first</mark> — these patients are volume-depleted."},
+  {tier:2, drug:"Calcitonin", note:"Fast (hours) but tachyphylaxis by ~48 h — bridges to the next step."},
+  {tier:3, drug:"Bisphosphonates", note:"Slow (2–4 days) but durable — the definitive agent."},
+ ]},
+ {cond:"Osteoporosis", rungs:[
+  {tier:1, drug:"Bisphosphonates", note:"Standard antiresorptive first-line."},
+  {tier:2, drug:"Teriparatide", note:"Anabolic (paradoxically builds bone via intermittent PTH) — when antiresorptives fail."},
+ ]},
+ {cond:"Hyperphosphatemia", rungs:[
+  {tier:1, drug:"Phosphate binders (sevelamer, Ca acetate, lanthanum)", note:"Plus dietary phosphate restriction — CKD context."},
+ ]},
+ {cond:"Graves Disease / Hyperthyroidism", rungs:[
+  {tier:1, drug:"Methimazole", note:"First-line — <b>except</b> 1st trimester and thyroid storm."},
+  {tier:"x", drug:"Propylthiouracil (PTU)", note:"Reserved for 1st trimester pregnancy and thyroid storm only (extra peripheral T4→T3 block; more hepatotoxic)."},
+  {tier:2, drug:"Radioactive iodine (I-131)", note:"Definitive therapy. Contraindicated in pregnancy/breastfeeding."},
+  {tier:3, drug:"Thyroidectomy", note:"Large goiter/compression, or when drugs/RAI aren't tolerated/appropriate."},
+ ]},
+ {cond:"Thyroid Storm", rungs:[
+  {tier:1, drug:"β-blocker (propranolol) → PTU → Iodide → Glucocorticoid", note:"<mark>Order matters</mark> — iodide must come ≥1 h <b>after</b> PTU/methimazole, or it fuels synthesis instead of blocking release."},
+ ]},
+ {cond:"Thyroid Cancer", rungs:[
+  {tier:1, drug:"Thyroidectomy", note:"Surgical resection first."},
+  {tier:2, drug:"Radioactive iodine (I-131)", note:"Adjuvant ablation — papillary/follicular only (medullary and anaplastic don't take up iodine)."},
+ ]},
+ {cond:"Hypothyroidism", rungs:[
+  {tier:1, drug:"Levothyroxine (T4)", note:"First-line for all hypothyroidism. Take on an empty stomach; titrate by TSH every 6 weeks."},
+ ]},
+ {cond:"Myxedema Coma", rungs:[
+  {tier:1, drug:"IV T4 (± T3) + Hydrocortisone", note:"Steroid is given <b>with/before</b> thyroid hormone — must cover possible coexisting adrenal insufficiency."},
+ ]},
+ {cond:"Hypoaldosteronism", rungs:[
+  {tier:1, drug:"Fludrocortisone", note:"Mineralocorticoid analog replacement."},
+ ]},
+ {cond:"Pain / Inflammation", rungs:[
+  {tier:1, drug:"NSAIDs", note:"Nonselective COX-1/2 inhibitors."},
+  {tier:"x", drug:"COX-2 selective (celecoxib)", note:"When GI protection matters — trades ulcer risk for thrombotic risk."},
+ ]},
+ {cond:"Antiplatelet / MI Prevention", rungs:[
+  {tier:1, drug:"Low-dose aspirin", note:"Irreversible COX-1 block — lasts the platelet's 7–10 day lifespan."},
+ ]},
+ {cond:"Inflammation / Autoimmune Disease", rungs:[
+  {tier:1, drug:"Corticosteroids", note:"Broad suppression via PLA2 blockade."},
+ ]},
+ {cond:"Cardiac Arrest", rungs:[
+  {tier:"x", drug:"Vasopressin", note:"Alternative/adjunct pressor in the ACLS algorithm."},
+ ]},
+ {cond:"Infertility", rungs:[
+  {tier:1, drug:"hCG / hMG", note:"Restores spermatogenesis in hypogonadotropic hypogonadism."},
+  {tier:"x", drug:"Pulsatile leuprolide (GnRH)", note:"Pulsatile dosing <b>stimulates</b> the axis — the opposite effect of continuous dosing, which suppresses it."},
+ ]},
+ {cond:"Labor Induction / Abortion", rungs:[
+  {tier:1, drug:"Dinoprost (PGF2α)", note:"Uterine contraction — abortifacient use, distinct from the ophthalmic PGF2α analogs (latanoprost/bimatoprost) used for glaucoma."},
+ ]},
+ {cond:"Cervical Ripening / Abortion", rungs:[
+  {tier:1, drug:"Misoprostol (± mifepristone)", note:"PGE1 analog — cervical ripening or medical abortion, in addition to its NSAID-ulcer-prevention use."},
+ ]},
+ {cond:"Heart Failure", rungs:[
+  {tier:1, drug:"SGLT2 inhibitors", note:"Proven cardiorenal benefit independent of glucose control — used in diabetics with heart failure or CKD."},
+ ]},
+ {cond:"Hyperkalemia", rungs:[
+  {tier:1, drug:"Regular insulin (IV) + dextrose", note:"Shifts potassium intracellularly — a temporizing measure, not a definitive K⁺-removal treatment."},
+ ]},
+ {cond:"CKD-Related Bone Disease", rungs:[
+  {tier:1, drug:"Calcitriol", note:"Active vitamin D — needed because CKD impairs the kidney's own 1α-hydroxylation step."},
+ ]},
+];
+
+const tbody=document.getElementById('tbody');
+const secpickEl=document.getElementById('secpick');
+const condpickEl=document.getElementById('condpick');
+const moapickEl=document.getElementById('moapick');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+// ---------- Mechanism-of-action classifier ----------
+// Assigns every drug row one canonical MOA family from its name + mechanism text.
+// Order matters: specific rules first. Used by both the MOA filter and the Sketchy view.
+const stripTags = s => (s||'').replace(/<[^>]+>/g,'');
+function moaOf(r){
+  const n = stripTags(r.n).toLowerCase();
+  const g = stripTags(r.g).toLowerCase();
+  const ng = n+' | '+g;
+  const inN = (...k)=>k.some(x=>n.includes(x));
+  const inG = (...k)=>k.some(x=>g.includes(x));
+  // regimens / multi-drug overviews
+  if(ng.includes('regimen')||inN('treatment options','overview','bariatric','nsaids vs saids')) return 'Regimen / multi-drug overview';
+  // pituitary / GH axis
+  if(inN('somatropin','mecasermin','pegvisomant')||inG('recombinant gh','gh receptor antagonist','igf-1')) return 'GH / IGF-1 axis';
+  if(inG('somatostatin analog')||inN('octreotide','lanreotide')) return 'Somatostatin analog';
+  if(inG('dopamine d2','d2 agonist')) return 'Dopamine agonist';
+  if(inG('v2 antagonist')||inN('conivaptan','tolvaptan')) return 'Vasopressin V2 antagonist (vaptan)';
+  if(inN('demeclocycline')||inG('tetracycline')) return 'ADH antagonist (demeclocycline)';
+  if(inN('desmopressin','vasopressin','terlipressin')||inG('adh analog','v2-selective','v1-preferring','v1a')) return 'Vasopressin / ADH analog';
+  if(inN('oxytocin')) return 'Oxytocin';
+  // adrenal steroids
+  if(inG('mineralocorticoid receptor antagonist')||inN('spironolactone','eplerenone')) return 'Mineralocorticoid receptor antagonist';
+  if(inN('fludrocortisone')||inG('synthetic mineralocorticoid','aldosterone analog')) return 'Mineralocorticoid (fludrocortisone)';
+  if(inG('glucocorticoid','steroidal anti-inflammatory')||inN('hydrocortisone','corticosteroid','glucocorticoids in cah')) return 'Glucocorticoid';
+  // reproductive
+  if(inG('5α-reductase')) return '5α-reductase inhibitor';
+  if(inG('aromatase','cyp19')) return 'Aromatase inhibitor';
+  if(inG('androgen receptor antagonist')) return 'Androgen receptor antagonist';
+  if(inG('androgen receptor')||inN('testosterone','anabolic','17α-alkylated')) return 'Androgen (testosterone) agonist';
+  if(inG('gnrh receptor antagonist')||inN('degarelix')) return 'GnRH antagonist';
+  if(inG('gnrh agonist')||inN('leuprolide')) return 'GnRH agonist';
+  if(inN('hcg','hmg','gonadotropin')) return 'Gonadotropin (hCG / hMG)';
+  if(inG('pde5')) return 'PDE5 inhibitor';
+  // eicosanoids — COX first (NSAID mechanism text also mentions "prostaglandin synthesis")
+  if(inG('cox')||inN('nsaid','aspirin','celecoxib')) return 'COX inhibitor (NSAID)';
+  if(inG('cyslt1','lipoxygenase')||inN('montelukast','zileuton','zafirlukast','leukotriene')) return 'Leukotriene modifier';
+  if(inN('alprostadil','dinoprostone','dinoprost','misoprostol','epoprostenol','iloprost','latanoprost','bimatoprost')||inG('pge1','pge2','pgf2','pgi2','prostacyclin','prostaglandin e','prostaglandin f','prostaglandin analog')) return 'Prostaglandin analog';
+  if(inN('omega-3')) return 'Omega-3 fatty acid';
+  // diabetes
+  if(inG('secretagogue')||inN('sulfonylurea','meglitinide','glipizide','glyburide','glimepiride','repaglinide','nateglinide')) return 'Insulin secretagogue (sulfonylurea / meglitinide)';
+  if(inG('channel opener')||inN('diazoxide')) return 'K-ATP channel opener (diazoxide)';
+  if(inG('biguanide')||inN('metformin')) return 'Biguanide (metformin)';
+  if(inG('ppar')||inN('thiazolidinedione','pioglitazone','rosiglitazone')) return 'Thiazolidinedione (PPAR-γ)';
+  // DPP-4 before GLP-1: a GLP-1 drug's text says "resists DPP-4", and a DPP-4 drug's text says "GLP-1 & GIP" — match on NAME to disambiguate
+  if(inN('dpp-4','gliptin','sitagliptin','linagliptin','saxagliptin')) return 'DPP-4 inhibitor';
+  if(inN('glp-1','semaglutide','liraglutide','tirzepatide','exenatide')||inG('glp-1 receptor agonist','dual gip')) return 'GLP-1 / incretin agonist';
+  if(inG('sglt2')||inN('gliflozin')) return 'SGLT2 inhibitor';
+  if(inG('glucosidase')||inN('acarbose','miglitol')) return 'α-glucosidase inhibitor';
+  if(n==='glucagon'||inG('glucagon receptor')) return 'Glucagon';
+  if(inG('nitrosourea')||inN('streptozocin')) return 'β-cell cytotoxin (streptozocin)';
+  if(inN('insulin','lispro','aspart','glulisine','nph','glargine','detemir','degludec','rapid-acting','short-acting','intermediate-acting','long-acting')||inG('insulin receptor')) return 'Insulin / insulin analog';
+  // weight loss
+  if(inG('lipase')||inN('orlistat')) return 'Lipase inhibitor (orlistat)';
+  if(inG('sympathomimetic')||inN('phentermine','topiramate','naltrexone','bupropion')) return 'Central weight-loss agent';
+  // thyroid
+  if(inG('tpo','thyroid peroxidase')||inN('methimazole','propylthiouracil')) return 'Antithyroid (TPO inhibitor)';
+  if(inG('β-emitter')||inN('radioactive iodine','i-131')) return 'Radioactive iodine (I-131)';
+  if(inG('wolff-chaikoff')||inN('iodide','lugol','sski')) return 'Iodide (Wolff-Chaikoff)';
+  if(inN('perchlorate')||inG('symporter','nis inhibitor','nis (')) return 'NIS inhibitor (perchlorate)';
+  if(inN('levothyroxine','liothyronine','liotrix')||inG('synthetic t4','thyroid hormone replacement')) return 'Thyroid hormone (T4 / T3)';
+  // bone & calcium
+  if(inG('calcimimetic')||inN('cinacalcet')) return 'Calcimimetic (cinacalcet)';
+  if(inG('pyrophosphate')||inN('bisphosphonate','alendronate','zoledronic','pamidronate')) return 'Bisphosphonate';
+  if(inN('calcitonin')) return 'Calcitonin';
+  if(inN('teriparatide')||inG('pth 1-34')) return 'PTH analog (teriparatide)';
+  if(inG('vitamin d')||inN('calcitriol')) return 'Vitamin D (calcitriol)';
+  if(inN('calcium gluconate','iv calcium')) return 'Calcium repletion';
+  if(inN('phosphate binder','sevelamer')) return 'Phosphate binder';
+  if(inN('normal saline')) return 'Volume expansion (saline)';
+  // adrenergic
+  if(inG('α-block','α1')||inN('tamsulosin','phenoxybenzamine','α1-blocker','α1-blockers')) return 'α-adrenergic blocker';
+  if(inG('β-adrenergic antagonist')||inN('β-blocker','propranolol')) return 'β-adrenergic blocker';
+  // miscellaneous single mechanisms
+  if(inG('tyrosine kinase inhibitor','bcr-abl')||inN('imatinib')) return 'Tyrosine kinase inhibitor';
+  if(inG('tyrosine hydroxylase')||inN('metyrosine')) return 'Tyrosine hydroxylase inhibitor';
+  if(inN('levodopa')) return 'Dopamine precursor (levodopa / carbidopa)';
+  if(inG('bh4')||inN('tetrahydrobiopterin','sapropterin')) return 'BH4 cofactor (sapropterin)';
+  if(inG('11β-hsd2')||inN('licorice')) return '11β-HSD2 inhibitor (licorice)';
+  return 'Other / miscellaneous';
+}
+
+// ---------- MOA family -> Sketchy Pharmacology video (approximate) ----------
+const SKETCHY = {
+  'Insulin / insulin analog':'Insulin',
+  'Insulin secretagogue (sulfonylurea / meglitinide)':'Sulfonylureas & Meglitinides',
+  'Biguanide (metformin)':'Metformin',
+  'Thiazolidinedione (PPAR-γ)':'Thiazolidinediones (TZDs)',
+  'GLP-1 / incretin agonist':'GLP-1 Agonists & DPP-4 Inhibitors',
+  'DPP-4 inhibitor':'GLP-1 Agonists & DPP-4 Inhibitors',
+  'SGLT2 inhibitor':'SGLT2 Inhibitors',
+  'α-glucosidase inhibitor':'α-Glucosidase Inhibitors',
+  'Glucagon':'Glucagon',
+  'Antithyroid (TPO inhibitor)':'Thyroid: PTU & Methimazole',
+  'Thyroid hormone (T4 / T3)':'Thyroid Hormone (Levothyroxine)',
+  'Iodide (Wolff-Chaikoff)':'Thyroid: Iodide & Antithyroid',
+  'Radioactive iodine (I-131)':'Thyroid: Radioactive Iodine',
+  'Glucocorticoid':'Corticosteroids / Glucocorticoids',
+  'Mineralocorticoid (fludrocortisone)':'Corticosteroids / Mineralocorticoids',
+  'Mineralocorticoid receptor antagonist':'Aldosterone Antagonists (Spironolactone)',
+  'GnRH agonist':'GnRH Analogs (Leuprolide)',
+  'GnRH antagonist':'GnRH Analogs (Leuprolide)',
+  'Androgen (testosterone) agonist':'Androgens & Anabolic Steroids',
+  'Androgen receptor antagonist':'Antiandrogens (Flutamide)',
+  '5α-reductase inhibitor':'Antiandrogens (Finasteride / Dutasteride)',
+  'Aromatase inhibitor':'Aromatase Inhibitors',
+  'PDE5 inhibitor':'PDE5 Inhibitors (Sildenafil)',
+  'Dopamine agonist':'Dopamine Agonists (Bromocriptine / Cabergoline)',
+  'Somatostatin analog':'Somatostatin Analogs (Octreotide)',
+  'GH / IGF-1 axis':'Growth Hormone & Analogs',
+  'Vasopressin / ADH analog':'ADH: Desmopressin',
+  'Vasopressin V2 antagonist (vaptan)':'ADH Antagonists (Vaptans)',
+  'ADH antagonist (demeclocycline)':'ADH Antagonists',
+  'Oxytocin':'Oxytocin & Uterotonics',
+  'COX inhibitor (NSAID)':'NSAIDs',
+  'Leukotriene modifier':'Leukotriene Antagonists (Montelukast)',
+  'Prostaglandin analog':'Prostaglandin Analogs (Misoprostol / Alprostadil)',
+  'Bisphosphonate':'Osteoporosis Drugs (Bisphosphonates)',
+  'Calcitonin':'Osteoporosis / Calcium Drugs',
+  'PTH analog (teriparatide)':'Osteoporosis Drugs (Teriparatide)',
+  'Calcimimetic (cinacalcet)':'Calcium: Cinacalcet',
+  'Vitamin D (calcitriol)':'Osteoporosis / Calcium Drugs',
+  'α-adrenergic blocker':'Alpha Blockers',
+  'β-adrenergic blocker':'Beta Blockers',
+  'Tyrosine kinase inhibitor':'Tyrosine Kinase Inhibitors (Imatinib)',
+  'Central weight-loss agent':'Weight-Loss Drugs',
+  'Lipase inhibitor (orlistat)':'Weight-Loss Drugs (Orlistat)',
+  'Dopamine precursor (levodopa / carbidopa)':'Parkinson: Levodopa / Carbidopa'
+};
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}${grp.tag?" · "+grp.tag:""}</span></span></td>`;
+  tbody.appendChild(secRow);
+  grp.rows.forEach(r=>{
+    total++;
+    const moa=moaOf(r); r._moa=moa;
+    const sk=SKETCHY[moa]; r._sk=sk||'';
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    tr.dataset.cond='|'+(r.cond||[]).join('|')+'|';
+    tr.dataset.moa=moa;
+    tr.dataset.sk=sk?'1':'0';
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e+' '+moa+' '+(sk||'')).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    const badge = sk?`<span class="sk-badge" title="Covered on Sketchy Pharm — ${sk}">▶ Sketchy</span>`:'';
+    tr.innerHTML=`<td class="name">${r.n}${badge}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td>
+      <td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// section picker
+const optAll=document.createElement('option');
+optAll.value='all';optAll.textContent='All lectures';
+secpickEl.appendChild(optAll);
+DATA.forEach((grp,gi)=>{
+  const o=document.createElement('option');
+  o.value=gi;
+  o.textContent=`${grp.sec}  (${grp.rows.length})`;
+  secpickEl.appendChild(o);
+});
+
+// condition picker — built from the union of every row's cond[] tags
+const condSet=new Set();
+DATA.forEach(grp=>grp.rows.forEach(r=>(r.cond||[]).forEach(c=>{ if(!c.startsWith('—')) condSet.add(c); })));
+const condList=[...condSet].sort((a,b)=>a.localeCompare(b));
+const condOptAll=document.createElement('option');
+condOptAll.value='all';condOptAll.textContent='Any condition treated';
+condpickEl.appendChild(condOptAll);
+condList.forEach(c=>{
+  const o=document.createElement('option');
+  o.value=c;o.textContent=c;
+  condpickEl.appendChild(o);
+});
+
+// MOA picker — built from the canonical mechanism family of every row
+const moaSet=new Set();
+DATA.forEach(grp=>grp.rows.forEach(r=>moaSet.add(r._moa)));
+const moaList=[...moaSet].sort((a,b)=>a.localeCompare(b));
+const moaOptAll=document.createElement('option');
+moaOptAll.value='all';moaOptAll.textContent='Any mechanism (MOA)';
+moapickEl.appendChild(moaOptAll);
+moaList.forEach(m=>{
+  const cnt=DATA.reduce((s,grp)=>s+grp.rows.filter(r=>r._moa===m).length,0);
+  const o=document.createElement('option');
+  o.value=m;o.textContent=`${m}  (${cnt})`;
+  moapickEl.appendChild(o);
+});
+
+let activeSec='all';
+let activeCond='all';
+let activeMoa='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const condOk = activeCond==='all' || tr.dataset.cond.includes('|'+activeCond+'|');
+    const moaOk = activeMoa==='all' || tr.dataset.moa===activeMoa;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && condOk && moaOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  const filtered = q||activeSec!=='all'||activeCond!=='all'||activeMoa!=='all';
+  countEl.innerHTML = filtered ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> drugs`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+secpickEl.addEventListener('change',()=>{ activeSec=secpickEl.value; apply(); });
+condpickEl.addEventListener('change',()=>{ activeCond=condpickEl.value; apply(); });
+moapickEl.addEventListener('change',()=>{ activeMoa=moapickEl.value; apply(); });
+qEl.addEventListener('input',apply);
+apply();
+
+// ---------- treatment ladders view ----------
+const laddergrid=document.getElementById('laddergrid');
+const ladderCount=document.getElementById('ladderCount');
+const lqEl=document.getElementById('lq');
+const TIER_LABEL={1:'First-line',2:'Second-line',3:'Third-line',x:'Situational'};
+const TIER_CLASS={1:'t1',2:'t2',3:'t3',x:'tx'};
+
+LADDERS.sort((a,b)=>a.cond.localeCompare(b.cond));
+LADDERS.forEach(l=>{
+  const card=document.createElement('div');
+  card.className='laddercard';
+  card.dataset.txt=(l.cond+' '+l.rungs.map(r=>r.drug+' '+r.note).join(' ')).replace(/<[^>]+>/g,'').toLowerCase();
+  const rungsHtml=l.rungs.map(r=>`
+    <div class="rung ${TIER_CLASS[r.tier]}">
+      <div class="tier">${TIER_LABEL[r.tier]}</div>
+      <div class="rc"><b>${r.drug}</b><span class="note">${r.note}</span></div>
+    </div>`).join('');
+  card.innerHTML=`<h3>${l.cond}</h3>${rungsHtml}`;
+  laddergrid.appendChild(card);
+});
+ladderCount.textContent=`${LADDERS.length} conditions`;
+
+function applyLadders(){
+  const q=lqEl.value.trim().toLowerCase();
+  let visible=0;
+  document.querySelectorAll('.laddercard').forEach(c=>{
+    const show=!q||c.dataset.txt.includes(q);
+    c.classList.toggle('hide',!show);
+    if(show)visible++;
+  });
+  document.getElementById('ladder-noresults')?.remove();
+  if(visible===0){
+    const nr=document.createElement('div');
+    nr.id='ladder-noresults';
+    nr.className='ladder-noresults';
+    nr.style.display='block';
+    nr.textContent='No condition matches that search.';
+    laddergrid.after(nr);
+  }
+}
+lqEl.addEventListener('input',applyLadders);
+
+// ---------- Sketchy Pharm view ----------
+// Group the deck's drugs by the Sketchy video that covers them (dedup by drug name).
+const sketchygrid=document.getElementById('sketchygrid');
+const sketchyCount=document.getElementById('sketchyCount');
+const skUncovered=document.getElementById('skUncovered');
+const skqEl=document.getElementById('skq');
+
+const skGroups={};              // video -> Set of drug names
+const uncoveredFams={};         // family -> Set of drug names (not on Sketchy)
+DATA.forEach(grp=>grp.rows.forEach(r=>{
+  const vid=r._sk;
+  if(vid){ (skGroups[vid]=skGroups[vid]||new Set()).add(r.n); }
+  else { (uncoveredFams[r._moa]=uncoveredFams[r._moa]||new Set()).add(r.n); }
+}));
+const skVideos=Object.keys(skGroups).sort((a,b)=>a.localeCompare(b));
+let skDrugTotal=0; skVideos.forEach(v=>skDrugTotal+=skGroups[v].size);
+sketchyCount.innerHTML=`<b>${skVideos.length}</b> Sketchy videos cover <b>${skDrugTotal}</b> of your drugs.`;
+
+skVideos.forEach(v=>{
+  const drugs=[...skGroups[v]].sort((a,b)=>a.localeCompare(b));
+  const card=document.createElement('div');
+  card.className='laddercard skcard';
+  card.dataset.txt=(v+' '+drugs.join(' ')).toLowerCase();
+  card.innerHTML=`<h3>▶ ${v}</h3><p class="vidmeta">${drugs.length} drug${drugs.length>1?'s':''} in your deck</p>
+    <div class="druglist">${drugs.map(d=>`<span class="skdrug">${d}</span>`).join('')}</div>`;
+  sketchygrid.appendChild(card);
+});
+
+// transparency: what ISN'T a standalone Sketchy topic
+const uncoveredDrugs=new Set();
+Object.values(uncoveredFams).forEach(set=>set.forEach(d=>uncoveredDrugs.add(d)));
+if(uncoveredDrugs.size){
+  const list=[...uncoveredDrugs].sort((a,b)=>a.localeCompare(b));
+  skUncovered.innerHTML=`<h3>Not a standalone Sketchy Pharm topic</h3>
+    <p>These are in your lectures but don't map to a dedicated Sketchy Pharmacology video (they're often background biochem/physiology, replacement/repletion agents, or multi-drug regimens). Learn them from your tables/notes instead.</p>
+    <div class="druglist">${list.map(d=>`<span class="skdrug">${d}</span>`).join('')}</div>`;
+}
+
+function applySketchy(){
+  const q=skqEl.value.trim().toLowerCase();
+  let visible=0;
+  document.querySelectorAll('#sketchygrid .skcard').forEach(c=>{
+    const show=!q||c.dataset.txt.includes(q);
+    c.classList.toggle('hide',!show);
+    if(show)visible++;
+  });
+  skUncovered.style.display = q?'none':'';
+}
+skqEl.addEventListener('input',applySketchy);
+
+// view switcher: Drug Table <-> Treatment Ladders <-> Sketchy
+const viewtabsEl=document.getElementById('viewtabs');
+const tableViewEl=document.getElementById('tableView');
+const laddersViewEl=document.getElementById('laddersView');
+const sketchyViewEl=document.getElementById('sketchyView');
+const stickytopEl=document.getElementById('stickytop');
+viewtabsEl.addEventListener('click',e=>{
+  const btn=e.target.closest('.vtab'); if(!btn)return;
+  const view=btn.dataset.view;
+  document.querySelectorAll('.vtab').forEach(b=>b.classList.toggle('active',b===btn));
+  tableViewEl.style.display  = view==='table'?'':'none';
+  stickytopEl.style.display  = view==='table'?'':'none';
+  laddersViewEl.style.display= view==='ladders'?'':'none';
+  sketchyViewEl.style.display= view==='sketchy'?'':'none';
+  window.scrollTo(0,0);
+  if(view==='table') syncSoon();
+});
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + section/condition pickers). Measured live so fullscreen,
+// resize, font load, and view-switch changes can never leave a gap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
+  PAGES.forEach(function(p){
+    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+    if(p[0].toLowerCase()===here) a.className='sk-here';
+    nav.appendChild(a);
+  });
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>
