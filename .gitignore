@@ -20,3 +20,6 @@ Thyroid, Parathyroid, Adrenal/
 summaries/
 *.apkg
 *.pdf
+
+# Exception: office-hour recording linked from the biochem table
+!slides/enre_biochem_office_hour.pdf
