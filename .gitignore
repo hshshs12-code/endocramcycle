@@ -21,5 +21,7 @@ summaries/
 *.apkg
 *.pdf
 
-# Exception: office-hour recording linked from the biochem table
+# Exception: lecture PDFs linked from the tables / Final Cram jump-buttons
 !slides/*.pdf
+# ...but never the macOS AppleDouble junk the exception would otherwise re-include
+slides/._*
