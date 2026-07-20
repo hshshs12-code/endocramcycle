@@ -141,7 +141,25 @@ render();
 <div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
 <script id="sitekit-js">
 (function(){
-  var PAGES=[['index.html','Home'],['master_table.html','Master'],['pathology_table.html','Pathology'],['physio_table.html','Physiology'],['drugs_table.html','Drugs'],['biochem_table.html','Biochem'],['embryo_anatomy_table.html','Embryo / Anatomy'],['pattern_recognition.html','Patterns'],['lecture_recall.html','Lecture Recall'],['physio_quiz.html','Physio Quiz'],['endocrine_path_quiz.html','Endo Path Quiz'],['male_path_quiz.html','Male Path Quiz'],['review_planner.html','Planner'],['gi_path_table.html','GI Path']];
+  var PAGES=[
+    ['index.html','Home'],
+    ['master_table.html','Master'],
+    ['pathology_table.html','Pathology'],
+    ['physio_table.html','Physiology'],
+    ['drugs_table.html','Drugs'],
+    ['biochem_table.html','Biochem'],
+    ['embryo_anatomy_table.html','Embryo / Anatomy'],
+    ['pattern_recognition.html','Patterns'],
+    ['lecture_recall.html','Lecture Recall'],
+    ['physio_quiz.html','Physio Quiz'],
+    ['endocrine_path_quiz.html','Endo Path Quiz'],
+    ['male_path_quiz.html','Male Path Quiz'],
+    ['physio_ext1_quiz.html','Repro Physio Q'],
+    ['physio_ext2_quiz.html','Physio Bank 1'],
+    ['physio_ext3_quiz.html','Physio Bank 2'],
+    ['review_planner.html','Planner'],
+    ['gi_path_table.html','GI Path']
+  ];
   var here=(location.pathname.split('/').pop()||'index.html').toLowerCase(); if(here==='')here='index.html';
   var nav=document.createElement('nav'); nav.className='sitenav';
   var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
