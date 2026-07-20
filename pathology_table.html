@@ -137,6 +137,9 @@
 
   tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
   tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row.jump td{animation:jumpflash 2.6s ease-out}
+  tbody tr.row.jump td.name{box-shadow:inset 3px 0 0 var(--exam-strong)}
+  @keyframes jumpflash{0%,32%{background:#fbe9c8}100%{background:transparent}}
   tbody tr.row:hover td.exam{background:#fbe2e1}
 
   td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
@@ -565,6 +568,9 @@ const DATA = [
 ];
 
 const tbody=document.getElementById('tbody');
+const _usedIds={};
+function slugify(s){ return (s||'').replace(/<[^>]+>/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+function uniqueSlug(n){ let base=slugify(n)||'row'; let id=base,i=2; while(_usedIds[id]){ id=base+'-'+i; i++; } _usedIds[id]=1; return id; }
 const secpickEl=document.getElementById('secpick');
 const qEl=document.getElementById('q');
 const countEl=document.getElementById('count');
@@ -582,6 +588,7 @@ DATA.forEach((grp,gi)=>{
     const tr=document.createElement('tr');
     tr.className='row';
     tr.dataset.sec=gi;
+    tr.id=uniqueSlug(r.n);
     const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
     tr.dataset.txt=txt;
     const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
@@ -635,6 +642,25 @@ secpickEl.addEventListener('change',()=>{
 });
 qEl.addEventListener('input',apply);
 apply();
+
+// Jump to a specific pathology row via #hash (e.g. from the Pathology Checklist)
+function jumpToHash(){
+  const h=decodeURIComponent((location.hash||'').slice(1));
+  if(!h) return;
+  const el=document.getElementById(h);
+  if(!el) return;
+  // clear any active filter so the target is guaranteed visible
+  if(activeSec!=='all'||qEl.value){ activeSec='all'; secpickEl.value='all'; qEl.value=''; apply(); }
+  setTimeout(()=>{
+    const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thead-top'))||90)+18;
+    const y=el.getBoundingClientRect().top+window.pageYOffset-off;
+    window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+    el.scrollIntoView&&el.scrollIntoView({block:'center'});  // fallback for any scroll container
+    el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump');
+  },60);
+}
+jumpToHash();
+window.addEventListener('hashchange',jumpToHash);
 
 // Anchor the sticky column header flush beneath the full sticky block
 // (search + section picker). Measured live so fullscreen, resize, font
