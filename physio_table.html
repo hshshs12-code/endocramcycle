@@ -222,6 +222,96 @@
   <p class="sub">Every pathology from your GINU deck on one scannable grid. Teal = genetics & inheritance. Highlighted = the classic buzzword/finding. The crimson rail on the right is the single fact most likely to anchor a question stem.</p>
 </header>
 
+<style>
+/* ===== Signaling-pathway mnemonics + rapid drill ===== */
+.mnmwrap{max-width:1200px;margin:18px auto 0;padding:0 clamp(14px,3vw,28px)}
+.mnm{background:var(--surface);border:1px solid var(--line-strong);border-radius:16px;padding:20px 22px 22px}
+.mnm-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(20px,3vw,25px);margin:0 0 6px;letter-spacing:-.01em}
+.mnm-head p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55;max-width:84ch}
+.mnm-head p b{color:var(--ink)}
+.mnm-head .kbd{font-family:'IBM Plex Mono',monospace;background:#faf8f2;border:1px solid var(--line-strong);border-radius:5px;padding:0 5px;font-size:11px;color:var(--ink)}
+.mnm-tabs{display:flex;gap:6px;margin:15px 0 16px;flex-wrap:wrap}
+.mnm-tab{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--muted);
+  background:#faf8f2;border:1px solid var(--line-strong);border-radius:9px;padding:7px 13px;cursor:pointer;transition:.12s}
+.mnm-tab:hover{border-color:var(--ink);color:var(--ink)}
+.mnm-tab.on{background:var(--exam-strong);color:#fff;border-color:var(--exam-strong)}
+.mnm-pane[hidden]{display:none}
+/* drill */
+.mnm-drilltop{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.mnm-mcount{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+.mnm-mcount b{color:var(--exam-strong);font-size:14px}
+.mnm-bar{flex:1;min-width:110px;height:8px;background:#eee6d6;border-radius:99px;overflow:hidden}
+.mnm-bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1f7a4d,#39a06a);transition:width .3s}
+.mnm-streak{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+.mnm-streak b{color:var(--ink)}
+.mnm-reset{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);background:none;border:1px solid var(--line-strong);border-radius:7px;padding:4px 9px;cursor:pointer}
+.mnm-reset:hover{color:var(--exam-strong);border-color:var(--exam-strong)}
+.mnm-prompt{font-size:15px;color:var(--muted);margin:16px 0 15px;text-align:center}
+.mnm-prompt b{display:block;font-family:'Fraunces',serif;font-weight:600;font-size:clamp(22px,4vw,28px);color:var(--exam-strong);margin-top:4px}
+.mnm-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:640px){.mnm-opts{grid-template-columns:repeat(2,1fr)}}
+.mnm-opt{text-align:left;font:inherit;background:#fff;border:1px solid var(--line-strong);border-radius:10px;
+  padding:10px 12px;cursor:pointer;transition:.1s;display:flex;flex-direction:column;gap:2px}
+.mnm-opt:hover:not(:disabled){border-color:var(--ink)}
+.mnm-opt .k{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)}
+.mnm-opt .nm{font-weight:600;font-size:14px}
+.mnm-opt .hint{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)}
+.mnm-opt.correct{background:#e4f4ea;border-color:#1f7a4d}
+.mnm-opt.wrong{background:#fdecec;border-color:#b0243a}
+.mnm-opt:disabled{cursor:default}
+.mnm-fb{min-height:20px;margin-top:14px;font-size:13.5px;text-align:center}
+.mnm-fb.ok{color:#14663c}
+.mnm-fb.no{color:#8f1b2c}
+.mnm-fb .mn{font-family:'IBM Plex Mono',monospace;background:var(--buzz-hl);color:var(--buzz-ink);padding:1px 7px;border-radius:5px}
+.mnm-next{margin-top:12px;text-align:center;min-height:20px}
+.mnm-next button{font:inherit;font-weight:600;font-size:13px;background:var(--exam-strong);color:#fff;border:none;border-radius:9px;padding:8px 20px;cursor:pointer}
+.mnm-allmastered{text-align:center;color:#14663c;font-size:12.5px;font-family:'IBM Plex Mono',monospace;margin-top:8px}
+/* flashcards */
+.mnm-fc{max-width:540px;margin:2px auto 0}
+.mnm-fcard{border:1px solid var(--line-strong);border-radius:14px;background:#faf8f2;padding:30px 24px;min-height:200px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;gap:9px}
+.mnm-fcard .fq{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mnm-fcard .fmne{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,5vw,34px);color:var(--exam-strong);letter-spacing:-.01em}
+.mnm-fcard .fpath{font-family:'Fraunces',serif;font-weight:600;font-size:23px}
+.mnm-fcard .fsub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.mnm-fcard .fdec{font-size:13.5px;line-height:1.7}
+.mnm-fcard .hintflip{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px;opacity:.8}
+.mnm-fcnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px}
+.mnm-fcnav button{font-family:'IBM Plex Mono',monospace;font-size:13px;background:#faf8f2;border:1px solid var(--line-strong);border-radius:8px;padding:6px 14px;cursor:pointer}
+.mnm-fcnav button:hover{border-color:var(--ink)}
+.mnm-fcnav .pos{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+/* reference */
+.mnm-ref{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:780px){.mnm-ref{grid-template-columns:1fr}}
+.mnm-rc{border:1px solid var(--line-strong);border-radius:12px;overflow:hidden;background:#fff}
+.mnm-rc-h{background:#faf8f2;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.mnm-rc-h .p{font-family:'Fraunces',serif;font-weight:600;font-size:18px}
+.mnm-rc-h .s{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);text-align:right;line-height:1.35}
+.mnm-rc-b{padding:11px 14px}
+.mnm-rc-b .mne{display:inline-block;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;background:var(--buzz-hl);color:var(--buzz-ink);padding:3px 9px;border-radius:6px;margin-bottom:10px}
+.mnm-rc-b .dec{font-size:13px;line-height:1.75}
+.mnm-rc-b .dec b{color:var(--exam-strong)}
+.mnm-rc-b .nt{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.5;border-top:1px dashed var(--line-strong);padding-top:8px}
+.mnm-reflegend{grid-column:1/-1;font-size:11.5px;color:var(--muted);background:#faf8f2;border:1px solid var(--line);border-radius:10px;padding:9px 13px;line-height:1.5}
+</style>
+
+<div class="wrap mnmwrap">
+  <section class="mnm" id="mnmSection">
+    <div class="mnm-head">
+      <h2>Signaling pathways — mnemonics &amp; rapid drill</h2>
+      <p>Every endocrine signalling molecule sorted by its second-messenger pathway, with the classic First&nbsp;Aid mnemonics — then drill them until they're automatic. In the drill: <b class="kbd">1</b>–<b class="kbd">6</b> to answer, <b class="kbd">Space</b>/<b class="kbd">→</b> for next. Progress saves on this device.</p>
+    </div>
+    <div class="mnm-tabs">
+      <button class="mnm-tab on" type="button" data-tab="drill">⚡ Drill</button>
+      <button class="mnm-tab" type="button" data-tab="cards">🃏 Flashcards</button>
+      <button class="mnm-tab" type="button" data-tab="ref">📖 Reference</button>
+    </div>
+    <div class="mnm-pane" data-pane="drill" id="mnmDrill"></div>
+    <div class="mnm-pane" data-pane="cards" id="mnmCards" hidden></div>
+    <div class="mnm-pane" data-pane="ref" id="mnmRef" hidden></div>
+  </section>
+</div>
+
 <div class="stickytop">
 <div class="controls">
   <div class="controls-inner">
@@ -627,6 +717,172 @@ setTimeout(syncHeaderOffset, 300);
 if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
 if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
 </script>
+<script>
+/* ===== Signaling-pathway mnemonic drill (self-contained) ===== */
+(function(){
+  var PATHS = [
+    {key:'cAMP', name:'cAMP',          hint:'↑cAMP · Gs',      sub:'Gs → adenylyl cyclase → ↑cAMP → PKA',
+      mne:'FLAT ChAMP · CHuGG',
+      dec:'<b>FLAT</b> — FSH · LH · ACTH · TSH &nbsp;•&nbsp; <b>ChAMP</b> — CRH · hCG · ADH&nbsp;(V₂) · MSH · PTH &nbsp;•&nbsp; <b>CHuGG</b> — Calcitonin · Histamine&nbsp;(H₂) · Glucagon · GHRH',
+      nt:'Most anterior-pituitary hormones + Gs GPCRs. Here ADH = V₂ (kidney, water) and histamine = H₂ (gastric acid).'},
+    {key:'cGMP', name:'cGMP',          hint:'↑cGMP',           sub:'guanylyl cyclase → ↑cGMP → PKG',
+      mne:'BAD GraMPa',
+      dec:'<b>B</b>NP · <b>A</b>NP · EDRF (nitric oxide)',
+      nt:'“Think vasodilation & diuresis.” Natriuretic peptides (membrane guanylyl cyclase) + NO (soluble guanylyl cyclase).'},
+    {key:'IP3', name:'IP₃',            hint:'IP₃/Ca²⁺ · Gq',   sub:'Gq → PLC → IP₃ + DAG → ↑Ca²⁺ / PKC',
+      mne:'GOAT HAG',
+      dec:'<b>G</b>nRH · <b>O</b>xytocin · <b>A</b>DH&nbsp;(V₁) · <b>T</b>RH · <b>H</b>istamine&nbsp;(H₁) · <b>A</b>ngiotensin II · <b>G</b>astrin',
+      nt:'Here ADH = V₁ (vascular smooth muscle, vasoconstriction) and histamine = H₁ — the mirror of the cAMP subtypes.'},
+    {key:'IC', name:'Intracellular',   hint:'nuclear receptor', sub:'lipophilic → cytoplasmic/nuclear receptor → gene transcription',
+      mne:'PET CAT on TV',
+      dec:'<b>P</b>rogesterone · <b>E</b>strogen · <b>T</b>estosterone · <b>C</b>ortisol · <b>A</b>ldosterone · <b>T</b>₃/T₄ · <b>V</b>itamin D',
+      nt:'The ONLY non-membrane receptors: steroids + thyroid hormone + vitamin D. Slow onset (hours–days), long duration.'},
+    {key:'RTK', name:'RTK',            hint:'tyrosine kinase',  sub:'receptor tyrosine kinase → MAP-kinase / PI3K-Akt',
+      mne:'Get Found In the MAP',
+      dec:'IGF-1 · FGF · PDGF · EGF · Insulin',
+      nt:'Growth factors + insulin. “MAP-kinase pathway” (Get Found In the MAP).'},
+    {key:'JAK', name:'JAK/STAT',       hint:'JAK/STAT',         sub:'nonreceptor tyrosine kinase → JAK → STAT → gene transcription',
+      mne:'GET a JAKed PIG',
+      dec:'<b>GET</b> — G-CSF · Erythropoietin · Thrombopoietin &nbsp;•&nbsp; <b>PIG</b> — Prolactin · Immunomodulators (IL-2, IL-6, IFN) · GH',
+      nt:'“Think acidophils & cytokines.” GH & prolactin (acidophil cells) plus the cytokine/hematopoietic ligands.'}
+  ];
+  var PMAP={}; PATHS.forEach(function(p){PMAP[p.key]=p;});
+  var HORM = [
+    ['FSH','cAMP'],['LH','cAMP'],['ACTH','cAMP'],['TSH','cAMP'],['CRH','cAMP'],['hCG','cAMP'],
+    ['ADH (V₂ receptor)','cAMP'],['MSH','cAMP'],['PTH','cAMP'],['Calcitonin','cAMP'],['Histamine (H₂ receptor)','cAMP'],['Glucagon','cAMP'],['GHRH','cAMP'],
+    ['BNP','cGMP'],['ANP','cGMP'],['EDRF / nitric oxide','cGMP'],
+    ['GnRH','IP3'],['Oxytocin','IP3'],['ADH (V₁ receptor)','IP3'],['TRH','IP3'],['Histamine (H₁ receptor)','IP3'],['Angiotensin II','IP3'],['Gastrin','IP3'],
+    ['Progesterone','IC'],['Estrogen','IC'],['Testosterone','IC'],['Cortisol','IC'],['Aldosterone','IC'],['T₃ / T₄','IC'],['Vitamin D','IC'],
+    ['IGF-1','RTK'],['FGF','RTK'],['PDGF','RTK'],['EGF','RTK'],['Insulin','RTK'],
+    ['G-CSF','JAK'],['Erythropoietin','JAK'],['Thrombopoietin','JAK'],['Prolactin','JAK'],['Immunomodulators (IL-2/6, IFN)','JAK'],['GH','JAK']
+  ];
+  var KEY='physioMnemDrill_v1';
+  function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}} }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){} }
+  var state=load(), streak=0, cur=null, answered=false, timer=null, curTab='drill';
+
+  var drillEl=document.getElementById('mnmDrill'),
+      cardsEl=document.getElementById('mnmCards'),
+      refEl=document.getElementById('mnmRef');
+
+  /* ---- reference pane ---- */
+  refEl.innerHTML='<div class="mnm-ref">'+PATHS.map(function(p){
+    return '<div class="mnm-rc"><div class="mnm-rc-h"><span class="p">'+p.name+'</span><span class="s">'+p.sub+'</span></div>'+
+      '<div class="mnm-rc-b"><span class="mne">'+p.mne+'</span><div class="dec">'+p.dec+'</div><div class="nt">'+p.nt+'</div></div></div>';
+  }).join('')+
+  '<div class="mnm-reflegend"><b>Watch the receptor subtypes:</b> ADH and histamine each appear in <i>two</i> buckets — '+
+  'ADH acts via <b>V₂ → cAMP</b> (kidney) but <b>V₁ → IP₃</b> (vessels); histamine via <b>H₂ → cAMP</b> (stomach) but <b>H₁ → IP₃</b>. '+
+  'The drill labels each with its receptor so the answer is unambiguous.</div></div>';
+
+  /* ---- drill pane ---- */
+  drillEl.innerHTML=
+    '<div class="mnm-drilltop">'+
+      '<span class="mnm-mcount">mastered <b id="mnmMC">0</b>/'+HORM.length+'</span>'+
+      '<span class="mnm-bar"><i id="mnmBar"></i></span>'+
+      '<span class="mnm-streak">🔥 streak <b id="mnmStreak">0</b></span>'+
+      '<button class="mnm-reset" id="mnmReset" type="button">reset</button>'+
+    '</div>'+
+    '<div class="mnm-prompt">Which signalling pathway does <b id="mnmHorm">—</b> use?</div>'+
+    '<div class="mnm-opts" id="mnmOpts"></div>'+
+    '<div class="mnm-fb" id="mnmFB"></div>'+
+    '<div class="mnm-next" id="mnmNext"></div>'+
+    '<div class="mnm-allmastered" id="mnmAll" style="display:none">🎉 All 41 mastered — now in free-review mode. Keep going or hit reset.</div>';
+
+  var hormB=document.getElementById('mnmHorm'), optsWrap=document.getElementById('mnmOpts'),
+      fb=document.getElementById('mnmFB'), nextWrap=document.getElementById('mnmNext'),
+      mc=document.getElementById('mnmMC'), bar=document.getElementById('mnmBar'),
+      streakEl=document.getElementById('mnmStreak'), allEl=document.getElementById('mnmAll');
+
+  var optBtns=PATHS.map(function(p,i){
+    var b=document.createElement('button');
+    b.className='mnm-opt'; b.type='button'; b.dataset.k=p.key;
+    b.innerHTML='<span class="k">'+(i+1)+'</span><span class="nm">'+p.name+'</span><span class="hint">'+p.hint+'</span>';
+    b.addEventListener('click',function(){ if(!answered) answer(p.key,b); });
+    optsWrap.appendChild(b); return b;
+  });
+
+  function masteredCount(){ return HORM.filter(function(h){return (state[h[0]]||0)>=2;}).length; }
+  function updateStats(){
+    var m=masteredCount();
+    mc.textContent=m; bar.style.width=(m/HORM.length*100)+'%'; streakEl.textContent=streak;
+    allEl.style.display = (m===HORM.length)?'block':'none';
+  }
+  function pick(){
+    var pool=HORM.filter(function(h){return (state[h[0]]||0)<2;});
+    if(!pool.length) pool=HORM.slice();
+    var p; do{ p=pool[Math.floor(Math.random()*pool.length)]; } while(pool.length>1 && p===cur);
+    cur=p;
+  }
+  function renderQ(){
+    answered=false; fb.className='mnm-fb'; fb.textContent=''; nextWrap.innerHTML='';
+    hormB.textContent=cur[0];
+    optBtns.forEach(function(b){ b.disabled=false; b.classList.remove('correct','wrong'); });
+  }
+  function goNext(){ if(timer){clearTimeout(timer);timer=null;} pick(); renderQ(); }
+  function answer(k,btn){
+    if(answered) return; answered=true;
+    var correct=(k===cur[1]), P=PMAP[cur[1]];
+    optBtns.forEach(function(b){ b.disabled=true; if(b.dataset.k===cur[1]) b.classList.add('correct'); });
+    if(correct){
+      state[cur[0]]=Math.min(2,(state[cur[0]]||0)+1); streak++;
+      fb.className='mnm-fb ok'; fb.innerHTML='✓ '+P.name+' &nbsp; <span class="mn">'+P.mne+'</span>';
+      save(); updateStats(); timer=setTimeout(goNext,850);
+    } else {
+      if(btn) btn.classList.add('wrong'); state[cur[0]]=0; streak=0;
+      fb.className='mnm-fb no'; fb.innerHTML='✗ '+cur[0]+' → <b>'+P.name+'</b> &nbsp; <span class="mn">'+P.mne+'</span>';
+      save(); updateStats();
+      var nb=document.createElement('button'); nb.type='button'; nb.textContent='Next →';
+      nb.addEventListener('click',goNext); nextWrap.appendChild(nb);
+    }
+  }
+  document.getElementById('mnmReset').addEventListener('click',function(){
+    state={}; streak=0; save(); updateStats(); goNext();
+  });
+
+  /* ---- flashcards pane ---- */
+  cardsEl.innerHTML='<div class="mnm-fc"><div class="mnm-fcard" id="mnmFcard"></div>'+
+    '<div class="mnm-fcnav"><button type="button" id="mnmPrev">← prev</button><span class="pos" id="mnmPos"></span><button type="button" id="mnmNextC">next →</button></div></div>';
+  var fcard=document.getElementById('mnmFcard'), pos=document.getElementById('mnmPos'), fi=0, flipped=false;
+  function renderFC(){
+    var p=PATHS[fi];
+    fcard.innerHTML = flipped
+      ? '<div class="fq">Pathway & hormones</div><div class="fpath">'+p.name+'</div><div class="fsub">'+p.sub+'</div><div class="fdec">'+p.dec+'</div>'
+      : '<div class="fq">Mnemonic — which pathway & hormones?</div><div class="fmne">'+p.mne+'</div><div class="hintflip">click / Space to flip</div>';
+    pos.textContent=(fi+1)+' / '+PATHS.length;
+  }
+  fcard.addEventListener('click',function(){ flipped=!flipped; renderFC(); });
+  document.getElementById('mnmPrev').addEventListener('click',function(){ fi=(fi-1+PATHS.length)%PATHS.length; flipped=false; renderFC(); });
+  document.getElementById('mnmNextC').addEventListener('click',function(){ fi=(fi+1)%PATHS.length; flipped=false; renderFC(); });
+
+  /* ---- tabs ---- */
+  var tabs=[].slice.call(document.querySelectorAll('.mnm-tab'));
+  var panes={drill:drillEl,cards:cardsEl,ref:refEl};
+  tabs.forEach(function(t){ t.addEventListener('click',function(){
+    curTab=t.dataset.tab;
+    tabs.forEach(function(x){ x.classList.toggle('on',x===t); });
+    for(var k in panes){ panes[k].hidden=(k!==curTab); }
+  }); });
+
+  /* ---- keyboard ---- */
+  document.addEventListener('keydown',function(e){
+    var ae=document.activeElement;
+    if(ae && /^(INPUT|SELECT|TEXTAREA)$/.test(ae.tagName)) return;
+    if(curTab==='drill'){
+      if(e.key>='1'&&e.key<='6'){ var b=optBtns[+e.key-1]; if(b&&!answered){ e.preventDefault(); answer(b.dataset.k,b); } }
+      else if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){
+        if(answered){ e.preventDefault(); goNext(); }
+      }
+    } else if(curTab==='cards'){
+      if(e.key===' '||e.key==='Enter'){ e.preventDefault(); flipped=!flipped; renderFC(); }
+      else if(e.key==='ArrowRight'){ e.preventDefault(); fi=(fi+1)%PATHS.length; flipped=false; renderFC(); }
+      else if(e.key==='ArrowLeft'){ e.preventDefault(); fi=(fi-1+PATHS.length)%PATHS.length; flipped=false; renderFC(); }
+    }
+  });
+
+  updateStats(); pick(); renderQ(); renderFC();
+})();
+</script>
+
 <!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
 <style id="sitekit">
   :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
