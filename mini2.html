@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ENRE Study Hub — Mini 1 &amp; Mini 2</title>
+<title>Mini 2 — Female Reproductive (in progress)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -13,91 +13,138 @@
     --line:#e3ded3; --line-strong:#cdc6b6;
     --gene-bg:#d8efe9; --gene-ink:#0c5247;
     --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --soon-bg:#fdf1cd; --soon-ink:#8a6d00;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);
     font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  header{max-width:1100px;margin:0 auto;padding:48px 28px 0}
+  header{max-width:1200px;margin:0 auto;padding:38px 28px 0}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
     text-transform:uppercase;color:var(--muted);margin:0 0 8px}
-  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,5.5vw,54px);line-height:1.02;margin:0;letter-spacing:-.015em}
+  .eyebrow a{color:inherit;text-decoration:none}
+  .eyebrow a:hover{color:var(--exam-strong)}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,5vw,50px);line-height:1.02;margin:0;letter-spacing:-.01em}
   h1 em{font-style:italic;color:var(--exam-strong)}
-  .sub{color:var(--muted);max-width:64ch;margin:15px 0 0;font-size:15px}
-  .wrap{max-width:1100px;margin:32px auto 60px;padding:0 28px}
-  .minigrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+  .sub{color:var(--muted);max-width:66ch;margin:14px 0 0;font-size:15px}
+  .wrap{max-width:1200px;margin:26px auto 60px;padding:0 28px}
 
-  a.mini{display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative;overflow:hidden;
-    background:var(--surface);border:1px solid var(--line-strong);border-radius:18px;padding:26px 26px 22px;transition:.15s}
-  a.mini:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.07)}
-  a.mini .num{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-  a.mini h2{font-family:'Fraunces',serif;font-weight:600;font-size:27px;margin:7px 0 3px;letter-spacing:-.01em}
-  a.mini .unit{font-size:14px;color:var(--exam-strong);font-weight:600;margin-bottom:9px}
-  a.mini p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
-  a.mini .meta{margin-top:16px;padding-top:13px;border-top:1px solid var(--line);
-    display:flex;align-items:center;justify-content:space-between;gap:10px}
-  a.mini .status{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
-    padding:4px 9px;border-radius:6px}
-  a.mini .status.ready{color:var(--gene-ink);background:var(--gene-bg)}
-  a.mini .status.soon{color:#8a6d00;background:#fdf1cd}
-  a.mini .go{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink)}
-  a.mini.soon{background:#fbfaf6;border-style:dashed}
+  .banner{background:var(--surface);border:1px solid var(--line-strong);border-left:4px solid #c9a227;
+    border-radius:12px;padding:17px 20px;margin-bottom:28px}
+  .banner h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 6px}
+  .banner p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+  .banner p + p{margin-top:8px}
+  .banner b{color:var(--ink)}
 
-  .stripe{position:absolute;inset:0 auto 0 0;width:4px}
-  .stripe.one{background:var(--exam-strong)}
-  .stripe.two{background:#c9a227}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:30px 0 12px;border-bottom:1px solid var(--line-strong);padding-bottom:8px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
 
-  .note{margin-top:26px;font-size:12.5px;color:var(--muted);background:var(--surface);
-    border:1px solid var(--line);border-radius:12px;padding:13px 16px;line-height:1.6}
-  .note b{color:var(--ink)}
-  footer{max-width:1100px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  .slot{display:flex;flex-direction:column;background:#fbfaf6;border:1px dashed var(--line-strong);
+    border-radius:14px;padding:18px 19px;opacity:.92}
+  .slot .ic{font-size:22px;margin-bottom:10px;filter:grayscale(.35);opacity:.75}
+  .slot h3{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 5px;letter-spacing:-.005em;color:#4c5157}
+  .slot p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+  .slot .tag{margin-top:11px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--soon-ink);background:var(--soon-bg);align-self:flex-start;
+    padding:3px 8px;border-radius:6px}
+
+  footer{max-width:1200px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
   footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
 </style>
 </head>
 <body>
 
 <header>
-  <p class="eyebrow">Endocrine &amp; Reproductive · Study Hub</p>
-  <h1>Two exams.<br>One <em>study hub</em>.</h1>
-  <p class="sub">Pick the mini you're studying for. Each has its own reference tables, quiz banks and review tools — the top bar switches between them from any page.</p>
+  <p class="eyebrow"><a href="index.html">Study Hub</a> &middot; Mini 2 &middot; Female Reproductive</p>
+  <h1>Mini 2 is <em>ready to fill</em>.</h1>
+  <p class="sub">The section exists and is wired into the site — the top bar, the home page and every Mini 1 page can already reach it. Nothing has been built yet, so the tiles below are placeholders showing the slots waiting for content.</p>
 </header>
 
 <div class="wrap">
-  <div class="minigrid">
 
-    <a class="mini" href="mini1.html">
-      <span class="stripe one"></span>
-      <span class="num">Mini 1</span>
-      <h2>Endocrine &amp; Repro</h2>
-      <div class="unit">Endocrine, male repro, pelvic anatomy</div>
-      <p>The complete set — pathology, physiology, pharmacology, biochemistry, embryology &amp; anatomy, pattern-recognition grids, seven quiz banks, a 2-day review planner and the Final Cram exam-intel page.</p>
-      <div class="meta">
-        <span class="status ready">complete · 20 pages</span>
-        <span class="go">Open Mini 1 →</span>
-      </div>
-    </a>
-
-    <a class="mini soon" href="mini2.html">
-      <span class="stripe two"></span>
-      <span class="num">Mini 2</span>
-      <h2>Female Repro</h2>
-      <div class="unit">Female reproductive system</div>
-      <p>The next unit — menstrual cycle, pregnancy, and female reproductive pathology, physiology and pharmacology. The section is set up and ready; pages get added as the material comes in.</p>
-      <div class="meta">
-        <span class="status soon">being built</span>
-        <span class="go">Open Mini 2 →</span>
-      </div>
-    </a>
-
+  <div class="banner">
+    <h2>Placeholder section — female reproductive</h2>
+    <p>This is scaffolding, not content. Every tile below is an <b>empty slot</b>, not a working page, so nothing here is a real study resource yet.</p>
+    <p>To fill it: send the lecture material (slides, notes, quiz banks, a score-report breakdown) and say which slot it belongs to. Pages get built the same way as Mini 1 — searchable tables, per-option quiz feedback, figures, and lecture jump-links — and the exact section names can be renamed once the unit's real topic list is known.</p>
   </div>
 
-  <div class="note">
-    <b>How this is organised:</b> everything that existed before is now filed under <b>Mini 1</b> — no links or bookmarks changed, the pages just live behind the Mini 1 hub. <b>Mini 2</b> is a fresh, empty section for the female-repro material. The dark bar at the top of every page shows which mini you're in and lets you jump straight to the other one.
+  <p class="kicker">Core reference tables &mdash; planned</p>
+  <div class="grid">
+    <div class="slot">
+      <div class="ic">&#128300;</div>
+      <h3>Pathology</h3>
+      <p>Female reproductive pathology &mdash; ovary, uterus, cervix, vagina, breast: buzzwords, differentiators and the fact most likely to anchor a stem.</p>
+      <span class="tag">empty slot</span>
+    </div>
+    <div class="slot">
+      <div class="ic">&#128260;</div>
+      <h3>Physiology</h3>
+      <p>Menstrual cycle, the HPO axis, pregnancy and lactation physiology &mdash; feedback loops and hormone curves.</p>
+      <span class="tag">empty slot</span>
+    </div>
+    <div class="slot">
+      <div class="ic">&#128138;</div>
+      <h3>Drugs &amp; Pharmacology</h3>
+      <p>Contraceptives, fertility agents, SERMs, tocolytics and uterotonics &mdash; by mechanism, filterable.</p>
+      <span class="tag">empty slot</span>
+    </div>
+    <div class="slot">
+      <div class="ic">&#129703;</div>
+      <h3>Embryology &amp; Anatomy</h3>
+      <p>Female pelvic anatomy, histology and development &mdash; with figures and imaging.</p>
+      <span class="tag">empty slot</span>
+    </div>
+    <div class="slot">
+      <div class="ic">&#128269;</div>
+      <h3>Pattern Recognition</h3>
+      <p>Reverse-lookup grids: &ldquo;if you see <em>this</em> &rarr; think <em>that</em>&rdquo;, plus the classic lab patterns side by side.</p>
+      <span class="tag">empty slot</span>
+    </div>
   </div>
+
+  <p class="kicker">Active recall &amp; self-test &mdash; planned</p>
+  <div class="grid">
+    <div class="slot">
+      <div class="ic">&#9889;</div>
+      <h3>Lecture Recall</h3>
+      <p>Every lecture in a minute &mdash; the gist, what it covered and the easy-to-miss &ldquo;don't forget&rdquo; list.</p>
+      <span class="tag">empty slot</span>
+    </div>
+    <div class="slot">
+      <div class="ic">&#128221;</div>
+      <h3>Practice Quizzes</h3>
+      <p>MCQ banks with per-option feedback, hints and verbatim + lecture explanations &mdash; same engine as Mini 1.</p>
+      <span class="tag">empty slot</span>
+    </div>
+    <div class="slot">
+      <div class="ic">&#9989;</div>
+      <h3>Mastery Checklist</h3>
+      <p>Every topic in one tickable list, grouped by system, with progress saved automatically.</p>
+      <span class="tag">empty slot</span>
+    </div>
+  </div>
+
+  <p class="kicker">Exam tools &mdash; planned</p>
+  <div class="grid">
+    <div class="slot">
+      <div class="ic">&#128197;</div>
+      <h3>Review Planner</h3>
+      <p>Triage-first, clock-time study schedule across your remaining days, weighted by yield and confidence.</p>
+      <span class="tag">empty slot</span>
+    </div>
+    <div class="slot">
+      <div class="ic">&#128274;</div>
+      <h3>Final Cram</h3>
+      <p>Score-report reconstruction with practice clones and lecture jump-links &mdash; password protected, like Mini 1's.</p>
+      <span class="tag">empty slot</span>
+    </div>
+  </div>
+
 </div>
 
 <footer>
   <hr>
-  Self-contained study reference set compiled from lecture material. Runs entirely in the browser — no accounts, no tracking.
+  Mini 2 &mdash; placeholder section. No study content here yet; the tiles above are empty slots, not pages. Use the bar at the top to switch back to Mini 1.
 </footer>
 
 <!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->

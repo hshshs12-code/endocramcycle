@@ -1138,6 +1138,11 @@ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
     padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
   .sitenav a:hover{background:#31363c;color:#fff}
   .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
   @media(max-width:600px){ .sitenav .sk-brand{display:none} }
 
   /* image lightbox */
@@ -1178,36 +1183,56 @@ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
 <script id="sitekit-js">
 (function(){
   // ---------- shared top nav ----------
-  var PAGES=[
-    ['index.html','Home'],
-    ['master_table.html','Master'],
-    ['pathology_table.html','Pathology'],
-    ['pathology_checklist.html','Path Checklist'],
-    ['physio_table.html','Physiology'],
-    ['drugs_table.html','Drugs'],
-    ['biochem_table.html','Biochem'],
-    ['embryo_anatomy_table.html','Embryo / Anatomy'],
-    ['pattern_recognition.html','Patterns'],
-    ['lecture_recall.html','Lecture Recall'],
-    ['physio_quiz.html','Physio Quiz'],
-    ['endocrine_path_quiz.html','Endo Path Quiz'],
-    ['male_path_quiz.html','Male Path Quiz'],
-    ['physio_ext1_quiz.html','Repro Physio Q'],
-    ['physio_ext2_quiz.html','Physio Bank 1'],
-    ['physio_ext3_quiz.html','Physio Bank 2'],
-    ['pharmq_quiz.html','Pharm Quiz'],
-    ['review_planner.html','Planner'],
-    ['gi_path_table.html','GI Path']
+  var MINIS=[
+    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+      ['mini1.html','Overview'],
+      ['master_table.html','Master'],
+      ['pathology_table.html','Pathology'],
+      ['pathology_checklist.html','Path Checklist'],
+      ['physio_table.html','Physiology'],
+      ['drugs_table.html','Drugs'],
+      ['biochem_table.html','Biochem'],
+      ['embryo_anatomy_table.html','Embryo / Anatomy'],
+      ['pattern_recognition.html','Patterns'],
+      ['lecture_recall.html','Lecture Recall'],
+      ['physio_quiz.html','Physio Quiz'],
+      ['endocrine_path_quiz.html','Endo Path Quiz'],
+      ['male_path_quiz.html','Male Path Quiz'],
+      ['physio_ext1_quiz.html','Repro Physio Q'],
+      ['physio_ext2_quiz.html','Physio Bank 1'],
+      ['physio_ext3_quiz.html','Physio Bank 2'],
+      ['pharmq_quiz.html','Pharm Quiz'],
+      ['review_planner.html','Planner'],
+      ['gi_path_table.html','GI Path']
+    ]},
+    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+      ['mini2.html','Overview']
+    ]}
   ];
   var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
   if(here==='') here='index.html';
-  var nav=document.createElement('nav'); nav.className='sitenav';
-  var brand=document.createElement('span'); brand.className='sk-brand'; brand.textContent='ENRE'; nav.appendChild(brand);
-  PAGES.forEach(function(p){
-    var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
-    if(p[0].toLowerCase()===here) a.className='sk-here';
-    nav.appendChild(a);
+  var mini=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
   });
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
+  var sw=document.createElement('span'); sw.className='sk-minis';
+  MINIS.forEach(function(m){
+    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+    sw.appendChild(a);
+  });
+  nav.appendChild(sw);
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
   document.body.insertBefore(nav, document.body.firstChild);
 
   // ---------- image lightbox (enlarge instead of opening a new tab) ----------

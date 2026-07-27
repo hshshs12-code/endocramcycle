@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ENRE Study Hub — Mini 1 &amp; Mini 2</title>
+<title>Mini 1 — Endocrine &amp; Reproductive Reference</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -12,92 +12,182 @@
     --paper:#f4f2ec; --surface:#ffffff; --ink:#1c2024; --muted:#6c7077;
     --line:#e3ded3; --line-strong:#cdc6b6;
     --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
     --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);
     font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  header{max-width:1100px;margin:0 auto;padding:48px 28px 0}
+  header{max-width:1200px;margin:0 auto;padding:38px 28px 0}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
     text-transform:uppercase;color:var(--muted);margin:0 0 8px}
-  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,5.5vw,54px);line-height:1.02;margin:0;letter-spacing:-.015em}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,5vw,50px);line-height:1.02;margin:0;letter-spacing:-.01em}
   h1 em{font-style:italic;color:var(--exam-strong)}
-  .sub{color:var(--muted);max-width:64ch;margin:15px 0 0;font-size:15px}
-  .wrap{max-width:1100px;margin:32px auto 60px;padding:0 28px}
-  .minigrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
-
-  a.mini{display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative;overflow:hidden;
-    background:var(--surface);border:1px solid var(--line-strong);border-radius:18px;padding:26px 26px 22px;transition:.15s}
-  a.mini:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.07)}
-  a.mini .num{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-  a.mini h2{font-family:'Fraunces',serif;font-weight:600;font-size:27px;margin:7px 0 3px;letter-spacing:-.01em}
-  a.mini .unit{font-size:14px;color:var(--exam-strong);font-weight:600;margin-bottom:9px}
-  a.mini p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
-  a.mini .meta{margin-top:16px;padding-top:13px;border-top:1px solid var(--line);
-    display:flex;align-items:center;justify-content:space-between;gap:10px}
-  a.mini .status{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
-    padding:4px 9px;border-radius:6px}
-  a.mini .status.ready{color:var(--gene-ink);background:var(--gene-bg)}
-  a.mini .status.soon{color:#8a6d00;background:#fdf1cd}
-  a.mini .go{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink)}
-  a.mini.soon{background:#fbfaf6;border-style:dashed}
-
-  .stripe{position:absolute;inset:0 auto 0 0;width:4px}
-  .stripe.one{background:var(--exam-strong)}
-  .stripe.two{background:#c9a227}
-
-  .note{margin-top:26px;font-size:12.5px;color:var(--muted);background:var(--surface);
-    border:1px solid var(--line);border-radius:12px;padding:13px 16px;line-height:1.6}
-  .note b{color:var(--ink)}
-  footer{max-width:1100px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  .sub{color:var(--muted);max-width:66ch;margin:14px 0 0;font-size:15px}
+  .wrap{max-width:1200px;margin:26px auto 60px;padding:0 28px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+  a.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;padding:18px 19px;
+    transition:.14s;position:relative;overflow:hidden}
+  a.card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  a.card .ic{font-size:22px;margin-bottom:10px}
+  a.card h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 5px;letter-spacing:-.005em}
+  a.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+  a.card .tag{margin-top:11px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--gene-ink);background:var(--gene-bg);align-self:flex-start;
+    padding:3px 8px;border-radius:6px}
+  a.card.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:18px}
+  a.card.wide .ic{margin:0}
+  a.card.wide .body{flex:1}
+  a.card.plan .tag{color:var(--exam-strong);background:var(--exam-bg)}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:30px 0 12px;border-bottom:1px solid var(--line-strong);padding-bottom:8px}
+  footer{max-width:1200px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
   footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
 </style>
 </head>
 <body>
 
 <header>
-  <p class="eyebrow">Endocrine &amp; Reproductive · Study Hub</p>
-  <h1>Two exams.<br>One <em>study hub</em>.</h1>
-  <p class="sub">Pick the mini you're studying for. Each has its own reference tables, quiz banks and review tools — the top bar switches between them from any page.</p>
+  <p class="eyebrow"><a href="index.html" style="color:inherit;text-decoration:none">Study Hub</a> · Mini 1 · Endocrine &amp; Reproductive</p>
+  <h1>Everything for <em>Mini 1</em>,<br>one click away.</h1>
+  <p class="sub">Your complete Endo/Repro reference set — physiology, pathology, pharmacology, biochemistry, embryology &amp; anatomy, plus an interactive review planner. Every table is searchable, filterable, mobile-friendly, and cross-linked. Tap any figure to enlarge it.</p>
 </header>
 
 <div class="wrap">
-  <div class="minigrid">
 
-    <a class="mini" href="mini1.html">
-      <span class="stripe one"></span>
-      <span class="num">Mini 1</span>
-      <h2>Endocrine &amp; Repro</h2>
-      <div class="unit">Endocrine, male repro, pelvic anatomy</div>
-      <p>The complete set — pathology, physiology, pharmacology, biochemistry, embryology &amp; anatomy, pattern-recognition grids, seven quiz banks, a 2-day review planner and the Final Cram exam-intel page.</p>
-      <div class="meta">
-        <span class="status ready">complete · 20 pages</span>
-        <span class="go">Open Mini 1 →</span>
-      </div>
+  <a class="card plan wide" href="review_planner.html">
+    <div class="ic">🗓️</div>
+    <div class="body">
+      <h2>2-Day Review Planner &amp; Tracker</h2>
+      <p>Start here before an exam. Builds a triage-first, clock-time study schedule across your remaining days, weighted by exam yield and how shaky you feel — with active-recall blocks, spaced-repetition touch-ups, a live progress tracker and a final sweep of your weak spots.</p>
+      <span class="tag">interactive · start here</span>
+    </div>
+  </a>
+
+  <a class="card plan wide" href="final_cram.html">
+    <div class="ic">🔒</div>
+    <div class="body">
+      <h2>Final Cram <span style="font-weight:400;color:var(--muted)">— password protected</span></h2>
+      <p>Every question from a prior semester's exam, rebuilt from the score-report breakdown: what each item tested, what it likely asked, 240 fresh practice clones, the verbatim report line, and a jump straight to the source lecture slide. Encrypted — you'll be asked for the password.</p>
+      <span class="tag">exam intel · 48 concepts · 240 Qs</span>
+    </div>
+  </a>
+
+  <p class="kicker">Core reference tables</p>
+  <div class="grid">
+    <a class="card" href="master_table.html">
+      <div class="ic">📚</div>
+      <h2>Master Reference</h2>
+      <p>The whole unit's high-yield facts on one combined grid — the fastest single-page review.</p>
+      <span class="tag">everything</span>
     </a>
-
-    <a class="mini soon" href="mini2.html">
-      <span class="stripe two"></span>
-      <span class="num">Mini 2</span>
-      <h2>Female Repro</h2>
-      <div class="unit">Female reproductive system</div>
-      <p>The next unit — menstrual cycle, pregnancy, and female reproductive pathology, physiology and pharmacology. The section is set up and ready; pages get added as the material comes in.</p>
-      <div class="meta">
-        <span class="status soon">being built</span>
-        <span class="go">Open Mini 2 →</span>
-      </div>
+    <a class="card" href="pathology_table.html">
+      <div class="ic">🔬</div>
+      <h2>Pathology</h2>
+      <p>Every disorder: buzzwords, differentiators, and the fact most likely to anchor a question stem.</p>
+      <span class="tag">disease</span>
     </a>
-
+    <a class="card" href="pathology_checklist.html">
+      <div class="ic">✅</div>
+      <h2>Pathology Checklist</h2>
+      <p>All 162 pathologies from the table, grouped by organ system — tick each off as you master it; progress saves automatically.</p>
+      <span class="tag">mastery tracker</span>
+    </a>
+    <a class="card" href="physio_table.html">
+      <div class="ic">🔄</div>
+      <h2>Physiology</h2>
+      <p>Axes, feedback loops, and a signalling-molecule master table grouped by receptor pathway.</p>
+      <span class="tag">normal function</span>
+    </a>
+    <a class="card" href="drugs_table.html">
+      <div class="ic">💊</div>
+      <h2>Drugs &amp; Pharmacology</h2>
+      <p>Every drug by mechanism, filterable by MOA, with treatment ladders and a Sketchy watch-list.</p>
+      <span class="tag">pharm</span>
+    </a>
+    <a class="card" href="biochem_table.html">
+      <div class="ic">🧬</div>
+      <h2>Biochemistry</h2>
+      <p>Hormone synthesis, enzyme pathways, and the biochem the exam actually tests.</p>
+      <span class="tag">pathways</span>
+    </a>
+    <a class="card" href="embryo_anatomy_table.html">
+      <div class="ic">🩻</div>
+      <h2>Embryology &amp; Anatomy</h2>
+      <p>Development, pelvic anatomy &amp; imaging — plus an interactive Cram Trainer tab for active recall.</p>
+      <span class="tag">structure · cram</span>
+    </a>
+    <a class="card" href="pattern_recognition.html">
+      <div class="ic">🔎</div>
+      <h2>Pattern Recognition</h2>
+      <p>Reverse-lookup grids: "if you see <em>this</em> → think <em>that</em>," and the classic lab patterns side by side.</p>
+      <span class="tag">reverse lookup</span>
+    </a>
+    <a class="card" href="gi_path_table.html">
+      <div class="ic">🩺</div>
+      <h2>GI Pathology</h2>
+      <p>Companion high-yield GI pathology grid, in the same format.</p>
+      <span class="tag">bonus unit</span>
+    </a>
   </div>
 
-  <div class="note">
-    <b>How this is organised:</b> everything that existed before is now filed under <b>Mini 1</b> — no links or bookmarks changed, the pages just live behind the Mini 1 hub. <b>Mini 2</b> is a fresh, empty section for the female-repro material. The dark bar at the top of every page shows which mini you're in and lets you jump straight to the other one.
+  <p class="kicker">Active recall &amp; self-test</p>
+  <div class="grid">
+    <a class="card" href="lecture_recall.html">
+      <div class="ic">⚡</div>
+      <h2>Lecture Recall</h2>
+      <p>Every lecture in a minute — the gist, what it covered, and the easy-to-miss "don't forget" list.</p>
+      <span class="tag">fast review</span>
+    </a>
+    <a class="card" href="physio_quiz.html">
+      <div class="ic">📝</div>
+      <h2>Physio Practice Quiz</h2>
+      <p>42 endocrine physiology MCQs — per-option feedback, clickable hints, and both the source &amp; lecture explanations.</p>
+      <span class="tag">self-test</span>
+    </a>
+    <a class="card" href="endocrine_path_quiz.html">
+      <div class="ic">🔬</div>
+      <h2>Endocrine Path Quiz</h2>
+      <p>89 Robbins-style pathology MCQs (pituitary → adrenal) with micrographs, per-option feedback, hints &amp; verbatim + lecture explanations.</p>
+      <span class="tag">self-test · images</span>
+    </a>
+    <a class="card" href="male_path_quiz.html">
+      <div class="ic">♂</div>
+      <h2>Male Path Quiz</h2>
+      <p>50 Robbins-style male GU pathology MCQs (penis, testis, prostate) with figures; off-module bladder items flagged.</p>
+      <span class="tag">self-test · images</span>
+    </a>
+    <a class="card" href="physio_ext1_quiz.html">
+      <div class="ic">🔄</div>
+      <h2>Repro Physio Q</h2>
+      <p>34 BRS reproductive &amp; endocrine physiology MCQs — menstrual-cycle graph, per-option feedback, hints &amp; verbatim + physio-lecture explanations.</p>
+      <span class="tag">self-test · images</span>
+    </a>
+    <a class="card" href="physio_ext2_quiz.html">
+      <div class="ic">🧠</div>
+      <h2>Physio Bank 1</h2>
+      <p>153 Guyton-review physiology MCQs with verbatim + physio-lecture explanations; off-module items flagged.</p>
+      <span class="tag">self-test</span>
+    </a>
+    <a class="card" href="physio_ext3_quiz.html">
+      <div class="ic">🧠</div>
+      <h2>Physio Bank 2</h2>
+      <p>153 more Guyton-review physiology MCQs — per-option feedback, clickable hints; off-module items flagged.</p>
+      <span class="tag">self-test</span>
+    </a>
+    <a class="card" href="pharmq_quiz.html">
+      <div class="ic">💊</div>
+      <h2>Endocrine Pharm Quiz</h2>
+      <p>209 BRS pharmacology MCQs across all endocrine drug classes (pituitary → diabetes) with difficulty ratings, matching sets, per-option feedback, hints, verbatim + drug-table explanations, and Sketchy Pharm sketches revealed on answer.</p>
+      <span class="tag">self-test · difficulty</span>
+    </a>
   </div>
 </div>
 
 <footer>
   <hr>
-  Self-contained study reference set compiled from lecture material. Runs entirely in the browser — no accounts, no tracking.
+  Self-contained study reference set compiled from lecture material. Runs entirely in the browser — no accounts, no tracking. Use the dark bar at the top to move between tools on any page.
 </footer>
 
 <!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
