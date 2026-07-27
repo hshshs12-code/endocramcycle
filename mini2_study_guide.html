@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENRE Mini 2 - Master Study Guide</title>
+<style>
+:root{--paper:#f4f2ec;--surface:#fff;--ink:#1c2024;--muted:#6c7077;--line:#e3ded3;--line-strong:#cdc6b6;
+--teal-bg:#d8efe9;--teal-ink:#0c5247;--buzz:#ffeaa7;--buzz-ink:#5c4400;
+--exam-bg:#fdeceb;--exam-ink:#9a1f2e;--exam-strong:#7a1422;--new:#0c5247;--new-bg:#d8efe9;
+--thead-top:0px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;
+font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+header.top{max-width:1180px;margin:0 auto;padding:34px 24px 0}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+color:var(--muted);margin:0 0 8px}
+h1{font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:clamp(27px,4.6vw,44px);
+line-height:1.05;margin:0;letter-spacing:-.01em}
+h1 em{font-style:italic;color:var(--exam-strong)}
+.sub{color:var(--muted);max-width:76ch;margin:13px 0 0;font-size:14.5px}
+.legend{max-width:1180px;margin:18px auto 0;padding:0 24px}
+.genbox{background:var(--surface);border:1px solid var(--line-strong);border-radius:12px;
+padding:12px 16px;margin-bottom:10px}
+.genlist{margin:6px 0 0;padding-left:18px}
+.genlist li{font-size:12.8px;line-height:1.6;margin:5px 0}
+.secheadline{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;
+text-transform:uppercase;color:var(--muted);margin:9px 0 0;padding-top:8px;border-top:1px solid var(--line)}
+.docttl{font-size:11px;color:var(--muted);margin:6px 0 0}
+.origheading{margin:0 0 5px;font-size:12.3px;color:#4a4f55}
+.legendbox{background:var(--surface);border:1px solid var(--line-strong);border-left:4px solid var(--new);
+border-radius:12px;padding:13px 16px;font-size:13px;line-height:1.65}
+.legendbox b{color:var(--ink)}
+.wrap{max-width:1180px;margin:20px auto 70px;padding:0 24px}
+.stickytop{position:sticky;top:0;z-index:50;background:var(--paper);
+border-bottom:1px solid var(--line-strong);padding:12px 0 10px}
+.controls{max-width:1180px;margin:0 auto;padding:0 24px}
+.searchrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.search{flex:1;min-width:230px;display:flex;align-items:center;gap:8px;background:var(--surface);
+border:1px solid var(--line-strong);border-radius:10px;padding:8px 12px}
+.search input{border:none;outline:none;background:none;font:inherit;font-size:14px;width:100%;color:var(--ink)}
+.count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+.count b{color:var(--exam-strong)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chipgrp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chiplbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+color:var(--muted);margin-right:2px}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--surface);
+border:1px solid var(--line-strong);border-radius:999px;padding:4px 11px;cursor:pointer;transition:.12s;color:var(--ink)}
+.chip:hover{border-color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.gap.on{background:var(--exam-strong);border-color:var(--exam-strong)}
+.chip.newonly.on{background:var(--new);border-color:var(--new)}
+.tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;margin:18px 0 8px}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+thead th{position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;text-align:left;
+font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+padding:10px 12px;white-space:nowrap}
+thead th:first-child{border-top-left-radius:14px}
+thead th:last-child{border-top-right-radius:14px}
+tbody td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td:first-child{border-bottom-left-radius:14px}
+tbody tr:last-child td:last-child{border-bottom-right-radius:14px}
+tbody tr:last-child td{border-bottom:none}
+.grp{margin-top:34px}
+.grphd{position:sticky;top:var(--thead-top);z-index:30;background:var(--paper);padding:10px 0 8px;
+border-bottom:1px solid var(--line-strong);display:flex;justify-content:space-between;
+align-items:center;gap:14px;flex-wrap:wrap}
+.grphd h2{font-family:Georgia,serif;font-weight:600;font-size:20px;margin:0;letter-spacing:-.005em}
+.prog{display:flex;align-items:center;gap:9px}
+.bar{width:150px;height:8px;background:#e9e2d3;border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1f7a4d,#39a06a);transition:width .25s}
+.pct{font-size:11.5px;color:var(--muted)}
+.grpdesc{font-size:13.5px;color:#4a4f55;margin:12px 0 4px;line-height:1.65;
+border-left:3px solid var(--new);background:var(--surface);padding:10px 14px;border-radius:0 10px 10px 0}
+.grpstat{font-size:11px;color:var(--muted);margin:0 0 14px}
+.lec{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;
+padding:15px 17px;margin:0 0 13px}
+.lechd{display:flex;gap:11px;align-items:flex-start}
+.lectitle{flex:1;min-width:0}
+.lec h3{font-family:Georgia,serif;font-weight:600;font-size:17.5px;margin:0 0 6px;letter-spacing:-.005em}
+.meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--teal-ink);background:var(--teal-bg);
+padding:2px 8px;border-radius:6px;white-space:nowrap}
+.tier{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600}
+.tA{background:#e4f4ea;color:#14663c}.tB{background:#e8eef7;color:#26456f}
+.tC{background:#fdf1cd;color:#8a6d00}.tD{background:#f0eeea;color:#6c7077}
+.cov{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)}
+.gapb{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;background:var(--exam-bg);
+color:var(--exam-strong);padding:2px 7px;border-radius:6px;font-weight:700}
+.chk{flex:0 0 auto;cursor:pointer;padding-top:3px}
+.chk input{position:absolute;opacity:0;width:0;height:0}
+.chk span{display:block;width:19px;height:19px;border:2px solid var(--line-strong);border-radius:5px;background:#fff;transition:.12s}
+.chk input:checked+span{background:#1f7a4d;border-color:#1f7a4d;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5'><path d='M4 12l5 5L20 6'/></svg>");
+background-size:14px;background-position:center;background-repeat:no-repeat}
+.lec.done{opacity:.62}
+.lec.done h3{text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.orig{margin:12px 0 0;background:#faf8f2;border:1px solid var(--line);border-radius:10px;padding:9px 13px}
+.orig.none{background:#fbfbfa}
+.origlbl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+color:var(--muted);margin-bottom:5px}
+.orig ul{margin:0;padding-left:18px}
+.orig li{font-size:13px;margin:3px 0;line-height:1.6}
+.nonep{margin:0;font-size:12.5px;color:var(--muted);font-style:italic}
+table.sti{margin-top:9px;font-size:12px}
+table.sti thead th{position:static;border-radius:0;font-size:9.5px}
+table.sti thead th:first-child{border-top-left-radius:8px}
+table.sti thead th:last-child{border-top-right-radius:8px}
+mark{background:var(--buzz);color:var(--buzz-ink);padding:1px 4px;border-radius:3px}
+.add{margin-top:9px;font-size:13.2px;line-height:1.65;border-left:3px solid var(--new);
+background:#fbfdfc;border-radius:0 9px 9px 0;padding:8px 13px}
+.add.which{border-left-color:#c9a227;background:#fffdf6}
+.add.covrail{border-left-color:var(--exam-strong);background:var(--exam-bg)}
+.add.steps{border-left-color:#26456f;background:#f7f9fd}
+.add ul,.add ol{margin:6px 0 0;padding-left:19px}
+.add li{margin:2px 0}
+.add .vid{font-weight:600}
+.nb{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.09em;
+background:var(--new-bg);color:var(--new);padding:2px 6px;border-radius:5px;font-weight:700;
+vertical-align:1px;margin-right:4px}
+.dim{color:var(--muted)}
+body.newonly .orig{display:none}
+body.newonly .lec>.lechd{opacity:.85}
+.nores{display:none;text-align:center;color:var(--muted);padding:34px;font-size:14px}
+footer{max-width:1180px;margin:0 auto 60px;padding:0 24px;color:var(--muted);font-size:12px}
+footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 13px}
+@media(max-width:760px){.bar{width:92px}.grphd{align-items:flex-start}}
+</style>
+<style id="sitekit">
+  .sitenav{position:relative;z-index:60}
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="eyebrow">ENRE Mini 2 &middot; Lecture to Resource Map</p>
+  <h1>Every lecture, every video,<br>and exactly what they <em>don't</em> cover.</h1>
+  <p class="sub">This document consolidates external study resources, slides, lecture notes, and specific advice from both Asher and Omar into a single unified guide for ENRE Mini 2.</p>
+  <p class="docttl mono">ENRE Mini 2 - Consolidated Study Guide</p>
+</header>
+
+<div class="legend">
+  <div class="genbox">
+    <div class="origlbl">General Notes &amp; Advice</div>
+    <ul class="genlist">
+      <li>Omar: "Salam everyone. I hope mini 1 went well for everyone inshallah. This half is really going to be a bit tricky but it's super straightforward. As a side note, I mostly used both bootcamp and boards for this mini (lowkey Boards was a bit superior), so if you want to watch both they will be there for you but it isn't necessary. For the workshops, I would recommend not only just watching the videos below, but I would lowkey skim through it just to make sure you are not missing anything. Ross is such a niche. A lot of the practice questions I used for this mini came from doing UWorld mostly. This does not mean that you can't use other practice questions available as well. These docs have and always been suggestions and guides for you all to do well and Inshallah all goes well for the rest of the module. Good Luck!"</li>
+      <li>General Rule (Omar): UNLESS SOMETHING IS WRITTEN UNDER IT, REFER TO THE SLIDES.</li>
+    </ul>
+    <p class="secheadline">Consolidated Topic-by-Topic Guide</p>
+  </div>
+  <div class="legendbox">
+    <b>Legend.</b> Lines carrying a teal <span class="nb">NEW</span> badge and a left accent rail were
+    generated for this edition. Everything else is original text from Asher and Omar, reproduced word
+    for word. Tiers: <b>A</b> direct coverage &middot; <b>B</b> partial (portion named) &middot;
+    <b>C</b> adjacent/background &middot; <b>D</b> no coverage, slides only.
+    <b>B&amp;B folder A</b> = Boards Endo:Repro Slides; <b>folder B</b> = Boards Repro Video Slides.
+  </div>
+</div>
+
+<div class="stickytop">
+  <div class="controls">
+    <div class="searchrow">
+      <div class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="q" type="search" placeholder="Search lectures, video titles, gap topics..." autocomplete="off">
+      </div>
+      <div class="count" id="count"></div>
+    </div>
+    <div class="chips">
+      <div class="chipgrp"><span class="chiplbl">Group</span>
+        <div class="chip" data-kind="group" data-val="1">1</div><div class="chip" data-kind="group" data-val="2">2</div><div class="chip" data-kind="group" data-val="3">3</div><div class="chip" data-kind="group" data-val="4">4</div><div class="chip" data-kind="group" data-val="5">5</div><div class="chip" data-kind="group" data-val="6">6</div><div class="chip" data-kind="group" data-val="7">7</div><div class="chip" data-kind="group" data-val="8">8</div>
+      </div>
+      <div class="chipgrp"><span class="chiplbl">Resource</span>
+        <div class="chip" data-kind="res" data-val="bootcamp">Bootcamp</div>
+        <div class="chip" data-kind="res" data-val="bnb">B&amp;B</div>
+        <div class="chip" data-kind="res" data-val="pathoma">Pathoma</div>
+        <div class="chip" data-kind="res" data-val="sketchy">Sketchy</div>
+        <div class="chip" data-kind="res" data-val="ninjanerd">Ninja Nerd</div>
+        <div class="chip" data-kind="res" data-val="slidesonly">Slides only</div>
+      </div>
+      <div class="chipgrp"><span class="chiplbl">Tier</span>
+        <div class="chip" data-kind="tier" data-val="A">A</div><div class="chip" data-kind="tier" data-val="B">B</div><div class="chip" data-kind="tier" data-val="C">C</div><div class="chip" data-kind="tier" data-val="D">D</div>
+      </div>
+      <div class="chipgrp">
+        <div class="chip gap" data-kind="gap">Gaps only</div>
+        <div class="chip newonly" data-kind="newonly">New additions only</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="tablecard">
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>#</th><th>Lecture</th><th>Grp</th><th>Best resource</th><th>Tier</th><th>Cov</th><th>Gap</th></tr></thead>
+        <tbody data-master><tr data-group="1" data-tier="A" data-gap="0"><td class="mono">1</td><td>Embryology: Development of the Placenta</td><td class="mono">1</td><td>BC Pregnancy and Menstruation - Placenta and Umbilical Cord</td><td><span class="tier tA">A</span></td><td class="mono">75%</td><td>-</td></tr><tr data-group="1" data-tier="A" data-gap="0"><td class="mono">2</td><td>Histology of the Female Reproductive System</td><td class="mono">1</td><td>BC Histology - Female Repro - Cortex and Germinal Epithelium</td><td><span class="tier tA">A</span></td><td class="mono">85%</td><td>-</td></tr><tr data-group="1" data-tier="C" data-gap="1"><td class="mono">3</td><td>Medical Imaging of the Reproductive System</td><td class="mono">1</td><td>BC Female Pathology - Ovarian Cysts</td><td><span class="tier tC">C</span></td><td class="mono">25%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="1" data-tier="B" data-gap="1"><td class="mono">4</td><td>Reproductive Systems (Gross Anatomy)</td><td class="mono">1</td><td>BC Fetal Development - Female Anatomy</td><td><span class="tier tB">B</span></td><td class="mono">55%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="2" data-tier="A" data-gap="0"><td class="mono">5</td><td>Female Reproductive Physiology (Notes)</td><td class="mono">2</td><td>BC Pregnancy and Menstruation - Menstrual Cycle</td><td><span class="tier tA">A</span></td><td class="mono">80%</td><td>-</td></tr><tr data-group="2" data-tier="A" data-gap="0"><td class="mono">6</td><td>Female Reproductive Physiology (Slides)</td><td class="mono">2</td><td>BC Pregnancy and Menstruation - Menstrual Cycle</td><td><span class="tier tA">A</span></td><td class="mono">80%</td><td>-</td></tr><tr data-group="3" data-tier="A" data-gap="0"><td class="mono">7</td><td>Disorders of Pregnancy</td><td class="mono">3</td><td>BC Pathologies of Pregnancy - Hypertension in Pregnancy</td><td><span class="tier tA">A</span></td><td class="mono">85%</td><td>-</td></tr><tr data-group="3" data-tier="B" data-gap="0"><td class="mono">8</td><td>Establishment of Pregnancy (Notes)</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Hormones of Pregnancy</td><td><span class="tier tB">B</span></td><td class="mono">65%</td><td>-</td></tr><tr data-group="3" data-tier="B" data-gap="0"><td class="mono">9</td><td>Establishment of Pregnancy (Slides)</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Hormones of Pregnancy</td><td><span class="tier tB">B</span></td><td class="mono">65%</td><td>-</td></tr><tr data-group="3" data-tier="C" data-gap="1"><td class="mono">10</td><td>Introduction to Obstetrics 1</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Pregnancy Physiology</td><td><span class="tier tC">C</span></td><td class="mono">20%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="3" data-tier="B" data-gap="0"><td class="mono">11</td><td>Introduction to Obstetrics 2</td><td class="mono">3</td><td>BC Pathologies of Pregnancy - Hypertension in Pregnancy</td><td><span class="tier tB">B</span></td><td class="mono">60%</td><td>-</td></tr><tr data-group="3" data-tier="B" data-gap="0"><td class="mono">12</td><td>Maternal Physiology (Notes)</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Pregnancy Physiology</td><td><span class="tier tB">B</span></td><td class="mono">60%</td><td>-</td></tr><tr data-group="3" data-tier="B" data-gap="0"><td class="mono">13</td><td>Maternal Physiology (Slides)</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Pregnancy Physiology</td><td><span class="tier tB">B</span></td><td class="mono">60%</td><td>-</td></tr><tr data-group="3" data-tier="C" data-gap="1"><td class="mono">14</td><td>Maternal Serum Screening</td><td class="mono">3</td><td>BC Fetal Development - Chromosomal Disorders</td><td><span class="tier tC">C</span></td><td class="mono">20%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="3" data-tier="D" data-gap="1"><td class="mono">15</td><td>Nutrition in Pregnancy, Lactation, and Childhood</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Pregnancy Physiology</td><td><span class="tier tD">D</span></td><td class="mono">5%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="3" data-tier="B" data-gap="1"><td class="mono">16</td><td>Parturition and Transition to Neonatal Life (Notes)</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Fetal Circulation</td><td><span class="tier tB">B</span></td><td class="mono">40%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="3" data-tier="B" data-gap="1"><td class="mono">17</td><td>Parturition and Transition to Neonatal Life (Slides)</td><td class="mono">3</td><td>BC Pregnancy and Menstruation - Fetal Circulation</td><td><span class="tier tB">B</span></td><td class="mono">40%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="4" data-tier="A" data-gap="0"><td class="mono">18</td><td>Breast Disorders</td><td class="mono">4</td><td>BC Female Pathology - Breast Cancer Overview</td><td><span class="tier tA">A</span></td><td class="mono">85%</td><td>-</td></tr><tr data-group="4" data-tier="A" data-gap="0"><td class="mono">19</td><td>Clinical Approach to Amenorrhea</td><td class="mono">4</td><td>BC Pregnancy and Menstruation - Menstrual Cycle Disorders</td><td><span class="tier tA">A</span></td><td class="mono">80%</td><td>-</td></tr><tr data-group="4" data-tier="C" data-gap="1"><td class="mono">20</td><td>Clinical Approach to Infertility</td><td class="mono">4</td><td>BC Female Pathology - Polycystic Ovarian Syndrome</td><td><span class="tier tC">C</span></td><td class="mono">30%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="4" data-tier="A" data-gap="0"><td class="mono">21</td><td>Diseases of the Vulva, Vagina and Cervix</td><td class="mono">4</td><td>BC Female Pathology - Vaginal Skin Pathology</td><td><span class="tier tA">A</span></td><td class="mono">85%</td><td>-</td></tr><tr data-group="4" data-tier="A" data-gap="0"><td class="mono">22</td><td>Disorders of the Uterus and PID</td><td class="mono">4</td><td>BC Female Pathology - Adenomyosis, Endometrial Hyperplasia, and Asherman Syndrome</td><td><span class="tier tA">A</span></td><td class="mono">80%</td><td>-</td></tr><tr data-group="4" data-tier="D" data-gap="1"><td class="mono">23</td><td>Genetic Counseling in Breast Cancer</td><td class="mono">4</td><td>BC Female Pathology - Breast Cancer Overview</td><td><span class="tier tD">D</span></td><td class="mono">15%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="4" data-tier="B" data-gap="1"><td class="mono">24</td><td>Introduction to Gynecology 1</td><td class="mono">4</td><td>BC Pathologies of Pregnancy - Ectopic Pregnancy</td><td><span class="tier tB">B</span></td><td class="mono">55%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="4" data-tier="B" data-gap="0"><td class="mono">25</td><td>Introduction to Gynecology 2 - Abnormal Uterine Bleeding</td><td class="mono">4</td><td>BC Pregnancy and Menstruation - Menstrual Cycle Disorders</td><td><span class="tier tB">B</span></td><td class="mono">60%</td><td>-</td></tr><tr data-group="4" data-tier="A" data-gap="0"><td class="mono">26</td><td>Ovarian Tumors</td><td class="mono">4</td><td>BC Female Pathology - Ovarian Cancer Overview</td><td><span class="tier tA">A</span></td><td class="mono">90%</td><td>-</td></tr><tr data-group="4" data-tier="A" data-gap="0"><td class="mono">27</td><td>PCOS and Non-Neoplastic Ovarian Cysts</td><td class="mono">4</td><td>BC Female Pathology - Polycystic Ovarian Syndrome</td><td><span class="tier tA">A</span></td><td class="mono">90%</td><td>-</td></tr><tr data-group="5" data-tier="B" data-gap="1"><td class="mono">28</td><td>Pharmacology of Gynecological and Obstetrical Conditions</td><td class="mono">5</td><td>BC Pharmacology - Tamsulosin, Minoxidil, Tocolytics</td><td><span class="tier tB">B</span></td><td class="mono">40%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="5" data-tier="B" data-gap="1"><td class="mono">29</td><td>Pharmacology of Reproductive System Neoplasms</td><td class="mono">5</td><td>BC Pharmacology - Selective Estrogen Receptor Modulators</td><td><span class="tier tB">B</span></td><td class="mono">45%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="5" data-tier="A" data-gap="0"><td class="mono">30</td><td>Pharmacology of the Female Reproductive System</td><td class="mono">5</td><td>BC Pharmacology - Contraception</td><td><span class="tier tA">A</span></td><td class="mono">75%</td><td>-</td></tr><tr data-group="6" data-tier="C" data-gap="1"><td class="mono">31</td><td>Sexually-Transmitted Infections</td><td class="mono">6</td><td>B&amp;B B - TORCHInfections</td><td><span class="tier tC">C</span></td><td class="mono">35%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="6" data-tier="D" data-gap="1"><td class="mono">32</td><td>Viral STIs</td><td class="mono">6</td><td>B&amp;B B - Cervical Cancer</td><td><span class="tier tD">D</span></td><td class="mono">15%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="7" data-tier="D" data-gap="1"><td class="mono">33</td><td>Human Development Through Adulthood</td><td class="mono">7</td><td>BC Pregnancy and Menstruation - Childhood Development</td><td><span class="tier tD">D</span></td><td class="mono">15%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="7" data-tier="C" data-gap="1"><td class="mono">34</td><td>Pathology Lab: Diseases of Pregnancy, Infancy and Childhood</td><td class="mono">7</td><td>BC Pathologies of Pregnancy - Molar Pregnancy</td><td><span class="tier tC">C</span></td><td class="mono">40%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="7" data-tier="B" data-gap="1"><td class="mono">35</td><td>Pathology of Diseases of Infancy and Childhood 1</td><td class="mono">7</td><td>BC Fetal Development - Teratogenic Medications</td><td><span class="tier tB">B</span></td><td class="mono">55%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="7" data-tier="C" data-gap="1"><td class="mono">36</td><td>Pathology of Diseases of Infancy and Childhood 2</td><td class="mono">7</td><td>B&amp;B B - Maternal Fetal Disorders</td><td><span class="tier tC">C</span></td><td class="mono">25%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="8" data-tier="D" data-gap="1"><td class="mono">37</td><td>Adolescent Health in the Community</td><td class="mono">8</td><td>Slides only</td><td><span class="tier tD">D</span></td><td class="mono">0%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="8" data-tier="B" data-gap="1"><td class="mono">38</td><td>Contraception and Reproductive Ethics</td><td class="mono">8</td><td>BC Pharmacology - Contraception</td><td><span class="tier tB">B</span></td><td class="mono">45%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="8" data-tier="D" data-gap="1"><td class="mono">39</td><td>Introduction to Sexuality</td><td class="mono">8</td><td>Slides only</td><td><span class="tier tD">D</span></td><td class="mono">0%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="8" data-tier="D" data-gap="1"><td class="mono">40</td><td>Prenatal and Early Childhood Health in the Community</td><td class="mono">8</td><td>Slides only</td><td><span class="tier tD">D</span></td><td class="mono">0%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="8" data-tier="C" data-gap="1"><td class="mono">41</td><td>Sex Assigned at Birth and Community Health</td><td class="mono">8</td><td>BC Fetal Development - Sexual Differentiation</td><td><span class="tier tC">C</span></td><td class="mono">25%</td><td><span class=gapb>GAP</span></td></tr><tr data-group="8" data-tier="D" data-gap="1"><td class="mono">42</td><td>TBL: Gender Identity, Sexuality and Sexual Health</td><td class="mono">8</td><td>Slides only</td><td><span class="tier tD">D</span></td><td class="mono">0%</td><td><span class=gapb>GAP</span></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <section class="grp" data-group="1"><div class="grphd"><h2>Group 1 &middot; Foundations - Anatomy, Embryology, Histology, Imaging</h2><div class="prog"><div class="bar"><i data-progbar="1"></i></div><span class="pct mono" data-progtxt="1">0 / 4</span></div></div><p class="grpdesc"><span class="nb">NEW</span> The structural and developmental base for everything else in the unit. Anatomy and histology give you the normal tissue you will be asked to call abnormal in Group 4; placental embryology feeds directly into the Obstetrics group; and the imaging lecture is where the pathology of Groups 3 and 4 is shown as ultrasound, MRI and HSG rather than as gross or histology.</p><p class="grpstat mono">4 lectures &middot; average video coverage 60%</p><article class="lec" data-group="1" data-tier="A" data-gap="0" data-res="bnb bootcamp ninjanerd" data-key="Embryology_Development of Placenta.pdf" data-search="embryology: development of the placenta embryology_development of placenta.pdf placenta and umbilical cord early development twin-twin transfusion syndrome placenta twins embryogenesis ross-specific detail on decidua basalis/capsularis/parietalis naming any placental pathology - that sits in disorders of pregnancy instead">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Embryology_Development of Placenta.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Embryology: Development of the Placenta</h3>
+<div class="meta"><span class="pill">Group 1</span><span class="pill mono">Embryology_Development of Placenta.pdf</span><span class="pill mono">35 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">75% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Embryology: Development of Placenta</p><ul>
+<li>Ninja Nerd Video: Solid video on placenta development</li>
+<li>Boards Repro: Under Pregnancy (Omar)</li>
+<li>Slides: Slides for twin stuff (Asher) | "Lock in on the twin stuff in the slides" (Omar)</li>
+<li>Notes (Omar): "Basically things Nunn taught us back in first sem just uk a 'little more'"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Placenta and Umbilical Cord"</span> <span class="mono dim">(video 6)</span> &mdash; The direct match - placental structure, membranes and cord anatomy, which is the spine of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Early Development"</span> <span class="mono dim">(video 1)</span> &mdash; Fertilization, implantation and trophoblast differentiation into syncytio- and cytotrophoblast, which this lecture builds the placenta from.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Twin-twin Transfusion Syndrome"</span> <span class="mono dim">(video 6)</span> &mdash; The monochorionic twin complication that follows directly from the chorionicity material both Asher and Omar tell you to prioritise in this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Placenta"</span> &mdash; B&amp;B's dedicated placenta deck runs 22 pages and covers structure and function in more depth than the Bootcamp single video.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Twins"</span> &mdash; Directly covers the chorionicity/amnionicity material that both Asher and Omar flag as the thing to lock in on in this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Embryogenesis"</span> &mdash; Fertilization through gastrulation as background to placental formation; useful only if the early-embryology prerequisites feel shaky.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B for depth - the separate Placenta and Twins decks together map this lecture better than Bootcamp's single combined video, and Twins in particular is the part your own notes tell you to prioritise.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 75% has a video backstop. <b>Not covered by video:</b><ul><li>Ross-specific detail on decidua basalis/capsularis/parietalis naming</li><li>Any placental pathology - that sits in Disorders of Pregnancy instead</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>Fertilization in the ampulla; zygote to morula by day 4</li><li>Blastocyst implants around day 6; trophoblast invades endometrium</li><li>Trophoblast splits into cytotrophoblast (inner) and syncytiotrophoblast (outer)</li><li>Syncytiotrophoblast erodes maternal vessels and forms lacunae</li><li>Primary, then secondary, then tertiary chorionic villi form</li><li>Decidua basalis (maternal) plus chorion frondosum (fetal) form the definitive placenta</li></ol></div>
+</article><article class="lec" data-group="1" data-tier="A" data-gap="0" data-res="bnb bootcamp" data-key="Histology of Female Reproductive System.pdf" data-search="histology of the female reproductive system histology of female reproductive system.pdf cortex and germinal epithelium primordial follicles primary and secondary follicles follicular ovarian hormones graafian follicles and ovulation corpus luteum and albicans luteal ovarian hormones fallopian tubes uterus - endometrium uterus - menstrual cycle cervix and vagina mammary glands breast tissue the two bootcamp 'practice' lessons are image drills, not new content ross-specific micrograph labelling conventions monica uses placental and umbilical cord histology if the deck includes it">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Histology of Female Reproductive System.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Histology of the Female Reproductive System</h3>
+<div class="meta"><span class="pill">Group 1</span><span class="pill mono">Histology of Female Reproductive System.pdf</span><span class="pill mono">106 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">85% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Histology of the Female Reproductive System</p><ul>
+<li>Bootcamp: Histology - Female Repro (Asher) | Histo -&gt; Female Repro (Playlist 20) (Omar)</li>
+<li>Notes (Omar): "Uk where to go at this point. Make sure to read the ross as they really like to go into detail but overall, Monica bodied this."</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Cortex and Germinal Epithelium"</span> <span class="mono dim">(video 1)</span> &mdash; Opens the ovarian sequence with the germinal epithelium, cortex and medulla - the orientation slides this 106-slide deck starts from.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Primordial Follicles"</span> <span class="mono dim">(video 2)</span> &mdash; The primordial follicle and its primary oocyte, matching the deck's first follicle stage.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Primary and Secondary Follicles"</span> <span class="mono dim">(video 3)</span> &mdash; Granulosa and theca cell development through the antral stage - the heart of the follicle sequence in this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Follicular Ovarian Hormones"</span> <span class="mono dim">(video 4)</span> &mdash; Ties the follicular histology to the estradiol it produces - the bridge between this lecture and the physiology group.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Graafian Follicles and Ovulation"</span> <span class="mono dim">(video 5)</span> &mdash; The mature (Graafian) follicle and the moment of ovulation.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Corpus Luteum and Albicans"</span> <span class="mono dim">(video 6)</span> &mdash; Post-ovulatory structures - corpus hemorrhagicum, luteum and albicans.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Luteal Ovarian Hormones"</span> <span class="mono dim">(video 7)</span> &mdash; The progesterone-secreting corpus luteum, completing the hormone half of the ovarian sequence.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Fallopian Tubes"</span> <span class="mono dim">(video 8)</span> &mdash; Tubal mucosa and the site of fertilization.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Uterus - Endometrium"</span> <span class="mono dim">(video 10)</span> &mdash; Endometrial layers, which the lecture then dates across the cycle.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Uterus - Menstrual Cycle"</span> <span class="mono dim">(video 11)</span> &mdash; Proliferative versus secretory endometrium - the dating skill this lecture tests.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Cervix and Vagina"</span> <span class="mono dim">(video 12)</span> &mdash; Cervical transformation zone and vaginal epithelium.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Histology - Female Repro</span> &rarr; <span class="vid">"Mammary Glands"</span> <span class="mono dim">(video 13)</span> &mdash; Breast histology, the last organ block in the deck.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Breast Tissue"</span> &mdash; B&amp;B's breast histology deck overlaps the mammary gland portion only; the rest of this lecture has no B&amp;B histology equivalent.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp, decisively. This is the one topic where Bootcamp has a purpose-built 14-lesson histology playlist with actual slide images; B&amp;B has almost nothing histologic here. This is also the playlist Omar points to.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 85% has a video backstop. <b>Not covered by video:</b><ul><li>The two Bootcamp 'Practice' lessons are image drills, not new content</li><li>Ross-specific micrograph labelling conventions Monica uses</li><li>Placental and umbilical cord histology if the deck includes it</li></ul></div>
+</article><article class="lec" data-group="1" data-tier="C" data-gap="1" data-res="bnb bootcamp" data-key="Medical Imaging of the Reproductive System.pdf" data-search="medical imaging of the reproductive system medical imaging of the reproductive system.pdf ovarian cysts polycystic ovarian syndrome endometrial disorders endometrial stripe thickness cut-offs (&lt;5 mm post-menopausal, &lt;=10 mm premenopausal) hysterosalpingography technique and normal hsg appearance contraceptive and tubal-occlusion device identification on x-ray bicornuate uterus recognition across us/mri/hsg uterine artery embolization as a procedure criteria for intrauterine fetal demise on imaging most accurate method of determining gestational age doppler findings in ovarian torsion trus and mri in prostate evaluation">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Medical Imaging of the Reproductive System.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Medical Imaging of the Reproductive System</h3>
+<div class="meta"><span class="pill">Group 1</span><span class="pill mono">Medical Imaging of the Reproductive System.pdf</span><span class="pill mono">48 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">25% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Medical Imaging of the Reproductive System</p><ul>
+<li>Slides / Notes (Omar): "Just do the slides"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Ovarian Cysts"</span> <span class="mono dim">(video 9)</span> &mdash; Covers the cyst types this lecture asks you to recognize sonographically, though it teaches them as pathology rather than as imaging findings.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Polycystic Ovarian Syndrome"</span> <span class="mono dim">(video 4)</span> &mdash; Gives the string-of-pearls morphology that the imaging lecture asks you to identify on ultrasound.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Endometrial Disorders"</span> &mdash; Covers the endometrial hyperplasia and polyp pathology behind the thickened-stripe finding, but not the ultrasound technique or the stripe thickness cut-offs.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Neither library teaches imaging as a modality. Use the slides for the technique, thickness cut-offs and modality choice, and borrow Bootcamp/B&amp;B only for the underlying pathology.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 25% has a video backstop. <b>Not covered by video:</b><ul><li>Endometrial stripe thickness cut-offs (&lt;5 mm post-menopausal, &lt;=10 mm premenopausal)</li><li>Hysterosalpingography technique and normal HSG appearance</li><li>Contraceptive and tubal-occlusion device identification on x-ray</li><li>Bicornuate uterus recognition across US/MRI/HSG</li><li>Uterine artery embolization as a procedure</li><li>Criteria for intrauterine fetal demise on imaging</li><li>Most accurate method of determining gestational age</li><li>Doppler findings in ovarian torsion</li><li>TRUS and MRI in prostate evaluation</li></ul></div>
+</article><article class="lec" data-group="1" data-tier="B" data-gap="1" data-res="bootcamp" data-key="Reproductive Systems.pdf" data-search="reproductive systems (gross anatomy) reproductive systems.pdf female anatomy male anatomy  ross-specific surface anatomy and exam-technique slides detailed perineal pouch content beyond the bootcamp summary any imaging correlation - that is in the medical imaging lecture instead">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Reproductive Systems.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Reproductive Systems (Gross Anatomy)</h3>
+<div class="meta"><span class="pill">Group 1</span><span class="pill mono">Reproductive Systems.pdf</span><span class="pill mono">24 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">55% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig none"><div class="origlbl">From the original guide</div><p class="nonep">No entry for this lecture existed in the original guide.</p></div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Female Anatomy"</span> <span class="mono dim">(video 11)</span> &mdash; Covers the female pelvic organs, their blood supply, lymphatic drainage, innervation and supporting ligaments - the same four axes this lecture walks through. It is the closest single video to the female half of the deck.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Male Anatomy"</span> <span class="mono dim">(video 10)</span> &mdash; The male counterpart, including anterior versus posterior urethral injury. Useful only for the male-anatomy slides, which are a minority of this deck in Mini 2.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Female Anatomy - B&amp;B has no dedicated gross-anatomy deck for the female pelvis, so Bootcamp is the only real option here.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 55% has a video backstop. <b>Not covered by video:</b><ul><li>Ross-specific surface anatomy and exam-technique slides</li><li>Detailed perineal pouch content beyond the Bootcamp summary</li><li>Any imaging correlation - that is in the Medical Imaging lecture instead</li></ul></div>
+</article></section><section class="grp" data-group="2"><div class="grphd"><h2>Group 2 &middot; Reproductive Physiology</h2><div class="prog"><div class="bar"><i data-progbar="2"></i></div><span class="pct mono" data-progtxt="2">0 / 2</span></div></div><p class="grpdesc"><span class="nb">NEW</span> The hormonal engine of the unit - the HPO axis, the ovarian and uterine cycles, and the feedback logic behind them. Almost every clinical lecture later in the unit (amenorrhea, infertility, PCOS, contraception, AUB) is an applied version of this material, so a gap here propagates into four other groups.</p><p class="grpstat mono">2 lectures + 1 review workshop &middot; average video coverage 80%</p><article class="lec" data-group="2" data-tier="A" data-gap="0" data-res="bnb bootcamp" data-key="Female Reproductive Physiology Notes.pdf" data-search="female reproductive physiology (notes) female reproductive physiology notes.pdf menstrual cycle gametogenesis hormones of pregnancy menstrual cycle female reproductive hormones reproductive hormones spermatogenesis oogenesis ross-specific emphasis on two-cell two-gonadotropin theory detail puberty staging if the deck covers it menopause physiology beyond the hormone changes">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Female Reproductive Physiology Notes.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Female Reproductive Physiology (Notes)</h3>
+<div class="meta"><span class="pill">Group 2</span><span class="pill mono">Female Reproductive Physiology Notes.pdf</span><span class="pill mono">45 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">80% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Physiology / Female Reproductive Physiology</p><ul>
+<li>Bootcamp: Repro - Menstrual Cycle (Asher) | Playlist 2 - Pregnancy and Menstruation (Gametogenesis, Hormones of Pregnancy, Menstrual Cycle) (Omar)</li>
+<li>Slides (Asher)</li>
+<li>Notes (Omar): "Some of this stuff you should remember from Mini 1 material. Monica will also speak about some of this in the histo section as well"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Menstrual Cycle"</span> <span class="mono dim">(video 3)</span> &mdash; The ovarian and uterine cycles with their hormone curves - the core of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Gametogenesis"</span> <span class="mono dim">(video 1)</span> &mdash; Oogenesis and the meiotic arrest points, which this lecture opens with.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Hormones of Pregnancy"</span> <span class="mono dim">(video 2)</span> &mdash; The hormonal handover from corpus luteum to placenta; relevant to the luteal-phase and pregnancy-recognition end of the lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Menstrual Cycle"</span> &mdash; B&amp;B's 23-page menstrual cycle deck - the single best content match to this lecture in either library, scoring highest on fingerprint overlap of all 44 B&amp;B decks.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Female Reproductive Hormones"</span> &mdash; The estrogen/progesterone/inhibin axis underpinning the cycle.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Reproductive Hormones"</span> &mdash; The general GnRH/FSH/LH framework, useful as a refresher before the female-specific deck.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Spermatogenesis Oogenesis"</span> &mdash; Covers oogenesis and the meiotic arrest points from the gamete side; the spermatogenesis half is Mini 1 material you can skip.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B, and specifically the folder A decks - Menstrual Cycle plus Female Reproductive Hormones. Omar's own note says Boards was 'a bit superior' for this mini and the fingerprint data agrees here: those two decks match this lecture more closely than any Bootcamp video. Use Bootcamp's Menstrual Cycle only if you want the faster pass.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 80% has a video backstop. <b>Not covered by video:</b><ul><li>Ross-specific emphasis on two-cell two-gonadotropin theory detail</li><li>Puberty staging if the deck covers it</li><li>Menopause physiology beyond the hormone changes</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>GnRH pulses from the hypothalamus drive anterior pituitary FSH and LH</li><li>FSH recruits follicles; granulosa cells aromatize theca-derived androgen to estradiol</li><li>Rising estradiol initially suppresses FSH (negative feedback), selecting a dominant follicle</li><li>Estradiol above threshold for ~48 h flips to positive feedback, triggering the LH surge</li><li>LH surge causes ovulation ~36 h later; the follicle becomes the corpus luteum</li><li>Corpus luteum secretes progesterone, converting endometrium to secretory phase</li><li>Without hCG the corpus luteum regresses, progesterone falls, and menses follows</li></ol></div>
+</article><article class="lec" data-group="2" data-tier="A" data-gap="0" data-res="bnb bootcamp" data-key="Female Reproductive Physiology Slides.pdf" data-search="female reproductive physiology (slides) female reproductive physiology slides.pdf menstrual cycle gametogenesis hormones of pregnancy menstrual cycle female reproductive hormones reproductive hormones spermatogenesis oogenesis ross-specific emphasis on two-cell two-gonadotropin theory detail puberty staging if the deck covers it menopause physiology beyond the hormone changes">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Female Reproductive Physiology Slides.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Female Reproductive Physiology (Slides)</h3>
+<div class="meta"><span class="pill">Group 2</span><span class="pill mono">Female Reproductive Physiology Slides.pdf</span><span class="pill mono">45 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">80% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Physiology / Female Reproductive Physiology</p><ul>
+<li>Bootcamp: Repro - Menstrual Cycle (Asher) | Playlist 2 - Pregnancy and Menstruation (Gametogenesis, Hormones of Pregnancy, Menstrual Cycle) (Omar)</li>
+<li>Slides (Asher)</li>
+<li>Notes (Omar): "Some of this stuff you should remember from Mini 1 material. Monica will also speak about some of this in the histo section as well"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Menstrual Cycle"</span> <span class="mono dim">(video 3)</span> &mdash; The ovarian and uterine cycles with their hormone curves - the core of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Gametogenesis"</span> <span class="mono dim">(video 1)</span> &mdash; Oogenesis and the meiotic arrest points, which this lecture opens with.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Hormones of Pregnancy"</span> <span class="mono dim">(video 2)</span> &mdash; The hormonal handover from corpus luteum to placenta; relevant to the luteal-phase and pregnancy-recognition end of the lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Menstrual Cycle"</span> &mdash; B&amp;B's 23-page menstrual cycle deck - the single best content match to this lecture in either library, scoring highest on fingerprint overlap of all 44 B&amp;B decks.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Female Reproductive Hormones"</span> &mdash; The estrogen/progesterone/inhibin axis underpinning the cycle.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Reproductive Hormones"</span> &mdash; The general GnRH/FSH/LH framework, useful as a refresher before the female-specific deck.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Spermatogenesis Oogenesis"</span> &mdash; Covers oogenesis and the meiotic arrest points from the gamete side; the spermatogenesis half is Mini 1 material you can skip.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B, and specifically the folder A decks - Menstrual Cycle plus Female Reproductive Hormones. Omar's own note says Boards was 'a bit superior' for this mini and the fingerprint data agrees here: those two decks match this lecture more closely than any Bootcamp video. Use Bootcamp's Menstrual Cycle only if you want the faster pass.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 80% has a video backstop. <b>Not covered by video:</b><ul><li>Ross-specific emphasis on two-cell two-gonadotropin theory detail</li><li>Puberty staging if the deck covers it</li><li>Menopause physiology beyond the hormone changes</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>GnRH pulses from the hypothalamus drive anterior pituitary FSH and LH</li><li>FSH recruits follicles; granulosa cells aromatize theca-derived androgen to estradiol</li><li>Rising estradiol initially suppresses FSH (negative feedback), selecting a dominant follicle</li><li>Estradiol above threshold for ~48 h flips to positive feedback, triggering the LH surge</li><li>LH surge causes ovulation ~36 h later; the follicle becomes the corpus luteum</li><li>Corpus luteum secretes progesterone, converting endometrium to secretory phase</li><li>Without hCG the corpus luteum regresses, progesterone falls, and menses follows</li></ol></div>
+</article><article class="lec orphan" data-group="2" data-tier="D" data-gap="1" data-res="slidesonly" data-key="orphan::Workshop: Reproductive Physiology (Cumulative Review)" data-search="workshop: reproductive physiology (cumulative review)"><div class="lechd"><label class="chk"><input type="checkbox" data-lec="orphan::Workshop: Reproductive Physiology (Cumulative Review)"><span></span></label><div class="lectitle"><h3>Workshop: Reproductive Physiology (Cumulative Review)</h3><div class="meta"><span class="pill">Group 2</span><span class="pill mono">no lecture file</span><span class="tier tD">Tier D - No coverage</span></div></div></div><div class="orig"><div class="origlbl">From the original guide</div><ul><li>Notes (Omar): "Refer to what I said in Clinical Cases in Gynecology"</li></ul></div><div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> No lecture PDF exists in the lecture folder for this heading - it is a live cumulative-review session drawing on the Reproductive Physiology group.</div></article></section><section class="grp" data-group="3"><div class="grphd"><h2>Group 3 &middot; Obstetrics - Pregnancy and Delivery</h2><div class="prog"><div class="bar"><i data-progbar="3"></i></div><span class="pct mono" data-progtxt="3">0 / 11</span></div></div><p class="grpdesc"><span class="nb">NEW</span> Normal pregnancy from implantation through parturition, plus the pathology that interrupts it. Establishment and Maternal Physiology are the normal baseline; Disorders of Pregnancy and the Introduction to Obstetrics pair are the deviations. Note the unit splits several of these into a Notes file and a Slides file covering the same session.</p><p class="grpstat mono">11 lectures + 1 review workshop &middot; average video coverage 47%</p><article class="lec" data-group="3" data-tier="A" data-gap="0" data-res="bnb bootcamp" data-key="Disorders of Pregnancy.pdf" data-search="disorders of pregnancy disorders of pregnancy.pdf hypertension in pregnancy molar pregnancy placental pathology ectopic pregnancy transient complications of pregnancy htnpregnancy gestational tumors placenta complications acute fatty liver of pregnancy (lchad deficiency) - absent from both libraries ross-specific p57 immunohistochemistry for complete versus partial mole">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Disorders of Pregnancy.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Disorders of Pregnancy</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Disorders of Pregnancy.pdf</span><span class="pill mono">27 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">85% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Disorders of Pregnancy</p><ul>
+<li>Bootcamp: Reproduction - Pathologies of Pregnancy (Omar)</li>
+<li>Boards Repro: Section under pregnancy (Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Hypertension in Pregnancy"</span> <span class="mono dim">(video 3)</span> &mdash; Preeclampsia, eclampsia and HELLP - the first half of this lecture, and the part with the most testable numbers.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Molar Pregnancy"</span> <span class="mono dim">(video 2)</span> &mdash; Complete versus partial mole with the karyotype and hCG distinctions this lecture drills.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Placental Pathology"</span> <span class="mono dim">(video 7)</span> &mdash; Placenta previa, abruption and accreta spectrum, plus the placental morphology of preeclampsia.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Ectopic Pregnancy"</span> <span class="mono dim">(video 1)</span> &mdash; The ectopic material this lecture opens with, including sites and rupture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Transient Complications of Pregnancy"</span> <span class="mono dim">(video 4)</span> &mdash; Shorter video covering the self-limiting complications around the edges of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"HTNPregnancy"</span> &mdash; B&amp;B's hypertension-in-pregnancy deck, an 18-page treatment of the preeclampsia spectrum.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Gestational Tumors"</span> &mdash; Molar pregnancy, invasive mole, choriocarcinoma and PSTT - the gestational trophoblastic disease spine of this lecture, and more complete on PSTT than Bootcamp.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Placenta Complications"</span> &mdash; Previa, abruption and accreta in a dedicated deck.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B has the edge here because Gestational Tumors covers placental site trophoblastic tumour, which the Bootcamp Molar Pregnancy video does not reach. Use Bootcamp Hypertension in Pregnancy for the preeclampsia numbers, then B&amp;B Gestational Tumors for the GTD spectrum.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 85% has a video backstop. <b>Not covered by video:</b><ul><li>Acute fatty liver of pregnancy (LCHAD deficiency) - absent from both libraries</li><li>Ross-specific p57 immunohistochemistry for complete versus partial mole</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>Abnormal trophoblast invasion leaves spiral arteries un-remodelled</li><li>Placental ischaemia releases anti-angiogenic factors (sFlt-1, soluble endoglin)</li><li>Systemic endothelial activation and dysfunction follow</li><li>Hypertension plus proteinuria after 20 weeks defines preeclampsia</li><li>Seizure converts it to eclampsia; microangiopathy plus intravascular coagulation gives HELLP</li></ol></div>
+</article><article class="lec" data-group="3" data-tier="B" data-gap="0" data-res="bnb bootcamp" data-key="Establishment of Pregnancy Notes.pdf" data-search="establishment of pregnancy (notes) establishment of pregnancy notes.pdf hormones of pregnancy pregnancy physiology pregnancy placenta ross-specific implantation-window detail decidualization specifics any content unique to the notes-vs-slides split of this session">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Establishment of Pregnancy Notes.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Establishment of Pregnancy (Notes)</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Establishment of Pregnancy Notes.pdf</span><span class="pill mono">25 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">65% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Establishment of Pregnancy</p><ul>
+<li>Slides (Asher)</li>
+<li>Boards Repro: Under Pregnancy (Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Hormones of Pregnancy"</span> <span class="mono dim">(video 2)</span> &mdash; hCG, progesterone and the luteo-placental shift - the endocrine backbone of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Pregnancy Physiology"</span> <span class="mono dim">(video 5)</span> &mdash; The maternal adaptations that follow establishment, bridging into the Maternal Physiology lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Pregnancy"</span> &mdash; B&amp;B's general pregnancy deck, which Omar's note points to as 'Boards Repro: Under Pregnancy'.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Placenta"</span> &mdash; Implantation and placental establishment, overlapping the first half of this lecture.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B Pregnancy for the fuller treatment; Bootcamp Hormones of Pregnancy if you only have 16 minutes and want the hCG curve nailed down.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 65% has a video backstop. <b>Not covered by video:</b><ul><li>Ross-specific implantation-window detail</li><li>Decidualization specifics</li><li>Any content unique to the Notes-vs-Slides split of this session</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="B" data-gap="0" data-res="bnb bootcamp" data-key="Establishment of Pregnancy Slides.pdf" data-search="establishment of pregnancy (slides) establishment of pregnancy slides.pdf hormones of pregnancy pregnancy physiology pregnancy placenta ross-specific implantation-window detail decidualization specifics any content unique to the notes-vs-slides split of this session">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Establishment of Pregnancy Slides.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Establishment of Pregnancy (Slides)</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Establishment of Pregnancy Slides.pdf</span><span class="pill mono">25 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">65% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Establishment of Pregnancy</p><ul>
+<li>Slides (Asher)</li>
+<li>Boards Repro: Under Pregnancy (Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Hormones of Pregnancy"</span> <span class="mono dim">(video 2)</span> &mdash; hCG, progesterone and the luteo-placental shift - the endocrine backbone of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Pregnancy Physiology"</span> <span class="mono dim">(video 5)</span> &mdash; The maternal adaptations that follow establishment, bridging into the Maternal Physiology lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Pregnancy"</span> &mdash; B&amp;B's general pregnancy deck, which Omar's note points to as 'Boards Repro: Under Pregnancy'.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Placenta"</span> &mdash; Implantation and placental establishment, overlapping the first half of this lecture.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B Pregnancy for the fuller treatment; Bootcamp Hormones of Pregnancy if you only have 16 minutes and want the hCG curve nailed down.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 65% has a video backstop. <b>Not covered by video:</b><ul><li>Ross-specific implantation-window detail</li><li>Decidualization specifics</li><li>Any content unique to the Notes-vs-Slides split of this session</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="C" data-gap="1" data-res="bnb bootcamp" data-key="Introduction to Obstetrics 1.pdf" data-search="introduction to obstetrics 1 introduction to obstetrics 1.pdf pregnancy physiology pregnancy gravidity/parity (gtpal) notation naegele's rule and dating conventions antenatal visit schedule and routine investigations obstetric history-taking and examination technique leopold manoeuvres if covered">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Introduction to Obstetrics 1.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Introduction to Obstetrics 1</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Introduction to Obstetrics 1.pdf</span><span class="pill mono">48 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">20% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Introduction to Obstetrics 1 &amp; 2</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Pregnancy Physiology"</span> <span class="mono dim">(video 5)</span> &mdash; Background on the normal pregnancy this introductory lecture frames its history and examination around.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Pregnancy"</span> &mdash; General pregnancy background; covers the physiology but not the clinical obstetric workflow.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides. This is a clinical-skills and terminology lecture (dating, gravidity/parity, antenatal visit structure) and neither library teaches that workflow.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 20% has a video backstop. <b>Not covered by video:</b><ul><li>Gravidity/parity (GTPAL) notation</li><li>Naegele's rule and dating conventions</li><li>Antenatal visit schedule and routine investigations</li><li>Obstetric history-taking and examination technique</li><li>Leopold manoeuvres if covered</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="B" data-gap="0" data-res="bnb bootcamp" data-key="Introduction to Obstetrics 2.pdf" data-search="introduction to obstetrics 2 introduction to obstetrics 2.pdf hypertension in pregnancy placental pathology polyhydramnios and oligohydramnios placenta complications maternal fetal disorders labour management and intrapartum monitoring ross-specific clinical protocols and local practice points any pure clinical-skills content carried over from obstetrics 1">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Introduction to Obstetrics 2.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Introduction to Obstetrics 2</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Introduction to Obstetrics 2.pdf</span><span class="pill mono">56 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">60% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Introduction to Obstetrics 1 &amp; 2</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Hypertension in Pregnancy"</span> <span class="mono dim">(video 3)</span> &mdash; Scores highest of any video against this lecture's fingerprint, reflecting how much of Obstetrics 2 is the hypertensive-disorder spectrum.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Placental Pathology"</span> <span class="mono dim">(video 7)</span> &mdash; The placental complications this lecture also walks through.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Polyhydramnios and Oligohydramnios"</span> <span class="mono dim">(video 5)</span> &mdash; Amniotic fluid disorders, which appear in this lecture's complication list.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Placenta Complications"</span> &mdash; Previa, abruption and accreta with more anatomical detail than the Bootcamp video.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Maternal Fetal Disorders"</span> &mdash; Broader maternal-fetal complication coverage matching this lecture's second half.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Hypertension in Pregnancy plus Placental Pathology gives you the bulk quickly; add B&amp;B Placenta Complications if previa/abruption/accreta feel shaky.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 60% has a video backstop. <b>Not covered by video:</b><ul><li>Labour management and intrapartum monitoring</li><li>Ross-specific clinical protocols and local practice points</li><li>Any pure clinical-skills content carried over from Obstetrics 1</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="B" data-gap="0" data-res="bnb bootcamp" data-key="Maternal Physiology Notes.pdf" data-search="maternal physiology (notes) maternal physiology notes.pdf pregnancy physiology pregnancy trimester-by-trimester numeric values ross tends to test detailed acid-base changes of pregnancy supine hypotensive syndrome if covered in the deck">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Maternal Physiology Notes.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Maternal Physiology (Notes)</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Maternal Physiology Notes.pdf</span><span class="pill mono">24 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">60% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Maternal Physiology</p><ul>
+<li>Slides (Asher)</li>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Pregnancy Physiology"</span> <span class="mono dim">(video 5)</span> &mdash; The single best match - cardiovascular, respiratory, renal, haematologic and GI adaptations to pregnancy, which is exactly this lecture's remit.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Pregnancy"</span> &mdash; Covers maternal adaptation alongside pregnancy establishment, with less physiology depth than the Bootcamp video.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Pregnancy Physiology - it is the only resource in either library built specifically around maternal system-by-system adaptation.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 60% has a video backstop. <b>Not covered by video:</b><ul><li>Trimester-by-trimester numeric values Ross tends to test</li><li>Detailed acid-base changes of pregnancy</li><li>Supine hypotensive syndrome if covered in the deck</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="B" data-gap="0" data-res="bnb bootcamp" data-key="Maternal Physiology Slides.pdf" data-search="maternal physiology (slides) maternal physiology slides.pdf pregnancy physiology pregnancy trimester-by-trimester numeric values ross tends to test detailed acid-base changes of pregnancy supine hypotensive syndrome if covered in the deck">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Maternal Physiology Slides.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Maternal Physiology (Slides)</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Maternal Physiology Slides.pdf</span><span class="pill mono">24 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">60% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Maternal Physiology</p><ul>
+<li>Slides (Asher)</li>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Pregnancy Physiology"</span> <span class="mono dim">(video 5)</span> &mdash; The single best match - cardiovascular, respiratory, renal, haematologic and GI adaptations to pregnancy, which is exactly this lecture's remit.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Pregnancy"</span> &mdash; Covers maternal adaptation alongside pregnancy establishment, with less physiology depth than the Bootcamp video.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Pregnancy Physiology - it is the only resource in either library built specifically around maternal system-by-system adaptation.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 60% has a video backstop. <b>Not covered by video:</b><ul><li>Trimester-by-trimester numeric values Ross tends to test</li><li>Detailed acid-base changes of pregnancy</li><li>Supine hypotensive syndrome if covered in the deck</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="C" data-gap="1" data-res="bnb bootcamp" data-key="Maternal Serum Screening.pdf" data-search="maternal serum screening maternal serum screening.pdf chromosomal disorders maternal fetal disorders quad screen analyte patterns for trisomy 21, 18 and neural tube defects first-trimester combined screening (papp-a, nuchal translucency) cell-free fetal dna / nipt performance characteristics screen-positive versus diagnostic testing pathways (cvs, amniocentesis) timing windows for each screening modality">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Maternal Serum Screening.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Maternal Serum Screening</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Maternal Serum Screening.pdf</span><span class="pill mono">46 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">20% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Maternal Serum Screening</p><ul>
+<li>Slides (Asher)</li>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Chromosomal Disorders"</span> <span class="mono dim">(video 7)</span> &mdash; Gives the trisomies whose screening patterns this lecture is built around, but teaches them as syndromes rather than as analyte patterns.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Maternal Fetal Disorders"</span> &mdash; The closest B&amp;B deck; covers maternal-fetal disorders including some screening context, but not the quad-screen analyte tables.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides. Neither library teaches the AFP/hCG/estriol/inhibin quad-screen patterns, which are the entire point of this lecture - treat the videos as background on the underlying trisomies only.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 20% has a video backstop. <b>Not covered by video:</b><ul><li>Quad screen analyte patterns for trisomy 21, 18 and neural tube defects</li><li>First-trimester combined screening (PAPP-A, nuchal translucency)</li><li>Cell-free fetal DNA / NIPT performance characteristics</li><li>Screen-positive versus diagnostic testing pathways (CVS, amniocentesis)</li><li>Timing windows for each screening modality</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="D" data-gap="1" data-res="bootcamp" data-key="Nutrition in Pregnancy, Lactation, and Childhood-Multi Page.pdf" data-search="nutrition in pregnancy, lactation, and childhood nutrition in pregnancy, lactation, and childhood-multi page.pdf pregnancy physiology  gestational weight-gain targets by pre-pregnancy bmi folate, iron, iodine and calcium requirements in pregnancy lactation nutritional demands and contraindications to breastfeeding infant feeding guidance and weaning childhood growth-chart interpretation">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Nutrition in Pregnancy, Lactation, and Childhood-Multi Page.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Nutrition in Pregnancy, Lactation, and Childhood</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Nutrition in Pregnancy, Lactation, and Childhood-Multi Page.pdf</span><span class="pill mono">32 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">5% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Nutrition in Pregnancy, Lactation, and Childhood</p><ul>
+<li>Notes (Omar): "Nothing out there with this lecture unless I looked in the wrong areas. Enjoy tho"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Pregnancy Physiology"</span> <span class="mono dim">(video 5)</span> &mdash; Touches maternal metabolic adaptation but does not address nutritional requirements, weight gain targets or micronutrient supplementation.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides only. Omar already reached this conclusion independently - his note reads 'Nothing out there with this lecture unless I looked in the wrong areas.' The index confirms it: no deck in either library addresses nutrition.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 5% has a video backstop. <b>Not covered by video:</b><ul><li>Gestational weight-gain targets by pre-pregnancy BMI</li><li>Folate, iron, iodine and calcium requirements in pregnancy</li><li>Lactation nutritional demands and contraindications to breastfeeding</li><li>Infant feeding guidance and weaning</li><li>Childhood growth-chart interpretation</li></ul></div>
+</article><article class="lec" data-group="3" data-tier="B" data-gap="1" data-res="bootcamp" data-key="Parturition and Transition to Neonatal Life Notes.pdf" data-search="parturition and transition to neonatal life (notes) parturition and transition to neonatal life notes.pdf fetal circulation postpartum hemorrhage  mechanism and triggers of labour onset (crh, oxytocin, prostaglandins) stages of labour and the cardinal movements bishop score / cervical ripening thermoregulation and first-breath mechanics beyond the shunt closure">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Parturition and Transition to Neonatal Life Notes.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Parturition and Transition to Neonatal Life (Notes)</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Parturition and Transition to Neonatal Life Notes.pdf</span><span class="pill mono">27 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">40% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Parturition and Transition to Neonatal Life</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Fetal Circulation"</span> <span class="mono dim">(video 7)</span> &mdash; The fetal shunts and their closure at birth - the transition half of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Postpartum Hemorrhage"</span> <span class="mono dim">(video 8)</span> &mdash; Covers the third stage of labour going wrong; adjacent to the normal parturition physiology taught here.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Fetal Circulation for the neonatal transition. Nothing in either library teaches the onset-of-labour mechanism or the stages of labour, so the parturition half is slides-only.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 40% has a video backstop. <b>Not covered by video:</b><ul><li>Mechanism and triggers of labour onset (CRH, oxytocin, prostaglandins)</li><li>Stages of labour and the cardinal movements</li><li>Bishop score / cervical ripening</li><li>Thermoregulation and first-breath mechanics beyond the shunt closure</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>Placental CRH rises, shifting the estrogen-to-progesterone ratio toward estrogen</li><li>Myometrial gap junctions and oxytocin receptors increase</li><li>Prostaglandins ripen the cervix; coordinated contractions begin</li><li>Delivery; cord clamping removes the low-resistance placental circuit</li><li>First breath drops pulmonary vascular resistance, raising left atrial pressure</li><li>Foramen ovale closes functionally; ductus arteriosus constricts as PaO2 rises</li></ol></div>
+</article><article class="lec" data-group="3" data-tier="B" data-gap="1" data-res="bootcamp" data-key="Parturition and Transition to Neonatal Life Slides.pdf" data-search="parturition and transition to neonatal life (slides) parturition and transition to neonatal life slides.pdf fetal circulation postpartum hemorrhage  mechanism and triggers of labour onset (crh, oxytocin, prostaglandins) stages of labour and the cardinal movements bishop score / cervical ripening thermoregulation and first-breath mechanics beyond the shunt closure">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Parturition and Transition to Neonatal Life Slides.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Parturition and Transition to Neonatal Life (Slides)</h3>
+<div class="meta"><span class="pill">Group 3</span><span class="pill mono">Parturition and Transition to Neonatal Life Slides.pdf</span><span class="pill mono">18 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">40% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Parturition and Transition to Neonatal Life</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Fetal Circulation"</span> <span class="mono dim">(video 7)</span> &mdash; The fetal shunts and their closure at birth - the transition half of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Postpartum Hemorrhage"</span> <span class="mono dim">(video 8)</span> &mdash; Covers the third stage of labour going wrong; adjacent to the normal parturition physiology taught here.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Fetal Circulation for the neonatal transition. Nothing in either library teaches the onset-of-labour mechanism or the stages of labour, so the parturition half is slides-only.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 40% has a video backstop. <b>Not covered by video:</b><ul><li>Mechanism and triggers of labour onset (CRH, oxytocin, prostaglandins)</li><li>Stages of labour and the cardinal movements</li><li>Bishop score / cervical ripening</li><li>Thermoregulation and first-breath mechanics beyond the shunt closure</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>Placental CRH rises, shifting the estrogen-to-progesterone ratio toward estrogen</li><li>Myometrial gap junctions and oxytocin receptors increase</li><li>Prostaglandins ripen the cervix; coordinated contractions begin</li><li>Delivery; cord clamping removes the low-resistance placental circuit</li><li>First breath drops pulmonary vascular resistance, raising left atrial pressure</li><li>Foramen ovale closes functionally; ductus arteriosus constricts as PaO2 rises</li></ol></div>
+</article><article class="lec orphan" data-group="3" data-tier="D" data-gap="1" data-res="slidesonly" data-key="orphan::Workshop: Clinical Cases in Obstetrics (Cumulative Review)" data-search="workshop: clinical cases in obstetrics (cumulative review)"><div class="lechd"><label class="chk"><input type="checkbox" data-lec="orphan::Workshop: Clinical Cases in Obstetrics (Cumulative Review)"><span></span></label><div class="lectitle"><h3>Workshop: Clinical Cases in Obstetrics (Cumulative Review)</h3><div class="meta"><span class="pill">Group 3</span><span class="pill mono">no lecture file</span><span class="tier tD">Tier D - No coverage</span></div></div></div><div class="orig"><div class="origlbl">From the original guide</div><ul><li>(Refer to slides per general rule - Omar)</li></ul></div><div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> No lecture PDF exists in the lecture folder for this heading - it is a live cumulative-review session drawing on the Obstetrics group.</div></article></section><section class="grp" data-group="4"><div class="grphd"><h2>Group 4 &middot; Gynecology - Pathology and Clinical Cases</h2><div class="prog"><div class="bar"><i data-progbar="4"></i></div><span class="pct mono" data-progtxt="4">0 / 10</span></div></div><p class="grpdesc"><span class="nb">NEW</span> The largest and most heavily tested group: the organ-by-organ pathology of vulva/vagina/cervix, uterus, ovary and breast, plus the clinical approach lectures (amenorrhea, infertility) that package that pathology as presentations. This is where external video coverage is strongest, so it is the best return on video time in the unit.</p><p class="grpstat mono">10 lectures + 2 review workshops &middot; average video coverage 67%</p><article class="lec" data-group="4" data-tier="A" data-gap="0" data-res="bnb bootcamp pathoma" data-key="Breast Disorders- Multi Page.pdf" data-search="breast disorders breast disorders- multi page.pdf breast cancer overview benign breast conditions benign breast tumors invasive breast carcinomas breast disorders breast carcinoma breast tissue gynecomastia in all its forms - physiologic, drug-induced, cirrhosis/ckd, klinefelter, leydig cell tumour. neither library covers this and it is a large part of the lecture polymastia and polythelia mammographic screening intervals and the macro- versus microcalcification distinction medullary, mucinous and metaplastic carcinoma subtypes">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Breast Disorders- Multi Page.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Breast Disorders</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Breast Disorders- Multi Page.pdf</span><span class="pill mono">50 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">85% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Breast Disorders</p><ul>
+<li>Pathoma: Chapter 16.1-16.4 (Asher, Omar)</li>
+<li>Bootcamp: Female Pathology playlist 4, videos 12-15 (Omar)</li>
+<li>Boards Repro: Under Breast (Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Breast Cancer Overview"</span> <span class="mono dim">(video 12)</span> &mdash; Risk factors and the malignant framework; video 12, the first of the range 12-15 Omar cites.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Benign Breast Conditions"</span> <span class="mono dim">(video 13)</span> &mdash; Fibrocystic change, fat necrosis, galactocele and mastitis - the benign first half of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Benign Breast Tumors"</span> <span class="mono dim">(video 14)</span> &mdash; Fibroadenoma, intraductal papilloma and phyllodes tumour.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Invasive Breast Carcinomas"</span> <span class="mono dim">(video 15)</span> &mdash; Invasive ductal and lobular carcinoma; the deck also carries a non-invasive carcinoma page covering DCIS/LCIS that is folded into this video.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Breast Disorders"</span> &mdash; The benign breast deck, 24 pages.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Breast Carcinoma"</span> &mdash; The malignant deck, also 24 pages, with more subtype detail than Bootcamp's 4-minute invasive carcinoma video.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Breast Tissue"</span> &mdash; Normal breast histology as background.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B for the malignant half - Bootcamp gives invasive carcinoma only 4:36, which is thin for how heavily this is tested. Use Bootcamp videos 13-14 for the benign lesions (they are crisp and well-organised), then B&amp;B Breast Carcinoma for the cancers. Both Asher and Omar rate Pathoma 16.1-16.4 above either library.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 85% has a video backstop. <b>Not covered by video:</b><ul><li>Gynecomastia in all its forms - physiologic, drug-induced, cirrhosis/CKD, Klinefelter, Leydig cell tumour. Neither library covers this and it is a large part of the lecture</li><li>Polymastia and polythelia</li><li>Mammographic screening intervals and the macro- versus microcalcification distinction</li><li>Medullary, mucinous and metaplastic carcinoma subtypes</li></ul></div>
+</article><article class="lec" data-group="4" data-tier="A" data-gap="0" data-res="bnb bootcamp" data-key="Clincal Approach to Amenorrhea.pdf" data-search="clinical approach to amenorrhea clincal approach to amenorrhea.pdf menstrual cycle disorders disorders of sexual development part 1 disorders of genital embryology primary amenorrhea secondary amenorrhea hypogonadism disorders sex development asherman syndrome as an outflow-tract cause (bootcamp covers it inside video 5 of female pathology, b&amp;b covers it thinly) the specific ross diagnostic algorithm and order of investigations progesterone challenge test interpretation">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Clincal Approach to Amenorrhea.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Clinical Approach to Amenorrhea</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Clincal Approach to Amenorrhea.pdf</span><span class="pill mono">58 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">80% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Clinical Approach to Amenorrhea</p><ul>
+<li>Slides (Asher)</li>
+<li>Notes (Omar): "Yea. Just read it chief"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Menstrual Cycle Disorders"</span> <span class="mono dim">(video 4)</span> &mdash; At 21:57 the longest video in the library and the best content match to this lecture - it works through amenorrhea as a differential rather than as a single disease, which is exactly this lecture's structure. A title-only search would never have found this.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Disorders of Sexual Development Part 1"</span> <span class="mono dim">(video 8)</span> &mdash; Androgen insensitivity and 5-alpha reductase deficiency, which appear in the primary amenorrhea differential.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Disorders of Genital Embryology"</span> <span class="mono dim">(video 6)</span> &mdash; Mullerian agenesis and outflow tract anomalies - the structural causes of primary amenorrhea.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Primary Amenorrhea"</span> &mdash; A dedicated 24-page primary amenorrhea deck - no equivalent single-topic video exists in Bootcamp.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Secondary Amenorrhea"</span> &mdash; The 28-page companion deck covering the secondary causes.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Hypogonadism"</span> &mdash; Hypogonadotropic versus hypergonadotropic hypogonadism, the axis-level framework this lecture uses to sort causes.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Disorders Sex Development"</span> &mdash; A 29-page deck on DSD, which supplies the androgen insensitivity and gonadal dysgenesis causes sitting in the primary amenorrhea differential.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B, and it is not close. Folder A splits primary and secondary amenorrhea into two dedicated decks that mirror how this 58-slide lecture is organised; Bootcamp folds everything into one Menstrual Cycle Disorders video. This is the clearest example in the unit of B&amp;B being 'a bit superior' as Omar put it.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 80% has a video backstop. <b>Not covered by video:</b><ul><li>Asherman syndrome as an outflow-tract cause (Bootcamp covers it inside video 5 of Female Pathology, B&amp;B covers it thinly)</li><li>The specific Ross diagnostic algorithm and order of investigations</li><li>Progesterone challenge test interpretation</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>Exclude pregnancy first - beta-hCG before anything else</li><li>Primary versus secondary: has the patient ever menstruated?</li><li>Check breast development (estrogen exposure) and uterus presence (Mullerian structures)</li><li>Measure FSH/LH to split hypergonadotropic (ovarian) from hypogonadotropic (central)</li><li>Add TSH and prolactin to catch thyroid disease and hyperprolactinaemia</li><li>Progesterone challenge assesses estrogen status and outflow tract patency</li></ol></div>
+</article><article class="lec" data-group="4" data-tier="C" data-gap="1" data-res="bnb bootcamp" data-key="Clinical Approach to Infertility.pdf" data-search="clinical approach to infertility clinical approach to infertility.pdf polycystic ovarian syndrome menstrual cycle disorders hypogonadism endometriosis the infertility workup sequence itself (semen analysis, ovulation confirmation, tubal patency testing) hysterosalpingography in the infertility context assisted reproductive technology - iui, ivf, icsi definitions and time thresholds for investigating infertility male-factor evaluation specifics">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Clinical Approach to Infertility.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Clinical Approach to Infertility</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Clinical Approach to Infertility.pdf</span><span class="pill mono">18 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">30% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Clinical Approach to Infertility</p><ul>
+<li>Notes (Omar): "Just read the workshop"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Polycystic Ovarian Syndrome"</span> <span class="mono dim">(video 4)</span> &mdash; PCOS as the leading anovulatory cause of infertility, which this workshop covers as one branch of its differential.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Menstrual Cycle Disorders"</span> <span class="mono dim">(video 4)</span> &mdash; Ovulatory dysfunction as a cause, overlapping the anovulation branch of the workup.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Hypogonadism"</span> &mdash; The axis-level causes of infertility on both the male and female side.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Endometriosis"</span> &mdash; Endometriosis as a tubal/peritoneal cause of infertility.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides for the workup algorithm; Bootcamp PCOS for the single most common treatable cause. Omar's note is 'Just read the workshop' and the index supports that - no video teaches the infertility evaluation sequence.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 30% has a video backstop. <b>Not covered by video:</b><ul><li>The infertility workup sequence itself (semen analysis, ovulation confirmation, tubal patency testing)</li><li>Hysterosalpingography in the infertility context</li><li>Assisted reproductive technology - IUI, IVF, ICSI</li><li>Definitions and time thresholds for investigating infertility</li><li>Male-factor evaluation specifics</li></ul></div>
+</article><article class="lec" data-group="4" data-tier="A" data-gap="0" data-res="bnb bootcamp pathoma" data-key="Diseases of Vulva Vagina and Cervix.pdf" data-search="diseases of the vulva, vagina and cervix diseases of vulva vagina and cervix.pdf vaginal skin pathology internal vaginal pathology vaginal cancer cervical pathology cervical cancer vaginal cancer bartholin cyst and abscess - not covered as a discrete topic by either library extramammary paget disease of the vulva embryonal rhabdomyosarcoma (sarcoma botryoides) ross-specific microinvasive carcinoma t1a1/t1a2 measurements">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Diseases of Vulva Vagina and Cervix.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Diseases of the Vulva, Vagina and Cervix</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Diseases of Vulva Vagina and Cervix.pdf</span><span class="pill mono">43 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">85% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Disorders of the Vulva, Vagina, and Cervix</p><ul>
+<li>Pathoma: Chapter 13.1-13.3 (Asher, Omar)</li>
+<li>Bootcamp: Female Pathology playlist 4, videos 1, 2, 3, 8 (Omar)</li>
+<li>Boards Repro: Under Vagina, Cervix, Uterus (Omar)</li>
+<li>Notes (Omar): "You can watch either or you can watch both. (Pathoma better imo)"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Vaginal Skin Pathology"</span> <span class="mono dim">(video 2)</span> &mdash; Lichen sclerosus, squamous cell hyperplasia and the vulvar skin lesions this lecture opens with - matches videos 1-2 of the playlist that Omar cites.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Internal Vaginal Pathology"</span> <span class="mono dim">(video 1)</span> &mdash; Vaginal adenosis and the internal vaginal lesions, including the DES story.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Vaginal Cancer"</span> <span class="mono dim">(video 3)</span> &mdash; Vulvar and vaginal malignancy including clear cell adenocarcinoma; the deck page is actually titled 'Vulvar and Vaginal Cancer', slightly broader than the video name.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Cervical Pathology"</span> <span class="mono dim">(video 8)</span> &mdash; CIN/SIL grading, HPV pathogenesis and cervical carcinoma - the whole second half of this lecture. This is video 8 in the playlist, exactly as Omar lists it.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Cervical Cancer"</span> &mdash; A dedicated 20-page cervical carcinoma deck with more staging detail than Bootcamp.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Vaginal Cancer"</span> &mdash; Shorter 10-page vaginal malignancy deck covering the clear cell adenocarcinoma link.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp for breadth - videos 1, 2, 3 and 8 cover this lecture end to end and are exactly the four Omar already identified. Add B&amp;B Cervical Cancer only if staging is weak. Note Asher and Omar both rate Pathoma 13.1-13.3 above either.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 85% has a video backstop. <b>Not covered by video:</b><ul><li>Bartholin cyst and abscess - not covered as a discrete topic by either library</li><li>Extramammary Paget disease of the vulva</li><li>Embryonal rhabdomyosarcoma (sarcoma botryoides)</li><li>Ross-specific microinvasive carcinoma T1a1/T1a2 measurements</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>High-risk HPV infects immature basal cells at the squamocolumnar junction</li><li>Viral DNA integrates into the host genome, raising E6 and E7 expression</li><li>E6 degrades p53 and upregulates telomerase; E7 degrades RB and blocks p21/p27</li><li>Koilocytic atypia appears; LSIL confined to the lower third of the epithelium</li><li>HSIL expands to the upper two thirds</li><li>Invasion through the basement membrane gives microinvasive then frank carcinoma</li></ol></div>
+</article><article class="lec" data-group="4" data-tier="A" data-gap="0" data-res="bnb bootcamp pathoma sketchy" data-key="Disorders of the Uterus and PID.pdf" data-search="disorders of the uterus and pid disorders of the uterus and pid.pdf adenomyosis, endometrial hyperplasia, and asherman syndrome endometriosis and postpartum endometritis uterine cancer endometrial disorders endometrial cancer endometriosis pelvic inflammatory disease itself - neither library has a pid-specific video; bootcamp's endometritis coverage is the closest and it is not the same thing fitz-hugh-curtis syndrome and violin-string adhesions malignant mixed mullerian tumour (mmmt) acute versus chronic salpingitis morphology, hydrosalpinx and tubo-ovarian abscess">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Disorders of the Uterus and PID.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Disorders of the Uterus and PID</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Disorders of the Uterus and PID.pdf</span><span class="pill mono">43 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">80% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Disorders of the Uterus and PID</p><ul>
+<li>Pathoma: Chapter 13.4 (Asher, Omar)</li>
+<li>Bootcamp: Female Pathology playlist 4, videos 5, 6, and 7 (Omar)</li>
+<li>Boards Repro: Under Vagina, Cervix, Uterus (Omar)</li>
+<li>Sketchy: Chlamydia and Neisseria (Asher)</li>
+<li>Notes (Asher): "Read Uterus tumors"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Adenomyosis, Endometrial Hyperplasia, and Asherman Syndrome"</span> <span class="mono dim">(video 5)</span> &mdash; Adenomyosis and endometrial hyperplasia, two of this lecture's core entities - video 5 in the playlist, matching Omar's citation.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Endometriosis and Postpartum Endometritis"</span> <span class="mono dim">(video 6)</span> &mdash; Endometriosis and the endometritis material; video 6, again matching Omar.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Uterine Cancer"</span> <span class="mono dim">(video 7)</span> &mdash; Endometrial carcinoma type I versus type II plus leiomyoma and leiomyosarcoma; video 7.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Endometrial Disorders"</span> &mdash; Covers endometritis, endometrial hyperplasia and adenomyosis in one 19-page deck; scored second-highest of all B&amp;B decks against this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Endometrial Cancer"</span> &mdash; The type I/type II carcinoma deck - highest fingerprint overlap of any B&amp;B deck with this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Endometriosis"</span> &mdash; A dedicated 17-page endometriosis deck, deeper than the shared Bootcamp video.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B, narrowly. Bootcamp compresses endometriosis and endometritis into one 10-minute video, whereas B&amp;B gives endometriosis its own deck and splits endometrial disorders from endometrial cancer. If time is tight, Bootcamp videos 5-7 still cover the lecture.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 80% has a video backstop. <b>Not covered by video:</b><ul><li>Pelvic inflammatory disease itself - neither library has a PID-specific video; Bootcamp's endometritis coverage is the closest and it is not the same thing</li><li>Fitz-Hugh-Curtis syndrome and violin-string adhesions</li><li>Malignant mixed Mullerian tumour (MMMT)</li><li>Acute versus chronic salpingitis morphology, hydrosalpinx and tubo-ovarian abscess</li></ul></div>
+</article><article class="lec" data-group="4" data-tier="D" data-gap="1" data-res="bnb bootcamp" data-key="Genetic Counseling of Breast Cancer.pdf" data-search="genetic counseling in breast cancer genetic counseling of breast cancer.pdf breast cancer overview breast carcinoma pedigree construction and interpretation brca1 versus brca2 penetrance figures and cancer-spectrum differences palb2, atm, msh6, pten and tp53 as secondary genes criteria for referring a patient for genetic testing counselling process, consent and result disclosure risk-reducing surgery and surveillance options">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Genetic Counseling of Breast Cancer.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Genetic Counseling in Breast Cancer</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Genetic Counseling of Breast Cancer.pdf</span><span class="pill mono">31 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">15% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Genetic Counseling in Breast Cancer</p><ul>
+<li>Slides (Asher, Omar)</li>
+<li>Notes (Omar): "Stick with the slides"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Breast Cancer Overview"</span> <span class="mono dim">(video 12)</span> &mdash; Mentions BRCA as a risk factor but does not teach pedigree analysis, penetrance figures or counselling practice.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Breast Carcinoma"</span> &mdash; Covers the hereditary breast cancer genes in passing within a pathology deck.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides. Both Asher and Omar say 'Stick with the slides' and the index supports that - neither library has anything on genetic counselling as a discipline.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 15% has a video backstop. <b>Not covered by video:</b><ul><li>Pedigree construction and interpretation</li><li>BRCA1 versus BRCA2 penetrance figures and cancer-spectrum differences</li><li>PALB2, ATM, MSH6, PTEN and TP53 as secondary genes</li><li>Criteria for referring a patient for genetic testing</li><li>Counselling process, consent and result disclosure</li><li>Risk-reducing surgery and surveillance options</li></ul></div>
+</article><article class="lec" data-group="4" data-tier="B" data-gap="1" data-res="bnb bootcamp" data-key="Introduction to Gynecology 1.pdf" data-search="introduction to gynecology 1 introduction to gynecology 1.pdf ectopic pregnancy molar pregnancy adenomyosis, endometrial hyperplasia, and asherman syndrome gestational tumors endometriosis miscarriage classification (threatened/inevitable/incomplete/complete/missed/septic) pelvic support defects, uterine prolapse and rectocele stress urinary incontinence and its management pessary use and pelvic floor exercises the vaginitis comparison table (bv vs candidiasis vs trichomoniasis) ovarian cyst accidents and torsion risk factors">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Introduction to Gynecology 1.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Introduction to Gynecology 1</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Introduction to Gynecology 1.pdf</span><span class="pill mono">54 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">55% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Introduction to Gynecology 1 &amp; 2</p><ul>
+<li>Notes: "Review of stuff you learnt" (Asher) | "Basically a review session" (Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Ectopic Pregnancy"</span> <span class="mono dim">(video 1)</span> &mdash; The ectopic material this lecture spends several slides on, including the hCG thresholds and management ladder.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Molar Pregnancy"</span> <span class="mono dim">(video 2)</span> &mdash; The complete versus partial mole comparison this lecture tabulates.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Adenomyosis, Endometrial Hyperplasia, and Asherman Syndrome"</span> <span class="mono dim">(video 5)</span> &mdash; Covers the fibroid and adenomyosis content in the lower-abdominal-pain section.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Gestational Tumors"</span> &mdash; The molar pregnancy and GTD content.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Endometriosis"</span> &mdash; The endometriosis section of this lecture.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp, because this lecture is a clinical survey and Bootcamp's pathology videos are pitched at that level. Both Asher and Omar call this a review session, so treat the videos as revision rather than first-pass learning.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 55% has a video backstop. <b>Not covered by video:</b><ul><li>Miscarriage classification (threatened/inevitable/incomplete/complete/missed/septic)</li><li>Pelvic support defects, uterine prolapse and rectocele</li><li>Stress urinary incontinence and its management</li><li>Pessary use and pelvic floor exercises</li><li>The vaginitis comparison table (BV vs candidiasis vs trichomoniasis)</li><li>Ovarian cyst accidents and torsion risk factors</li></ul></div>
+</article><article class="lec" data-group="4" data-tier="B" data-gap="0" data-res="bnb bootcamp" data-key="Introduction to Gynecology 2.pdf" data-search="introduction to gynecology 2 - abnormal uterine bleeding introduction to gynecology 2.pdf menstrual cycle disorders adenomyosis, endometrial hyperplasia, and asherman syndrome polycystic ovarian syndrome endometrial cancer secondary amenorrhea the palm-coein style framework and the lecture's own 'three reasons' organising scheme aub from coagulopathy (von willebrand disease, ~13% of women with aub) postmenopausal bleeding workup and the 4 mm endometrial thickness cut-off breakthrough bleeding on hormonal contraception perimenopause and menopause definitions and management">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Introduction to Gynecology 2.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Introduction to Gynecology 2 - Abnormal Uterine Bleeding</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Introduction to Gynecology 2.pdf</span><span class="pill mono">51 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">60% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Introduction to Gynecology 1 &amp; 2</p><ul>
+<li>Notes: "Review of stuff you learnt" (Asher) | "Basically a review session" (Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Menstrual Cycle Disorders"</span> <span class="mono dim">(video 4)</span> &mdash; The best single match - menorrhagia, oligomenorrhea and the anovulatory bleeding mechanisms that this lecture is built around.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Adenomyosis, Endometrial Hyperplasia, and Asherman Syndrome"</span> <span class="mono dim">(video 5)</span> &mdash; Adenomyosis, hyperplasia and Asherman - three of the structural causes on this lecture's list.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Polycystic Ovarian Syndrome"</span> <span class="mono dim">(video 4)</span> &mdash; PCOS as the thickened-endometrium branch of the AUB differential.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Endometrial Cancer"</span> &mdash; Highest-scoring B&amp;B deck against this lecture, reflecting how much of it is the hyperplasia-to-carcinoma progression.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Secondary Amenorrhea"</span> &mdash; Overlaps the hypothalamic and iatrogenic causes of the atrophic-endometrium branch.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Menstrual Cycle Disorders is the single most efficient video for this lecture; add B&amp;B Endometrial Cancer for the hyperplasia grading and management algorithm.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 60% has a video backstop. <b>Not covered by video:</b><ul><li>The PALM-COEIN style framework and the lecture's own 'three reasons' organising scheme</li><li>AUB from coagulopathy (von Willebrand disease, ~13% of women with AUB)</li><li>Postmenopausal bleeding workup and the 4 mm endometrial thickness cut-off</li><li>Breakthrough bleeding on hormonal contraception</li><li>Perimenopause and menopause definitions and management</li></ul></div>
+</article><article class="lec" data-group="4" data-tier="A" data-gap="0" data-res="bnb bootcamp pathoma" data-key="Ovarian Tumors.pdf" data-search="ovarian tumors ovarian tumors.pdf ovarian cancer overview ovarian cancer subtypes ovarian epithelial tumors ovarian germ cell tumors ovarian stromal tumors krukenberg tumour and metastasis to the ovary - thin in both libraries pseudomyxoma peritonei and its appendiceal origin struma ovarii and ovarian carcinoid as monodermal teratomas">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Ovarian Tumors.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Ovarian Tumors</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Ovarian Tumors.pdf</span><span class="pill mono">31 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">90% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Ovarian Tumors</p><ul>
+<li>Pathoma: Chapter 13.6 (Asher, Omar)</li>
+<li>Bootcamp: Female Pathology playlist 4, videos 10 and 11 (Omar)</li>
+<li>Boards Repro: Under Ovary (Omar)</li>
+<li>Slides (Asher, Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Ovarian Cancer Overview"</span> <span class="mono dim">(video 10)</span> &mdash; The surface-epithelial/germ-cell/sex-cord-stromal classification framework this lecture is organised around; video 10, matching Omar's citation.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Ovarian Cancer Subtypes"</span> <span class="mono dim">(video 11)</span> &mdash; The individual tumours - serous, mucinous, Brenner, dysgerminoma, yolk sac, granulosa, Sertoli-Leydig. Video 11. Highest fingerprint overlap of any video with this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Ovarian Epithelial Tumors"</span> &mdash; Serous, mucinous, endometrioid, clear cell and Brenner in a dedicated 18-page deck.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Ovarian Germ Cell Tumors"</span> &mdash; Dysgerminoma, yolk sac, teratoma and choriocarcinoma.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Ovarian Stromal Tumors"</span> &mdash; Granulosa, thecoma/fibroma and Sertoli-Leydig, including Meigs syndrome.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B, clearly. Splitting the three lineages into three dedicated decks mirrors how this lecture and the exam think about ovarian tumours, whereas Bootcamp compresses all subtypes into a single 11-minute video. Omar's 'Boards Repro: Under Ovary' points the same way.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 90% has a video backstop. <b>Not covered by video:</b><ul><li>Krukenberg tumour and metastasis to the ovary - thin in both libraries</li><li>Pseudomyxoma peritonei and its appendiceal origin</li><li>Struma ovarii and ovarian carcinoid as monodermal teratomas</li></ul></div>
+</article><article class="lec" data-group="4" data-tier="A" data-gap="0" data-res="bnb bootcamp" data-key="Polycystic Ovarian Syndrome (PCOS) and Non-Neoplastic Ovarian Cysts.pdf" data-search="pcos and non-neoplastic ovarian cysts polycystic ovarian syndrome (pcos) and non-neoplastic ovarian cysts.pdf polycystic ovarian syndrome ovarian cysts ovarian cysts endometrioma as a cyst category (covered under endometriosis instead) the specific ca-125 caveats this workshop lists">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Polycystic Ovarian Syndrome (PCOS) and Non-Neoplastic Ovarian Cysts.pdf"><span></span></label>
+<div class="lectitle">
+<h3>PCOS and Non-Neoplastic Ovarian Cysts</h3>
+<div class="meta"><span class="pill">Group 4</span><span class="pill mono">Polycystic Ovarian Syndrome (PCOS) and Non-Neoplastic Ovarian Cysts.pdf</span><span class="pill mono">15 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">90% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Polycystic Ovarian Syndrome (PCOS) and Non-Neoplastic Ovarian Cysts</p><ul>
+<li>Bootcamp: Repro - PCOS + Ovarian Cysts (Asher) | Female Pathology playlist 4, videos 4 and 9 (Omar)</li>
+<li>Boards Repro: Ovary (Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Polycystic Ovarian Syndrome"</span> <span class="mono dim">(video 4)</span> &mdash; A full 14-minute treatment of PCOS - criteria, the LH/FSH ratio, hyperandrogenism and the endometrial cancer risk. Video 4, matching Omar.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Female Pathology</span> &rarr; <span class="vid">"Ovarian Cysts"</span> <span class="mono dim">(video 9)</span> &mdash; Follicular, corpus luteum and theca lutein cysts - the non-neoplastic half of this lecture. Video 9, again matching Omar.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Ovarian Cysts"</span> &mdash; An 11-page non-neoplastic cyst deck covering the same functional cyst types.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp. Videos 4 and 9 together map this short workshop almost exactly, and Bootcamp's PCOS video is more thorough on the endocrine mechanism than the B&amp;B cyst deck.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 90% has a video backstop. <b>Not covered by video:</b><ul><li>Endometrioma as a cyst category (covered under Endometriosis instead)</li><li>The specific CA-125 caveats this workshop lists</li></ul></div>
+<div class="add steps"><span class="nb">NEW</span> <b>Sequence recap:</b><ol><li>Exaggerated LH response to GnRH raises pituitary LH</li><li>High LH drives theca interna androstenedione production (hyperandrogenism)</li><li>Peripheral adipose aromatizes androgen to estrone</li><li>Estrone suppresses FSH, raising the LH/FSH ratio</li><li>The LH/FSH imbalance blocks follicle maturation, leaving peripheral unruptured follicles</li><li>Anovulation means no progesterone, so unopposed estrogen raises endometrial cancer risk</li></ol></div>
+</article><article class="lec orphan" data-group="4" data-tier="D" data-gap="1" data-res="slidesonly" data-key="orphan::Workshop: Amenorrhea Clinical Cases (Cumulative Review)" data-search="workshop: amenorrhea clinical cases (cumulative review)"><div class="lechd"><label class="chk"><input type="checkbox" data-lec="orphan::Workshop: Amenorrhea Clinical Cases (Cumulative Review)"><span></span></label><div class="lectitle"><h3>Workshop: Amenorrhea Clinical Cases (Cumulative Review)</h3><div class="meta"><span class="pill">Group 4</span><span class="pill mono">no lecture file</span><span class="tier tD">Tier D - No coverage</span></div></div></div><div class="orig"><div class="origlbl">From the original guide</div><ul><li>Notes (Omar): "Enjoy"</li></ul></div><div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> No lecture PDF exists in the lecture folder for this heading - it is a live cumulative-review session. Revise using the Clinical Approach to Amenorrhea resources above.</div></article><article class="lec orphan" data-group="4" data-tier="D" data-gap="1" data-res="slidesonly" data-key="orphan::Workshop: Clinical Cases in Gynecology (Cumulative Review)" data-search="workshop: clinical cases in gynecology (cumulative review)"><div class="lechd"><label class="chk"><input type="checkbox" data-lec="orphan::Workshop: Clinical Cases in Gynecology (Cumulative Review)"><span></span></label><div class="lectitle"><h3>Workshop: Clinical Cases in Gynecology (Cumulative Review)</h3><div class="meta"><span class="pill">Group 4</span><span class="pill mono">no lecture file</span><span class="tier tD">Tier D - No coverage</span></div></div></div><div class="orig"><div class="origlbl">From the original guide</div><ul><li>Notes (Omar): "Kinda getting sick of these cumulative reviews"</li></ul></div><div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> No lecture PDF exists in the lecture folder for this heading - it is a live cumulative-review session drawing on the whole Gynecology group.</div></article></section><section class="grp" data-group="5"><div class="grphd"><h2>Group 5 &middot; Pharmacology</h2><div class="prog"><div class="bar"><i data-progbar="5"></i></div><span class="pct mono" data-progtxt="5">0 / 3</span></div></div><p class="grpdesc"><span class="nb">NEW</span> Three lectures that cut across the other groups rather than sitting under one organ: the female reproductive drugs (contraceptives, SERMs, ovulation induction), the neoplasm drugs (hormonal and cytotoxic agents for breast/ovarian/endometrial cancer), and the gynecologic/obstetric drugs (uterotonics, tocolytics). Match them against the Bootcamp Pharmacology playlist, not the pathology playlists.</p><p class="grpstat mono">3 lectures &middot; average video coverage 53%</p><article class="lec" data-group="5" data-tier="B" data-gap="1" data-res="bootcamp" data-key="Pharmacology of Gynecological &amp; Obstetrical Conditions.pdf" data-search="pharmacology of gynecological and obstetrical conditions pharmacology of gynecological &amp; obstetrical conditions.pdf tamsulosin, minoxidil, tocolytics hormone replacement therapy contraception  uterotonics - oxytocin, methylergonovine, carboprost, misoprostol magnesium sulfate for seizure prophylaxis in preeclampsia antenatal corticosteroids for fetal lung maturity rh immunoglobulin (rhogam) dosing and timing drugs for hyperemesis gravidarum pregnancy drug-safety categories">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Pharmacology of Gynecological &amp; Obstetrical Conditions.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Pharmacology of Gynecological and Obstetrical Conditions</h3>
+<div class="meta"><span class="pill">Group 5</span><span class="pill mono">Pharmacology of Gynecological &amp; Obstetrical Conditions.pdf</span><span class="pill mono">36 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">40% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Pharmacology of Gynecological &amp; Obstetrical Conditions</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Tamsulosin, Minoxidil, Tocolytics"</span> <span class="mono dim">(video 7)</span> &mdash; The only video in either library that covers tocolytics, which are central to this lecture's obstetric half.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Hormone Replacement Therapy"</span> <span class="mono dim">(video 5)</span> &mdash; Overlaps the gynecologic hormone-therapy content.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Contraception"</span> <span class="mono dim">(video 6)</span> &mdash; Overlaps the contraceptive portion.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Tamsulosin, Minoxidil, Tocolytics for the tocolytic content, then slides for everything else. Note the video bundles tocolytics with two unrelated urologic drugs, so only part of it is relevant.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 40% has a video backstop. <b>Not covered by video:</b><ul><li>Uterotonics - oxytocin, methylergonovine, carboprost, misoprostol</li><li>Magnesium sulfate for seizure prophylaxis in preeclampsia</li><li>Antenatal corticosteroids for fetal lung maturity</li><li>Rh immunoglobulin (RhoGAM) dosing and timing</li><li>Drugs for hyperemesis gravidarum</li><li>Pregnancy drug-safety categories</li></ul></div>
+</article><article class="lec" data-group="5" data-tier="B" data-gap="1" data-res="bootcamp" data-key="Pharmacology of Reproductive System Neoplasms.pdf" data-search="pharmacology of reproductive system neoplasms pharmacology of reproductive system neoplasms.pdf selective estrogen receptor modulators gnrh modulators androgen modulators antiandrogens  aromatase inhibitors (anastrozole, letrozole) as a class trastuzumab and her2-targeted therapy platinum-based chemotherapy for ovarian cancer parp inhibitors in brca-mutated disease cytotoxic agent toxicity profiles">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Pharmacology of Reproductive System Neoplasms.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Pharmacology of Reproductive System Neoplasms</h3>
+<div class="meta"><span class="pill">Group 5</span><span class="pill mono">Pharmacology of Reproductive System Neoplasms.pdf</span><span class="pill mono">26 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">45% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Pharmacology of Reproductive System Neoplasms</p><ul>
+<li>Slides (Asher, Omar)</li>
+<li>Notes (Omar): "Stick with the slides"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Selective Estrogen Receptor Modulators"</span> <span class="mono dim">(video 2)</span> &mdash; Tamoxifen and raloxifene as the hormonal backbone of breast cancer treatment.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"GnRH Modulators"</span> <span class="mono dim">(video 1)</span> &mdash; Leuprolide and goserelin in hormone-responsive tumours.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Androgen Modulators"</span> <span class="mono dim">(video 3)</span> &mdash; Androgen-axis agents relevant to the prostate content of this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Antiandrogens"</span> <span class="mono dim">(video 4)</span> &mdash; Flutamide and related agents, again mostly on the prostate side.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Pharmacology playlist, but expect gaps - the videos are pitched at Step 1 hormone modulators and do not cover cytotoxic chemotherapy or targeted agents. Both Asher and Omar say 'Stick with the slides' for this one.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 45% has a video backstop. <b>Not covered by video:</b><ul><li>Aromatase inhibitors (anastrozole, letrozole) as a class</li><li>Trastuzumab and HER2-targeted therapy</li><li>Platinum-based chemotherapy for ovarian cancer</li><li>PARP inhibitors in BRCA-mutated disease</li><li>Cytotoxic agent toxicity profiles</li></ul></div>
+</article><article class="lec" data-group="5" data-tier="A" data-gap="0" data-res="bnb bootcamp" data-key="Pharmacology of the Female Reproductive System.pdf" data-search="pharmacology of the female reproductive system pharmacology of the female reproductive system.pdf contraception hormone replacement therapy selective estrogen receptor modulators gnrh modulators contraceptives female reproductive hormones ovulation-induction protocols beyond clomiphene (letrozole, gonadotropins) ross-specific adverse-effect tables and contraindication lists drugs for abnormal uterine bleeding (tranexamic acid)">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Pharmacology of the Female Reproductive System.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Pharmacology of the Female Reproductive System</h3>
+<div class="meta"><span class="pill">Group 5</span><span class="pill mono">Pharmacology of the Female Reproductive System.pdf</span><span class="pill mono">50 slides</span><span class="tier tA">Tier A - Direct</span><span class="cov">75% covered</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Pharmacology of the Female Reproductive System</p><ul>
+<li>Slides (Asher)</li>
+<li>Notes (Omar): "Just do the slides"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Contraception"</span> <span class="mono dim">(video 6)</span> &mdash; Combined and progestin-only contraception, mechanisms and adverse effects - the highest fingerprint overlap of any video with this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Hormone Replacement Therapy"</span> <span class="mono dim">(video 5)</span> &mdash; Menopausal hormone therapy, its indications and its risks.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Selective Estrogen Receptor Modulators"</span> <span class="mono dim">(video 2)</span> &mdash; Tamoxifen, raloxifene and clomiphene - tissue-selective agonism/antagonism.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"GnRH Modulators"</span> <span class="mono dim">(video 1)</span> &mdash; Agonists versus antagonists and the pulsatile-versus-continuous distinction.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Contraceptives"</span> &mdash; An 18-page contraceptives deck, the only B&amp;B deck squarely on this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Female Reproductive Hormones"</span> &mdash; The endogenous hormone background the drugs act on.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp. The Pharmacology playlist is organised drug-class by drug-class, which is how this lecture and the exam approach it; B&amp;B only has the contraceptives deck at this level of specificity.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier A - Direct &mdash; approx 75% has a video backstop. <b>Not covered by video:</b><ul><li>Ovulation-induction protocols beyond clomiphene (letrozole, gonadotropins)</li><li>Ross-specific adverse-effect tables and contraindication lists</li><li>Drugs for abnormal uterine bleeding (tranexamic acid)</li></ul></div>
+</article></section><section class="grp" data-group="6"><div class="grphd"><h2>Group 6 &middot; Infectious Disease / STIs</h2><div class="prog"><div class="bar"><i data-progbar="6"></i></div><span class="pct mono" data-progtxt="6">0 / 2</span></div></div><p class="grpdesc"><span class="nb">NEW</span> Two very short Canvas cover pages rather than full decks - they carry learning objectives and a reading list, not content. The actual STI material for this unit lives in Sketchy and in the table Asher and Omar already built into this guide, which is why their notes both say to lock in on Sketchy.</p><p class="grpstat mono">2 lectures &middot; average video coverage 25%</p><article class="lec" data-group="6" data-tier="C" data-gap="1" data-res="bnb sketchy" data-key="Sexually-Transmitted Infections.pdf" data-search="sexually-transmitted infections sexually-transmitted infections.pdf  torchinfections this file is a 3-page canvas cover page - objectives and a reading list, not content. the actual material must come from sketchy and the reading chancroid (haemophilus ducreyi) and the painful-versus-painless ulcer distinction discharge characteristics side-by-side, which the authors flag as the highest-yield part group b streptococcus and listeria in the perinatal context">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Sexually-Transmitted Infections.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Sexually-Transmitted Infections</h3>
+<div class="meta"><span class="pill">Group 6</span><span class="pill mono">Sexually-Transmitted Infections.pdf</span><span class="pill mono">3 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">35% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Sexually Transmitted Infections</p><ul>
+<li>Sketchy: Table has all infections you need to know (Asher)</li>
+<li>Notes (Omar): "Lock in on sketchy. These are the ones you need to know. Very buzzy type (ESPECIALLY DISCHARGE)."</li>
+</ul>
+<div class="tscroll"><table class="sti"><thead><tr><th>Category</th><th>Organism</th><th>Buzzwords &amp; Details</th><th>Source</th></tr></thead><tbody>
+<tr><td>Bacteria / Fungi</td><td>Chlamydia trachomatis</td><td><mark>Watery discharge</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Bacteria / Fungi</td><td>Neisseria gonorrhoeae</td><td><mark>Thick wax</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Bacteria / Fungi</td><td>Treponema pallidum</td><td><mark>Painless ulcer + lymph</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Bacteria / Fungi</td><td>Haemophilus ducreyi</td><td><mark>Painful lymph nodes</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Bacteria / Fungi</td><td>Streptococcus agalactiae</td><td>-</td><td>Asher, Omar</td></tr>
+<tr><td>Bacteria / Fungi</td><td>Listeria</td><td>-</td><td>Asher, Omar</td></tr>
+<tr><td>Bacteria / Fungi</td><td>Candida</td><td><mark>Pseudohyphae</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Viruses</td><td>Cytomegalovirus</td><td><mark>Deafness + blueberry muffin rash</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Viruses</td><td>Rubella</td><td><mark>Eye, deafness + PDA</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Viruses</td><td>Parvovirus</td><td><mark>Slapped Cheek + Hydrops fetalis</mark></td><td>Asher, Omar</td></tr>
+<tr><td>Viruses</td><td>Hepatitis B virus</td><td>-</td><td>Asher, Omar</td></tr>
+<tr><td>Viruses</td><td>HIV</td><td>-</td><td>Asher, Omar</td></tr>
+<tr><td>Parasite</td><td>Toxoplasma gondii</td><td>-</td><td>Asher, Omar</td></tr>
+<tr><td>Parasite</td><td>Trichomonas vaginalis</td><td><mark>Green discharge + motile trophozoites, elevated pH</mark></td><td>Asher, Omar</td></tr>
+</tbody></table></div>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"TORCHInfections"</span> &mdash; The congenital and perinatal infection half of this workshop's objectives - toxoplasmosis, CMV, rubella, syphilis and parvovirus B19 - in a dedicated 22-page deck.</div>
+<div class="add"><span class="nb">NEW</span> <b>Other:</b> Sketchy Micro - the resource both Asher and Omar name for this session</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Sketchy, per both authors. B&amp;B TORCH Infections is worth adding for the congenital infections specifically, since that is an explicit objective of this workshop and Sketchy splits those across several sketches.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 35% has a video backstop. <b>Not covered by video:</b><ul><li>This file is a 3-page Canvas cover page - objectives and a reading list, not content. The actual material must come from Sketchy and the reading</li><li>Chancroid (Haemophilus ducreyi) and the painful-versus-painless ulcer distinction</li><li>Discharge characteristics side-by-side, which the authors flag as the highest-yield part</li><li>Group B Streptococcus and Listeria in the perinatal context</li></ul></div>
+</article><article class="lec" data-group="6" data-tier="D" data-gap="1" data-res="bnb sketchy" data-key="Viral STIs.pdf" data-search="viral stis viral stis.pdf  cervical cancer this file is a 2-page canvas cover page - objectives and reading list only hsv and hpv structure, latency and reactivation transmission, tropism and cytopathic effect diagnostic testing and prevention including hpv vaccination">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Viral STIs.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Viral STIs</h3>
+<div class="meta"><span class="pill">Group 6</span><span class="pill mono">Viral STIs.pdf</span><span class="pill mono">2 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">15% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Viral Sexually Transmitted Infections</p><ul>
+<li>Sketchy: HSV + HPV (Asher, Omar)</li>
+<li>Notes (Omar): "Lock in on sketchy. It will be under HSV + HPV"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Cervical Cancer"</span> &mdash; Carries the HPV oncogenesis mechanism (E6/E7) that is one of this session's stated objectives, though it approaches it from the cancer side rather than the virology side.</div>
+<div class="add"><span class="nb">NEW</span> <b>Other:</b> Sketchy - HSV and HPV, named by both Asher and Omar</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Sketchy HSV and HPV, exactly as both authors say. Neither video library has a virology deck for these organisms.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 15% has a video backstop. <b>Not covered by video:</b><ul><li>This file is a 2-page Canvas cover page - objectives and reading list only</li><li>HSV and HPV structure, latency and reactivation</li><li>Transmission, tropism and cytopathic effect</li><li>Diagnostic testing and prevention including HPV vaccination</li></ul></div>
+</article></section><section class="grp" data-group="7"><div class="grphd"><h2>Group 7 &middot; Pediatrics and Lifespan Development</h2><div class="prog"><div class="bar"><i data-progbar="7"></i></div><span class="pct mono" data-progtxt="7">0 / 4</span></div></div><p class="grpdesc"><span class="nb">NEW</span> Congenital and neonatal pathology (malformation vs deformation vs disruption, teratogens, neural tube defects, RDS, NEC, hemolytic disease, cystic fibrosis, SIDS) plus the normal-development lecture. The teratogen and morphogenesis-error content overlaps Group 1 embryology; the neonatal pathology overlaps Group 3 obstetrics.</p><p class="grpstat mono">4 lectures &middot; average video coverage 34%</p><article class="lec" data-group="7" data-tier="D" data-gap="1" data-res="bootcamp" data-key="Human Development Through Adulthood-Multi Page.pdf" data-search="human development through adulthood human development through adulthood-multi page.pdf childhood development  adolescent, adult and late-adulthood developmental stages psychosocial development theory as applied in this workshop aging physiology anything past the paediatric milestone tables">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Human Development Through Adulthood-Multi Page.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Human Development Through Adulthood</h3>
+<div class="meta"><span class="pill">Group 7</span><span class="pill mono">Human Development Through Adulthood-Multi Page.pdf</span><span class="pill mono">29 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">15% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Human Development Through Adulthood</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pregnancy and Menstruation</span> &rarr; <span class="vid">"Childhood Development"</span> <span class="mono dim">(video 8)</span> &mdash; At 4:48 the shortest video in the library; covers developmental milestones only, and this lecture runs from infancy through late adulthood.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides. The single Bootcamp video is a milestones summary and does not attempt the lifespan-psychology content that makes up most of this workshop.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 15% has a video backstop. <b>Not covered by video:</b><ul><li>Adolescent, adult and late-adulthood developmental stages</li><li>Psychosocial development theory as applied in this workshop</li><li>Aging physiology</li><li>Anything past the paediatric milestone tables</li></ul></div>
+</article><article class="lec" data-group="7" data-tier="C" data-gap="1" data-res="bnb bootcamp" data-key="Diseases of Pregnancy, Infancy, Childhood.pdf" data-search="pathology lab: diseases of pregnancy, infancy and childhood diseases of pregnancy, infancy, childhood.pdf molar pregnancy ectopic pregnancy gestational tumors maternal fetal disorders the necrotizing enterocolitis case (case 4) - no video coverage the cystic fibrosis pancreatic biopsy case (case 5) - no video coverage image-interpretation practice itself, which is the point of the lab">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Diseases of Pregnancy, Infancy, Childhood.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Pathology Lab: Diseases of Pregnancy, Infancy and Childhood</h3>
+<div class="meta"><span class="pill">Group 7</span><span class="pill mono">Diseases of Pregnancy, Infancy, Childhood.pdf</span><span class="pill mono">36 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">40% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig none"><div class="origlbl">From the original guide</div><p class="nonep">No entry for this lecture existed in the original guide.</p></div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Molar Pregnancy"</span> <span class="mono dim">(video 2)</span> &mdash; Case 1 of this lab is a complete mole, and this video covers the ultrasound, gross and histologic findings the case asks you to interpret.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Ectopic Pregnancy"</span> <span class="mono dim">(video 1)</span> &mdash; Case 2 is a ruptured tubal ectopic; this video covers the risk factors the case tests.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Gestational Tumors"</span> &mdash; Backs the molar pregnancy case with more histologic detail.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Maternal Fetal Disorders"</span> &mdash; Backs the hemolytic disease of the newborn case.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> This is a case-based lab, so watch the videos for the underlying entities first and then work the cases cold - the value is in the image interpretation, not in new content.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 40% has a video backstop. <b>Not covered by video:</b><ul><li>The necrotizing enterocolitis case (Case 4) - no video coverage</li><li>The cystic fibrosis pancreatic biopsy case (Case 5) - no video coverage</li><li>Image-interpretation practice itself, which is the point of the lab</li></ul></div>
+</article><article class="lec" data-group="7" data-tier="B" data-gap="1" data-res="bnb bootcamp" data-key="Pathology of Diseases of Infancy and Childhood 1.pdf" data-search="pathology of diseases of infancy and childhood 1 pathology of diseases of infancy and childhood 1.pdf teratogenic medications polyhydramnios and oligohydramnios errors morphogenesis teratogens1 teratogens2 neonatal respiratory distress syndrome - surfactant, hyaline membranes, l:s ratio. neither library covers it and it is a major objective retinopathy of prematurity and its two-phase vegf mechanism bronchopulmonary dysplasia apgar score components and timing fetal growth restriction, sga versus lga definitions and macrosomia neural tube defect subtypes beyond the embryology basics fetal alcohol syndrome diagnostic criteria">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Pathology of Diseases of Infancy and Childhood 1.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Pathology of Diseases of Infancy and Childhood 1</h3>
+<div class="meta"><span class="pill">Group 7</span><span class="pill mono">Pathology of Diseases of Infancy and Childhood 1.pdf</span><span class="pill mono">37 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">55% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Pathology of Diseases of Infancy and Childhood 1 &amp; 2</p><ul>
+<li>Slides (Asher)</li>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Teratogenic Medications"</span> <span class="mono dim">(video 3)</span> &mdash; The teratogen tables that occupy three slides of this lecture - medications, substances and maternal conditions.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pathologies of Pregnancy</span> &rarr; <span class="vid">"Polyhydramnios and Oligohydramnios"</span> <span class="mono dim">(video 5)</span> &mdash; Oligohydramnios is the initiating event in Potter sequence, which this lecture uses as its worked example of a sequence.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Errors Morphogenesis"</span> &mdash; The malformation/deformation/disruption/sequence vocabulary that opens this lecture - an 11-page deck aimed squarely at it.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Teratogens1"</span> &mdash; First of two teratogen decks, more thorough than the single Bootcamp video.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Teratogens2"</span> &mdash; Second teratogen deck completing the drug and substance coverage.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> B&amp;B. Errors of Morphogenesis is the only resource in either library that teaches the malformation-versus-deformation-versus-disruption distinction as its own topic, and that is an explicit learning objective here. Pair it with the two Teratogens decks.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 55% has a video backstop. <b>Not covered by video:</b><ul><li>Neonatal respiratory distress syndrome - surfactant, hyaline membranes, L:S ratio. Neither library covers it and it is a major objective</li><li>Retinopathy of prematurity and its two-phase VEGF mechanism</li><li>Bronchopulmonary dysplasia</li><li>APGAR score components and timing</li><li>Fetal growth restriction, SGA versus LGA definitions and macrosomia</li><li>Neural tube defect subtypes beyond the embryology basics</li><li>Fetal alcohol syndrome diagnostic criteria</li></ul></div>
+</article><article class="lec" data-group="7" data-tier="C" data-gap="1" data-res="bnb" data-key="Pathology of Diseases of Infancy and Childhood 2.pdf" data-search="pathology of diseases of infancy and childhood 2 pathology of diseases of infancy and childhood 2.pdf  maternal fetal disorders necrotizing enterocolitis - pneumatosis intestinalis, prematurity as the main risk factor cystic fibrosis - cftr mechanism, the sweat-duct exception, meconium ileus, pancreatic insufficiency, cbavd primary ciliary dyskinesia and kartagener syndrome sudden infant death syndrome - definition, risk factors, safe to sleep kernicterus and its neurologic sequelae non-immune hydrops causes">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Pathology of Diseases of Infancy and Childhood 2.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Pathology of Diseases of Infancy and Childhood 2</h3>
+<div class="meta"><span class="pill">Group 7</span><span class="pill mono">Pathology of Diseases of Infancy and Childhood 2.pdf</span><span class="pill mono">22 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">25% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Pathology of Diseases of Infancy and Childhood 1 &amp; 2</p><ul>
+<li>Slides (Asher)</li>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Maternal Fetal Disorders"</span> &mdash; Covers Rh alloimmunisation and hemolytic disease of the newborn, which is roughly the first third of this lecture.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides. B&amp;B Maternal Fetal Disorders handles the hemolytic disease portion; nothing in either library covers necrotizing enterocolitis, cystic fibrosis or SIDS, which together are most of this lecture.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 25% has a video backstop. <b>Not covered by video:</b><ul><li>Necrotizing enterocolitis - pneumatosis intestinalis, prematurity as the main risk factor</li><li>Cystic fibrosis - CFTR mechanism, the sweat-duct exception, meconium ileus, pancreatic insufficiency, CBAVD</li><li>Primary ciliary dyskinesia and Kartagener syndrome</li><li>Sudden infant death syndrome - definition, risk factors, Safe to Sleep</li><li>Kernicterus and its neurologic sequelae</li><li>Non-immune hydrops causes</li></ul></div>
+</article></section><section class="grp" data-group="8"><div class="grphd"><h2>Group 8 &middot; Public Health, Ethics and Community Medicine</h2><div class="prog"><div class="bar"><i data-progbar="8"></i></div><span class="pct mono" data-progtxt="8">0 / 6</span></div></div><p class="grpdesc"><span class="nb">NEW</span> The non-biomedical arm of the unit - sexuality, gender identity, sex assigned at birth, contraception ethics, and community/prenatal/adolescent health. Board-style video libraries do not cover this material at all, by design: it is Ross-specific and slide-only. Treat this group as read-the-slides territory and budget time accordingly.</p><p class="grpstat mono">6 lectures &middot; average video coverage 12%</p><article class="lec" data-group="8" data-tier="D" data-gap="1" data-res="slidesonly" data-key="Adolescent Health in the Community.pdf" data-search="adolescent health in the community adolescent health in the community.pdf   no coverage in either library. entire lecture is slides-only.">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Adolescent Health in the Community.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Adolescent Health in the Community</h3>
+<div class="meta"><span class="pill">Group 8</span><span class="pill mono">Adolescent Health in the Community.pdf</span><span class="pill mono">34 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">0% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Adolescent Health in the Community</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides only. Board-review video libraries do not cover public health, ethics or community medicine - this is Ross-specific material by design.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 0% has a video backstop. <b>Not covered by video:</b><ul><li>No coverage in either library. Entire lecture is slides-only.</li></ul></div>
+</article><article class="lec" data-group="8" data-tier="B" data-gap="1" data-res="bnb bootcamp" data-key="Contraception and Reproductive Ethics.pdf" data-search="contraception and reproductive ethics contraception and reproductive ethics.pdf contraception contraceptives reproductive ethics - autonomy, consent, minors, conscientious objection legal and policy framework around contraception access counselling approach and shared decision-making emergency contraception counselling specifics">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Contraception and Reproductive Ethics.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Contraception and Reproductive Ethics</h3>
+<div class="meta"><span class="pill">Group 8</span><span class="pill mono">Contraception and Reproductive Ethics.pdf</span><span class="pill mono">21 slides</span><span class="tier tB">Tier B - Partial</span><span class="cov">45% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Contraception and Reproductive Ethics</p><ul>
+<li>Notes (Omar): "Enjoy"</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Pharmacology</span> &rarr; <span class="vid">"Contraception"</span> <span class="mono dim">(video 6)</span> &mdash; Covers the pharmacology and mechanism of each contraceptive method, which is the first half of this workshop. It does not touch the ethics half at all.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder A]:</b> <span class="vid">"Contraceptives"</span> &mdash; The same pharmacologic content in deck form, 18 pages.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Bootcamp Contraception for the methods and their efficacy; the ethics content is slides-only in both libraries.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier B - Partial &mdash; approx 45% has a video backstop. <b>Not covered by video:</b><ul><li>Reproductive ethics - autonomy, consent, minors, conscientious objection</li><li>Legal and policy framework around contraception access</li><li>Counselling approach and shared decision-making</li><li>Emergency contraception counselling specifics</li></ul></div>
+</article><article class="lec" data-group="8" data-tier="D" data-gap="1" data-res="slidesonly" data-key="Introduction to Sexuality- Multi Page.pdf" data-search="introduction to sexuality introduction to sexuality- multi page.pdf   no coverage in either library. entire lecture is slides-only.">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Introduction to Sexuality- Multi Page.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Introduction to Sexuality</h3>
+<div class="meta"><span class="pill">Group 8</span><span class="pill mono">Introduction to Sexuality- Multi Page.pdf</span><span class="pill mono">46 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">0% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Workshop: Introduction to Sexuality</p><ul>
+<li>Notes (Omar): "46 pages lol. Sorry guys."</li>
+</ul>
+</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides only. Board-review video libraries do not cover public health, ethics or community medicine - this is Ross-specific material by design.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 0% has a video backstop. <b>Not covered by video:</b><ul><li>No coverage in either library. Entire lecture is slides-only.</li></ul></div>
+</article><article class="lec" data-group="8" data-tier="D" data-gap="1" data-res="slidesonly" data-key="Prenatal and Early Childhood Health in the Community.pdf" data-search="prenatal and early childhood health in the community prenatal and early childhood health in the community.pdf   no coverage in either library. entire lecture is slides-only.">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Prenatal and Early Childhood Health in the Community.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Prenatal and Early Childhood Health in the Community</h3>
+<div class="meta"><span class="pill">Group 8</span><span class="pill mono">Prenatal and Early Childhood Health in the Community.pdf</span><span class="pill mono">40 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">0% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Prenatal and Early Childhood Health in the Community</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides only. Board-review video libraries do not cover public health, ethics or community medicine - this is Ross-specific material by design.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 0% has a video backstop. <b>Not covered by video:</b><ul><li>No coverage in either library. Entire lecture is slides-only.</li></ul></div>
+</article><article class="lec" data-group="8" data-tier="C" data-gap="1" data-res="bnb bootcamp" data-key="Sex Assigned at Birth and Community Health.pdf" data-search="sex assigned at birth and community health sex assigned at birth and community health.pdf sexual differentiation disorders of sexual development part 1 disorders of sexual development part 2 disorders sex development community health framing and health-disparities content policy, legal and documentation aspects of sex assigned at birth clinical communication and terminology guidance everything outside the dsd biology - the majority of the lecture">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Sex Assigned at Birth and Community Health.pdf"><span></span></label>
+<div class="lectitle">
+<h3>Sex Assigned at Birth and Community Health</h3>
+<div class="meta"><span class="pill">Group 8</span><span class="pill mono">Sex Assigned at Birth and Community Health.pdf</span><span class="pill mono">69 slides</span><span class="tier tC">Tier C - Adjacent</span><span class="cov">25% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> Sex Assigned at Birth and Community Health</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Sexual Differentiation"</span> <span class="mono dim">(video 5)</span> &mdash; The SRY/anti-Mullerian pathway that determines phenotypic sex - background to the biological half of this lecture, though not to its community-health content.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Disorders of Sexual Development Part 1"</span> <span class="mono dim">(video 8)</span> &mdash; Androgen insensitivity and 5-alpha reductase deficiency, the conditions behind the intersex/DSD discussion in this lecture.</div>
+<div class="add"><span class="nb">NEW</span> <b>Bootcamp:</b> <span class="pill">Fetal Development</span> &rarr; <span class="vid">"Disorders of Sexual Development Part 2"</span> <span class="mono dim">(video 9)</span> &mdash; Placental aromatase deficiency and Kallmann syndrome, completing the DSD set.</div>
+<div class="add"><span class="nb">NEW</span> <b>B&amp;B [folder B]:</b> <span class="vid">"Disorders Sex Development"</span> &mdash; The B&amp;B DSD deck; more thorough than the two Bootcamp videos combined and the better choice if you want the biology properly.</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Use the DSD videos for the biology only. The community-health, policy and ethics content - which is most of this 69-slide lecture - has no video coverage anywhere.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier C - Adjacent &mdash; approx 25% has a video backstop. <b>Not covered by video:</b><ul><li>Community health framing and health-disparities content</li><li>Policy, legal and documentation aspects of sex assigned at birth</li><li>Clinical communication and terminology guidance</li><li>Everything outside the DSD biology - the majority of the lecture</li></ul></div>
+</article><article class="lec" data-group="8" data-tier="D" data-gap="1" data-res="slidesonly" data-key="Gender Identity Sexuality and Sexual Health.pdf" data-search="tbl: gender identity, sexuality and sexual health gender identity sexuality and sexual health.pdf   no coverage in either library. entire lecture is slides-only.">
+<div class="lechd">
+<label class="chk"><input type="checkbox" data-lec="Gender Identity Sexuality and Sexual Health.pdf"><span></span></label>
+<div class="lectitle">
+<h3>TBL: Gender Identity, Sexuality and Sexual Health</h3>
+<div class="meta"><span class="pill">Group 8</span><span class="pill mono">Gender Identity Sexuality and Sexual Health.pdf</span><span class="pill mono">14 slides</span><span class="tier tD">Tier D - No coverage</span><span class="cov">0% covered</span><span class="gapb">GAP</span></div>
+</div></div>
+<div class="orig"><div class="origlbl">From the original guide</div><p class="origheading"><b>Original guide heading:</b> TBL: Gender Identity, Sexuality and Sexual Health</p><ul>
+<li>(Refer to slides per general rule - Omar)</li>
+</ul>
+</div>
+<div class="add which"><span class="nb">NEW</span> <b>Which to use:</b> Slides only. Board-review video libraries do not cover public health, ethics or community medicine - this is Ross-specific material by design.</div>
+<div class="add covrail"><span class="nb">NEW</span> <b>Coverage:</b> Tier D - No coverage &mdash; approx 0% has a video backstop. <b>Not covered by video:</b><ul><li>No coverage in either library. Entire lecture is slides-only.</li></ul></div>
+</article></section>
+
+  <div class="nores" id="nores">No lecture matches those filters.</div>
+</div>
+
+<footer>
+  <hr>
+  Built from the in-house Mini 2 lecture PDFs and the Bootcamp / Boards &amp; Beyond decks on disk.
+  Original guide by Asher and Omar, preserved verbatim. Video citations were validated against the
+  master video list and deck filenames - nothing here is invented.
+</footer>
+
+<script>
+(function(){
+ var KEY='enreM2GuideWatched_v1';
+ function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}}
+ function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+ var state=load();
+
+ // restore checkboxes
+ document.querySelectorAll('input[data-lec]').forEach(function(cb){
+   if(state[cb.dataset.lec]){cb.checked=true;cb.closest('.lec').classList.add('done');}
+   cb.addEventListener('change',function(){
+     state[cb.dataset.lec]=cb.checked; if(!cb.checked) delete state[cb.dataset.lec];
+     save(state); cb.closest('.lec').classList.toggle('done',cb.checked); progress();
+   });
+ });
+
+ function progress(){
+   document.querySelectorAll('section.grp').forEach(function(sec){
+     var g=sec.dataset.group;
+     var all=sec.querySelectorAll('.lec');
+     var done=sec.querySelectorAll('.lec input[data-lec]:checked').length;
+     var bar=document.querySelector('[data-progbar="'+g+'"]');
+     var txt=document.querySelector('[data-progtxt="'+g+'"]');
+     if(bar) bar.style.width=(all.length?(done/all.length*100):0)+'%';
+     if(txt) txt.textContent=done+' / '+all.length;
+   });
+ }
+
+ // filters
+ var F={group:null,res:null,tier:null,gap:false,newonly:false,q:''};
+ var qEl=document.getElementById('q'), countEl=document.getElementById('count'), noresEl=document.getElementById('nores');
+
+ document.querySelectorAll('.chip').forEach(function(c){
+   c.addEventListener('click',function(){
+     var k=c.dataset.kind, v=c.dataset.val;
+     if(k==='gap'||k==='newonly'){
+       F[k]=!F[k]; c.classList.toggle('on',F[k]);
+       if(k==='newonly') document.body.classList.toggle('newonly',F.newonly);
+     } else {
+       var on = F[k]===v;
+       F[k]= on? null : v;
+       document.querySelectorAll('.chip[data-kind="'+k+'"]').forEach(function(o){o.classList.remove('on')});
+       if(!on) c.classList.add('on');
+     }
+     apply();
+   });
+ });
+ qEl.addEventListener('input',function(){F.q=qEl.value.trim().toLowerCase();apply();});
+
+ function apply(){
+   var vis=0, tot=0;
+   document.querySelectorAll('.lec').forEach(function(a){
+     tot++;
+     var ok=true;
+     if(F.group && a.dataset.group!==F.group) ok=false;
+     if(ok&&F.tier && a.dataset.tier!==F.tier) ok=false;
+     if(ok&&F.gap && a.dataset.gap!=='1') ok=false;
+     if(ok&&F.res && (' '+a.dataset.res+' ').indexOf(' '+F.res+' ')<0) ok=false;
+     if(ok&&F.q && a.dataset.search.indexOf(F.q)<0) ok=false;
+     a.style.display=ok?'':'none';
+     if(ok) vis++;
+   });
+   document.querySelectorAll('section.grp').forEach(function(s){
+     var any=s.querySelectorAll('.lec:not([style*="display: none"])').length;
+     s.style.display=any?'':'none';
+   });
+   // master table rows follow the same filters (except search)
+   document.querySelectorAll('tbody[data-master] tr').forEach(function(tr){
+     var ok=true;
+     if(F.group && tr.dataset.group!==F.group) ok=false;
+     if(ok&&F.tier && tr.dataset.tier!==F.tier) ok=false;
+     if(ok&&F.gap && tr.dataset.gap!=='1') ok=false;
+     tr.style.display=ok?'':'none';
+   });
+   countEl.innerHTML='<b>'+vis+'</b> / '+tot+' lectures';
+   noresEl.style.display=vis?'none':'block';
+ }
+
+ // sticky offset: group headers sit below the control bar
+ var st=document.querySelector('.stickytop');
+ function sync(){
+   var h=Math.round(st.getBoundingClientRect().height);
+   document.documentElement.style.setProperty('--thead-top',h+'px');
+ }
+ sync(); setTimeout(sync,250);
+ ['resize','orientationchange'].forEach(function(ev){window.addEventListener(ev,sync)});
+ if(window.ResizeObserver) new ResizeObserver(sync).observe(st);
+
+ progress(); apply();
+})();
+</script>
+<script>(function(){
+  var MINIS=[
+    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+      ['mini1.html','Overview'],
+      ['master_table.html','Master'],
+      ['pathology_table.html','Pathology'],
+      ['pathology_checklist.html','Path Checklist'],
+      ['physio_table.html','Physiology'],
+      ['drugs_table.html','Drugs'],
+      ['biochem_table.html','Biochem'],
+      ['embryo_anatomy_table.html','Embryo / Anatomy'],
+      ['pattern_recognition.html','Patterns'],
+      ['lecture_recall.html','Lecture Recall'],
+      ['physio_quiz.html','Physio Quiz'],
+      ['endocrine_path_quiz.html','Endo Path Quiz'],
+      ['male_path_quiz.html','Male Path Quiz'],
+      ['physio_ext1_quiz.html','Repro Physio Q'],
+      ['physio_ext2_quiz.html','Physio Bank 1'],
+      ['physio_ext3_quiz.html','Physio Bank 2'],
+      ['pharmq_quiz.html','Pharm Quiz'],
+      ['review_planner.html','Planner'],
+      ['gi_path_table.html','GI Path']
+    ]},
+    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+      ['mini2.html','Overview'],
+      ['mini2_pathology_table.html','Pathology'],
+      ['mini2_study_guide.html','Resource Guide']
+    ]}
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
+  var sw=document.createElement('span'); sw.className='sk-minis';
+  MINIS.forEach(function(m){
+    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+    sw.appendChild(a);
+  });
+  nav.appendChild(sw);
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);})();</script>
+</body>
+</html>
