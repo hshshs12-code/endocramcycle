@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini 2 Foundations — Embryology, Anatomy, Histology &amp; Imaging</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:6px 11px;border:1px solid var(--line-strong);border-radius:99px;
+    background:var(--surface);color:var(--muted);cursor:pointer;user-select:none;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:13%}
+  col.c-gene{width:22%}
+  col.c-buzz{width:21%}
+  col.c-diff{width:20%}
+  col.c-exam{width:15%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+.c-img{width:13%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:86px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Mini 2 · Foundations · Embryology · Histology · Imaging</p>
+  <h1>The structures, the slides,<br>and the pictures that <em>are</em> the answer.</h1>
+  <p class="sub">Embryology, histology and medical imaging of the reproductive system on one scannable grid. Every section is tagged with its subject — <b>[embryo]</b>, <b>[anatomy]</b>, <b>[histology]</b>, <b>[imaging]</b> — and states the format it uses. Teal = structure, layer or value. Highlighted = the defining feature or number you are expected to produce. The crimson rail is the single fact most likely to anchor a question stem. In histology and imaging the <b>figure is the content</b>: click any thumbnail to open the slide full size.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search structure, layer, sign, modality…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Structure / layer</span>
+      <span><i class="sw b"></i>Defining feature</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Structure / Concept</th>
+          <th>Origin, Location &amp; Sequence</th>
+          <th>Defining Features</th>
+          <th>How to Tell It Apart / Correlate</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No structure matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Study reference compiled from the Mini 2 foundations lectures — <b>Embryology: Development of the Placenta</b>, <b>Histology of the Female Reproductive System</b> and <b>Medical Imaging of the Reproductive System</b>. Figures are cropped directly from those slides; click any thumbnail to open it full size. The fourth file in that folder, <i>Reproductive Systems.pdf</i>, is a histopathology case lab built around unanswered questions, so it is deliberately excluded — no lecture in this folder covers gross anatomy, and the [anatomy] tag therefore has no source deck. Verify against your primary lecture material where anything differs — not a substitute for the notes.
+</footer>
+
+<script>
+const DATA = [
+ {
+  "sec": "Development of the Placenta & Fetal Membranes  [embryo] · timeline",
+  "rows": [
+   {
+    "n": "The placenta — what it is and what it is made of",
+    "g": "<span class='pill'>Chorion frondosum</span><span class='pill'>Decidua basalis</span> The placenta is a <mark>fetomaternal organ with two components</mark>: a <b>fetal part</b> derived from the <b>chorion frondosum (villous chorion)</b>, and a <b>maternal part</b> derived from the <b>decidua basalis</b>. It is the site of exchange between mother and fetus.",
+    "b": "<b>Fetal surface</b> — smooth, shiny, covered by amnion, umbilical cord inserted near the centre, chorionic vessels radiating from it. <b>Maternal surface</b> — dull, rough, divided into <mark>15–20 cotyledons</mark> by decidual septa.",
+    "d": "Learn to name the surface from a photograph: <b>shiny + cord + amnion = fetal</b>; <b>dull + cotyledons = maternal</b>.",
+    "e": "<span class='star'>⭐</span>Fetal part = chorion frondosum, maternal part = decidua basalis. This one-line pair is the highest-yield fact in the deck.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p4_placenta_fetal_vs_maternal_surfaces.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p4_placenta_fetal_vs_maternal_surfaces.jpg\" loading=\"lazy\" alt=\"fetal vs maternal surfaces\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p16_section_through_full_term_placenta_cotyledons.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p16_section_through_full_term_placenta_cotyledons.jpg\" loading=\"lazy\" alt=\"cotyledons\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Trophoblast differentiation at implantation",
+    "g": "<span class='pill'>Cytotrophoblast</span><span class='pill'>Syncytiotrophoblast</span> At implantation the trophoblast splits into <b>1.</b> an inner <mark>cytotrophoblast</mark> — mononucleated, mitotically active, the germinal/stem layer; and <b>2.</b> an outer <mark>syncytiotrophoblast</mark> — multinucleated, no cell boundaries, <b>non-mitotic</b> (it grows only by fusion of cytotrophoblast cells).",
+    "b": "The syncytiotrophoblast is <b>invasive</b> — it erodes endometrial stroma, glands and maternal capillaries, forming lacunae that fill with maternal blood, and it is the layer that <b>secretes hCG</b>.",
+    "d": "Cytotrophoblast divides; syncytiotrophoblast does not. Anything invasive or hormone-secreting is <mark>syncytio-</mark>.",
+    "e": "<span class='star'>⭐</span>hCG comes from the syncytiotrophoblast — that links straight into the physiology table's hCG doubling time and the pathology table's molar pregnancy.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p7_implantation_cyto_syncytiotrophoblast.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p7_implantation_cyto_syncytiotrophoblast.jpg\" loading=\"lazy\" alt=\"implantation cyto syncytiotrophoblast\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Chorionic villi — primary → secondary → tertiary",
+    "g": "<span class='pill'>Week 2</span><span class='pill'>Week 3</span><span class='pill'>Week 3 end</span> <b>1. Primary villus</b> — a core of <mark>cytotrophoblast</mark> covered by syncytiotrophoblast. <b>2. Secondary villus</b> — <mark>extraembryonic mesoderm</mark> invades the core. <b>3. Tertiary (definitive) villus</b> — <mark>blood vessels and capillaries develop within the mesodermal core</mark>, establishing the fetal circulation of the villus.",
+    "b": "Only the <b>tertiary</b> villus can perform exchange, because only it contains fetal capillaries. Villous capillaries make contact with those of the chorion and connecting stalk, linking the villus to the embryonic heart.",
+    "d": "Three steps, one new tissue each time: <b>cytotrophoblast → mesoderm → vessels</b>.",
+    "e": "<span class='star'>⭐</span>The stage is named by what is in the CORE. A villus with mesoderm but no vessels is secondary, not tertiary.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p8_chorionic_villi_timeline_primary_secondary_tertiary.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p8_chorionic_villi_timeline_primary_secondary_tertiary.jpg\" loading=\"lazy\" alt=\"secondary tertiary\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Spiral artery remodeling — trophoblastic invasion",
+    "g": "<span class='pill'>Extravillous trophoblast</span><span class='pill'>Low-resistance flow</span> Extravillous cytotrophoblast migrates into the maternal <b>spiral arteries</b> and <mark>replaces the endothelium and destroys the smooth muscle of the vessel wall</mark>, converting them from narrow high-resistance vessels into wide <b>low-resistance, high-capacitance</b> channels that cannot constrict.",
+    "b": "This guarantees a large, steady, pressure-independent supply of maternal blood into the intervillous space.",
+    "d": "<mark>Failure of adequate spiral artery invasion is the accepted basis of pre-eclampsia and IUGR</mark> — the vessels stay narrow and responsive, so placental perfusion falls.",
+    "e": "<span class='star'>⭐</span>The mechanism links this deck directly to the pre-eclampsia rows in the pathology table — inadequate remodeling is the answer they want.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p9_spiral_artery_remodeling.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p9_spiral_artery_remodeling.jpg\" loading=\"lazy\" alt=\"spiral artery remodeling\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Placental circulation — two circulations that never mix",
+    "g": "<span class='pill'>Intervillous space</span><span class='pill'>2 umbilical arteries</span><span class='pill'>1 umbilical vein</span> <b>Maternal side:</b> spiral arteries → <mark>intervillous space</mark> (~150 mL of maternal blood, replaced 3–4×/min) → endometrial veins. <b>Fetal side:</b> <mark>two umbilical arteries carry deoxygenated blood TO the placenta</mark>; villous capillaries; <mark>one umbilical vein carries oxygenated blood back TO the fetus</mark>.",
+    "b": "Exchange occurs across the placental membrane by diffusion; the two bloodstreams are separated at all times and <b>do not normally mix</b>.",
+    "d": "The umbilical vessels are the classic reversal: in the cord, the <b>artery is the deoxygenated one</b> — the opposite of the systemic rule.",
+    "e": "<span class='star'>⭐</span>Two arteries, one vein; artery = deoxygenated. Also know the intervillous volume is maternal blood, not fetal.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p10_placenta_structure_maternal_fetal_circulation.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p10_placenta_structure_maternal_fetal_circulation.jpg\" loading=\"lazy\" alt=\"structure maternal fetal circulation\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Luteal–placental shift",
+    "g": "<span class='pill'>Corpus luteum</span><span class='pill'>Syncytiotrophoblast</span><span class='pill'>Week 8–12</span> <b>Weeks 0–8:</b> the <b>corpus luteum</b>, rescued by hCG, is the source of progesterone. <b>Weeks 8–12:</b> the <mark>placenta takes over progesterone production</mark>. After the shift the corpus luteum regresses and pregnancy no longer depends on it.",
+    "b": "hCG peaks at ~8–10 weeks — precisely while it is still needed to sustain the corpus luteum — and then falls as the placenta becomes self-sufficient.",
+    "d": "<mark>Oophorectomy before ~8 weeks ends the pregnancy; after ~12 weeks it does not.</mark> That is the clinical expression of the shift.",
+    "e": "<span class='star'>⭐</span>Know the window (8–12 weeks) and why hCG peaks and then falls. Cross-check this against the Establishment of Pregnancy rows in the physiology table.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p11_luteal_placental_shift_timeline.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p11_luteal_placental_shift_timeline.jpg\" loading=\"lazy\" alt=\"shift timeline\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Decidua and the decidual reaction",
+    "g": "<span class='pill'>Decidua</span><span class='pill'>Glycogen</span><span class='pill'>Lipid</span> The <b>decidua</b> is the functional layer of the endometrium of a pregnant uterus — it is the layer <b>shed at parturition</b>. In the <b>decidual reaction</b>, endometrial stromal cells enlarge and accumulate <mark>glycogen and lipid</mark> in response to progesterone.",
+    "b": "The decidual cells provide nutrition to the early conceptus and form an immunologically privileged, protective matrix around it.",
+    "d": "Decidualisation is <b>progesterone-driven</b> — it is the same hormone that drives the secretory endometrium in the histology deck.",
+    "e": "<span class='star'>⭐</span>'Decidua' means the layer that falls away. Name the two stored substances: glycogen and lipid.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p13_decidual_reaction.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p13_decidual_reaction.jpg\" loading=\"lazy\" alt=\"decidual reaction\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The three parts of the decidua",
+    "g": "<span class='pill'>Basalis</span><span class='pill'>Capsularis</span><span class='pill'>Parietalis</span> <b>Decidua basalis</b> — deep to the conceptus; forms the <mark>maternal part of the placenta</mark>. <b>Decidua capsularis</b> — the thin layer overlying and covering the conceptus. <b>Decidua parietalis</b> — lines the remainder of the uterine cavity.",
+    "b": "As the fetus grows, the capsularis thins and degenerates, and by month 4–5 it <mark>fuses with the parietalis</mark>, obliterating the uterine cavity.",
+    "d": "<b>Basalis = under it, capsularis = over it, parietalis = the rest of the wall.</b> Only the basalis becomes placenta.",
+    "e": "<span class='star'>⭐</span>A labelled diagram of the three deciduas is a near-certain identification question.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p14_parts_of_decidua_basalis_capsularis_parietalis.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p14_parts_of_decidua_basalis_capsularis_parietalis.jpg\" loading=\"lazy\" alt=\"arietalis\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Chorion frondosum vs chorion laeve",
+    "g": "<span class='pill'>Frondosum = villous</span><span class='pill'>Laeve = smooth</span> Villi initially cover the entire chorionic sac. Villi adjacent to the <b>decidua basalis</b> proliferate → <mark>chorion frondosum (villous chorion) — becomes the fetal placenta</mark>. Villi adjacent to the <b>decidua capsularis</b> are compressed, lose their blood supply and degenerate → <mark>chorion laeve (smooth chorion)</mark>.",
+    "b": "The result is that the placenta is discoid rather than covering the whole sac.",
+    "d": "Frondosum sits on <b>basalis</b>; laeve sits under <b>capsularis</b>. The pairing is fixed — learn them together, never separately.",
+    "e": "<span class='star'>⭐</span>Which chorion becomes the placenta, and which decidua it faces. Both halves are examinable.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p17_chorion_frondosum_vs_laeve.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p17_chorion_frondosum_vs_laeve.jpg\" loading=\"lazy\" alt=\"chorion frondosum vs laeve\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Cytotrophoblastic shell, anchoring and branching villi",
+    "g": "<span class='pill'>Anchoring villi</span><span class='pill'>Branching villi</span> Cytotrophoblast cells penetrate the syncytiotrophoblast and spread out to form a continuous <mark>cytotrophoblastic shell</mark> that anchors the chorionic sac to the endometrium. <b>Anchoring (stem) villi</b> extend from the chorionic plate to the shell; <b>branching (terminal) villi</b> arise from their sides.",
+    "b": "<mark>Exchange takes place across the branching villi</mark>, not the anchoring villi — the anchoring villi are structural.",
+    "d": "Anchoring = attachment; branching = function. Both project into the intervillous space and are bathed in maternal blood.",
+    "e": "<span class='star'>⭐</span>Say explicitly that the branching villi are the exchange surface — that is the distinction being tested.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p18_cytotrophoblastic_shell_anchoring_branching_villi.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p18_cytotrophoblastic_shell_anchoring_branching_villi.jpg\" loading=\"lazy\" alt=\"cytotrophoblastic shell anchoring branching villi\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The placental membrane — 4 layers → 2 layers",
+    "g": "<span class='pill'>Early: 4 layers</span><span class='pill'>After week 20: 2 layers</span> <b>Early (up to ~20 weeks) — four layers:</b> <b>1.</b> syncytiotrophoblast, <b>2.</b> cytotrophoblast, <b>3.</b> connective tissue of the villus, <b>4.</b> endothelium of the fetal capillary. <b>Later — effectively two layers:</b> the <mark>cytotrophoblast disappears and the connective tissue thins</mark>, leaving syncytiotrophoblast and capillary endothelium in near-apposition.",
+    "b": "The membrane also becomes thinner overall and the fetal capillaries move to the periphery of the villus, further shortening the diffusion distance.",
+    "d": "<mark>Thinning increases exchange efficiency to meet the growing fetus's demands</mark> — but it also means more substances (drugs, viruses, antibodies) cross late in pregnancy.",
+    "e": "<span class='star'>⭐</span>Name all four layers in order and state which one is lost. The functional consequence — increased permeability — is the follow-up.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p19_placental_membrane_four_layers.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p19_placental_membrane_four_layers.jpg\" loading=\"lazy\" alt=\"membrane four layers\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p20_placental_membrane_thinning_at_term.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p20_placental_membrane_thinning_at_term.jpg\" loading=\"lazy\" alt=\"membrane thinning at term\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Placental transfer — what crosses and what does not",
+    "g": "<span class='pill'>Simple diffusion</span><span class='pill'>Facilitated</span><span class='pill'>Active</span><span class='pill'>Pinocytosis</span> <b>Crosses:</b> O₂ and CO₂ (simple diffusion), water and electrolytes (electrolytes pass faster), glucose (<b>facilitated</b> diffusion), amino acids (<b>active</b> transport), free fatty acids, water-soluble vitamins, steroid hormones, fetal waste (urea, uric acid, bilirubin), <mark>IgG (pinocytosis/receptor-mediated)</mark>, <b>fetal and maternal red blood cells</b>, maternal serum proteins, most drugs (thalidomide, warfarin, phenytoin, alcohol, cocaine, nicotine, anaesthetics), carbon monoxide, viruses (HIV, CMV, rubella, varicella, measles, polio), <i>Toxoplasma gondii</i>, <i>Treponema pallidum</i>.",
+    "b": "<b>Does NOT cross:</b> <mark>IgM</mark>, <b>all protein hormones including insulin</b>, maternally-derived cholesterol, triglycerides and phospholipids, the drugs <b>succinylcholine, curare, heparin</b> and amino-acid-like drugs (<b>methyldopa</b>), and <mark>bacteria</mark>.",
+    "d": "The IgG/IgM split is the highest-yield contrast: <mark>IgG confers passive fetal immunity; IgM in fetal blood means fetal infection</mark>, because it cannot have come from the mother.",
+    "e": "<span class='star'>⭐</span>Raised fetal/neonatal IgM = congenital infection. Also: glucose is facilitated, amino acids are active — do not swap them.",
+    "img": ""
+   },
+   {
+    "n": "Placental endocrine function",
+    "g": "<span class='pill'>hCG</span><span class='pill'>hPL</span><span class='pill'>Estrogen</span><span class='pill'>Progesterone</span> The <b>syncytiotrophoblast</b> is the endocrine layer. <b>hCG</b> — maintains the corpus luteum; basis of the pregnancy test. <b>hPL (human placental lactogen / somatomammotropin)</b> — growth-hormone-like, promotes lipolysis and <mark>maternal insulin resistance</mark>. <b>Progesterone</b> — maintains the pregnancy. <b>Estrogens</b> — uterine and breast growth.",
+    "b": "Placental hormone output rises with placental mass, so the endocrine effects intensify as pregnancy advances.",
+    "d": "<mark>hPL rising with placental mass is why gestational diabetes worsens in the third trimester</mark> — the same logic as the physiology table's GDM row.",
+    "e": "<span class='star'>⭐</span>Match each hormone to its single defining action. hCG → corpus luteum; hPL → insulin resistance.",
+    "img": ""
+   },
+   {
+    "n": "Amnion, amniotic cavity and amniotic fluid",
+    "g": "<span class='pill'>~30 mL at 10 wk</span><span class='pill'>~450 mL at 20 wk</span><span class='pill'>~1000 mL at 37 wk</span> The amnion encloses the amniotic cavity. Fluid volume rises through gestation: <mark>~30 mL at 10 weeks → ~450 mL at 20 weeks → ~800–1000 mL at 37 weeks</mark>. Early fluid is largely maternal tissue fluid; from ~11 weeks the <b>fetus contributes urine</b>, and the fetus swallows fluid which is absorbed and recirculated.",
+    "b": "Functions: cushions the fetus against mechanical injury, <mark>allows symmetrical growth and fetal movement</mark>, prevents adherence of the amnion to the fetus, maintains temperature, and permits <b>lung development</b>.",
+    "d": "<b>Oligohydramnios</b> → renal agenesis / urinary obstruction / <b>Potter sequence</b> with pulmonary hypoplasia and limb deformity. <b>Polyhydramnios</b> → oesophageal atresia, anencephaly, maternal diabetes.",
+    "e": "<span class='star'>⭐</span>Know the three volumes and the two-way logic: <mark>fetus makes fluid by urinating, removes it by swallowing</mark>. The pathology follows from which arm fails.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p23_amniotic_cavity_and_fluid.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p23_amniotic_cavity_and_fluid.jpg\" loading=\"lazy\" alt=\"amniotic cavity and fluid\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The umbilical cord",
+    "g": "<span class='pill'>2 arteries</span><span class='pill'>1 vein</span><span class='pill'>Wharton's jelly</span> The cord contains <mark>two umbilical arteries and one umbilical vein</mark> embedded in <b>Wharton's jelly</b> (mucous connective tissue), covered by amnion. It is usually 1–2 cm wide and 30–90 cm long, and typically inserts near the centre of the placenta.",
+    "b": "Wharton's jelly cushions the vessels and <b>prevents compression</b> of the cord. Abnormal insertions: <b>marginal (battledore)</b> at the edge, and <mark>velamentous</mark>, where the vessels run through the membranes before reaching the placenta.",
+    "d": "<mark>Single umbilical artery occurs in ~1 in 200 and is associated with a ~15–20% incidence of cardiovascular and other anomalies.</mark> <b>False knots</b> are vessel loops and harmless; <b>true knots</b> can occlude flow.",
+    "e": "<span class='star'>⭐</span>Single umbilical artery → look for other anomalies. True vs false knot, and velamentous insertion (which risks vasa previa), are the named traps.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p25_umbilical_cord_insertions.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p25_umbilical_cord_insertions.jpg\" loading=\"lazy\" alt=\"umbilical cord insertions\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Placental structural anomalies",
+    "g": "<span class='pill'>Succenturiate</span><span class='pill'>Bipartite</span><span class='pill'>Membranacea</span><span class='pill'>Circumvallate</span> <b>Succenturiate placenta</b> — one or more accessory lobes. <b>Bipartite / bilobed</b> — two roughly equal lobes. <b>Placenta membranacea</b> — villi persist over the whole chorion so the placenta is thin and diffuse. <b>Circumvallate</b> — the chorionic plate is smaller than the basal plate, with a raised rolled edge of membranes.",
+    "b": "These are variations of the normal discoid placenta, arising from failure of the usual villous regression pattern that produces the chorion laeve.",
+    "d": "<mark>A retained succenturiate lobe is a classic cause of postpartum haemorrhage</mark> — the placenta looks complete but a lobe is left behind.",
+    "e": "<span class='star'>⭐</span>Recognise them by shape on a photograph and pair succenturiate with postpartum haemorrhage.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p24_placental_structural_anomalies.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p24_placental_structural_anomalies.jpg\" loading=\"lazy\" alt=\"structural anomalies\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Placental development — fertilization to term",
+    "g": "<span class='pill'>Overview</span> The sequence in one line: <b>fertilization → blastocyst → implantation (day 6–7) → trophoblast differentiation → lacunae → primary/secondary/tertiary villi (weeks 2–3) → chorion frondosum vs laeve → definitive discoid placenta → membrane thinning after week 20 → term placenta of 15–20 cotyledons.</b>",
+    "b": "At term the placenta is discoid, ~15–20 cm across, ~3 cm thick, ~500–600 g, and roughly <mark>one-sixth of fetal weight</mark>.",
+    "d": "Use this row as the spine and hang the individual rows above onto it — each detailed row is one step of this sequence.",
+    "e": "<span class='star'>⭐</span>Being able to order the steps without prompting is what separates a recall answer from a reasoned one.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p27_placental_development_fertilization_to_term.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p27_placental_development_fertilization_to_term.jpg\" loading=\"lazy\" alt=\"development fertilization to term\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Twinning & Multiple Pregnancy  [embryo] · compare",
+  "rows": [
+   {
+    "n": "Dizygotic (fraternal) twins",
+    "g": "<span class='pill'>2 zygotes</span><span class='pill'>~2/3 of twins</span> Two oocytes are released and fertilized by <b>two different sperm</b> → two zygotes. Always <mark>dichorionic and diamniotic</mark>: two chorions, two amnions, and two placentas (which may fuse and appear as one).",
+    "b": "Genetically no more alike than any siblings; may be different sexes. Incidence rises with <b>maternal age, parity, family history and ovulation induction</b>.",
+    "d": "Even when the two placentas fuse, <mark>the fetal blood circulations do not join</mark> — this is what distinguishes fused dizygotic placentas from a true monochorionic placenta.",
+    "e": "<span class='star'>⭐</span>Dizygotic is always di/di. If the twins are of different sexes, they are dizygotic — no exceptions worth arguing.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p29_dizygotic_twins_membranes.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p29_dizygotic_twins_membranes.jpg\" loading=\"lazy\" alt=\"dizygotic twins membranes\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Monozygotic (identical) twins — membranes by day of cleavage",
+    "g": "<span class='pill'>Day 1–3</span><span class='pill'>Day 4–8</span><span class='pill'>Day 8–12</span><span class='pill'>&gt; Day 13</span> One zygote splits; the membranes are determined entirely by <mark>WHEN the split occurs</mark>. <b>Days 1–3 (morula):</b> <b>dichorionic / diamniotic</b> — 2 chorions, 2 amnions. <b>Days 4–8 (blastocyst, inner cell mass):</b> <mark>monochorionic / diamniotic — the commonest, ~70%</mark>. <b>Days 8–12 (after amnion forms):</b> <b>monochorionic / monoamniotic</b>. <b>After day 13:</b> <mark>conjoined twins</mark>.",
+    "b": "Monozygotic twins are genetically identical and always the same sex. Incidence is roughly constant worldwide (~1 in 250) and independent of maternal age or race.",
+    "d": "<b>The later the split, the more shared the membranes.</b> Read the table backwards from the membranes to date the split.",
+    "e": "<span class='star'>⭐</span>This table is the single most examinable item in the twinning section — memorise the four day-ranges and their membrane combinations.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p30_monozygotic_twins_membrane_combinations.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p30_monozygotic_twins_membrane_combinations.jpg\" loading=\"lazy\" alt=\"monozygotic twins membrane combinations\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p32_monozygotic_age_at_cleavage.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p32_monozygotic_age_at_cleavage.jpg\" loading=\"lazy\" alt=\"monozygotic age at cleavage\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Complications of monochorionic twinning",
+    "g": "<span class='pill'>TTTS</span><span class='pill'>Cord entanglement</span> A shared (monochorionic) placenta contains <mark>vascular anastomoses between the two fetal circulations</mark>. Unbalanced flow produces <b>twin-to-twin transfusion syndrome</b>: the <b>donor</b> becomes anaemic, growth-restricted and oligohydramniotic; the <b>recipient</b> becomes polycythaemic, larger and polyhydramniotic.",
+    "b": "<b>Monoamniotic</b> twins share one sac and carry a high risk of <mark>cord entanglement</mark>, the main cause of their high mortality.",
+    "d": "TTTS requires a <b>monochorionic</b> placenta — it cannot occur in dizygotic twins even when their placentas are fused, because those circulations remain separate.",
+    "e": "<span class='star'>⭐</span>Donor = small, anaemic, oligohydramnios. Recipient = large, polycythaemic, polyhydramnios. And TTTS ⇒ monochorionic.",
+    "img": ""
+   },
+   {
+    "n": "Conjoined twins and the twinning summary",
+    "g": "<span class='pill'>&gt; Day 13</span><span class='pill'>Incomplete splitting</span> Conjoined twins result from <mark>incomplete splitting of the embryonic disc after day 13</mark>. They are named by the site of union — <b>thoracopagus</b> (chest, commonest), <b>craniopagus</b> (head), <b>pygopagus</b> (sacrum), <b>ischiopagus</b> (pelvis).",
+    "b": "Because the split is so late, conjoined twins are always <b>monochorionic and monoamniotic</b>.",
+    "d": "Use the summary table to answer in both directions: given a day of cleavage, state the membranes; given the membranes, bracket the day of cleavage.",
+    "e": "<span class='star'>⭐</span>Day 13 is the cut-off. The suffix <b>-pagus</b> means 'fixed/joined', and the prefix names the joined region.",
+    "img": "<a href=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p33_major_types_of_twinning_table.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/embryology_development_of_placenta/embryology_development_of_placenta_p33_major_types_of_twinning_table.jpg\" loading=\"lazy\" alt=\"major types of twinning table\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Ovary — Structure & Folliculogenesis  [histology] · defining features",
+  "rows": [
+   {
+    "n": "Ovary — general organisation",
+    "g": "<span class='pill'>Germinal epithelium</span><span class='pill'>Tunica albuginea</span><span class='pill'>Cortex</span><span class='pill'>Medulla</span> From outside in: <b>1.</b> <mark>Germinal epithelium</mark> — a single layer of cuboidal cells (a misnomer; it does not give rise to germ cells). <b>2.</b> <mark>Tunica albuginea</mark> — dense irregular connective tissue capsule. <b>3.</b> <b>Cortex</b> — contains the follicles in a highly cellular stroma. <b>4.</b> <b>Medulla</b> — loose connective tissue with large blood vessels, lymphatics and nerves.",
+    "b": "The cortical stroma is distinctive: <mark>spindle-shaped stromal cells arranged in whorls</mark>, far more cellular than ordinary connective tissue.",
+    "d": "<b>Follicles are in the CORTEX; vessels are in the MEDULLA.</b> Compare with the testis, where the surface is mesothelium and the tunica albuginea sends in septa.",
+    "e": "<span class='star'>⭐</span>Germinal epithelium is cuboidal, not squamous, and does not make germ cells — both halves are common distractors.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p6_ovary_cortex_medulla_tunica_albuginea.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p6_ovary_cortex_medulla_tunica_albuginea.jpg\" loading=\"lazy\" alt=\"ovary cortex medulla tunica albuginea\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p12_overview_ovarian_follicles.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p12_overview_ovarian_follicles.jpg\" loading=\"lazy\" alt=\"overview ovarian follicles\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Oogenesis — the two arrests",
+    "g": "<span class='pill'>Prophase I</span><span class='pill'>Metaphase II</span> <b>1.</b> Oogonia proliferate in fetal life. <b>2.</b> They enter meiosis I and arrest in <mark>prophase I</mark> as <b>primary oocytes</b> — this arrest persists from before birth until ovulation, up to 50 years. <b>3.</b> At ovulation meiosis I completes → <b>secondary oocyte + first polar body</b>. <b>4.</b> The secondary oocyte arrests in <mark>metaphase II</mark>. <b>5.</b> Meiosis II completes <mark>only if fertilization occurs</mark>.",
+    "b": "Numbers: ~5–7 million oogonia at mid-gestation, ~1–2 million at birth, ~400,000 at puberty, and only <mark>~400 ovulated in a lifetime</mark> — the rest undergo atresia.",
+    "d": "<b>Prophase I arrest = before ovulation. Metaphase II arrest = after ovulation, released by fertilization.</b> In the male there are no arrests, and spermatogenesis begins only at puberty.",
+    "e": "<span class='star'>⭐</span>The prolonged prophase I arrest is the standard explanation for the rise in <b>non-disjunction and trisomy with maternal age</b>.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p10_oogenesis_meiotic_arrests_and_follicle_development.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p10_oogenesis_meiotic_arrests_and_follicle_development.jpg\" loading=\"lazy\" alt=\"oogenesis meiotic arrests and follicle development\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p13_folliculogenesis_overview.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p13_folliculogenesis_overview.jpg\" loading=\"lazy\" alt=\"folliculogenesis overview\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Primordial follicle",
+    "g": "<span class='pill'>Simple squamous follicular cells</span><span class='pill'>Resting pool</span> The resting follicle: a <b>primary oocyte</b> (~25 µm, large pale nucleus with a prominent nucleolus) surrounded by a <mark>single layer of FLAT (simple squamous) follicular cells</mark>, sitting on a basal lamina. Located in the <b>outer cortex</b>, just under the tunica albuginea.",
+    "b": "There is <b>no zona pellucida yet</b> and no theca layer. Growth is independent of gonadotropins at this stage.",
+    "d": "<mark>Flat follicular cells = primordial. Cuboidal = primary.</mark> That single cell-shape change is the whole distinction, and it is the most frequently tested slide in the deck.",
+    "e": "<span class='star'>⭐</span>Recognise it by <b>one flat layer + peripheral cortical location</b>. Nothing else is required.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p16_primordial_follicle_micrograph.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p16_primordial_follicle_micrograph.jpg\" loading=\"lazy\" alt=\"follicle micrograph\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Primary follicle — unilaminar and multilaminar",
+    "g": "<span class='pill'>Cuboidal granulosa</span><span class='pill'>Zona pellucida</span><span class='pill'>Call–Exner bodies</span> <b>Unilaminar primary:</b> follicular cells become <mark>cuboidal</mark> in a single layer. <b>Multilaminar primary:</b> they proliferate into a stratified <mark>granulosa</mark> layer. The <b>zona pellucida</b> — a glycoprotein coat (ZP1–ZP3) between oocyte and granulosa — <mark>appears at the primary stage</mark>, and the surrounding stroma organises into the <b>theca folliculi</b>.",
+    "b": "Oocyte and granulosa communicate across the zona through microvilli and <b>gap junctions</b> — visible on SEM as processes crossing the zona.",
+    "d": "<b>Zona pellucida first appears in the PRIMARY follicle</b>; the antrum first appears in the secondary. Do not attribute either to the primordial follicle.",
+    "e": "<span class='star'>⭐</span>ZP3 is the sperm receptor and the basis of the block to polyspermy — the histology and the fertilization physiology meet here.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p19_primary_follicles_unilaminar_multilaminar.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p19_primary_follicles_unilaminar_multilaminar.jpg\" loading=\"lazy\" alt=\"follicles unilaminar multilaminar\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p20_primary_follicle_sem.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p20_primary_follicle_sem.jpg\" loading=\"lazy\" alt=\"follicle sem\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Secondary (antral) follicle",
+    "g": "<span class='pill'>Antrum</span><span class='pill'>Liquor folliculi</span><span class='pill'>Cumulus oophorus</span><span class='pill'>Corona radiata</span> Fluid-filled spaces among the granulosa cells coalesce into a single <mark>antrum</mark> filled with <b>liquor folliculi</b>. The oocyte is displaced to one side on a mound of granulosa cells — the <mark>cumulus oophorus</mark> — and the granulosa cells immediately surrounding the zona form the <mark>corona radiata</mark>.",
+    "b": "The wall now has two thecal layers: <b>theca interna</b> — cuboidal, <mark>vacuolated, steroid-secreting cells with abundant SER and lipid droplets</mark>, richly vascularised, producing <b>androgens</b>; and <b>theca externa</b> — fibrous, spindle cells and smooth muscle, no steroid features.",
+    "d": "<b>Theca interna looks pale, rounded and vacuolated; theca externa looks like dense fibrous tissue.</b> The vacuolation is the giveaway for a steroid-secreting cell.",
+    "e": "<span class='star'>⭐</span>The two-cell two-gonadotropin theory sits on this slide — <mark>theca interna (LH) makes androgen, granulosa (FSH) aromatises it to estrogen</mark>.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p22_antral_follicle_cumulus_corona_radiata.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p22_antral_follicle_cumulus_corona_radiata.jpg\" loading=\"lazy\" alt=\"antral follicle cumulus corona radiata\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p23_wall_of_antral_follicle_theca_interna_externa.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p23_wall_of_antral_follicle_theca_interna_externa.jpg\" loading=\"lazy\" alt=\"wall of antral follicle theca interna externa\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Graafian (mature / pre-ovulatory) follicle",
+    "g": "<span class='pill'>~2.5 cm</span><span class='pill'>Secondary oocyte</span> The largest follicle, up to <mark>2.5 cm</mark>, bulging from the ovarian surface. It has a very large antrum, a thin granulosa wall, the oocyte suspended on the cumulus, and a full theca interna/externa. Just before ovulation the LH surge drives completion of meiosis I → a <mark>secondary oocyte arrested in metaphase II</mark> plus the first polar body.",
+    "b": "The cumulus detaches so the oocyte with its corona radiata floats free in the antral fluid, ready for release.",
+    "d": "Distinguish from a secondary follicle by <b>size, the very large antrum with a thin granulosa rim, and the detached cumulus</b>.",
+    "e": "<span class='star'>⭐</span>Name the cell released at ovulation correctly: it is a <mark>secondary oocyte in metaphase II</mark>, surrounded by zona pellucida and corona radiata.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p25_graafian_follicle.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p25_graafian_follicle.jpg\" loading=\"lazy\" alt=\"graafian follicle\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p26_graafian_follicle_secondary_oocyte.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p26_graafian_follicle_secondary_oocyte.jpg\" loading=\"lazy\" alt=\"graafian follicle secondary oocyte\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Ovulation and the stigma",
+    "g": "<span class='pill'>LH surge</span><span class='pill'>Stigma</span> The LH surge → increased follicular fluid pressure, local ischaemia and enzymatic (collagenase, plasmin) digestion of the follicular wall and tunica albuginea → an avascular blister, the <mark>stigma</mark>, forms on the ovarian surface and ruptures. The <b>secondary oocyte with its corona radiata</b> is expelled and swept up by the fimbriae.",
+    "b": "Ovulation occurs about <mark>14 days before the next menses</mark>; the follicular phase varies in length, the luteal phase does not.",
+    "d": "<b>Mittelschmerz</b> is the mid-cycle pain of ovulation; a little bleeding from the ruptured vessels may irritate the peritoneum.",
+    "e": "<span class='star'>⭐</span>It is the <b>oocyte plus corona radiata</b> that is released — not a bare oocyte, and not an ovum.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p30_ovulation_release_of_oocyte.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p30_ovulation_release_of_oocyte.jpg\" loading=\"lazy\" alt=\"ovulation release of oocyte\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Corpus luteum",
+    "g": "<span class='pill'>Granulosa lutein</span><span class='pill'>Theca lutein</span><span class='pill'>Progesterone</span> After ovulation the collapsed follicle luteinises into a large, <mark>yellow, highly folded endocrine gland</mark>. Two cell populations: <b>granulosa lutein cells</b> — large, pale, centrally placed, <mark>~80%</mark>, secreting <b>progesterone</b> (and estrogen); and <b>theca lutein cells</b> — smaller, darker, peripheral, in the folds, secreting <b>androgens and estrogen</b>.",
+    "b": "Both have the ultrastructure of steroid-secreting cells: abundant <b>smooth ER</b>, tubular-cristae mitochondria and lipid droplets — hence the pale, vacuolated appearance. The gland is richly vascularised.",
+    "d": "<b>Corpus luteum of menstruation</b> lasts ~14 days then involutes; <b>corpus luteum of pregnancy</b> is rescued by <mark>hCG</mark>, becomes much larger, and persists until the luteal–placental shift.",
+    "e": "<span class='star'>⭐</span>Large-pale-central vs small-dark-peripheral is the identification. The yellow colour is lipid/lutein pigment.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p33_corpus_luteum_granulosa_theca_lutein.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p33_corpus_luteum_granulosa_theca_lutein.jpg\" loading=\"lazy\" alt=\"corpus luteum granulosa theca lutein\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p34_corpus_luteum_digital_histology.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p34_corpus_luteum_digital_histology.jpg\" loading=\"lazy\" alt=\"corpus luteum digital histology\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Corpus albicans",
+    "g": "<span class='pill'>Hyaline scar</span><span class='pill'>Acellular</span> The involuted corpus luteum. Lutein cells degenerate and are removed by macrophages, and the gland is replaced by a <mark>dense, acellular, hyaline (glassy pink) scar of collagen</mark> that slowly shrinks and sinks into the cortex.",
+    "b": "It stains intensely eosinophilic and contains very few nuclei — the contrast with the cell-rich corpus luteum is stark at low power.",
+    "d": "<b>Corpus luteum = cellular, folded, yellow. Corpus albicans = acellular, hyaline, white.</b> A single low-power view separates them.",
+    "e": "<span class='star'>⭐</span>Low-power identification question: an intensely pink acellular mass in the ovarian cortex is a corpus albicans.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p35_corpus_albicans.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p35_corpus_albicans.jpg\" loading=\"lazy\" alt=\"corpus albicans\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Follicular atresia",
+    "g": "<span class='pill'>&gt; 99% of follicles</span><span class='pill'>Glassy membrane</span> The fate of <mark>over 99% of follicles</mark>, at any stage, at any age. Features: <b>pyknotic granulosa nuclei</b>, granulosa cells sloughing into the antrum, a degenerating oocyte, collapse of the follicle, invasion by macrophages and connective tissue, and a thickened, folded, collapsed basement membrane — the <mark>glassy membrane</mark>.",
+    "b": "Atretic follicles are eventually replaced by connective tissue scar; theca interna cells may persist as interstitial cells that continue to secrete androgen.",
+    "d": "Distinguish from a healthy follicle by the <b>pyknotic nuclei and the wrinkled glassy membrane</b>; distinguish from a corpus albicans by the retained follicular outline.",
+    "e": "<span class='star'>⭐</span>Atresia is the normal fate and is gonadotropin-independent for the earliest stages — it happens before birth, in childhood and throughout life.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p39_follicular_atresia_micrograph.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p39_follicular_atresia_micrograph.jpg\" loading=\"lazy\" alt=\"follicular atresia micrograph\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p40_follicle_review_unilaminar_multilaminar.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p40_follicle_review_unilaminar_multilaminar.jpg\" loading=\"lazy\" alt=\"follicle review unilaminar multilaminar\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Polycystic ovaries — histology",
+    "g": "<span class='pill'>Thickened tunica</span><span class='pill'>Subcapsular cysts</span> Enlarged ovaries with a <mark>thickened, fibrotic tunica albuginea</mark> and <mark>numerous subcapsular cystic follicles arranged peripherally</mark>, each an arrested antral follicle with an attenuated granulosa layer and a conspicuously <b>hyperplastic, luteinised theca interna</b>.",
+    "b": "There are few or no corpora lutea, because ovulation is not occurring — that absence is itself diagnostic on a section.",
+    "d": "The peripheral ring of cysts is the histological counterpart of the <mark>'string of pearls'</mark> seen on ultrasound in the imaging section.",
+    "e": "<span class='star'>⭐</span>Theca interna hyperplasia is the histological source of the hyperandrogenism — it ties this slide to the PCOS cascade in the physiology table.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p43_polycystic_ovaries.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p43_polycystic_ovaries.jpg\" loading=\"lazy\" alt=\"ovaries\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Uterine Tube  [histology] · defining features",
+  "rows": [
+   {
+    "n": "Uterine tube — parts and wall layers",
+    "g": "<span class='pill'>Infundibulum</span><span class='pill'>Ampulla</span><span class='pill'>Isthmus</span><span class='pill'>Intramural</span> Four parts from ovary to uterus: <b>infundibulum</b> (with fimbriae) → <mark>ampulla — the longest part and the site of fertilization</mark> → <b>isthmus</b> → <b>intramural (interstitial)</b> part within the uterine wall. Three layers: <b>mucosa</b> (simple columnar epithelium + lamina propria), <b>muscularis</b> (inner circular, outer longitudinal smooth muscle), <b>serosa</b>.",
+    "b": "The mucosa is thrown into <mark>extensively branched, labyrinthine folds — most elaborate in the ampulla</mark> and progressively simpler towards the isthmus.",
+    "d": "<b>You can name the region from the folds alone:</b> a lumen almost filled with complex branching folds is ampulla; a narrow lumen with few blunt folds and a thick muscularis is isthmus.",
+    "e": "<span class='star'>⭐</span>Fertilization occurs in the ampulla; ectopic pregnancy is therefore most commonly ampullary.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p46_uterine_tube_wall_layers.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p46_uterine_tube_wall_layers.jpg\" loading=\"lazy\" alt=\"uterine tube wall layers\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Ciliated vs peg (secretory) cells",
+    "g": "<span class='pill'>Ciliated</span><span class='pill'>Peg / secretory</span> Two cell types in one simple columnar epithelium. <b>Ciliated cells</b> — bear kinocilia beating <mark>towards the uterus</mark>, transporting the oocyte; <b>most numerous in the infundibulum and ampulla</b>, and <mark>estrogen increases ciliogenesis</mark>. <b>Peg (secretory) cells</b> — non-ciliated, narrow, often bulging apically between the ciliated cells, secreting nutritive fluid that also <b>capacitates sperm</b>.",
+    "b": "Both are hormone-responsive: the epithelium is tallest and most ciliated around ovulation and becomes lower in the luteal phase and in pregnancy.",
+    "d": "<mark>Ciliated cells move the egg; peg cells feed it and capacitate sperm.</mark> Peg cells look 'squeezed' — that is where the name comes from.",
+    "e": "<span class='star'>⭐</span>Damage to the ciliated cells — as after PID/salpingitis — impairs transport and predisposes to <b>ectopic pregnancy</b>.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p47_uterine_tube_ciliated_and_peg_cells.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p47_uterine_tube_ciliated_and_peg_cells.jpg\" loading=\"lazy\" alt=\"cells\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Acute suppurative salpingitis",
+    "g": "<span class='pill'>Neutrophils</span><span class='pill'>Scarring</span> The tube is filled and its wall infiltrated by <mark>neutrophils</mark>, with oedema, congestion and destruction of the mucosal folds — most often ascending infection with <i>Neisseria gonorrhoeae</i> or <i>Chlamydia</i>.",
+    "b": "Healing produces <b>fibrosis, blunting and adhesion of the plicae</b>, and adhesion between mucosal folds — permanent architectural damage.",
+    "d": "<mark>Scarred tube → infertility and ectopic pregnancy</mark>; complete occlusion with fluid accumulation gives a <b>hydrosalpinx</b>.",
+    "e": "<span class='star'>⭐</span>The link chain is worth memorising whole: PID → salpingitis → scarred plicae and lost cilia → ectopic pregnancy.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p49_acute_suppurative_salpingitis.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p49_acute_suppurative_salpingitis.jpg\" loading=\"lazy\" alt=\"acute suppurative salpingitis\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Uterus — Wall, Endometrium & Cycle  [histology] · process",
+  "rows": [
+   {
+    "n": "Uterine wall — three layers",
+    "g": "<span class='pill'>Endometrium</span><span class='pill'>Myometrium</span><span class='pill'>Perimetrium</span> <b>Endometrium</b> — mucosa: simple columnar epithelium with <b>simple tubular glands</b> in a highly cellular stroma. <b>Myometrium</b> — the thickest layer, smooth muscle. <b>Perimetrium</b> — outer serosa (or adventitia where retroperitoneal).",
+    "b": "The endometrium is the layer that changes cyclically; the myometrium changes mainly in pregnancy.",
+    "d": "<b>Note the epithelium: simple columnar in the uterus, becoming stratified squamous non-keratinised at the ectocervix and vagina.</b> The transition points are where pathology concentrates.",
+    "e": "<span class='star'>⭐</span>Get the three names and their order right — everything else in this section attaches to the endometrium row.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p53_uterine_wall_three_layers.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p53_uterine_wall_three_layers.jpg\" loading=\"lazy\" alt=\"uterine wall three layers\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Myometrium",
+    "g": "<span class='pill'>Hyperplasia + hypertrophy</span><span class='pill'>Oxytocin receptors</span> Three ill-defined smooth-muscle layers; the middle <mark>stratum vasculare</mark> is the thickest and carries the large arcuate vessels. Fibres run in interlacing bundles separated by connective tissue.",
+    "b": "In pregnancy the myometrium enlarges by both <mark>hypertrophy (cells enlarge) and hyperplasia (cells divide)</mark>, and the cells also become secretory, producing collagen. After delivery the cells shrink and many undergo apoptosis.",
+    "d": "<b>Leiomyoma</b> arises here — a well-circumscribed <mark>whorled bundle of bland smooth muscle</mark>, sharply demarcated from the surrounding myometrium.",
+    "e": "<span class='star'>⭐</span>Pregnancy uses both hypertrophy AND hyperplasia — a common single-word trap.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p54_myometrium_layers.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p54_myometrium_layers.jpg\" loading=\"lazy\" alt=\"myometrium layers\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p56_leiomyoma_whorled_vs_normal_myometrium.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p56_leiomyoma_whorled_vs_normal_myometrium.jpg\" loading=\"lazy\" alt=\"leiomyoma whorled vs normal myometrium\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Endometrium — basal vs functional layer",
+    "g": "<span class='pill'>Stratum functionalis</span><span class='pill'>Stratum basalis</span> <b>Stratum functionalis</b> — the superficial layer; <mark>shed at menstruation</mark>; supplied by <b>spiral (coiled) arteries</b>. <b>Stratum basalis</b> — the deep layer adjacent to the myometrium; <mark>retained at menstruation and regenerates the functionalis</mark>; supplied by <b>straight (basal) arteries</b>.",
+    "b": "Uterine artery → arcuate arteries (stratum vasculare) → radial arteries → straight arteries to the basalis and <b>spiral arteries</b> to the functionalis.",
+    "d": "<mark>The spiral arteries are hormone-sensitive and the straight arteries are not</mark> — that is exactly why one layer is shed and the other survives.",
+    "e": "<span class='star'>⭐</span>The blood supply IS the explanation of menstruation. If you can state which artery feeds which layer, the menstrual phase row follows automatically.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p57_endometrium_surface_epithelium_stroma.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p57_endometrium_surface_epithelium_stroma.jpg\" loading=\"lazy\" alt=\"endometrium surface epithelium stroma\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p59_endometrium_basal_and_functional_layers.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p59_endometrium_basal_and_functional_layers.jpg\" loading=\"lazy\" alt=\"endometrium basal and functional layers\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p60_uterine_blood_supply_spiral_arteries.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p60_uterine_blood_supply_spiral_arteries.jpg\" loading=\"lazy\" alt=\"uterine blood supply spiral arteries\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Proliferative (follicular / estrogenic) phase",
+    "g": "<span class='pill'>Estrogen</span><span class='pill'>Days 5–14</span> Driven by <b>estrogen</b> from the growing follicles. The functionalis is regenerated from the basalis: the epithelium re-forms, the stroma proliferates, and the glands are <mark>straight, narrow and tubular with little or no secretion</mark>. Mitotic figures are conspicuous in both glands and stroma. The spiral arteries lengthen and grow into the regenerating layer.",
+    "b": "By the end of the phase the endometrium has thickened from ~0.5 mm to ~3 mm.",
+    "d": "<b>Straight glands + visible mitoses + no secretion = proliferative.</b> Compare directly with the secretory row below.",
+    "e": "<span class='star'>⭐</span>Mitotic figures are the single most reliable proliferative feature — they are absent in the secretory phase.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p65_proliferative_phase_straight_glands.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p65_proliferative_phase_straight_glands.jpg\" loading=\"lazy\" alt=\"straight glands\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Secretory (luteal / progestational) phase",
+    "g": "<span class='pill'>Progesterone</span><span class='pill'>Days 15–28</span> Driven by <b>progesterone</b> from the corpus luteum. The glands become <mark>tortuous, coiled and 'corkscrew'/saw-toothed, with dilated lumina full of glycogen-rich secretion</mark>; early on, <b>subnuclear glycogen vacuoles</b> appear in the gland cells. The stroma becomes oedematous and later shows a <b>predecidual reaction</b>. The spiral arteries become highly coiled and reach the surface.",
+    "b": "Endometrial thickness peaks at ~5–6 mm. The corkscrew glands and coiled arteries are the two features present together only in this phase.",
+    "d": "<mark>Subnuclear vacuoles are the earliest reliable histological sign that ovulation has occurred</mark> — the classic post-ovulatory dating criterion.",
+    "e": "<span class='star'>⭐</span>Progesterone = secretion and coiling. Estrogen = proliferation and straight glands. Never invert this pair.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p70_secretory_phase_corkscrew_glands.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p70_secretory_phase_corkscrew_glands.jpg\" loading=\"lazy\" alt=\"corkscrew glands\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p73_endometrium_review_glands_vs_arteries.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p73_endometrium_review_glands_vs_arteries.jpg\" loading=\"lazy\" alt=\"endometrium review glands vs arteries\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Menstrual phase",
+    "g": "<span class='pill'>Progesterone withdrawal</span><span class='pill'>Days 1–4</span> The corpus luteum regresses → <mark>progesterone and estrogen fall</mark> → the spiral arteries undergo prolonged <b>vasoconstriction</b> → ischaemia and necrosis of the functionalis → the arteries then relax and rupture, and the necrotic functionalis is shed with blood.",
+    "b": "The section shows collapsed, fragmented glands, stromal breakdown, haemorrhage and infiltrating neutrophils, with the <b>basalis intact</b> beneath.",
+    "d": "<mark>Menstrual blood does not normally clot</mark> because of fibrinolysins released from the necrotic endometrium. The straight arteries never constrict, so the basalis is spared.",
+    "e": "<span class='star'>⭐</span>State the mechanism as a chain: progesterone withdrawal → spiral artery vasoconstriction → ischaemic necrosis → shedding.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p72_menstrual_phase_breakdown.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p72_menstrual_phase_breakdown.jpg\" loading=\"lazy\" alt=\"breakdown\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Endometriosis — histology",
+    "g": "<span class='pill'>Endometrial glands + stroma</span><span class='pill'>Ectopic</span> Diagnosis requires <mark>endometrial glands AND endometrial stroma outside the uterus</mark> (haemosiderin-laden macrophages are supportive). The ectopic tissue responds to the same hormones and therefore bleeds cyclically.",
+    "b": "Repeated bleeding produces fibrosis, adhesions and haemosiderin pigment; in the ovary it forms a <b>chocolate cyst (endometrioma)</b>.",
+    "d": "<b>Adenomyosis</b> is the same tissue within the myometrium; <b>endometriosis</b> is outside the uterus altogether — the ovary is the commonest site.",
+    "e": "<span class='star'>⭐</span>Two components are required for the diagnosis. Glands alone are not enough — the stroma must be there too.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p76_endometriosis_histology.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p76_endometriosis_histology.jpg\" loading=\"lazy\" alt=\"endometriosis histology\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Cervix, Vagina & Vulva  [histology] · defining features",
+  "rows": [
+   {
+    "n": "Cervix — endocervix vs ectocervix",
+    "g": "<span class='pill'>Simple columnar</span><span class='pill'>Stratified squamous</span> <b>Endocervix (canal)</b> — <mark>simple columnar mucus-secreting epithelium</mark> with large branched cervical glands. <b>Ectocervix (portio vaginalis)</b> — <mark>stratified squamous non-keratinised epithelium</mark>, continuous with the vagina. The cervical wall is <b>dense collagenous connective tissue with very little smooth muscle</b> — unlike the body of the uterus.",
+    "b": "Cervical mucus changes with the cycle: at ovulation it is <b>thin, watery and abundant</b> to admit sperm; under progesterone it is <b>thick and scanty</b>, a barrier.",
+    "d": "The cervix does <b>not</b> participate in menstrual shedding, and its collagenous wall is why <mark>'cervical ripening' before labour is a collagen-remodelling event</mark>, not a muscular one.",
+    "e": "<span class='star'>⭐</span>Two epithelia, one organ. Match each to its region before attempting the transformation zone row.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p78_cervix_glands_nabothian_cysts.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p78_cervix_glands_nabothian_cysts.jpg\" loading=\"lazy\" alt=\"cervix glands nabothian cysts\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p84_normal_cervix.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p84_normal_cervix.jpg\" loading=\"lazy\" alt=\"normal cervix\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Transformation zone and Nabothian cysts",
+    "g": "<span class='pill'>Squamocolumnar junction</span><span class='pill'>Metaplasia</span><span class='pill'>HPV</span> The <b>transformation zone</b> is the region between the original and the current <mark>squamocolumnar junction</mark>, where columnar epithelium has undergone <b>squamous metaplasia</b>. Its position <mark>changes with age and hormonal status</mark> — everted onto the ectocervix in the reproductive years, and receding into the canal after menopause.",
+    "b": "When metaplastic squamous epithelium occludes the mouth of a cervical gland, trapped mucus forms a <mark>Nabothian cyst</mark> — a benign retention cyst.",
+    "d": "<mark>The transformation zone is where HPV infects and where virtually all cervical dysplasia and carcinoma arise</mark> — actively dividing metaplastic cells are the susceptible target.",
+    "e": "<span class='star'>⭐</span>This is why the PAP smear must sample the transformation zone, and why an inadequate smear is one lacking endocervical/metaplastic cells.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p81_cervix_transformation_zone.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p81_cervix_transformation_zone.jpg\" loading=\"lazy\" alt=\"cervix transformation zone\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p82_transformation_zone_age_variation.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p82_transformation_zone_age_variation.jpg\" loading=\"lazy\" alt=\"transformation zone age variation\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Vagina — layers, glycogen and pH",
+    "g": "<span class='pill'>No glands</span><span class='pill'>Glycogen</span><span class='pill'>pH ~3–4</span> Three layers: <b>mucosa</b> — <mark>stratified squamous non-keratinised epithelium</mark> with a lamina propria rich in elastic fibres; <b>muscularis</b> — inner circular and outer longitudinal smooth muscle; <b>adventitia</b>. <mark>The vagina has NO glands</mark> — its lubrication comes from cervical mucus and transudate through the epithelium.",
+    "b": "<b>Estrogen drives the epithelial cells to accumulate glycogen.</b> Desquamated cells release glycogen, which resident <mark>lactobacilli ferment to lactic acid, giving a pH of about 3–4</mark>.",
+    "d": "<mark>The acid pH is the vagina's principal defence against pathogens.</mark> After menopause, low estrogen → less glycogen → higher pH → atrophic epithelium and increased infection.",
+    "e": "<span class='star'>⭐</span>The chain estrogen → glycogen → lactobacilli → lactic acid → low pH is a favourite short-answer question, and explains bacterial vaginosis when it fails.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p86_vagina_three_layers.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p86_vagina_three_layers.jpg\" loading=\"lazy\" alt=\"vagina three layers\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p87_vaginal_glycogen_and_ph.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p87_vaginal_glycogen_and_ph.jpg\" loading=\"lazy\" alt=\"h\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Vulva — external genitalia",
+    "g": "<span class='pill'>Keratinised</span><span class='pill'>Bartholin glands</span> <b>Labia majora</b> — skin with <mark>hair follicles, sebaceous and sweat glands</mark> and a core of adipose tissue. <b>Labia minora</b> — thin <b>keratinised</b> stratified squamous epithelium, no hair follicles and no fat, with a vascular core and abundant sebaceous glands. <b>Clitoris</b> — erectile tissue, thin epidermis, richly innervated.",
+    "b": "Glands: <b>Bartholin's (greater vestibular)</b> — mucus-secreting, homologous to the male bulbourethral glands; <b>Skene's (paraurethral)</b> — homologous to the prostate.",
+    "d": "<mark>The vulva is keratinised; the vagina is not.</mark> That change of epithelium is the anatomical boundary between them.",
+    "e": "<span class='star'>⭐</span>Bartholin ↔ bulbourethral and Skene ↔ prostate are the two homologies routinely asked.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p88_external_genitalia_vulva.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p88_external_genitalia_vulva.jpg\" loading=\"lazy\" alt=\"external genitalia vulva\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Bartholin cyst and condyloma acuminatum",
+    "g": "<span class='pill'>Duct obstruction</span><span class='pill'>HPV 6 &amp; 11</span> <b>Bartholin cyst</b> — obstruction of the duct → a dilated, cystic gland lined by flattened epithelium, filled with mucus; may become an abscess. <b>Condyloma acuminatum</b> — a papillary exophytic lesion with <mark>acanthosis, hyperkeratosis and koilocytosis</mark> (perinuclear halos with wrinkled 'raisinoid' nuclei).",
+    "b": "Koilocytes are the histological footprint of productive HPV infection.",
+    "d": "<mark>Condyloma acuminatum is caused by low-risk HPV 6 and 11 and is NOT premalignant</mark>; high-risk HPV 16 and 18 cause dysplasia and carcinoma instead. Distinguish from the flat, non-HPV condyloma latum of secondary syphilis.",
+    "e": "<span class='star'>⭐</span>Koilocytosis = HPV. Low-risk types make warts, high-risk types make cancer — never conflate the two.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p90_bartholin_cyst.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p90_bartholin_cyst.jpg\" loading=\"lazy\" alt=\"bartholin cyst\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p91_condyloma_acuminatum.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p91_condyloma_acuminatum.jpg\" loading=\"lazy\" alt=\"condyloma acuminatum\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Mammary Gland  [histology] · compare",
+  "rows": [
+   {
+    "n": "Non-lactating (resting) mammary gland",
+    "g": "<span class='pill'>Duct-predominant</span><span class='pill'>Abundant stroma</span> A compound tubuloalveolar gland of 15–20 lobes. In the resting state the gland is <mark>duct-predominant: ducts and terminal duct lobular units with few or no secretory alveoli</mark>, embedded in <mark>abundant adipose and dense interlobular connective tissue</mark>.",
+    "b": "The ducts are lined by a <b>two-cell layer — inner luminal epithelium and outer myoepithelial cells</b> — a feature that persists throughout the gland.",
+    "d": "<b>Resting = mostly stroma and fat, little epithelium.</b> The intralobular stroma is loose and cellular; the interlobular stroma is dense and fatty.",
+    "e": "<span class='star'>⭐</span>Loss of the myoepithelial layer is the criterion for invasion in breast carcinoma — this normal slide is the reference point.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p94_adult_non_lactating_mammary_gland.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p94_adult_non_lactating_mammary_gland.jpg\" loading=\"lazy\" alt=\"adult non lactating mammary gland\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p95_stroma_of_non_lactating_breast.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p95_stroma_of_non_lactating_breast.jpg\" loading=\"lazy\" alt=\"stroma of non lactating breast\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Lactating mammary gland",
+    "g": "<span class='pill'>Alveoli-predominant</span><span class='pill'>Little stroma</span> In pregnancy and lactation the alveoli proliferate dramatically, so the gland becomes <mark>alveoli-predominant with the connective tissue and fat reduced to thin septa</mark>. The alveoli are distended with milk and lined by cuboidal secretory cells with lipid droplets, surrounded by myoepithelial cells.",
+    "b": "Alveolar development is driven by <b>estrogen, progesterone and prolactin</b>; ejection is driven by <mark>oxytocin contracting the myoepithelial cells</mark>.",
+    "d": "<b>The reliable low-power discriminator is the epithelium-to-stroma ratio</b>: resting = stroma ≫ epithelium; lactating = epithelium ≫ stroma, with visibly distended alveoli.",
+    "e": "<span class='star'>⭐</span>Prolactin makes the milk, oxytocin ejects it. On the slide, look at how much fat and dense stroma is present before anything else.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p97_lactating_mammary_gland.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p97_lactating_mammary_gland.jpg\" loading=\"lazy\" alt=\"lactating mammary gland\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Merocrine and apocrine secretion in the breast",
+    "g": "<span class='pill'>Merocrine = protein</span><span class='pill'>Apocrine = lipid</span> The lactating cell uses <b>both</b> mechanisms at once. <mark>Merocrine (exocytosis)</mark> — the <b>protein</b> component (casein, lactalbumin) is released by exocytosis with no loss of cytoplasm. <mark>Apocrine</mark> — the <b>lipid</b> component is released enveloped in apical plasma membrane and a thin rim of cytoplasm.",
+    "b": "Milk therefore contains membrane-bound fat globules but free protein — a direct structural consequence of the two mechanisms.",
+    "d": "<b>Holocrine</b> secretion (the whole cell disintegrates, as in sebaceous glands) does <mark>not</mark> occur in the breast — it is the standard distractor.",
+    "e": "<span class='star'>⭐</span>Protein = merocrine, fat = apocrine, and the breast does both simultaneously. Say 'both' if asked which one the breast uses.",
+    "img": "<a href=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p98_merocrine_and_apocrine_secretion.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/histology_of_female_reproductive_system/histology_of_female_reproductive_system_p98_merocrine_and_apocrine_secretion.jpg\" loading=\"lazy\" alt=\"merocrine and apocrine secretion\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Imaging Modalities & Normal Anatomy  [imaging] · modality",
+  "rows": [
+   {
+    "n": "Ultrasound — the primary modality",
+    "g": "<span class='pill'>Transabdominal</span><span class='pill'>Transvaginal</span><span class='pill'>Doppler</span> <mark>Ultrasound is the FIRST-LINE and primary imaging modality of the female pelvis.</mark> <b>Transabdominal</b> — requires a <b>full bladder</b> as an acoustic window, gives a wide field of view. <b>Transvaginal</b> — higher frequency, <mark>much higher resolution, requires an EMPTY bladder</mark>, the better view of the uterus, endometrium and ovaries. <b>Doppler</b> adds blood flow.",
+    "b": "No ionising radiation, inexpensive, real-time, portable — hence the modality of choice in pregnancy and in young women.",
+    "d": "<b>Full bladder = transabdominal; empty bladder = transvaginal.</b> Transvaginal is superior for the endometrium, early pregnancy and the ovaries; transabdominal is better for a very large mass that extends out of the pelvis.",
+    "e": "<span class='star'>⭐</span>If a question asks for the initial investigation of pelvic pain, bleeding or a suspected pelvic mass, the answer is ultrasound.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p8_pelvic_ultrasound_transabdominal_and_transvaginal.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p8_pelvic_ultrasound_transabdominal_and_transvaginal.jpg\" loading=\"lazy\" alt=\"ultrasound transabdominal and transvaginal\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Normal uterus — position and ultrasound appearance",
+    "g": "<span class='pill'>Anteverted / anteflexed</span><span class='pill'>Retroverted</span> The normal uterus is <mark>anteverted and anteflexed</mark> in most women; retroversion/retroflexion is a normal variant. On ultrasound the myometrium is <b>homogeneous and mid-level echogenicity</b>, with the endometrium as a distinct central echogenic stripe.",
+    "b": "Version describes the angle of the cervix on the vagina; flexion describes the angle of the body on the cervix.",
+    "d": "A <b>retroverted</b> uterus is harder to image transabdominally and is better seen transvaginally — a practical point, not pathology.",
+    "e": "<span class='star'>⭐</span>Anteverted/anteflexed is normal; retroversion is a variant, not a disease. Do not report it as an abnormality.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p9_normal_uterus_positions.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p9_normal_uterus_positions.jpg\" loading=\"lazy\" alt=\"ositions\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p10_normal_uterus_on_ultrasound.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p10_normal_uterus_on_ultrasound.jpg\" loading=\"lazy\" alt=\"normal uterus on ultrasound\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Endometrial stripe — the thickness thresholds",
+    "g": "<span class='pill'>≤ 10 mm premenopausal</span><span class='pill'>&lt; 5 mm postmenopausal</span> The <b>endometrial stripe</b> is the double-layer thickness of the endometrium measured in the sagittal midline. <mark>Premenopausal: up to ~10 mm, and it varies with the cycle</mark> — thin and hyperechoic just after menses, thicker with a trilaminar appearance at mid-cycle, thickest and most echogenic in the secretory phase. <mark>Postmenopausal: should be &lt; 5 mm.</mark>",
+    "b": "The cyclic variation is the direct imaging counterpart of the proliferative and secretory histology.",
+    "d": "<mark>Postmenopausal bleeding with a stripe ≥ 5 mm requires endometrial biopsy</mark> to exclude hyperplasia or carcinoma; below 5 mm, carcinoma is very unlikely.",
+    "e": "<span class='star'>⭐</span>The 5 mm postmenopausal threshold is the single most examinable number in this deck.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p11_endometrial_stripe.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p11_endometrial_stripe.jpg\" loading=\"lazy\" alt=\"endometrial stripe\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Normal ovaries",
+    "g": "<span class='pill'>~3 × 2 × 2 cm</span><span class='pill'>Follicles</span> Normal ovaries measure roughly <mark>3 × 2 × 2 cm</mark> (about 10 mL volume in the reproductive years) and are identified by their <b>peripheral follicles — small anechoic cysts</b> — usually lying near the internal iliac vessels.",
+    "b": "Ovarian volume falls markedly after menopause and follicles disappear, so postmenopausal ovaries are small and may be hard to identify.",
+    "d": "A simple <b>follicular or corpus luteum cyst</b> up to ~3 cm is physiological; the corpus luteum classically shows a <b>peripheral ring of Doppler flow</b> ('ring of fire').",
+    "e": "<span class='star'>⭐</span>Know that follicles are what let you identify the ovary, and that a small simple cyst in a premenopausal woman is normal.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p12_normal_ovaries_on_ultrasound.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p12_normal_ovaries_on_ultrasound.jpg\" loading=\"lazy\" alt=\"normal ovaries on ultrasound\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "MRI of the pelvis",
+    "g": "<span class='pill'>Zonal anatomy</span><span class='pill'>Problem-solving</span> MRI has the best soft-tissue contrast and shows the <mark>zonal anatomy of the uterus on T2</mark>: bright endometrium, a dark <b>junctional zone</b> (inner myometrium), and intermediate outer myometrium.",
+    "b": "Used as a <b>problem-solving</b> tool rather than first line: staging of endometrial and cervical carcinoma, characterising an indeterminate adnexal mass, mapping fibroids before myomectomy or embolisation, and diagnosing müllerian anomalies.",
+    "d": "<mark>A thickened junctional zone (&gt; 12 mm) is the MRI hallmark of adenomyosis</mark> — a diagnosis ultrasound often misses.",
+    "e": "<span class='star'>⭐</span>MRI = staging and characterisation, not screening. The junctional zone is the structure to name.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p14_normal_mri_pelvis.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p14_normal_mri_pelvis.jpg\" loading=\"lazy\" alt=\"elvis\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "CT of the pelvis",
+    "g": "<span class='pill'>Ionising radiation</span><span class='pill'>Staging / acute abdomen</span> CT is fast and shows the whole abdomen and pelvis, but has <b>poor soft-tissue contrast for the uterus and ovaries</b> and uses ionising radiation.",
+    "b": "Its roles are <b>staging and surveillance of gynaecological malignancy</b> (nodes, peritoneal and distant disease), and the <b>acute abdomen</b> where the differential is broad.",
+    "d": "<mark>CT is generally avoided as a primary pelvic study in young women and is contraindicated as first-line in pregnancy</mark> — ultrasound, then MRI, are preferred.",
+    "e": "<span class='star'>⭐</span>Pick CT for metastatic spread and for undifferentiated acute abdominal pain; pick ultrasound for a pelvic organ question.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p15_ct_of_the_pelvis.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p15_ct_of_the_pelvis.jpg\" loading=\"lazy\" alt=\"elvis\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Hysterosalpingography (HSG)",
+    "g": "<span class='pill'>Fluoroscopy</span><span class='pill'>Contrast</span><span class='pill'>Free spill</span> Contrast is injected through the cervix under fluoroscopy to opacify the endometrial cavity and tubes. The <mark>normal cavity is a smooth, symmetric inverted triangle ('T'-shaped)</mark>, with contrast passing along both tubes and <mark>free spill into the peritoneal cavity — the sign of tubal patency</mark>.",
+    "b": "Performed in the <b>follicular phase, after menses and before ovulation</b>, to avoid disturbing a possible pregnancy.",
+    "d": "<b>Main indication: infertility.</b> Findings include tubal occlusion, hydrosalpinx, intrauterine adhesions (Asherman) and müllerian anomalies. It is contraindicated in active pelvic infection or pregnancy.",
+    "e": "<span class='star'>⭐</span>'Free spill' is the phrase they want for patency, and 'follicular phase' is the timing answer.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p16_hysterosalpingography.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p16_hysterosalpingography.jpg\" loading=\"lazy\" alt=\"hysterosalpingography\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "IUD and tubal occlusion devices",
+    "g": "<span class='pill'>IUD</span><span class='pill'>Essure</span> An <b>IUD</b> is strongly echogenic on ultrasound with posterior shadowing, and radio-opaque on plain film. It should sit in the <mark>fundal endometrial cavity</mark>. <b>Essure</b> micro-inserts are small metallic coils lodged in the proximal (interstitial) tubes for permanent sterilisation.",
+    "b": "Ultrasound (3D coronal is best) confirms position; plain film or CT locates a device that cannot be found in the uterus.",
+    "d": "<mark>Malposition, myometrial embedment, or perforation with an intra-abdominal IUD</mark> are the findings to look for when the strings are missing or there is pain or bleeding.",
+    "e": "<span class='star'>⭐</span>A missing IUD string means: image it. It is either low, expelled, or perforated — do not assume expulsion.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p17_iud_on_xray_and_ultrasound.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p17_iud_on_xray_and_ultrasound.jpg\" loading=\"lazy\" alt=\"iud on xray and ultrasound\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p18_essure_tubal_occlusion_device.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p18_essure_tubal_occlusion_device.jpg\" loading=\"lazy\" alt=\"essure tubal occlusion device\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Müllerian anomalies — bicornuate uterus",
+    "g": "<span class='pill'>Fusion defect</span><span class='pill'>US / MRI / HSG</span> Failure of fusion of the paramesonephric (müllerian) ducts. The <b>bicornuate uterus</b> has two divergent horns with a <mark>deep external fundal cleft (&gt; 1 cm indentation of the outer contour)</mark>. On HSG two cavities are opacified; on ultrasound and MRI the coronal view shows the two horns and the fundal contour.",
+    "b": "Related anomalies: <b>septate</b> uterus, <b>unicornuate</b>, <b>didelphys</b> (complete duplication including two cervices), and <b>arcuate</b> (a mild, essentially normal variant).",
+    "d": "<mark>The septate uterus has a NORMAL convex outer fundal contour; the bicornuate has a cleft.</mark> This distinction matters because a septum can be resected hysteroscopically and a bicornuate uterus cannot.",
+    "e": "<span class='star'>⭐</span>Look at the OUTER fundal contour, not the cavity. Müllerian anomalies also carry an association with renal anomalies.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p20_bicornuate_uterus_us_mri_hsg.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p20_bicornuate_uterus_us_mri_hsg.jpg\" loading=\"lazy\" alt=\"bicornuate uterus us mri hsg\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Uterine & Endometrial Pathology  [imaging] · modality",
+  "rows": [
+   {
+    "n": "Uterine fibroids (leiomyomas)",
+    "g": "<span class='pill'>Submucosal</span><span class='pill'>Intramural</span><span class='pill'>Subserosal</span> The commonest uterine tumour. On ultrasound: <mark>well-defined, round, hypoechoic masses with whorled internal echoes and characteristic edge shadowing</mark>, often calcified. On MRI they are <b>low signal on T2</b> and sharply demarcated. Classified by location as <b>submucosal, intramural or subserosal</b>.",
+    "b": "Fibroids distort the uterine contour and enlarge the uterus; degeneration (hyaline, cystic, red) changes the appearance and can cause pain.",
+    "d": "<mark>Submucosal fibroids cause the most bleeding and infertility</mark> despite often being the smallest; subserosal ones cause mass effect. A pedunculated subserosal fibroid can mimic an adnexal mass.",
+    "e": "<span class='star'>⭐</span>Location predicts the symptom. Match the whorled hypoechoic mass with edge shadowing to a fibroid on sight.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p21_uterine_fibroids.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p21_uterine_fibroids.jpg\" loading=\"lazy\" alt=\"uterine fibroids\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Uterine fibroid (artery) embolization",
+    "g": "<span class='pill'>Interventional radiology</span><span class='pill'>Uterus-sparing</span> A catheter is advanced into both uterine arteries and <b>particulate embolic material</b> is injected, infarcting the fibroids while the uterus survives on collateral supply. Post-procedure MRI shows <mark>loss of enhancement in the infarcted fibroids</mark> with shrinkage over months.",
+    "b": "A minimally invasive alternative to myomectomy or hysterectomy for symptomatic fibroids.",
+    "d": "<mark>Relatively contraindicated in women wanting future fertility</mark>, and not appropriate if malignancy is suspected — the tissue is not sampled.",
+    "e": "<span class='star'>⭐</span>Know it as the uterus-sparing option and know the fertility caveat.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p22_uterine_fibroid_embolization.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p22_uterine_fibroid_embolization.jpg\" loading=\"lazy\" alt=\"uterine fibroid embolization\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Endometrial hyperplasia and polyps",
+    "g": "<span class='pill'>Thickened stripe</span><span class='pill'>Feeding vessel</span><span class='pill'>Sonohysterography</span> <b>Hyperplasia</b> — <mark>diffuse thickening of the endometrial stripe</mark>, usually homogeneous and echogenic. <b>Polyp</b> — a <mark>focal echogenic mass within the cavity with a single feeding vessel on Doppler</mark>, best demonstrated by <b>sonohysterography</b> (saline infusion), which separates the walls and outlines it.",
+    "b": "Both present with abnormal or postmenopausal bleeding and both thicken the stripe, so the imaging question is focal versus diffuse.",
+    "d": "<mark>Focal + feeding vessel = polyp; diffuse = hyperplasia.</mark> Hyperplasia results from unopposed estrogen and, when atypical, is the precursor of endometrioid carcinoma.",
+    "e": "<span class='star'>⭐</span>Sonohysterography is the answer for distinguishing focal from diffuse endometrial thickening. The single feeding vessel is the polyp's signature.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p23_endometrial_hyperplasia_and_polyps.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p23_endometrial_hyperplasia_and_polyps.jpg\" loading=\"lazy\" alt=\"olyps\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Endometrial carcinoma",
+    "g": "<span class='pill'>Postmenopausal bleeding</span><span class='pill'>MRI staging</span> Ultrasound shows a <mark>markedly thickened, heterogeneous, irregular endometrium with an indistinct endometrial–myometrial interface</mark>, sometimes with fluid in the cavity. <b>MRI is the staging modality</b>, assessing <mark>depth of myometrial invasion</mark>, cervical stromal involvement and nodes.",
+    "b": "Ultrasound raises the suspicion; <b>the diagnosis is histological</b> — endometrial biopsy or D&C.",
+    "d": "<mark>Depth of myometrial invasion is the key prognostic feature MRI is asked to provide</mark> (&lt; 50% vs ≥ 50%). Any postmenopausal bleeding is carcinoma until proven otherwise.",
+    "e": "<span class='star'>⭐</span>Imaging cannot diagnose it — biopsy does. MRI's job is staging, specifically myometrial invasion.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p24_endometrial_carcinoma.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p24_endometrial_carcinoma.jpg\" loading=\"lazy\" alt=\"endometrial carcinoma\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Adenomyosis and endometriosis",
+    "g": "<span class='pill'>Chocolate cyst</span><span class='pill'>Junctional zone</span> <b>Endometriosis:</b> the ovarian <mark>endometrioma ('chocolate cyst') is a cyst with homogeneous low-level internal echoes ('ground glass') and no internal vascularity</mark>; on MRI it is <b>bright on T1 and dark on T2 ('T2 shading')</b> because of blood products. <b>Adenomyosis:</b> a globular uterus with a heterogeneous myometrium, myometrial cysts, and a <mark>thickened junctional zone on MRI</mark>.",
+    "b": "Peritoneal implants are often invisible on imaging — laparoscopy remains the definitive diagnostic test for endometriosis.",
+    "d": "<b>T1 bright + T2 dark = blood = endometrioma</b>; a dermoid is also T1 bright but <mark>loses signal with fat saturation</mark>, which blood does not.",
+    "e": "<span class='star'>⭐</span>The fat-saturation trick is how you separate a dermoid from an endometrioma — both are T1 bright.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p31_endometriosis_chocolate_cyst.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p31_endometriosis_chocolate_cyst.jpg\" loading=\"lazy\" alt=\"endometriosis chocolate cyst\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Ovarian & Adnexal Imaging  [imaging] · modality",
+  "rows": [
+   {
+    "n": "Polycystic ovarian disease (Stein–Leventhal)",
+    "g": "<span class='pill'>String of pearls</span><span class='pill'>≥ 12 follicles</span> Enlarged ovaries containing <mark>numerous small (2–9 mm) peripherally arranged follicles — the 'string of pearls' sign</mark> — with increased central echogenic stroma. The usual threshold is <b>≥ 12 follicles per ovary and/or ovarian volume &gt; 10 mL</b>.",
+    "b": "Transvaginal scanning is required to count the follicles reliably.",
+    "d": "<mark>Imaging alone does NOT diagnose PCOS</mark> — the Rotterdam criteria require two of three: oligo/anovulation, hyperandrogenism, and polycystic ovaries on ultrasound. Polycystic-appearing ovaries occur in normal women.",
+    "e": "<span class='star'>⭐</span>'String of pearls' plus the caveat that it is one of three criteria. This is the imaging face of the PCOS cascade in the physiology table and the theca hyperplasia in the histology section.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p25_polycystic_ovarian_disease.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p25_polycystic_ovarian_disease.jpg\" loading=\"lazy\" alt=\"ovarian disease\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Ovarian torsion",
+    "g": "<span class='pill'>Absent Doppler flow</span><span class='pill'>Surgical emergency</span> An <mark>enlarged, oedematous ovary with peripherally displaced follicles</mark>, often with a mass acting as the lead point, and free fluid. Doppler classically shows <mark>absent or markedly reduced flow</mark>, and the twisted vascular pedicle may appear as the <b>'whirlpool sign'</b>.",
+    "b": "Presents as acute unilateral pelvic pain with nausea and vomiting, often in a young woman with an ovarian cyst or dermoid.",
+    "d": "<mark>PRESERVED Doppler flow does NOT exclude torsion</mark> — the dual ovarian and uterine artery supply means flow may persist. It is a clinical and surgical diagnosis; delay costs the ovary.",
+    "e": "<span class='star'>⭐</span>The trap is the reassuring Doppler. The enlarged oedematous ovary with peripheral follicles is the more reliable sign.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p26_ovarian_torsion.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p26_ovarian_torsion.jpg\" loading=\"lazy\" alt=\"ovarian torsion\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Ovarian teratoma (dermoid cyst)",
+    "g": "<span class='pill'>Fat</span><span class='pill'>Calcification</span><span class='pill'>Tip of the iceberg</span> The commonest ovarian tumour in young women. Ultrasound shows a <mark>markedly echogenic mass with dense posterior shadowing — the 'tip of the iceberg' sign</mark>, plus the <b>'dermoid plug' (Rokitansky nodule)</b> and echogenic linear strands from hair ('dot-dash'). CT and MRI show <mark>macroscopic fat and calcification (teeth), which is diagnostic</mark>.",
+    "b": "Because it contains all three germ layers, its contents — fat, hair, teeth, sebum — are what make it so recognisable.",
+    "d": "<b>Fat within an adnexal mass is essentially diagnostic of a dermoid.</b> Confirm with fat-saturated MRI, which suppresses the signal (unlike the blood in an endometrioma).",
+    "e": "<span class='star'>⭐</span>Dermoids are a common lead point for torsion — the two rows connect. Mature teratoma is benign; the immature variant is not.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p27_ovarian_teratoma_dermoid.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p27_ovarian_teratoma_dermoid.jpg\" loading=\"lazy\" alt=\"ovarian teratoma dermoid\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Ovarian carcinoma",
+    "g": "<span class='pill'>Complex cystic-solid</span><span class='pill'>Thick septa</span><span class='pill'>CA-125</span> Malignant features on ultrasound: a <mark>complex cystic and solid mass, thick (&gt; 3 mm) septations, mural nodules or papillary projections, and low-resistance internal Doppler flow</mark>, with ascites. Bilaterality raises suspicion further.",
+    "b": "CT is used for staging: peritoneal spread, nodes and distant disease. <b>CA-125</b> is the associated tumour marker, most useful for monitoring.",
+    "d": "<mark>Simple, thin-walled, anechoic, avascular = almost certainly benign.</mark> The number and thickness of septations and the presence of solid vascular components drive the risk assessment.",
+    "e": "<span class='star'>⭐</span>Learn the malignant-feature list as a checklist — it is exactly what a stem will describe. Ovarian carcinoma presents late because the pelvis accommodates it silently.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p28_ovarian_carcinoma.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p28_ovarian_carcinoma.jpg\" loading=\"lazy\" alt=\"ovarian carcinoma\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Peritoneal spread — omental caking and pseudomyxoma peritonei",
+    "g": "<span class='pill'>Omental cake</span><span class='pill'>Scalloping</span> <b>Omental caking</b> — the omentum is replaced by a <mark>thickened, nodular soft-tissue 'cake' between the bowel and the anterior abdominal wall</mark>, the classic CT appearance of peritoneal carcinomatosis from ovarian carcinoma, usually with ascites. <b>Pseudomyxoma peritonei</b> — gelatinous mucinous ascites that <mark>scallops the liver and splenic surfaces</mark>.",
+    "b": "Ovarian carcinoma spreads transcoelomically, so the peritoneum, omentum and diaphragmatic surfaces are involved before distant metastasis.",
+    "d": "<mark>Scalloping of the liver edge distinguishes pseudomyxoma from simple ascites</mark>, which does not indent solid organs. Pseudomyxoma most often arises from a mucinous appendiceal neoplasm, with the ovary secondarily involved.",
+    "e": "<span class='star'>⭐</span>Omental cake ⇒ think ovarian primary. Scalloped liver ⇒ pseudomyxoma, and go looking at the appendix.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p29_omental_caking_and_pseudomyxoma.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p29_omental_caking_and_pseudomyxoma.jpg\" loading=\"lazy\" alt=\"seudomyxoma\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Pelvic inflammatory disease",
+    "g": "<span class='pill'>Tubo-ovarian abscess</span><span class='pill'>Gas is diagnostic</span> Findings: a thickened, fluid-filled tube with incomplete septa and a <b>'cogwheel'</b> appearance in cross-section (hydrosalpinx/pyosalpinx), a complex <mark>tubo-ovarian abscess</mark> in which the ovary and tube can no longer be separated, free pelvic fluid, and hyperaemia on Doppler.",
+    "b": "It is ascending infection, usually gonococcal or chlamydial, and imaging is often normal in mild disease.",
+    "d": "<mark>Gas within the endometrial cavity or an adnexal collection is diagnostic of infection</mark>. Perihepatic adhesions give <b>Fitz-Hugh–Curtis syndrome</b>. Long-term: tubal scarring → infertility and ectopic pregnancy.",
+    "e": "<span class='star'>⭐</span>Gas = infection, and the cogwheel/incomplete-septa tube is the named sign. This is the imaging counterpart of the salpingitis histology row.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p30_pelvic_inflammatory_disease.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p30_pelvic_inflammatory_disease.jpg\" loading=\"lazy\" alt=\"inflammatory disease\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Early Pregnancy Imaging  [imaging] · timeline",
+  "rows": [
+   {
+    "n": "First-trimester milestones on transvaginal ultrasound",
+    "g": "<span class='pill'>Sac 4–5 wk</span><span class='pill'>Yolk sac 5 wk</span><span class='pill'>Fetal pole 6 wk</span><span class='pill'>Heartbeat 6 wk</span> The ordered sequence: <b>1.</b> <mark>Gestational sac at ~4–5 weeks</mark> (with the intradecidual and double decidual sac signs). <b>2.</b> <mark>Yolk sac at ~5 weeks</mark> — the first definite sign of an intrauterine pregnancy. <b>3.</b> <mark>Fetal pole at ~6 weeks</mark>. <b>4.</b> <mark>Cardiac activity by ~6 weeks</mark> (5–6 weeks), when the pole reaches ~2 mm.",
+    "b": "The sac should be seen transvaginally once β-hCG exceeds the <b>discriminatory zone (~1500–2000 mIU/mL)</b>.",
+    "d": "<mark>The yolk sac is what proves a true gestational sac</mark> — a pseudogestational sac in ectopic pregnancy is fluid in the cavity and contains no yolk sac.",
+    "e": "<span class='star'>⭐</span>Memorise the four milestones with their weeks in order. Nearly every early-pregnancy question is answered from this list.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p34_normal_first_trimester_transvaginal.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p34_normal_first_trimester_transvaginal.jpg\" loading=\"lazy\" alt=\"normal first trimester transvaginal\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p35_fetal_heart_beat.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p35_fetal_heart_beat.jpg\" loading=\"lazy\" alt=\"fetal heart beat\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Criteria for pregnancy failure (demise)",
+    "g": "<span class='pill'>CRL ≥ 7 mm, no heartbeat</span><span class='pill'>MSD ≥ 25 mm, no embryo</span> Definitive criteria: <mark>crown–rump length ≥ 7 mm with NO cardiac activity</mark>, or a <mark>mean sac diameter ≥ 25 mm with NO embryo</mark>. Also diagnostic: no embryo with heartbeat ≥ 2 weeks after a sac without a yolk sac, or ≥ 11 days after a sac with a yolk sac.",
+    "b": "Suspicious but not diagnostic findings (small sac relative to embryo, enlarged or irregular yolk sac, slow heart rate) warrant a follow-up scan rather than intervention.",
+    "d": "<mark>These thresholds are deliberately conservative</mark> — the cost of wrongly diagnosing demise in a viable pregnancy is unacceptable, so borderline cases are rescanned.",
+    "e": "<span class='star'>⭐</span>Learn the two numbers (7 mm CRL and 25 mm MSD) exactly, and the principle that borderline findings mean repeat imaging, not action.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p35_fetal_heart_beat.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p35_fetal_heart_beat.jpg\" loading=\"lazy\" alt=\"fetal heart beat\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Dating — crown–rump length",
+    "g": "<span class='pill'>CRL best in T1</span><span class='pill'>± 5–7 days</span> <mark>Crown–rump length is the most accurate measure of gestational age</mark>, accurate to about ±5–7 days when performed in the first trimester. Beyond ~14 weeks, biometry shifts to <b>biparietal diameter, head and abdominal circumference and femur length</b>, which are progressively less accurate.",
+    "b": "Accuracy falls with gestation because biological variation in fetal size increases.",
+    "d": "<mark>Early dating overrides later dating</mark> — once established by a first-trimester CRL, the estimated due date is not revised on later scans.",
+    "e": "<span class='star'>⭐</span>CRL in the first trimester is the answer for 'most accurate dating', and the reason is that fetuses vary less in size early.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p36_crown_rump_length_gestational_age.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p36_crown_rump_length_gestational_age.jpg\" loading=\"lazy\" alt=\"crown rump length gestational age\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Ectopic pregnancy",
+    "g": "<span class='pill'>Tubal ring</span><span class='pill'>Empty uterus + positive hCG</span> <mark>An empty uterus with a positive β-hCG above the discriminatory zone</mark> is ectopic until proven otherwise. Look for an adnexal <b>'tubal ring' / 'ring of fire'</b> — an echogenic ring with peripheral Doppler flow separate from the ovary — free fluid, and in the uterus a <b>pseudogestational sac with no yolk sac</b>.",
+    "b": "Over 95% are tubal, and most of those <mark>ampullary</mark> — the site of fertilization.",
+    "d": "<mark>A live embryo outside the uterus is 100% specific but seen in only a minority.</mark> Risk factors are prior PID, tubal surgery, previous ectopic and IUD — all mechanisms of impaired tubal transport.",
+    "e": "<span class='star'>⭐</span>Empty uterus + β-hCG above the discriminatory zone. Also know a heterotopic pregnancy can coexist with an intrauterine one, especially after IVF.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p37_ectopic_pregnancy_ring_sign.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p37_ectopic_pregnancy_ring_sign.jpg\" loading=\"lazy\" alt=\"ring sign\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Male Reproductive Imaging  [imaging] · modality",
+  "rows": [
+   {
+    "n": "Prostate imaging — TRUS",
+    "g": "<span class='pill'>Transrectal US</span><span class='pill'>Biopsy guidance</span> <b>Transrectal ultrasound</b> places a high-frequency probe adjacent to the prostate. It shows the zonal anatomy — <b>peripheral zone</b> (where most carcinoma arises), <b>central</b> and <b>transition</b> zones (where BPH arises) — and is used to measure volume and, principally, to <mark>guide systematic biopsy</mark>.",
+    "b": "Carcinoma is classically a hypoechoic peripheral zone lesion, but ultrasound appearance alone is unreliable.",
+    "d": "<mark>TRUS is for guidance and volume, not for diagnosis</mark> — many cancers are isoechoic and invisible, which is why systematic sampling is done.",
+    "e": "<span class='star'>⭐</span>Peripheral zone = cancer, transition zone = BPH. That zonal split is the fact being tested.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p40_transrectal_ultrasound_prostate.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p40_transrectal_ultrasound_prostate.jpg\" loading=\"lazy\" alt=\"rostate\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "MRI of the prostate",
+    "g": "<span class='pill'>Multiparametric</span><span class='pill'>PI-RADS</span> <b>Multiparametric MRI</b> combines T2, diffusion-weighted imaging (with ADC) and dynamic contrast enhancement. Carcinoma appears as a <mark>low-T2, diffusion-restricted (low ADC) focus, usually in the peripheral zone</mark>, with early enhancement. Lesions are scored <b>PI-RADS 1–5</b>.",
+    "b": "It is also used for local staging — extracapsular extension, seminal vesicle invasion — and to guide targeted (fusion) biopsy.",
+    "d": "<mark>Diffusion restriction is the most useful sequence for detecting significant cancer</mark>; MRI before biopsy reduces detection of clinically insignificant disease.",
+    "e": "<span class='star'>⭐</span>Name the sequences and know that peripheral-zone diffusion restriction is the signature. Bone metastases are osteoblastic (sclerotic) on plain film and CT.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p41_mri_of_the_prostate.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p41_mri_of_the_prostate.jpg\" loading=\"lazy\" alt=\"rostate\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Testicular carcinoma",
+    "g": "<span class='pill'>Scrotal US</span><span class='pill'>Hypoechoic mass</span><span class='pill'>AFP / β-hCG / LDH</span> <b>Scrotal ultrasound is the first-line test.</b> A malignant tumour is a <mark>solid, hypoechoic INTRAtesticular mass with increased vascularity</mark>. <b>Seminoma</b> — homogeneous, well defined; <b>non-seminomatous</b> — heterogeneous with cystic change, calcification and haemorrhage.",
+    "b": "CT of the chest, abdomen and pelvis stages it, following the lymphatic drainage to the <mark>retroperitoneal para-aortic nodes</mark> — not the inguinal nodes.",
+    "d": "<mark>Any solid intratesticular mass is malignant until proven otherwise; extratesticular masses are usually benign.</mark> Markers: AFP (never raised in pure seminoma), β-hCG, LDH.",
+    "e": "<span class='star'>⭐</span>Intratesticular vs extratesticular is the first decision. Para-aortic nodal spread reflects the embryological origin of the testis.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p43_testicular_carcinoma.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p43_testicular_carcinoma.jpg\" loading=\"lazy\" alt=\"testicular carcinoma\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Testicular torsion",
+    "g": "<span class='pill'>Absent flow</span><span class='pill'>Whirlpool</span><span class='pill'>6-hour window</span> <mark>Absent or markedly reduced intratesticular Doppler flow</mark> in an enlarged, heterogeneous, painful testis, with the twisted spermatic cord visible as the <b>'whirlpool' or 'twisted towel' sign</b> and reactive hydrocele and skin thickening.",
+    "b": "Typically an adolescent with sudden severe pain, a high-riding transverse testis and an <b>absent cremasteric reflex</b>. The underlying anatomy is the <b>bell-clapper deformity</b>.",
+    "d": "<mark>A surgical emergency — salvage falls sharply after about 6 hours.</mark> Imaging must never delay exploration when the diagnosis is clinically clear.",
+    "e": "<span class='star'>⭐</span>Absent flow + whirlpool sign, and the 6-hour window. Compare with epididymo-orchitis, where flow is INCREASED.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p44_testicular_torsion.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p44_testicular_torsion.jpg\" loading=\"lazy\" alt=\"testicular torsion\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Epididymo-orchitis",
+    "g": "<span class='pill'>Increased flow</span><span class='pill'>Prehn sign</span> The mirror image of torsion: an <mark>enlarged, hypoechoic epididymis (and testis) with markedly INCREASED Doppler flow (hyperaemia)</mark>, a reactive hydrocele and scrotal wall thickening.",
+    "b": "Usually infective — <i>Chlamydia</i> and <i>N. gonorrhoeae</i> in younger men, coliforms in older men — with gradual onset, fever and dysuria.",
+    "d": "<mark>Increased flow = inflammation; absent flow = torsion.</mark> Clinically, pain relieved by elevation (positive Prehn sign) favours epididymo-orchitis. Complications: abscess and pyocele.",
+    "e": "<span class='star'>⭐</span>This is the highest-yield pair in the male section — Doppler flow is the discriminator, in opposite directions.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p45_epididymo_orchitis.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p45_epididymo_orchitis.jpg\" loading=\"lazy\" alt=\"epididymo orchitis\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Hydrocele, varicocele and other scrotal collections",
+    "g": "<span class='pill'>Bag of worms</span><span class='pill'>Valsalva</span> <b>Hydrocele</b> — an <mark>anechoic fluid collection surrounding the testis</mark> within the tunica vaginalis; transilluminates. <b>Varicocele</b> — dilated (&gt; 2–3 mm) pampiniform plexus veins, the <mark>'bag of worms', which enlarge with Valsalva and standing</mark> and show venous flow on Doppler. <b>Haematocele</b> and <b>pyocele</b> show internal echoes and septations.",
+    "b": "Varicoceles are a treatable cause of male infertility, acting through raised scrotal temperature.",
+    "d": "<mark>Varicoceles are ~85–90% LEFT-sided</mark> because the left testicular vein drains at a right angle into the left renal vein. <mark>A NEW right-sided or non-reducible varicocele demands abdominal imaging</mark> to exclude a retroperitoneal mass or renal cell carcinoma with venous invasion.",
+    "e": "<span class='star'>⭐</span>Left-sided anatomy, and the red flag of a new right-sided varicocele. Both are standard question material.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p46_hydrocele_and_varicocele.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p46_hydrocele_and_varicocele.jpg\" loading=\"lazy\" alt=\"hydrocele and varicocele\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Testicular trauma and fracture",
+    "g": "<span class='pill'>Tunica albuginea</span><span class='pill'>Surgical emergency</span> Ultrasound assesses the integrity of the <b>tunica albuginea</b>. <b>Testicular fracture</b> — a <mark>linear hypoechoic band across the parenchyma with an intact tunica</mark>. <b>Rupture</b> — <mark>discontinuity of the tunica albuginea with an irregular testicular contour and extrusion of parenchyma</mark>, plus haematocele.",
+    "b": "Doppler assesses residual perfusion, which determines salvageability.",
+    "d": "<mark>Rupture requires urgent surgical exploration</mark>; salvage rates exceed 80% within 72 hours and fall steeply after. An intact tunica with a haematoma can often be managed conservatively.",
+    "e": "<span class='star'>⭐</span>The tunica albuginea is the structure that decides management — intact or breached.",
+    "img": "<a href=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p47_testicular_fracture.jpg\" target=\"_blank\"><img src=\"mini2_foundations_images/medical_imaging_of_the_reproductive_system/medical_imaging_of_the_reproductive_system_p47_testicular_fracture.jpg\" loading=\"lazy\" alt=\"testicular fracture\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ }
+];
+
+const tbody=document.getElementById('tbody');
+const chipsEl=document.getElementById('chips');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}</span></span></td>`;
+  tbody.appendChild(secRow);
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td>
+      <td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// chips
+const chipAll=document.createElement('div');
+chipAll.className='chip active';chipAll.textContent='All systems';chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach((grp,gi)=>{
+  const c=document.createElement('div');
+  c.className='chip';c.dataset.sec=gi;
+  c.textContent=grp.sec.replace(/ \(.*?\)/,'').replace(' / ',' / ');
+  chipsEl.appendChild(c);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> concepts`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active');
+  activeSec=c.dataset.sec;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + chips). Measured live so fullscreen, resize, font load, and
+// chip-wrapping changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+.c-img{width:9%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var MINIS=[
+    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+      ['mini1.html','Overview'],
+      ['master_table.html','Master'],
+      ['pathology_table.html','Pathology'],
+      ['pathology_checklist.html','Path Checklist'],
+      ['physio_table.html','Physiology'],
+      ['drugs_table.html','Drugs'],
+      ['biochem_table.html','Biochem'],
+      ['embryo_anatomy_table.html','Embryo / Anatomy'],
+      ['pattern_recognition.html','Patterns'],
+      ['lecture_recall.html','Lecture Recall'],
+      ['physio_quiz.html','Physio Quiz'],
+      ['endocrine_path_quiz.html','Endo Path Quiz'],
+      ['male_path_quiz.html','Male Path Quiz'],
+      ['physio_ext1_quiz.html','Repro Physio Q'],
+      ['physio_ext2_quiz.html','Physio Bank 1'],
+      ['physio_ext3_quiz.html','Physio Bank 2'],
+      ['pharmq_quiz.html','Pharm Quiz'],
+      ['review_planner.html','Planner'],
+      ['gi_path_table.html','GI Path']
+    ]},
+    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+      ['mini2.html','Overview'],
+      ['mini2_pathology_table.html','Pathology'],
+      ['mini2_physio_table.html','Physiology'],
+      ['mini2_drugs_table.html','Drugs'],
+      ['mini2_foundations_table.html','Foundations'],
+      ['mini2_study_guide.html','Resource Guide']
+    ]}
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
+  var sw=document.createElement('span'); sw.className='sk-minis';
+  MINIS.forEach(function(m){
+    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+    sw.appendChild(a);
+  });
+  nav.appendChild(sw);
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>
