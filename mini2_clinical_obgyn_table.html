@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinical Obstetrics &amp; Gynecology — Approach, Workup &amp; Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:6px 11px;border:1px solid var(--line-strong);border-radius:99px;
+    background:var(--surface);color:var(--muted);cursor:pointer;user-select:none;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:14%}
+  col.c-gene{width:16%}
+  col.c-buzz{width:30%}
+  col.c-diff{width:21%}
+  col.c-exam{width:19%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+.c-img{width:11%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Mini 2 · Clinical Obstetrics &amp; Gynecology</p>
+  <h1>The approach, the cutoffs,<br>and the next step that <em>will</em> be tested.</h1>
+  <p class="sub">Clinical obstetrics and gynecology on one scannable grid — the approach, workup, screening and management, not the pathology descriptions (those live in the pathology table). Every section is tagged <b>[OB]</b> or <b>[GYN]</b> and states the format it uses: <b>workup algorithm</b> for the clinical approaches, <b>reference values</b> for screening, <b>sequence</b> for ordered content, <b>entity table</b> otherwise. Teal = criterion, cutoff or timing. Highlighted = the number or decision you are expected to produce. The crimson rail is the single fact most likely to anchor a question stem.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search condition, cutoff, test, drug…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Criterion / cutoff</span>
+      <span><i class="sw b"></i>Key finding / number</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Condition / Topic</th>
+          <th>Definition, Criteria &amp; Timing</th>
+          <th>Presentation / Findings</th>
+          <th>Workup &amp; Management</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No topic matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Study reference compiled from the Mini 2 clinical lectures — Introduction to Obstetrics 1 &amp; 2, Establishment of Pregnancy, Maternal Serum Screening, Nutrition in Pregnancy/Lactation/Childhood, Parturition &amp; Transition to Neonatal Life, Introduction to Gynecology 1 &amp; 2, Clinical Approach to Amenorrhea, Clinical Approach to Infertility, and Genetic Counseling of Breast Cancer. Sections tagged [summary] come from the Summaries folder and intentionally overlap the lecture sections. The three Cumulative Review case decks (Clinical Cases in Obstetrics, Amenorrhea Clinical Cases, Clinical Cases in Gynecology) are deliberately excluded — those folders are empty and the material now exists only as an unanswered question set, which is kept out of the tables so the questions are not spoiled. Verify against your primary lecture material where anything differs — not a substitute for the notes.
+</footer>
+
+<script>
+const DATA = [
+ {
+  "sec": "Preconception, Diagnosis & Dating of Pregnancy  [OB] · entity table",
+  "rows": [
+   {
+    "n": "Preconception counseling",
+    "g": "<span class='pill'>Folate 400 µg</span><span class='pill'>Start 3 months before</span> <mark>Pregnancy care begins BEFORE pregnancy.</mark> Prenatal vitamins for <b>3 months prior to conception</b>. <mark>Folate 400 micrograms orally daily to prevent neural tube defects</mark>. Iron to prevent anemia of pregnancy. Protein <b>60–90 mg/day</b> in the diet.",
+    "b": "Avoid packaged meats and high-mercury fish — <b>swordfish, shark, tilefish, mackerel</b>. Screen for recent chemotherapy or radiation, and review immunization status. In early pregnancy: <mark>no scuba diving, no sky diving, no hot tubs</mark>.",
+    "d": "Counsel on smoking, alcohol, recreational drugs (<b>cocaine</b>), chronic medical conditions, STI screening and <b>intimate partner violence screening</b>. Genetic counseling: cystic fibrosis, Tay-Sachs, Canavan disease, myotonic dystrophy, sickle cell disease (risk &gt; 1:60).",
+    "e": "<span class='star'>⭐</span>Folate 400 µg started <b>three months before conception</b> — both the dose and the timing are asked. Up to ¾ of NTDs are preventable by folate.",
+    "img": ""
+   },
+   {
+    "n": "Diagnosis of pregnancy — presumptive vs confirmatory",
+    "g": "<span class='pill'>β-hCG</span><span class='pill'>Day 8–9 post-ovulation</span> <b>Presumptive:</b> cessation of menses. <b>Probable:</b> urine or serum <b>β-hCG</b> — a sensitive test detects β-hCG in plasma or urine by <mark>8–9 days following ovulation</mark>. <b>Confirmatory:</b> <mark>fetal heart tones (≥ 12 weeks)</mark> and <mark>transvaginal ultrasound</mark>.",
+    "b": "False-negative tests can occur; false positives are rare but possible.",
+    "d": "Only fetal heart tones and ultrasound are <b>confirmatory</b> — a positive β-hCG alone is not, because it does not establish location or viability.",
+    "e": "<span class='star'>⭐</span>Sort the signs into presumptive / probable / confirmatory. β-hCG is probable, not confirmatory.",
+    "img": ""
+   },
+   {
+    "n": "Signs and symptoms of pregnancy",
+    "g": "<span class='pill'>Hegar sign</span><span class='pill'>Chadwick sign</span><span class='pill'>Quickening</span> <b>Hegar sign</b> — <mark>softening of the isthmus of the uterus at 6–8 weeks</mark>, palpated on bimanual exam. <b>Chadwick sign</b> — <mark>reddish-blue coloration of the labia, vaginal mucosa and cervix</mark>. Enlarged, soft, 'boggy' uterus; edema and cyanosis of the cervix.",
+    "b": "Symptoms: nausea/vomiting, fatigue, urinary frequency, breast tenderness and enlargement, ptyalism (excess salivation), food cravings and pica, haemorrhoids, varicose veins, joint and back pain, leg cramps.",
+    "d": "Skin: <b>linea nigra</b>, striae, and <mark>chloasma (melasma)</mark> — progesterone-dependent hypermelanosis, <b>preventable by sun protection during pregnancy</b>.",
+    "e": "<span class='star'>⭐</span>Hegar = isthmus softening at 6–8 weeks; Chadwick = blue cervix and vagina. Do not mix the two eponyms.",
+    "img": ""
+   },
+   {
+    "n": "Determination of gestational age and EDD",
+    "g": "<span class='pill'>Naegele's rule</span><span class='pill'>CRL</span><span class='pill'>40 weeks / 280 days</span> <b>Naegele's rule:</b> from the first day of the LMP, <mark>subtract 3 months, add 7 days, add 1 year</mark>. The due date (EDC/EDD) is <mark>40 weeks (280 days) from the first day of the LMP</mark>. Other methods: uterine size on bimanual exam, obstetric wheel, fundal height, ultrasound.",
+    "b": "<mark>In the first 12 weeks, ultrasound crown–rump length (CRL) determines gestational age to within 4 days.</mark> Trimesters: <b>1st = weeks 1–13</b>, <b>2nd = weeks 14–27</b>, <b>3rd = week 28 to birth</b>.",
+    "d": "<mark>Establishing an accurate due date early is critical</mark> — every later screening window, growth assessment and delivery decision depends on it.",
+    "e": "<span class='star'>⭐</span>Know Naegele's rule as an arithmetic operation and the CRL accuracy figure. The trimester week boundaries underpin the whole screening lecture.",
+    "img": ""
+   },
+   {
+    "n": "Routine prenatal visits and testing schedule",
+    "g": "<span class='pill'>FHR 110–160</span><span class='pill'>Glucola 24–28 wk</span> <b>Maternal at each visit:</b> symptoms, blood pressure, weight, uterine (fundal) height, urine for glucose and protein, vaginal exam late in pregnancy if indicated, immunizations, IPV screening. <b>Fetal:</b> <mark>heart rate (110–160)</mark>, growth, activity, presenting part.",
+    "b": "<b>Bloods and screens:</b> HIV, rubella, hepatitis B, VDRL, blood group and <b>Rhesus status</b>, CBC, STI screen. <b>Quad screen</b> (second trimester). <b>NIPT — can be done as early as 10 weeks.</b>",
+    "d": "<mark>Glucose challenge test ('Glucola') at 24–28 weeks.</mark>",
+    "e": "<span class='star'>⭐</span>Memorise the 24–28 week window for GDM screening and that NIPT can start at 10 weeks.",
+    "img": ""
+   },
+   {
+    "n": "Quickening and fundal height",
+    "g": "<span class='pill'>20 wk primigravida</span><span class='pill'>16 wk multipara</span> <b>Quickening</b> = first appreciation of fetal movement by the patient. In a <mark>first pregnancy ~20 weeks</mark>; in a patient who has had a previous baby, as early as <mark>16 weeks</mark>. <b>Fundal height</b> is measured from the top of the uterus to the pubic symphysis.",
+    "b": "<mark>Between 20 and 34 weeks, fundal height in cm ≈ gestational age in weeks (± 2 cm).</mark>",
+    "d": "<b>Fundal height LARGER than dates</b> → wrong dates, macrosomia, polyhydramnios, multiple gestation. <b>SMALLER than dates</b> → wrong dates, fetal growth restriction, oligohydramnios. <mark>To evaluate any discrepancy, obtain an ultrasound.</mark>",
+    "e": "<span class='star'>⭐</span>The ±2 cm rule and the two differential lists are classic. The next step for a size–dates discrepancy is always ultrasound.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p15_fundal_height.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p15_fundal_height.jpg\" loading=\"lazy\" alt=\"fundal height\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Gestational age at delivery — ACOG terminology",
+    "g": "<span class='pill'>Preterm</span><span class='pill'>Term</span><span class='pill'>Post-term</span> <b>Preterm:</b> through <mark>36 weeks 6 days</mark>. <b>Term:</b> 37 weeks and beyond, subdivided: <mark>early term 37 0/7 – 38 6/7</mark>; <mark>full term 39 0/7 – 40 6/7</mark>; <mark>late term 41 0/7 – 41 6/7</mark>; <mark>post-term 42 weeks and beyond</mark>.",
+    "b": "These are the ACOG / Society for Maternal-Fetal Medicine definitions.",
+    "d": "'Term' is <b>not</b> a single point — the four-way subdivision exists because outcomes differ across it.",
+    "e": "<span class='star'>⭐</span>Learn the four term categories with their exact week-and-day boundaries.",
+    "img": ""
+   },
+   {
+    "n": "Obstetric terminology — gravidity, parity and GTPAL",
+    "g": "<span class='pill'>G-T-P-A-L</span><span class='pill'>20 weeks</span> <b>Gravida</b> — a woman who is or has been pregnant (nulli-, primi-, multigravida). <b>Para/parity</b> — pregnancy carried <mark>beyond 20 weeks gestation</mark>. <b>GTPAL:</b> <b>T</b>erm deliveries, <b>P</b>reterm deliveries, <b>A</b>bortions (induced + miscarriage <b>before 20 weeks</b>, excluding ectopics), <b>L</b>iving children.",
+    "b": "<mark>A multiple pregnancy still counts as a parity of 1</mark> but contributes each surviving child to 'Living'. Example: Para 1-0-0-2 = 1 term delivery, 0 preterm, 0 abortuses, 2 living children (twins).",
+    "d": "<b>Worked example:</b> twins at 34 weeks + triplets at 28 weeks (2 of the triplets died) + 2 elective terminations + 1 miscarriage at 11 weeks → <mark>G5 P0-2-3-3</mark>.",
+    "e": "<span class='star'>⭐</span>Practise the twin/triplet trap: parity counts pregnancies, 'living' counts children. Ectopics are excluded from 'A'.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p20_gtpal_five_digit_designation.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p20_gtpal_five_digit_designation.jpg\" loading=\"lazy\" alt=\"gtpal five digit designation\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Labor, Delivery & the Puerperium  [OB] · sequence",
+  "rows": [
+   {
+    "n": "The four phases of parturition",
+    "g": "<span class='pill'>Quiescence</span><span class='pill'>Activation</span><span class='pill'>Stimulation</span><span class='pill'>Involution</span> <b>Phase 1 — Quiescence:</b> prelude to parturition, conception to initiation; <mark>~95% of gestation (32+ weeks), a progesterone-dominated state</mark>; myometrium functionally quiet, cervix softens. <b>Phase 2 — Activation:</b> preparation for labor, <mark>final 6–8 weeks</mark>. <b>Phase 3 — Stimulation:</b> the process of labor, 3 stages, estrogen-dominated. <b>Phase 4 — Involution:</b> recovery.",
+    "b": "<b>Phase 1</b> — progesterone ↓ myometrial responsiveness to estrogen, ↓ CAPs (Cx43, oxytocin receptor, PG enzymes), ↑ Ca²⁺ uptake into SR, ↑ K⁺ efflux. <b>Phase 2</b> — ↑ estrogen:progesterone ratio, ↑ CAPs, cervical ripening.",
+    "d": "<b>The Phase 1→2 trigger is the fetal HPA axis:</b> <mark>↑ placental CRH → ↑ fetal ACTH → ↑ cortisol + DHEAS → ↑ estrogen</mark>. The Phase 2→3 transition is <mark>functional progesterone withdrawal (↓ PR) with ↑ ER</mark>, so estrogen action ≫ progesterone action.",
+    "e": "<span class='star'>⭐</span>'Functional progesterone withdrawal' — in humans progesterone levels do not fall; receptor expression changes. That distinction is the exam point.",
+    "img": "<a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p3_four_phases_of_parturition.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p3_four_phases_of_parturition.jpg\" loading=\"lazy\" alt=\"arturition\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p17_transition_activation_to_stimulation.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p17_transition_activation_to_stimulation.jpg\" loading=\"lazy\" alt=\"transition activation to stimulation\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Cervical remodeling across the phases",
+    "g": "<span class='pill'>Softening</span><span class='pill'>Ripening</span><span class='pill'>Dilation</span><span class='pill'>Repair</span> <b>Phase 1 Softening</b> — ↓ cervical rigidity, tissue integrity maintained. <b>Phase 2 Ripening</b> — ↓ integrity and tensile strength. <b>Phase 3 Dilation</b> — loss of integrity. <b>Phase 4 Repair</b> — <mark>cessation of collagen dissolution, promotion of collagen synthesis, reestablishment of collagen architecture</mark>.",
+    "b": "<b>Prostaglandins:</b> in the myometrium <b>PGF2α contracts via FP</b>; <b>PGE2 contracts via EP1/EP3 but relaxes via EP2/EP4</b>; PGF2α promotes gap-junction formation. In the <b>cervix</b>, <mark>PGE2 stimulates ripening via EP2 and EP4</mark>.",
+    "d": "The cervix is largely collagen, so ripening is a <b>connective-tissue remodeling event, not a muscular one</b>.",
+    "e": "<span class='star'>⭐</span>PGE2 does opposite things in myometrium and cervix depending on receptor subtype — a favourite distractor.",
+    "img": "<a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p5_cervical_remodeling_by_phase.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p5_cervical_remodeling_by_phase.jpg\" loading=\"lazy\" alt=\"hase\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Oxytocin and the Ferguson reflex",
+    "g": "<span class='pill'>Supraoptic &amp; paraventricular</span><span class='pill'>200–300× receptors</span> Oxytocin is synthesised in the <b>supraoptic and paraventricular nuclei</b> and released from the <b>posterior</b> pituitary on distension of the cervix. <mark>Oxytocin is the most potent endogenous uterotonic known.</mark> <mark>Oxytocin receptor number increases 200- to 300-fold during pregnancy, peaking in early labor</mark>, so the myometrium is most sensitive at term.",
+    "b": "Receptor activation → ↑ intracellular Ca²⁺ → ↑ myosin light chain phosphorylation → contraction, plus ↑ prostaglandin production in myometrium and decidua.",
+    "d": "<b>Ferguson reflex</b> — the neuroendocrine <mark>POSITIVE feedback loop</mark>: <b>1.</b> mechanical stretch of the cervix → <b>2.</b> ↑ oxytocin release → <b>3.</b> ↑ uterine contractions → more stretch. Once labor begins it continues until fetus and placenta are delivered.",
+    "e": "<span class='star'>⭐</span>Positive feedback, and the receptor up-regulation is why oxytocin works at term but not early. Both halves get asked.",
+    "img": "<a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p9_oxytocin_receptor_sensitivity_at_term.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p9_oxytocin_receptor_sensitivity_at_term.jpg\" loading=\"lazy\" alt=\"oxytocin receptor sensitivity at term\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p16_ferguson_reflex_positive_feedback.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p16_ferguson_reflex_positive_feedback.jpg\" loading=\"lazy\" alt=\"feedback\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The three stages of labor",
+    "g": "<span class='pill'>Stage 1 ~14 hr</span><span class='pill'>Stage 2 &lt; 2 hr</span><span class='pill'>Stage 3</span> <b>Labor</b> = regular, painful uterine contractions producing progressive cervical effacement and dilation. <b>Stage 1:</b> onset of labor to <mark>full cervical dilation (10 cm)</mark>, ~14 hr — <b>latent phase</b> (effacement and dilation to 3 cm, ~8 hr) then <b>active phase</b>. <b>Stage 2:</b> full dilation to delivery of the baby, <mark>&lt; 2 hr</mark>; the mother pushes. <b>Stage 3:</b> delivery of the placenta.",
+    "b": "Contractions begin at one every 5–30 min lasting ~1 min, increasing to one per minute. <mark>Relaxation between contractions is essential</mark> — it is when placental perfusion occurs. <b>Effacement</b> = thinning and drawing up of the cervix into the lower uterine segment. Membranes often rupture in stage 1 (SROM).",
+    "d": "<b>Signs of labor:</b> contractions, a 'show' (blood-stained mucus plug), backache, diarrhoea, gush or trickle of fluid.",
+    "e": "<span class='star'>⭐</span>Define each stage by its start and end point. Full dilation is 10 cm and ends stage 1, not stage 2.",
+    "img": "<a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p14_stage_1_latent_and_active_phase.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p14_stage_1_latent_and_active_phase.jpg\" loading=\"lazy\" alt=\"hase\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p27_stages_of_labor.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p27_stages_of_labor.jpg\" loading=\"lazy\" alt=\"stages of labor\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Fetal lie, presentation and Leopold's maneuvers",
+    "g": "<span class='pill'>Lie</span><span class='pill'>Presentation</span><span class='pill'>Position</span> <b>Fetal lie</b> — relationship between the longitudinal axis of the baby and that of the mother (longitudinal or transverse). <b>Presentation</b> — the part of the fetus leading the way out through the birth canal (the presenting part).",
+    "b": "<b>Leopold's four maneuvers</b> determine the lie (vertical or transverse), the position of the fetus, and whether the presenting part (head, buttocks) has descended into the pelvis.",
+    "d": "Malpresentation (breech, transverse, face, brow) changes the mode of delivery.",
+    "e": "<span class='star'>⭐</span>Lie, presentation and position are three different things — define each precisely.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p23_fetal_lie_and_presentation.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p23_fetal_lie_and_presentation.jpg\" loading=\"lazy\" alt=\"resentation\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p24_leopolds_maneuvers.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p24_leopolds_maneuvers.jpg\" loading=\"lazy\" alt=\"leopolds maneuvers\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Fetal station",
+    "g": "<span class='pill'>Ischial spines</span><span class='pill'>Station 0 = engaged</span> <b>Station</b> = level of the presenting part relative to the <mark>ischial spines</mark>. <mark>Engagement = presenting part at the level of the ischial spines = station 0</mark>. At <b>+2 or +3</b> the head is at the vaginal opening and the perineum bulges. <b>Crowning</b> — the head is emerging, station <mark>+4 or +5</mark>.",
+    "b": "Negative stations are above the spines, positive below.",
+    "d": "The ischial spines are the fixed bony landmark — station is meaningless without them.",
+    "e": "<span class='star'>⭐</span>Station 0 = engaged = at the ischial spines. This single equivalence is the tested fact.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p30_fetal_station_ischial_spines.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p30_fetal_station_ischial_spines.jpg\" loading=\"lazy\" alt=\"fetal station ischial spines\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Examination of the placenta and umbilical cord",
+    "g": "<span class='pill'>2 arteries, 1 vein</span><span class='pill'>Velamentous</span><span class='pill'>Vasa previa</span> After delivery, inspect the placenta for a <b>succenturiate lobe</b> and note the site of cord insertion and the vessels coursing over the surface. Inspect the cord: <mark>normal = 2 arteries and 1 vein</mark>.",
+    "b": "<b>Velamentous cord insertion</b> — vessels run through the membranes; <mark>sudden fetal blood loss if the umbilical vessels rupture</mark>. <b>Vasa previa</b> — fetal vessels cross the internal os. <b>True knot</b> — causes FHR decelerations. <b>Single umbilical artery</b> — associated with other anomalies.",
+    "d": "<mark>A retained succenturiate lobe is a classic cause of postpartum haemorrhage</mark> — the placenta can look complete while a lobe remains in utero.",
+    "e": "<span class='star'>⭐</span>Why examine the cord? Because a single umbilical artery flags other anomalies, and velamentous insertion flags vasa previa.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p35_umbilical_cord_abnormalities.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p35_umbilical_cord_abnormalities.jpg\" loading=\"lazy\" alt=\"umbilical cord abnormalities\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Intrapartum fetal monitoring — CTG",
+    "g": "<span class='pill'>Early decel</span><span class='pill'>Late decel</span><span class='pill'>FHR 120–160</span> <b>Cardiotocography (CTG)</b> monitors fetal heart rate and uterine contractions. <b>External:</b> transducers on the abdomen. <b>Internal:</b> <mark>fetal scalp electrode for FHR and an intrauterine pressure catheter for contractions</mark>. Normal FHR 120–160 bpm.",
+    "b": "<mark>EARLY deceleration — coincident with the PEAK of the contraction; caused by fetal head compression; a normally functioning autonomic nervous system; NOT associated with fetal hypoxia or poor outcome.</mark>",
+    "d": "<mark>LATE deceleration — uteroplacental insufficiency and fetal hypoxaemia.</mark> This is the ominous pattern.",
+    "e": "<span class='star'>⭐</span>Early = head compression = benign. Late = uteroplacental insufficiency = act. The timing relative to the contraction is the whole answer.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p38_ctg_early_vs_late_decelerations.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p38_ctg_early_vs_late_decelerations.jpg\" loading=\"lazy\" alt=\"ctg early vs late decelerations\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Operative delivery — assisted vaginal and cesarean",
+    "g": "<span class='pill'>Forceps / vacuum</span><span class='pill'>Pfannenstiel</span> <b>Operative assisted vaginal delivery (FAVD forceps / VAVD vacuum)</b> — indication is to <b>expedite vaginal delivery</b>. <b>Maternal indications:</b> cardiac disease such as aortic valve stenosis, prolonged second stage, maternal exhaustion. <b>Fetal indication:</b> <mark>a fetal heart rate pattern indicating impending acidosis</mark>.",
+    "b": "<b>Cesarean section</b> — skin incisions <b>Pfannenstiel (transverse)</b> or vertical; uterine incisions <b>low transverse</b> or vertical.",
+    "d": "The CDC reported a US cesarean rate of <mark>32.8% in 2010</mark>.",
+    "e": "<span class='star'>⭐</span>Separate maternal from fetal indications for assisted delivery, and keep skin incision distinct from uterine incision.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p41_cesarean_section_incisions.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p41_cesarean_section_incisions.jpg\" loading=\"lazy\" alt=\"cesarean section incisions\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Postpartum hemorrhage",
+    "g": "<span class='pill'>&gt; 500 mL vaginal</span><span class='pill'>&gt; 1000 mL cesarean</span><span class='pill'>Atony</span> <mark>PPH = loss of &gt; 500 mL after vaginal delivery or &gt; 1000 mL after cesarean</mark>, following the third stage — or <mark>a drop of ≥ 10% in baseline haematocrit</mark>. Note that the physiologic increase in blood volume during pregnancy is 1500–2000 mL, which masks early loss.",
+    "b": "<b>Causes:</b> <mark>uterine atony (hypotonic uterus) — most common</mark>; genital tract laceration (cervix, vagina, perineum); retained placental tissue; uterine inversion; coagulopathy (uncommon in vaginal delivery).",
+    "d": "<b>Prevention — active management of the 3rd stage:</b> after delivery of the placenta give a <mark>uterotonic (oxytocin or ergometrine, IM or IV)</mark> to contract the uterus, with <b>gentle downward traction on the cord and uterine counter-traction</b>. <b>Uterine inversion</b> results from too much cord traction or from placenta accreta.",
+    "e": "<span class='star'>⭐</span>Atony is the commonest cause. Know both volume thresholds and that counter-traction is what prevents inversion.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p41_cesarean_section_incisions.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_1/introduction_to_obstetrics_1_p41_cesarean_section_incisions.jpg\" loading=\"lazy\" alt=\"cesarean section incisions\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The puerperium",
+    "g": "<span class='pill'>6 weeks</span><span class='pill'>Lochia</span><span class='pill'>Involution</span> The puerperium is the <mark>6 weeks after birth</mark> during which the anatomical and physiological changes of pregnancy reverse. <b>Three phases:</b> <b>immediate</b> (first 24 hours, when complications occur), <b>early</b> (to the first week), <b>remote</b> (involution of the genital organs through week 6).",
+    "b": "<b>Uterus:</b> involutes; the decidua sheds as <mark>lochia rubra (red) → lochia serosa (pink) → lochia alba (white)</mark>; uterus returns to normal size in 6–8 weeks. <b>Breasts:</b> lactation is triggered by delivery of the placenta — <mark>estrogen ↓, progesterone ↓, prolactin acts</mark>; colostrum for the first 2–4 days.",
+    "d": "<b>Fertility:</b> non-breastfeeding women ovulate between <mark>45 and 94 days</mark> after delivery; <mark>~15% are fertile at 6 weeks postpartum — prescribe contraception</mark>. 70% menstruate by 12 weeks. <b>Cardiovascular:</b> blood volume normal by day 10; cardiac output ↑ immediately after delivery then normalises over 2–6 weeks. Fibrinogen and other clotting factors ↑ in the first days.",
+    "e": "<span class='star'>⭐</span>Lochia colour sequence, and the fact that ovulation can precede the first period — hence contraception before discharge. Puerperal infection risk factors: PROM, anaemia, haemorrhage, C-section, retained placenta.",
+    "img": "<a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p15_stage_2_fetal_descent_and_delivery.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p15_stage_2_fetal_descent_and_delivery.jpg\" loading=\"lazy\" alt=\"stage 2 fetal descent and delivery\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Maternal Serum Screening & Prenatal Diagnosis  [OB] · reference values",
+  "rows": [
+   {
+    "n": "Screening vs diagnosis — the governing principle",
+    "g": "<span class='pill'>Screening ≠ diagnosis</span><span class='pill'>95% specificity</span> <mark>Screening is NOT diagnosis</mark> — it identifies candidates who are then further tested (often more invasively) to reach a firm diagnosis. A screening test must be <b>cheap and low risk</b>. Screening is now <mark>offered to everyone, no longer limited by maternal age</mark>, because too many true positives were missed by an age cutoff.",
+    "b": "<mark>The frequently used cutoff is a specificity of 95% = a 5% false-positive rate</mark> — i.e. 5% of those screened will be recommended invasive testing, and most of them do not carry an affected fetus. <b>Sensitivity</b> = positives over all true positives; <b>specificity</b> = negatives over all true negatives; <b>1 − specificity = false positive rate</b>.",
+    "d": "Results are reported as <mark>MoM (multiple of the median)</mark> because the median concentration differs between labs but the MoM is comparable. <b>Reducing false negatives automatically increases false positives</b> and vice versa. <mark>An age cutoff of 35 would detect only 51% of Down syndrome pregnancies.</mark>",
+    "e": "<span class='star'>⭐</span>Sensitivity/specificity definitions, the 5% false-positive convention, and why MoM is used. Aim of screening: give parents the best information for their reproductive decisions.",
+    "img": "<a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p10_screening_cutoff_mom_curve.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p10_screening_cutoff_mom_curve.jpg\" loading=\"lazy\" alt=\"screening cutoff mom curve\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "First trimester (combined) screening",
+    "g": "<span class='pill'>11–13+6 weeks</span><span class='pill'>↑ β-hCG</span><span class='pill'>↓ PAPP-A</span><span class='pill'>↑ NT</span> Performed at <mark>11 to 13+6 weeks</mark> (first day of week 11 to the last day of week 13 plus 6 days). <b>Target: Down syndrome.</b> Combines maternal age + <b>nuchal translucency</b> + <b>free β-hCG</b> + <b>PAPP-A</b>.",
+    "b": "<mark>In Down syndrome: β-hCG ELEVATED, PAPP-A REDUCED (and inhibin-A elevated).</mark> β-hCG performs better late (free β-hCG from week 9, total from week 11); <b>PAPP-A performs better early</b>. <b>NT</b> = space between skin and soft tissue at the spine; an abnormally large NT indicates abnormality, and an <b>invisible nasal bone</b> indicates Down syndrome.",
+    "d": "<b>Sensitivities (at 5% FPR):</b> maternal age only 30%; MA + NT 70–80%; <mark>MA + NT + free β-hCG + PAPP-A = 85–90%</mark>; MA + NT + nasal bone 90%; all combined <mark>95%</mark>. <b>Advantages:</b> maximum time for decision-making, safer termination methods, privacy. <b>Expected follow-up diagnostic: CVS.</b>",
+    "e": "<span class='star'>⭐</span>↑hCG + ↓PAPP-A = Down. Also: <mark>first trimester screening does NOT detect neural tube defects</mark> — msAFP in week 15+ is still needed.",
+    "img": "<a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p12_sensitivity_of_screening_protocols_table.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p12_sensitivity_of_screening_protocols_table.jpg\" loading=\"lazy\" alt=\"table\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p13_first_trimester_markers_hcg_pappa.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p13_first_trimester_markers_hcg_pappa.jpg\" loading=\"lazy\" alt=\"appa\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Nuchal translucency — what an enlarged NT means",
+    "g": "<span class='pill'>Wk 11–13+6</span><span class='pill'>Avoid wk 13</span> Ultrasound measurement at weeks 11–13+6 (one source recommends week 12 and the ISPD position paper says <b>avoid week 13</b>). If <mark>strongly increased, often leads directly to invasive diagnosis without waiting for other results</mark>.",
+    "b": "<b>Conditions found with an enlarged NT:</b> trisomies 21, 18, 13 (and to some extent sex chromosome anomalies); <mark>monosomy X — often a very large NT</mark>; triploidy; translocations and other chromosomal conditions; and <b>non-chromosomal genetic conditions</b>, which often carry a poor prognosis too.",
+    "d": "<mark>A very large NT leads to CVS with karyotype — but karyotype detects chromosomal, NOT non-chromosomal, conditions.</mark> A normal karyotype therefore still leaves a possibility of abnormality, and also a possibility of a completely normal phenotype.",
+    "e": "<span class='star'>⭐</span>NT is technically demanding — requires a good operator, good equipment and a QC programme; nasal bone assessment is harder still.",
+    "img": ""
+   },
+   {
+    "n": "Second trimester screening — the quad test",
+    "g": "<span class='pill'>Weeks 15–18</span><span class='pill'>Quad = 4 analytes</span><span class='pill'>Triple = 3</span> Optimum at <mark>weeks 15–18</mark>. <b>Targets: NTD, Down syndrome, trisomy 18.</b> For a woman presenting in week 14 or later, or who has not had first trimester screening. <mark>The quad test uses four biochemical markers; the 'triple test' is the less complete left-hand three.</mark>",
+    "b": "<b>Analyte changes in DOWN SYNDROME vs normal pregnancy:</b> <mark>MSAFP ↓ reduced · uE3 (unconjugated estriol) ↓ reduced · β-hCG ↑ elevated · inhibin-A ↑ elevated</mark>. <b>Note: β-hCG is REDUCED in trisomy 18.</b>",
+    "d": "<b>AFP</b> is albumin-like, produced in fetal liver and yolk sac at very high levels early; its profile in amniotic fluid and maternal serum is very different, and <mark>accurate gestational age is essential for interpretation</mark>. Raised msAFP → open NTD; the increase is proportional to the area of non-coverage, and anencephaly shifts the curve furthest right.",
+    "e": "<span class='star'>⭐</span>Learn the four-analyte Down pattern as a block: <b>AFP↓ uE3↓ hCG↑ inhibin-A↑</b>. Two absolute rules: <mark>never do first AND second trimester screening as independent tests</mark> (false positives rise too much), and <mark>never repeat a screening test</mark>.",
+    "img": "<a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p24_quad_test_analyte_patterns.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p24_quad_test_analyte_patterns.jpg\" loading=\"lazy\" alt=\"atterns\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p22_second_trimester_msafp_curves.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p22_second_trimester_msafp_curves.jpg\" loading=\"lazy\" alt=\"second trimester msafp curves\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Follow-up when NTD is suspected",
+    "g": "<span class='pill'>High-resolution US</span><span class='pill'>AChE</span> <b>1.</b> High-resolution ultrasound with an experienced operator (a second screening test — many centres consider it actually diagnostic). <b>2.</b> <mark>Amniocentesis with electrophoretic detection of acetylcholinesterase</mark> — this is the diagnostic test. <b>3.</b> Counsel the parents on what to expect.",
+    "b": "<mark>AFP in amniotic fluid is NOT used as the follow-up</mark> — acetylcholinesterase is.",
+    "d": "In the US, <b>abortion must be mentioned as an option</b> (there have been liability cases where it was not); an individual physician may still decline to perform one. <mark>NTDs are multifactorial and CANNOT be predicted from a karyotype</mark>; up to ¾ are preventable by folate.",
+    "e": "<span class='star'>⭐</span>Amniotic-fluid AChE, not amniotic-fluid AFP, is the NTD confirmatory test.",
+    "img": ""
+   },
+   {
+    "n": "CVS vs amniocentesis",
+    "g": "<span class='pill'>CVS: 1st trimester</span><span class='pill'>Amnio: 15–20 wk</span><span class='pill'>CPM 0.2%</span> <b>CVS</b> is offered in the first trimester; <b>amniocentesis</b> from weeks 15–20 (genetic diagnosis) — so <mark>the timing of the screening test determines which diagnostic test can follow</mark>. Total pregnancy loss from the procedure to the end of pregnancy is (probably) slightly higher for CVS, and risk depends heavily on operator experience.",
+    "b": "<mark>CVS risks detecting confined placental mosaicism (CPM) in 0.2% of pregnancies</mark> — a false positive arising because the sample is placental, not fetal.",
+    "d": "If the procedure leads to termination, <b>late termination is significantly riskier for the mother and more emotionally taxing</b> — an argument for earlier screening. <b>Other amniocentesis indications:</b> fetal lung maturity in the 3rd trimester (<mark>lecithin:sphingomyelin &gt; 2:1</mark>), polyhydramnios, detection of intra-amniotic infection. A maximum of 30 mL is aspirated under ultrasound guidance.",
+    "e": "<span class='star'>⭐</span>CVS → first trimester → CPM risk. Amnio → 15–20 weeks → can also do AChE and FLM.",
+    "img": "<a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p27_cvs_vs_amniocentesis_timing.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p27_cvs_vs_amniocentesis_timing.jpg\" loading=\"lazy\" alt=\"cvs vs amniocentesis timing\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Cell-free fetal DNA (cffDNA / NIPT)",
+    "g": "<span class='pill'>From week 11</span><span class='pill'>Fetal fraction ~12%</span><span class='pill'>&lt; 4% problematic</span> cffDNA is found in maternal plasma in sufficient concentration <mark>from about week 11</mark>. It <mark>originates in the placenta (trophoblasts) from necrosis/apoptosis</mark> and <mark>disappears from the circulation about half an hour after delivery</mark>. It is mixed with maternal cell-free DNA; the fetal fraction averages <mark>12%</mark> and <mark>below 4% the test is problematic</mark>. Concentration of maternal cfDNA is higher if the mother is obese.",
+    "b": "Analysed by <b>next-generation sequencing</b>: fragments are mapped per chromosome and counted; deviation from the normal distribution demonstrates aneuploidy. Offered for <b>trisomy 21, 18, 13 and sex chromosome aneuploidy</b>. <mark>Target: chromosomal abnormalities — NOT NTD.</mark>",
+    "d": "<b>Performance:</b> <mark>T21 sensitivity 99.5%, FPR 0.05% · T18 97.7%, 0.04% · T13 96.1%, 0.06%</mark>; sex chromosomes lower/higher. <mark>No result in 1–3% of tests, usually because the fetal fraction is too low.</mark> False positives include confined placental mosaicism. <b>PPV depends on incidence, which depends on age.</b>",
+    "e": "<span class='star'>⭐</span><mark>It is still a SCREENING test</mark> — MFM specialists agree NIPT should be confirmed with invasive testing. Other uses: detecting Y chromosome in severe X-linked disease, and fetal Rh/D status in an Rh-negative mother to reduce RhoGam use.",
+    "img": "<a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p35_cffdna_sensitivity_false_positive_table.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p35_cffdna_sensitivity_false_positive_table.jpg\" loading=\"lazy\" alt=\"table\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The abnormality (structural) scan",
+    "g": "<span class='pill'>Weeks 18–22</span> Ultrasound at <mark>weeks 18–22</mark>, performed by a fetal medicine specialist. <b>Targets all abnormalities that are visible</b> — a much broader scope than any of the aneuploidy screens.",
+    "b": "<mark>Should be recommended irrespective of what other screening has been done.</mark>",
+    "d": "Because cffDNA does not detect NTD or structural defects, both the msAFP and this scan remain necessary even when NIPT is used.",
+    "e": "<span class='star'>⭐</span>Weeks 18–22, and 'regardless of other screening' — that universality is the point being tested.",
+    "img": ""
+   },
+   {
+    "n": "Putting it together — which test, when",
+    "g": "<span class='pill'>Wk 11–13</span><span class='pill'>Wk 14+</span><span class='pill'>Wk 18–22</span> <b>A) If seen around weeks 11–13</b>, choose <b>either</b> first trimester combined screening <b>or</b> cffDNA (NIPT) — <mark>in both cases follow up with msAFP at week 15+ for neural tube defects</mark>. <b>B) If seen at week 14+</b>, do the <b>quadruple test</b> (which includes the msAFP). <mark>If A) has been completed, do NOT then do B).</mark>",
+    "b": "<b>In all cases, do the abnormality (ultrasound) scan at weeks 18–22.</b> If a first-trimester screen is abnormal → <b>CVS</b>; if a second-trimester screen is abnormal → <b>amniocentesis</b> or ultrasound.",
+    "d": "<b>Worked PPV example:</b> 3500 pregnant mothers, 5% false-positive rate, 80% sensitivity, Down incidence 1/700 → 175 test-positives of whom 4 are true positives → <mark>PPV = 4/175 = 2.3%</mark>.",
+    "e": "<span class='star'>⭐</span>Be able to answer 'what would you offer this woman at 11 weeks / at 16 weeks?' and to compute PPV from a 2×2. Counselling must be <b>non-directive</b>, and parents may opt out at any stage.",
+    "img": "<a href=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p46_graphical_summary_screening_algorithm.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/maternal_serum_screening/maternal_serum_screening_p46_graphical_summary_screening_algorithm.jpg\" loading=\"lazy\" alt=\"graphical summary screening algorithm\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Nutrition, Lactation & the Neonate  [OB] · sequence",
+  "rows": [
+   {
+    "n": "The four phases of lactation",
+    "g": "<span class='pill'>Mammogenesis</span><span class='pill'>Lactogenesis</span><span class='pill'>Galactokinesis</span><span class='pill'>Galactopoiesis</span> <b>1. Mammogenesis</b> — proliferation and differentiation of ductal, alveolar and myoepithelial elements. <b>2. Lactogenesis</b> — synthesis and secretion of milk from the alveoli. <b>3. Galactokinesis</b> — ejection of milk. <b>4. Galactopoiesis</b> — maintenance of production.",
+    "b": "<b>Development requires estrogen, progesterone and prolactin.</b> Progesterone develops alveoli and lobules; <mark>estrogen priming is necessary for progesterone effects because estrogen increases progesterone receptor expression</mark>.",
+    "d": "<mark>During pregnancy, high plasma progesterone and estrogen INHIBIT lactation</mark> by interfering with prolactin binding to its receptor. <mark>The sudden loss of placental estrogen and progesterone at delivery is what permits prolactin to initiate milk production.</mark>",
+    "e": "<span class='star'>⭐</span>Why doesn't a pregnant woman lactate? Because progesterone and estrogen block prolactin's effect at the receptor. Delivery of the placenta removes the block.",
+    "img": "<a href=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p19_breast_secretory_lobules_and_ducts.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p19_breast_secretory_lobules_and_ducts.jpg\" loading=\"lazy\" alt=\"breast secretory lobules and ducts\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p21_postpartum_fall_in_estrogen_progesterone.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p21_postpartum_fall_in_estrogen_progesterone.jpg\" loading=\"lazy\" alt=\"rogesterone\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The suckling reflex arc",
+    "g": "<span class='pill'>↓ Dopamine</span><span class='pill'>↑ Prolactin</span><span class='pill'>↑ Oxytocin</span> <b>1.</b> Suckling stimulates sensory receptors in the nipple. <b>2.</b> Impulses reach the hypothalamic <b>arcuate nucleus</b> and <mark>inhibit dopamine release</mark>. <b>3.</b> Lactotropes therefore synthesise and release <b>prolactin</b>. <b>4.</b> Prolactin stimulates milk production. <b>5.</b> Impulses also reach the <b>supraoptic and paraventricular nuclei</b>. <b>6.</b> <b>Oxytocin</b> is released from the posterior pituitary. <b>7.</b> Oxytocin contracts myoepithelial cells → milk ejection.",
+    "b": "Prolactin signals via cell-surface receptors linked to <b>Janus kinases (JAKs)</b>, which phosphorylate <b>STAT</b> proteins; STAT dimerises and travels to the nucleus to act as a transcription factor.",
+    "d": "<mark>Prolactin MAKES the milk; oxytocin EJECTS it.</mark> Oxytocin release becomes a conditioned response — visual stimulation or conscious thought alone can trigger let-down. Galactopoiesis requires both a prolactin surge while nursing and regular removal of milk.",
+    "e": "<span class='star'>⭐</span>The exam pattern for suckling is <mark>↓ dopamine, ↓ GnRH, ↑ oxytocin, ↑ prolactin</mark>. Emotional stress inhibits let-down by blocking oxytocin release.",
+    "img": "<a href=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p24_suckling_reflex_arc.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p24_suckling_reflex_arc.jpg\" loading=\"lazy\" alt=\"suckling reflex arc\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p25_prolactin_secretion_around_parturition.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/nutrition_in_pregnancy_lactation_and_childhood_multi_page/nutrition_in_pregnancy_lactation_and_childhood_multi_page_p25_prolactin_secretion_around_parturition.jpg\" loading=\"lazy\" alt=\"arturition\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Lactational amenorrhea",
+    "g": "<span class='pill'>98% effective</span><span class='pill'>3 criteria</span> Prolactin inhibits hypothalamic <b>GnRH</b> secretion, which suppresses <b>LH and FSH</b> — producing the temporary postnatal cessation of menstrual cycles.",
+    "b": "<mark>Contraceptive protection is 98% effective ONLY if ALL THREE criteria are met: less than 6 months postpartum, breastfeeding exclusively (no other food or liquid), and amenorrhoeic.</mark>",
+    "d": "<mark>If any criterion is not met, the risk of unintended pregnancy is high</mark> — this connects directly to the puerperium row: ~15% of non-breastfeeding women are fertile by 6 weeks.",
+    "e": "<span class='star'>⭐</span>All three criteria together. A question that breaks even one of them (e.g. formula top-ups) makes the method unreliable.",
+    "img": ""
+   },
+   {
+    "n": "Gestational diabetes — screening and diagnosis",
+    "g": "<span class='pill'>24–28 weeks</span><span class='pill'>1-hr 50 g</span><span class='pill'>3-hr 100 g</span> <mark>Universal screening is recommended for all pregnancies at 24–28 weeks.</mark> GDM is <b>the #1 medical complication of pregnancy</b> (2–5%, up to ~6–7%), caused by <mark>human placental lactogen (hPL) antagonising insulin</mark>, and it worsens as the placenta enlarges and releases more hPL.",
+    "b": "<b>Fasting plasma glucose:</b> &gt; 125 mg/dL suspect DM; &lt; 95 mg/dL normal. <b>Step 1 — 1-hour 50 g OGTT (Glucola):</b> <mark>&gt; 140 mg/dL (some use 130–140) suspects GDM; a very SENSITIVE test, so a negative rules it OUT.</mark> <b>Step 2 — confirmatory 3-hour 100 g OGTT:</b> abnormal is <mark>&gt; 180 at 1 hr, &gt; 155 at 2 hr, &gt; 140 at 3 hr</mark>; a very SPECIFIC test, so a positive rules it IN.",
+    "d": "<b>HbA1c</b> is not part of most official GDM criteria. <mark>A urine glucose test is NOT useful — glycosuria is normal in pregnancy.</mark> Risk factors: age ≥ 25–30, prior GDM, obesity (BMI &gt; 30), excessive gestational weight gain, family history, prior macrosomia, previous miscarriage or stillbirth.",
+    "e": "<span class='star'>⭐</span>The two-step sequence with all four cutoffs, and the sensitive-then-specific logic. It is asked as numbers.",
+    "img": ""
+   },
+   {
+    "n": "Gestational diabetes — management and complications",
+    "g": "<span class='pill'>Diet first</span><span class='pill'>Insulin</span><span class='pill'>Metformin / glyburide</span> <b>Initial treatment is always conservative: diet modification and exercise</b> — 1800–2500 kcal/day, <mark>40% carbohydrate, 40% fat, 20% protein</mark>, with strict ADA adherence and glucose monitoring. <b>If diet is insufficient, give insulin</b>; <mark>metformin and glyburide are currently approved in pregnancy</mark>.",
+    "b": "<b>Delivery mode</b> is determined by estimated fetal weight at term — <mark>if 4000–4500 g, consider cesarean section</mark>.",
+    "d": "<b>Maternal complications:</b> <mark>type 2 DM later in life (50%)</mark>, 2× risk of pre-eclampsia and eclampsia, polyhydramnios (from fetal polyuria), UTIs, preterm labour, retinopathy. <b>Fetal:</b> <mark>macrosomia (&gt; 4500 g) — the most common complication</mark>, shoulder dystocia, perinatal mortality 2–5%, abruption, <mark>neonatal hypoglycaemia from abrupt loss of maternal glucose with high fetal insulin</mark>, β-cell hyperplasia.",
+    "e": "<span class='star'>⭐</span>Diet before drugs. Macrosomia is the commonest complication; neonatal hypoglycaemia is the mechanism question. <mark>95% return to normal postpartum — but re-screen at 2 months postpartum</mark> (75 g OGTT or fasting glucose) to check the GDM was not undiagnosed type 2 DM.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p41_fetal_complications_of_gdm.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p41_fetal_complications_of_gdm.jpg\" loading=\"lazy\" alt=\"fetal complications of gdm\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Neonatal jaundice and bilirubin handling",
+    "g": "<span class='pill'>UGT1A1 low</span><span class='pill'>Enterohepatic recirculation</span> Fetal bilirubin is cleared by the <b>placenta</b> and eliminated by the <b>maternal liver</b>. Immediately after birth the neonatal liver must take over, but <mark>UGT1A1 levels are low</mark> and alternative pathways allow unconjugated bilirubin into the gut. Because <mark>the intestinal flora that convert bilirubin to urobilinogen are also undeveloped, an enterohepatic circulation of unconjugated bilirubin ensues</mark>.",
+    "b": "Bilirubin is the end-product of heme degradation; <b>70–90% derives from senescent red cells</b>. It is insoluble and travels bound to albumin. Normal circulating levels are <mark>&lt; 0.5 mg/dL</mark>.",
+    "d": "<b>Phototherapy is the mainstay of treatment</b> for unconjugated hyperbilirubinaemia; the objective is <mark>preventing bilirubin neurotoxicity</mark>. It works by <mark>structural and configurational isomerisation of bilirubin to less toxic, less lipophilic products excreted WITHOUT hepatic conjugation</mark>.",
+    "e": "<span class='star'>⭐</span>Why phototherapy works without a functioning liver — the isomers bypass conjugation entirely. That mechanism is the tested point.",
+    "img": ""
+   },
+   {
+    "n": "Neonatal thermoregulation",
+    "g": "<span class='pill'>Non-shivering thermogenesis</span><span class='pill'>Brown fat</span> Temperature stability = heat production and conservation balanced against heat loss. Heat production can occur by voluntary muscle activity, shivering, or non-shivering thermogenesis — <mark>newborns produce heat mainly by NON-SHIVERING thermogenesis</mark>.",
+    "b": "This depends on the quantity of <b>brown adipose tissue (BAT)</b>, located <mark>on the back, primarily between the shoulders and around the kidneys</mark> — visible on a thermogram as the hottest regions along with the head.",
+    "d": "<mark>BAT is very limited in the preterm infant</mark>, and heat loss is simultaneously accelerated — so preterm neonates are doubly vulnerable to cold stress.",
+    "e": "<span class='star'>⭐</span>Newborns do not shiver. Brown fat and its distribution is the answer to 'how does a neonate stay warm?'",
+    "img": "<a href=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p27_neonatal_thermogram_brown_fat.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p27_neonatal_thermogram_brown_fat.jpg\" loading=\"lazy\" alt=\"neonatal thermogram brown fat\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Amniotic fluid and meconium",
+    "g": "<span class='pill'>Ultrafiltrate</span><span class='pill'>Meconium</span> AF is an <b>ultrafiltrate of fetal and maternal fluids</b> in a dynamic state, with complete exchange of its water component several times a day. Electrolyte composition resembles maternal plasma but <mark>protein content is 5% that of serum</mark>. Early on, water and solute come mainly from the maternal circulation and cross the amnion, placenta, cord and the <b>not-yet-keratinised fetal skin</b>.",
+    "b": "<b>GI:</b> AF swallowing begins at the end of the first trimester; water is absorbed and unabsorbed matter propelled to the lower colon.",
+    "d": "<mark>Meconium</mark> = fetal bowel contents — excretory products of GI mucosa and glands, glycophospholipids from the lungs, desquamated fetal cells, lanugo, scalp hair and vernix; dark greenish-black. Most passes after birth, but <mark>it can pass into the AF in fetal distress</mark>.",
+    "e": "<span class='star'>⭐</span>Meconium in the liquor is a marker of fetal distress — and the reason to know what meconium is made of.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Disorders of Placentation  [OB] · entity table",
+  "rows": [
+   {
+    "n": "Placenta previa",
+    "g": "<span class='pill'>Painless bleeding</span><span class='pill'>Diagnosed by ultrasound</span> The placenta is implanted abnormally low, <mark>over or near the internal cervical os</mark> (normally it implants high in the uterus). If labor ensued, <b>the placenta would deliver before the fetus</b>.",
+    "b": "<mark>PAINLESS uterine bleeding.</mark> <b>Diagnosis is made by ultrasound.</b> <b>Risk factors:</b> prior cesarean section, multiparity, multifetal gestation, increasing maternal age, smoking.",
+    "d": "<b>Management depends on maternal status and gestational age.</b> <mark>Complete previa at 36–37 weeks with no bleeding → deliver by cesarean, independent of fetal lung maturity.</mark> Persistent haemorrhage at 25 weeks → cesarean for a maternal indication, independent of gestational age. Term fetus, bleeding stopped, mother stable → cesarean. <b>Bleeding stopped, mother stable, PRETERM fetus → expectant management</b>: bed rest, and at <mark>23–34 weeks antenatal corticosteroids (betamethasone, dexamethasone)</mark> for fetal lung maturity.",
+    "e": "<span class='star'>⭐</span><mark>Painless bleeding = previa; painful = abruption.</mark> Delivery is by cesarean in every scenario; only the timing and the use of steroids change.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p4_placenta_previa_ultrasound.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p4_placenta_previa_ultrasound.jpg\" loading=\"lazy\" alt=\"ultrasound\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Abruptio placentae",
+    "g": "<span class='pill'>Painful bleeding</span><span class='pill'>Concealed or revealed</span> <mark>Separation of the normally-implanted placenta before delivery.</mark> Separation may be total or partial; bleeding may be <b>concealed</b> or escape through the cervix.",
+    "b": "<b>Vaginal bleeding — but may be ABSENT with a concealed abruption.</b> <mark>Uterine pain and tenderness; uterine irritability with a firm, contracted uterus</mark> (thrombin is a direct, potent uterotonic). Fetal compromise, shock, <b>consumptive coagulopathy (DIC)</b>, renal failure. The monitor strip shows <b>tetanic contractions</b>.",
+    "d": "<b>Risk factors:</b> <mark>hypertension</mark>, advancing maternal age, <mark>cocaine abuse</mark>, smoking, trauma, previous abruption, PPROM. <b>Management</b> depends on gestational age and maternal and fetal status: treat hypovolaemia, anaemia and hypoxia; decide to deliver or observe; cesarean vs vaginal delivery.",
+    "e": "<span class='star'>⭐</span>A concealed abruption can present with pain, a rigid uterus and shock but <b>no visible bleeding</b> — the classic trap.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p9_abruption_fhr_tetanic_contractions.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p9_abruption_fhr_tetanic_contractions.jpg\" loading=\"lazy\" alt=\"abruption fhr tetanic contractions\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Placenta accreta / increta / percreta",
+    "g": "<span class='pill'>Accreta</span><span class='pill'>Increta</span><span class='pill'>Percreta</span> Abnormally firm adherence of the placenta to the <b>myometrium</b> rather than to decidua. <b>Accreta</b> — anchoring villi <mark>attach to</mark> the myometrium. <b>Increta</b> — villi <mark>penetrate INTO</mark> the myometrium. <b>Percreta</b> — villi <mark>penetrate THROUGH</mark> the myometrium to the serosa or adjacent organs.",
+    "b": "<mark>Ultrasound has sensitivity and specificity exceeding 85% for detecting accreta; MRI is used when the result is equivocal.</mark>",
+    "d": "<b>The most important risk factor is placenta previa after a prior cesarean delivery</b>, and frequency rises with the number of cesareans. Others: prior uterine curettage, <b>Asherman's</b>, maternal age &gt; 35 — all producing <mark>an abnormally thin or denuded decidual layer</mark> that gives trophoblast access to myometrium. <b>Management: hysterectomy</b> (cesarean hysterectomy, or after vaginal delivery) with blood replacement; conservative option is to <b>leave the placenta in situ + methotrexate</b>.",
+    "e": "<span class='star'>⭐</span>Learn the three depths in order. Previa + prior cesarean is the risk-factor answer, and the mechanism is a deficient decidua.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p13_degrees_of_placental_invasion_accreta_increta_percreta.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p13_degrees_of_placental_invasion_accreta_increta_percreta.jpg\" loading=\"lazy\" alt=\"ercreta\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Amniotic Fluid, Preterm Labor & Hypertension  [OB] · entity table",
+  "rows": [
+   {
+    "n": "Measuring amniotic fluid volume",
+    "g": "<span class='pill'>AFI &gt; 25 cm</span><span class='pill'>AFI &lt; 5 cm</span> Amniotic fluid provides fluid space for fetal growth and normal shape, prevents cord compression and promotes normal lung development. <mark>Volume peaks at 1 litre at 33–34 weeks, then declines.</mark>",
+    "b": "Measured by ultrasound using the <b>amniotic fluid index (AFI)</b> or four-quadrant method: the uterine cavity is divided into four quadrants, the <b>largest vertical pocket in each is measured in cm</b>, and the four are added.",
+    "d": "<mark>AFI &gt; 25 cm = polyhydramnios. AFI &lt; 5 cm = oligohydramnios.</mark>",
+    "e": "<span class='star'>⭐</span>Both numbers, and how the AFI is actually constructed — four quadrants, largest vertical pocket in each.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p17_amniotic_fluid_index_four_quadrant.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p17_amniotic_fluid_index_four_quadrant.jpg\" loading=\"lazy\" alt=\"amniotic fluid index four quadrant\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Polyhydramnios",
+    "g": "<span class='pill'>AFI &gt; 25 cm</span><span class='pill'>&gt; 2 L</span><span class='pill'>Indomethacin</span> <b>AFI &gt; 25 cm; amniotic fluid volume &gt; 2 litres.</b> Diagnosed by physical examination and ultrasound.",
+    "b": "<b>Causes:</b> fetal malformations — <mark>CNS (open neural tube defects)</mark> and <mark>GI (oesophageal atresia, duodenal atresia)</mark>; fetal chromosomal anomaly; fetal anaemia; <b>maternal diabetes</b>; multiple gestation; <mark>idiopathic in half of cases</mark>. <b>Maternal risks:</b> dyspnoea, oedema, abruption, uterine dysfunction, postpartum haemorrhage, malpresentation, operative delivery.",
+    "d": "<b>Evaluation:</b> screen for infection — <mark>TORCH (toxoplasmosis, others including syphilis, listeriosis, varicella, parvovirus B19, rubella, CMV, herpes)</mark>; amniocentesis. <b>Management:</b> conservative; <b>indomethacin</b> — reduces fluid production in fetal lungs, increases absorption into lungs, increases movement across the membranes and <mark>reduces fetal urine formation</mark>.",
+    "e": "<span class='star'>⭐</span>The 'can't swallow' logic: anything obstructing fetal swallowing (atresia, anencephaly) causes polyhydramnios. Indomethacin works chiefly by cutting fetal urine output.",
+    "img": ""
+   },
+   {
+    "n": "Oligohydramnios",
+    "g": "<span class='pill'>AFI &lt; 5 cm</span><span class='pill'>Renal agenesis</span> <b>Diminished amniotic fluid volume — AFI &lt; 5 cm.</b>",
+    "b": "<b>Causes:</b> fetal malformations <mark>including renal agenesis</mark>, post-term pregnancy, <b>uteroplacental insufficiency</b>, pre-eclampsia, ruptured membranes.",
+    "d": "<b>Consequences:</b> <mark>musculoskeletal deformities (clubfoot, amputation), pulmonary hypoplasia</mark>, and <mark>intrapartum cord compression → variable FHR decelerations</mark>. <b>Management of either poly- or oligohydramnios:</b> evaluate for fetal anomalies, assess fetal (and for poly, maternal) status; <b>if fetal anatomy and growth are normal → expectant management</b>.",
+    "e": "The 'can't pee' logic: renal agenesis or obstruction → no fetal urine → oligohydramnios → pulmonary hypoplasia and limb deformity (Potter sequence).",
+    "img": "<span class='star'>⭐</span><mark>Variable decelerations = cord compression = think oligohydramnios</mark>, which distinguishes them from early (head) and late (uteroplacental) decelerations."
+   },
+   {
+    "n": "Preterm labor and PPROM",
+    "g": "<span class='pill'>20–36 6/7 wk</span><span class='pill'>Tocolytic</span><span class='pill'>ANCS</span> <b>Birth after 20 weeks but before 37 0/7 weeks.</b> <mark>Preterm birth is the single greatest cause of infant mortality.</mark> <b>PPROM</b> = rupture of membranes before 37 weeks. <mark>The greatest risk factor is a history of prior preterm delivery.</mark> Others: uterine overdistension, maternal-fetal stress, infection, tobacco, induced labour, unexplained.",
+    "b": "<b>Diagnosis:</b> document uterine contractions AND cervical change — <mark>effacement &gt; 80% or dilation &gt; 2 cm</mark>. Document ROM with the <mark>Nitrazine test and ferning</mark>.",
+    "d": "<b>Management:</b> assess and monitor mother and fetus; <b>hydrate</b> — with adequate IV hydration and bed rest contractions cease in ~20%; check cultures including <mark>Group B Streptococcus (S. agalactiae)</mark>; <mark>antenatal corticosteroids for fetal lung maturity — reduces RDS and IVH</mark>; <b>tocolytic</b> if no contraindication (no signs of infection such as uterine tenderness, no decline in fetal status). <mark>If PPROM confirmed give antibiotics: ampicillin + erythromycin (clindamycin if ampicillin-allergic)</mark>.",
+    "e": "<span class='star'>⭐</span>Consequences of preterm birth: ROP, RDS (hyaline membrane disease), BPD/asthma, learning disability, IVH, cerebral palsy, NEC, death — and in adulthood obesity, diabetes and renal disease.",
+    "img": ""
+   },
+   {
+    "n": "Hypertensive disorders — chronic and gestational",
+    "g": "<span class='pill'>BP &gt; 140/90</span><span class='pill'>20 weeks</span> <b>Hypertension in pregnancy = BP &gt; 140/90 mmHg</b>; affects 8–10% of pregnancies. <b>Chronic essential hypertension</b> — elevated BP preceding pregnancy or <mark>before 20 weeks</mark>. <b>Gestational hypertension</b> — hypertension developing <mark>after 20 weeks</mark>, with <b>no proteinuria and none of the other pre-eclampsia features</b>; usually returns to baseline by 6 weeks postpartum.",
+    "b": "There is no evidence supporting treatment of mild to moderate gestational hypertension.",
+    "d": "<b>Chronic hypertension — treat to goal with alpha-methyldopa, a beta blocker, or a calcium channel blocker.</b> <mark>NO ACE INHIBITORS.</mark>",
+    "e": "<span class='star'>⭐</span>The 20-week line separates chronic from gestational hypertension. ACE inhibitors are absolutely contraindicated — a guaranteed distractor.",
+    "img": ""
+   },
+   {
+    "n": "Pre-eclampsia and eclampsia",
+    "g": "<span class='pill'>After 20 weeks</span><span class='pill'>HTN + proteinuria</span><span class='pill'>MgSO₄</span> Occurs <mark>after 20 weeks of gestation and as late as 4–6 weeks postpartum</mark>; classically <b>hypertension + proteinuria</b>. <mark>Proteinuria is NOT mandatory for the diagnosis</mark> — if absent, diagnose with hypertension plus any of: <mark>thrombocytopenia &lt; 100,000/µL, creatinine &gt; 1.1 mg/dL or doubling, transaminases double normal, pulmonary oedema, or cerebral/visual symptoms</mark>. <b>Eclampsia = pre-eclampsia + seizures.</b>",
+    "b": "<b>Proteinuria thresholds:</b> <mark>&gt; 300 mg/24 hr</mark>, or a <mark>spot protein/creatinine ratio &gt; 0.3</mark>. <b>Severe features:</b> headache, blurred vision, <b>right upper quadrant pain</b>, weight gain, nausea/vomiting, oliguria, confusion, altered mental status, hyperreflexia, facial and extremity oedema. <mark>Without severe features BP &gt; 140/90; WITH severe features BP &gt; 160/110.</mark>",
+    "d": "<mark>DELIVERY IS THE ONLY DEFINITIVE TREATMENT.</mark> For severe pre-eclampsia and eclampsia, deliver at any gestational age. Without severe features: conservative — bed rest, salt restriction, monitor and treat BP with <b>labetalol, hydralazine or nifedipine</b>. <mark>IV magnesium sulfate to prevent and treat eclamptic seizures</mark>; watch for <b>magnesium toxicity — hyporeflexia and bradypnoea</b>. Complications: maternal cerebral haemorrhage, DIC, ARDS, abruption, intrauterine fetal demise.",
+    "e": "<span class='star'>⭐</span>When a stem gives severe hypertension with headache and visual change, the <b>most definitive</b> answer is <mark>deliver</mark> — magnesium prevents seizures but does not treat the disease. Underlying pathophysiology: systemic vasoconstriction and endothelial dysfunction.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p30_preeclampsia_pathophysiology.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p30_preeclampsia_pathophysiology.jpg\" loading=\"lazy\" alt=\"athophysiology\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Endocrine Disorders in Pregnancy & Multifetal Gestation  [OB] · entity table",
+  "rows": [
+   {
+    "n": "Physiologic thyroid changes in pregnancy",
+    "g": "<span class='pill'>↑ TBG</span><span class='pill'>↑ Total T4/T3</span><span class='pill'>↓ TSH early</span> <mark>Estrogen increases thyroxine-binding globulin (TBG)</mark> and hepatic clearance of TBG is reduced → <mark>increased TOTAL T4 and T3</mark>. <mark>hCG stimulates the TSH receptor and suppresses TSH</mark>, so serum TSH falls early in gestation with a rise in free T3 and free T4, <b>normalising by the end of the first trimester</b>.",
+    "b": "Plasma iodide falls (increased maternal renal clearance plus fetal use), producing <mark>a notable increase in gland size in 15% of women with normal thyroid function tests</mark>.",
+    "d": "<b>Normal TSH in pregnancy:</b> <mark>1st trimester 0.1–2.5 mIU/L · 2nd trimester 0.2–3.0 · 3rd trimester 0.3–3.0</mark>.",
+    "e": "<span class='star'>⭐</span>Total T4/T3 rise but FREE hormone stays near normal — the classic 'is she hyperthyroid?' trap. The trimester-specific TSH ranges are the numbers to carry.",
+    "img": ""
+   },
+   {
+    "n": "Hyperthyroidism and thyroid storm in pregnancy",
+    "g": "<span class='pill'>Graves 95%</span><span class='pill'>PTU first trimester</span> <mark>Graves' disease accounts for 95% of cases.</mark> Look for the usual features: nervousness, tremor, tachycardia, frequent stools, sweating, heat intolerance, goitre, insomnia, palpitations, hypertension, lid lag/retraction, pretibial myxoedema.",
+    "b": "<b>Treatment: propylthiouracil (PTU)</b> — reduces T4→T3 conversion and works more quickly; <mark>PTU is preferred, especially in the first trimester</mark>. <mark>Caution: methimazole crosses the placenta more readily and is associated with fetal aplasia cutis.</mark> Goal: maintain FT4/FTI in the <b>high normal</b> range.",
+    "d": "<b>Thyroid storm</b> — life-threatening exacerbation precipitated by stress, labour, infection, pre-eclampsia or C-section; <b>1% of pregnant patients with hyperthyroidism</b>. Fever, tachycardia, tremor, altered mental status, nausea, vomiting, diarrhoea → shock, stupor, coma, maternal heart failure. <b>Treat with supportive care (IV fluids, cooling blankets, glucose) plus propylthiouracil, propranolol and dexamethasone.</b>",
+    "e": "<mark>A woman previously treated for Graves' by ablation or surgery may still produce IgG thyroid-stimulating immunoglobulins that cross the placenta and cause FETAL thyrotoxicosis</mark> — fetal US shows goitre, tachycardia, growth restriction, polyhydramnios, accelerated bone maturation, heart failure and hydrops.",
+    "img": "<span class='star'>⭐</span>PTU in the first trimester (methimazole → aplasia cutis). And a euthyroid mother post-ablation can still have a thyrotoxic fetus because the antibody crosses."
+   },
+   {
+    "n": "Hypothyroidism in pregnancy",
+    "g": "<span class='pill'>Hashimoto</span><span class='pill'>Levothyroxine</span><span class='pill'>Cretinism</span> Commonest causes: <mark>Hashimoto's in developed countries; iodine deficiency worldwide</mark>; iatrogenic after thyroidectomy or radioactive iodine. Usual features: fatigue, goitre, constipation, cold intolerance, muscle cramps, hair loss, dry skin, slow reflexes, weight gain.",
+    "b": "<b>Treatment: levothyroxine in a dose sufficient to return TSH to normal.</b>",
+    "d": "<b>Risks:</b> preterm delivery, birth defects, stillbirth, pre-eclampsia, C-section for fetal distress, abruption, PPH, anaemia, and low birth weight. <mark>Iodine-deficient hypothyroidism causes congenital cretinism — growth failure, intellectual disability and other neuropsychological deficits.</mark> Neonate: prolonged jaundice, hoarse cry, feeding problems, marked retardation of bone maturation.",
+    "e": "<mark>Neonatal screening: TSH or T4 within 24–48 hours after delivery by heel stick, with immediate treatment on diagnosis.</mark>",
+    "img": "<span class='star'>⭐</span>Cretinism is preventable — hence universal neonatal heel-stick screening in the first 24–48 hours."
+   },
+   {
+    "n": "Multifetal pregnancy — zygosity and membranes",
+    "g": "<span class='pill'>Dizygotic 2/3</span><span class='pill'>Di/Di</span><span class='pill'>Mono/Di</span><span class='pill'>Mono/Mono</span> <b>Dizygotic (fraternal)</b> — maturation and fertilization of two ova in a single ovulatory cycle; <mark>the commonest form, two-thirds of twins</mark>. <b>Monozygotic (identical)</b> — fertilization of a single ovum which then divides.",
+    "b": "<b>Genesis of monozygotic twins, by timing of division:</b> <mark>within 72 hours → two placentas, two chorions, two amnions (Di/Di)</mark>; <mark>between day 4 and day 8, after the inner cell mass forms → monochorionic, diamniotic (Mono/Di)</mark>; <mark>approximately 8 days, after chorion and amnion have differentiated → monoamniotic, monochorionic (Mono/Mono)</mark>; <mark>2 weeks after development of the embryonic disc → conjoined twins</mark>.",
+    "d": "<b>Risks of twin pregnancy:</b> preterm labour and delivery, gestational hypertension and pre-eclampsia, gestational diabetes, <b>acute fatty liver of pregnancy</b>, and also PUPPP (pruritic urticarial papules and plaques of pregnancy), thrombosis, hyperemesis gravidarum, cholestasis and iron deficiency anaemia.",
+    "e": "<span class='star'>⭐</span>The later the split, the more shared the membranes. Read the table in both directions.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p52_genesis_of_monozygotic_twins.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p52_genesis_of_monozygotic_twins.jpg\" loading=\"lazy\" alt=\"genesis of monozygotic twins\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Twin-twin transfusion syndrome",
+    "g": "<span class='pill'>Monochorionic only</span><span class='pill'>15–20%</span> <mark>Monochorionic twin placentas have anastomoses between the two umbilical circulations.</mark> In TTTS, blood is transfused from a <b>donor</b> twin to its <b>recipient</b> sibling. <mark>Occurs in 15–20% of monochorial placentas.</mark>",
+    "b": "<b>Donor</b> — becomes anaemic, growth may be restricted. <b>Recipient</b> — becomes polycythaemic and may develop circulatory overload manifesting as <mark>hydrops</mark>.",
+    "d": "TTTS requires a <b>monochorionic</b> placenta — it cannot occur in dizygotic twins, even where the two placentas have fused, because those circulations stay separate.",
+    "e": "<span class='star'>⭐</span>Donor = small and anaemic; recipient = large, polycythaemic, hydropic. And TTTS ⇒ monochorionic, always.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p53_twin_twin_transfusion_syndrome.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_obstetrics_2/introduction_to_obstetrics_2_p53_twin_twin_transfusion_syndrome.jpg\" loading=\"lazy\" alt=\"twin twin transfusion syndrome\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Early Pregnancy Loss & Trophoblastic Disease  [GYN] · entity table",
+  "rows": [
+   {
+    "n": "Miscarriage — the five types",
+    "g": "<span class='pill'>&lt; 20 weeks</span><span class='pill'>Os open or closed</span> <mark>Miscarriage = loss before 20 weeks of pregnancy.</mark> Classified by <b>viability</b> and by whether the <b>cervical os</b> is open or closed. The differential for vaginal bleeding and lower abdominal pain in the first trimester also includes molar and ectopic pregnancy.",
+    "b": "<b>Threatened</b> — viable, <mark>os CLOSED</mark>, vaginal bleeding. <b>Inevitable</b> — aborting, <mark>os OPEN</mark>, vaginal bleeding. <b>Incomplete</b> — nonviable, os open, bleeding with partial expulsion of products of conception and retained POC. <b>Complete</b> — nonviable, <b>os closed</b>, bleeding may or may not be present. Also <b>delayed (missed)</b> and <b>septic</b> miscarriage.",
+    "d": "<b>Threatened → observation.</b> <b>Inevitable and incomplete → suction D&amp;C or medical management.</b>",
+    "e": "<span class='star'>⭐</span>The cervical os is the discriminator: closed + viable = threatened; open = inevitable or incomplete; closed + everything passed = complete.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p9_types_of_miscarriage_table.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p9_types_of_miscarriage_table.jpg\" loading=\"lazy\" alt=\"types of miscarriage table\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Ectopic pregnancy",
+    "g": "<span class='pill'>Tubal 98%</span><span class='pill'>hCG 1500</span><span class='pill'>Methotrexate</span> An extrauterine implantation of the conceptus (<i>ektopos</i> = out of place). <mark>Tubal in 98%</mark>; other sites are cervical, ovarian, cesarean scar and abdominal. <b>Heterotopic</b> = an ectopic and an intrauterine pregnancy at the same time.",
+    "b": "<b>Risk factors — all mechanisms of tubal damage:</b> <mark>PID</mark>, previous tubal surgery, previous ectopic, progesterone-secreting IUD. On ultrasound, the tubal ectopic shows the <b>'bagel sign'</b>.",
+    "d": "<b>Expectant</b> — asymptomatic patient with <mark>hCG &lt; 1500</mark>. <b>Medical — methotrexate</b>, <mark>contraindicated if hCG &gt; 5000, or if a yolk sac or fetal pole/cardiac activity is present</mark>. <b>Surgical — salpingostomy vs salpingectomy</b>, by laparoscopy, or laparotomy if haemodynamically unstable. Decisions turn on <b>β-hCG level, symptoms and haemodynamic stability</b>.",
+    "e": "<span class='star'>⭐</span>The two hCG numbers (1500 expectant, 5000 methotrexate contraindicated) and the three hard contraindications to methotrexate.",
+    "img": ""
+   },
+   {
+    "n": "Pregnancy of unknown location (PUL)",
+    "g": "<span class='pill'>hCG 1500 mIU/mL</span><span class='pill'>53% rise / 48 hr</span> A positive pregnancy test with <b>no intrauterine or extrauterine pregnancy seen on scan</b>.",
+    "b": "<mark>An intrauterine pregnancy is usually seen at hCG levels of 1500 mIU/mL on a transvaginal scan</mark> — the discriminatory zone.",
+    "d": "<b>If the hCG is below that threshold and the patient is asymptomatic, repeat the hCG in 48 hours.</b> <mark>A rise of at least 53% above the initial level is good evidence of a viable intrauterine pregnancy.</mark>",
+    "e": "<span class='star'>⭐</span>1500 mIU/mL discriminatory zone; 53% rise in 48 hours. Both numbers are examinable and often confused.",
+    "img": ""
+   },
+   {
+    "n": "Hydatidiform mole — complete vs partial",
+    "g": "<span class='pill'>46,XX</span><span class='pill'>69,XXY</span><span class='pill'>Snowstorm</span> A gestational trophoblastic disease — a tumour originating from the trophoblast. Occurs in women <mark>&lt; 17 or &gt; 35</mark> and in those with previous GTD; about <mark>1/2000 gestations</mark> in the US. <b>Complete</b> — placental tissue abnormal, <b>no fetal tissue</b>. <b>Partial</b> — some normal and some abnormal placental tissue; a fetus may develop but cannot survive.",
+    "b": "<b>COMPLETE:</b> <mark>empty egg fertilized by a single sperm; all chromosomes paternally derived; karyotype 46,XX in 90%</mark>; <mark>hCG very high, typically well over 100,000 mIU/mL</mark>; large uterus for dates; no fetal heart beat; gestational hypertension; ultrasound shows the <mark>'snowstorm' appearance from hydropic villi</mark> with <b>bilateral theca lutein cysts</b>; <mark>risk of choriocarcinoma 15%</mark>. Presents with passage of grape-like clusters, hyperemesis gravidarum, and <b>hyperthyroid symptoms from β-hCG cross-reactivity at the TSH receptor</b>.",
+    "d": "<b>PARTIAL:</b> <mark>single egg fertilized by two sperm; triploid 69,XXY</mark>; hCG may or may not be elevated; no FHR; ultrasound shows a coexistent fetus with fetal parts and hydropic villi; <mark>risk of choriocarcinoma 0.5%</mark>. <b>Management of both: D&amp;C, serial β-hCG, contraception during follow-up (6 months for complete); anti-D immunoglobulin for partial.</b> Labs: CBC, LFTs, β-hCG.",
+    "e": "<span class='star'>⭐</span>The comparison table is the highest-yield item: karyotype, hCG level, uterine size, fetal parts, components and choriocarcinoma risk.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p20_complete_vs_partial_mole_table.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p20_complete_vs_partial_mole_table.jpg\" loading=\"lazy\" alt=\"mole table\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Pelvic Pain, Masses & Pelvic Floor  [GYN] · entity table",
+  "rows": [
+   {
+    "n": "Uterine leiomyomata (fibroids)",
+    "g": "<span class='pill'>Estrogen-dependent</span><span class='pill'>Submucosal = bleeding</span> Benign uterine smooth-muscle tumours — <mark>benign over 99% of the time</mark>. Lifetime prevalence <mark>~70% in Caucasian women, &gt; 80% in Black women</mark>; a US study found <b>51% of premenopausal women have fibroids</b>. <mark>Estrogen-dependent: they grow in pregnancy and regress at menopause.</mark>",
+    "b": "<b>Symptoms:</b> heavy menstrual bleeding → anaemia; pelvic pain and pressure; abdominal enlargement; <mark>miscarriage (submucosal)</mark>; infertility. <b>Exam:</b> enlarged, firm, irregularly shaped, non-tender uterus. Classified as <b>submucosal, intramural, subserosal</b>.",
+    "d": "<mark>Asymptomatic fibroids do not require treatment</mark> — reevaluate every 6–12 months. <b>Hormonal:</b> combined OCP, progestin, GnRH agonist, progestin IUD. <b>Surgical:</b> hysteroscopic resection, uterine artery embolization, myomectomy, hysterectomy. <mark>Always consider the patient's fertility needs.</mark>",
+    "e": "<span class='star'>⭐</span>Submucosal fibroids cause the most bleeding and infertility despite often being smallest. UAE is the uterus-sparing option but is a poor choice if fertility is desired.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p24_locations_of_fibroids.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p24_locations_of_fibroids.jpg\" loading=\"lazy\" alt=\"locations of fibroids\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Endometriosis",
+    "g": "<span class='pill'>Laparoscopy = diagnosis</span><span class='pill'>Chocolate cyst</span> Presence of <b>normal endometrial mucosa (glands AND stroma)</b> abnormally implanted outside the uterine cavity. Proposed cause: <b>retrograde menstruation</b>.",
+    "b": "<b>Symptoms:</b> dysmenorrhoea, heavy or irregular bleeding, pelvic pain, <mark>dyspareunia</mark>, <mark>dyschezia (pain on defecation)</mark> often with cycles of diarrhoea and constipation, bloating, nausea and vomiting, inguinal pain, pain on micturition/urinary frequency. <b>Exam:</b> abdominal tenderness, <mark>decreased mobility of the uterus, nodularity in the cul-de-sac</mark>, adnexal mass (endometrioma).",
+    "d": "<mark>Diagnosis is made by LAPAROSCOPY.</mark> Common sites: cul-de-sac, ovaries, uterosacral ligaments; can also occur in lung, brain, rectum, large bowel, thorax and GI tract. <b>Medical:</b> NSAIDs; ovarian suppression with Depo-Provera, progesterone IUD, GnRH agonist, COCP. <b>Surgical:</b> conservative resection/ablation ± presacral neurectomy or LUNA; semiconservative hysterectomy; radical hysterectomy with bilateral oophorectomy.",
+    "e": "<span class='star'>⭐</span>Laparoscopy is the diagnostic answer — imaging can suggest an endometrioma but cannot diagnose peritoneal disease.",
+    "img": ""
+   },
+   {
+    "n": "Pelvic inflammatory disease and Fitz-Hugh–Curtis",
+    "g": "<span class='pill'>CMT</span><span class='pill'>Ceftriaxone + doxycycline</span> <mark>PID = cervical motion tenderness OR uterine OR adnexal tenderness, AND lower abdominal/pelvic pain.</mark> <b>The clinical diagnosis of PID is imprecise.</b>",
+    "b": "Lower abdominal pain, fever, cervical discharge and abnormal uterine bleeding, <b>particularly during or after menses</b>.",
+    "d": "<mark>Treat with ceftriaxone + doxycycline ± metronidazole.</mark> <b>Long-term complications: infertility, chronic pelvic pain and ectopic pregnancy.</b>",
+    "e": "<span class='star'>⭐</span><b>Fitz-Hugh–Curtis syndrome</b> = <mark>perihepatitis associated with PID</mark> — inflammation of the liver capsule with 'violin string' adhesions. Initially described with gonococcus, but <mark>Chlamydia is now FIVE TIMES more common</mark>. Severe RUQ pain with a pleuritic component radiating to the right shoulder — <b>easily confused with cholecystitis</b>; transaminases abnormal in half.",
+    "img": ""
+   },
+   {
+    "n": "Ovarian cysts, torsion and the adnexal mass",
+    "g": "<span class='pill'>&gt; 5 cm</span><span class='pill'>Right &gt; left</span><span class='pill'>CA-125</span> <b>Ovarian cyst accidents: bleed, rupture, torsion.</b> <b>Benign:</b> simple cysts, corpus luteal cysts, endometriotic cysts, mature teratomas. <b>Malignant:</b> immature teratoma, dysgerminoma, granulosa cell tumours.",
+    "b": "<b>Risk factors for ovarian torsion:</b> an ovarian mass (functional cyst, endometrioma, dermoid, adenocarcinoma), <mark>right-sided &gt; left-sided</mark>, <mark>size &gt; 5 cm</mark>, and <b>pregnancy</b>. Torsion causes <b>sudden severe pelvic pain</b> with nausea. <b>Epithelial ovarian cancer</b> presents with abdominal bloating, indigestion and weight loss, with ascites on examination.",
+    "d": "<b>Approach:</b> thorough history and bimanual examination for size, location, mobility, nodularity, and assessment for ascites. <mark>The most common ovarian tumour in a woman under 30 is a benign cystic teratoma (dermoid).</mark> <b>Management: observe if the cyst appears benign and is &lt; 5 cm</b>; <mark>cysts &gt; 5 cm carry a torsion risk and are removed surgically leaving the ovary intact</mark>; surgical staging and debulking for cancer.",
+    "e": "<span class='star'>⭐</span>5 cm is the action threshold. <mark>Epithelial ovarian cancer is the most common cause of gynaecological cancer death</mark>; 5–10% are familial, some BRCA1/2; CA-125 is the marker.",
+    "img": ""
+   },
+   {
+    "n": "Pelvic organ prolapse and support defects",
+    "g": "<span class='pill'>Apical</span><span class='pill'>Horizontal</span><span class='pill'>Pessary</span> <b>Risk factors:</b> childbearing, heavy lifting, menopause, or inherent connective tissue weakness, producing pathophysiologic change in the muscular and fascial structures of the pelvic floor over time.",
+    "b": "<b>Support anatomy:</b> <mark>uterosacral and cardinal ligaments give VERTICAL (apical) support</mark>; <mark>pubocervical and rectovaginal fascia give HORIZONTAL support</mark>; plus the perineal body and perineal musculature. <b>Loss of apical support → uterine prolapse.</b> <b>Rectocele</b> = loss of horizontal support of the rectovaginal septum.",
+    "d": "<b>Management: Kegel exercises, pessary, surgery.</b>",
+    "e": "<span class='star'>⭐</span>Match the defect to the lost ligament: apical (uterosacral/cardinal) → uterine prolapse; rectovaginal septum → rectocele. <b>Menopause</b> = cessation of menses for at least one year, average age 51 (range 48–55).",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p44_supporting_ligaments_of_female_genitalia.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_1/introduction_to_gynecology_1_p44_supporting_ligaments_of_female_genitalia.jpg\" loading=\"lazy\" alt=\"supporting ligaments of female genitalia\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Urinary incontinence — stress vs urge",
+    "g": "<span class='pill'>Stress = laxity</span><span class='pill'>Urge = detrusor</span> <b>Stress UI</b> — the muscles and tissues around the urethra do not stay closed when abdominal pressure rises, so urine leaks; due to <mark>laxity of the pelvic floor muscles</mark>. Occurs with coughing, sneezing, laughing or running. Common in women who are obese or have had vaginal deliveries.",
+    "b": "<b>Stress UI management:</b> incontinence pessary; lifestyle (weight loss, fluid management, bladder training); pelvic floor muscle exercise (Kegel, biofeedback, cones); <b>bulking agents</b> injected periurethrally; electrical stimulation or sacral neuromodulation; surgery — <mark>midurethral mesh slings (no longer used)</mark>.",
+    "d": "<b>Urge incontinence:</b> <mark>antimuscarinics acting on bladder M2/M3 receptors to inhibit involuntary detrusor contractions — oxybutynin, tolterodine, solifenacin, darifenacin</mark>; <mark>beta-3 agonist mirabegron</mark>, relaxing the detrusor and increasing bladder capacity; <b>onabotulinumtoxin A</b>, inhibiting presynaptic acetylcholine release at the neuromuscular junction.",
+    "e": "<span class='star'>⭐</span>Stress = anatomical/mechanical, treated mechanically. Urge = detrusor overactivity, treated pharmacologically. Do not swap the treatments.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Abnormal Uterine Bleeding  [GYN] · workup algorithm",
+  "rows": [
+   {
+    "n": "AUB — definitions and normal parameters",
+    "g": "<span class='pill'>&gt; 80 mL</span><span class='pill'>&gt; 7 days</span><span class='pill'>21–35 days</span> AUB in patients of reproductive age is <b>a bleeding pattern inconsistent with normal menstrual cycle parameters</b> — frequency, regularity, duration and volume. Affects &gt; 10 million women in the US; may lead to <b>iron deficiency anaemia</b> and fatigue.",
+    "b": "<b>Normal vs abnormal:</b> <mark>duration of flow 4–6 days (abnormal &gt; 7 days) · volume 35 mL (abnormal &gt; 80 mL) · cycle length 21–35 days</mark>.",
+    "d": "<b>Terminology:</b> <b>amenorrhoea</b> — absence of flow for 3 usual cycle lengths or 6 months. <b>Oligomenorrhoea</b> — cycle frequency <mark>&gt; 35 days</mark>. <b>Polymenorrhoea</b> — cycle frequency <mark>&lt; 21 days</mark>. <b>Menorrhagia</b> — regular cycle with increased volume (&gt; 80 mL) or duration (&gt; 7 days). <b>Metrorrhagia</b> — irregular intervals, light or normal volume. <b>Menomet­rorrhagia</b> — irregular interval AND excessive volume.",
+    "e": "<span class='star'>⭐</span>Learn the four -rrhagia/-menorrhoea terms as a grid of interval vs volume. History: how many pads daily, flooding, clots larger than a penny, impact on daily life.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p6_normal_menses_parameters.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p6_normal_menses_parameters.jpg\" loading=\"lazy\" alt=\"arameters\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "The three reasons for irregular bleeding — the organising algorithm",
+    "g": "<span class='pill'>Distorted cavity</span><span class='pill'>Too thin</span><span class='pill'>Too thick</span> <mark>The lecture's organising framework: the TOP THREE reasons women have irregular uterine bleeding are (1) a DISTORTED uterine cavity, (2) endometrium TOO THIN (atrophic), (3) endometrium TOO THICK.</mark>",
+    "b": "<b>Reason 1 — distorted cavity:</b> uterine or cervical <b>polyps</b> (glands, stroma and vessels projecting into the cavity; usually benign; diagnosed on <mark>sonohysterogram / saline infusion sonogram</mark>); <b>adenomyosis</b>; <b>leiomyoma</b>.",
+    "d": "<b>Reason 2 — atrophic endometrium</b> (low estrogen, no progesterone): hypothalamic suppression, chronic anovulation, adolescent HPO immaturity, or iatrogenic. <b>Reason 3 — thickened endometrium</b> (unopposed estrogen): PCOS, and the postmenopausal woman at risk.",
+    "e": "<span class='star'>⭐</span>Use this three-way split as the spine of the whole AUB section — every subsequent row hangs off one of the three branches.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p10_three_reasons_for_irregular_bleeding.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p10_three_reasons_for_irregular_bleeding.jpg\" loading=\"lazy\" alt=\"three reasons for irregular bleeding\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Adenomyosis",
+    "g": "<span class='pill'>&gt; 2.5 mm beneath basalis</span><span class='pill'>Ages 35–50</span> <mark>Invasion of endometrial glands into the uterine myometrium — extension of endometrial glands and stroma &gt; 2.5 mm beneath the basalis layer.</mark> Produces diffuse enlargement of the uterus with thickened myometrium containing glands. Epidemiology: <b>women aged 35–50</b>.",
+    "b": "<b>Presentation:</b> dysmenorrhoea, menorrhagia, dyspareunia, abdominal bloating/heaviness/fullness. Ultrasound shows a thickened myometrium with glandular irregularities.",
+    "d": "<b>Treatment:</b> analgesia, hormonal contraceptives (<mark>levonorgestrel-releasing intrauterine system</mark>), <b>hysterectomy if fertility is no longer desired</b>.",
+    "e": "<span class='star'>⭐</span>The 2.5 mm depth criterion, and the distinction from endometriosis (which is outside the uterus entirely).",
+    "img": ""
+   },
+   {
+    "n": "Atrophic endometrium — hypothalamic suppression and anovulation",
+    "g": "<span class='pill'>LOW estrogen</span><span class='pill'>Very thin stripe</span> <b>Reason 2, arm 1 — hypothalamic suppression:</b> common in competitive athletes, strenuous regular exercise, ballet and modern dance. <mark>Two major, additive influences: a critical level of body fat and stress itself.</mark> Young women who weigh &lt; 115 lb and lose &gt; 10 lb while exercising are most at risk. Mechanism: <mark>↑ CRH directly inhibits GnRH release; endogenous opiates suppress GnRH</mark> → ↓ GnRH → ↓ LH/FSH → ↓ estradiol.",
+    "b": "<mark>Anovulation with LOW estrogen → low estrogen, no progesterone → atrophic endometrial lining → VERY THIN endometrial stripe → irregular spotting/bleeding from a fragile and unstable endometrium</mark> (atrophic glands, lots of stroma).",
+    "d": "<b>Adolescents</b> — immaturity of the HPO axis: estrogen rises normally in the early cycle, but with no LH surge no corpus luteum forms and no progesterone is produced; the endometrium becomes hyperproliferative and <mark>outgrows its estrogen supply</mark>, giving irregular sloughing and excessive bleeding from spiral arteries that have not undergone physiologic senescence. <b>Treatment: oral contraceptive pills.</b>",
+    "e": "<b>Risks of exercise-induced hypothalamic amenorrhoea: osteoporosis, cardiovascular disease, stress fractures, dyspareunia</b> — these patients are <mark>very estrogen deficient</mark>. Treatment is hormone therapy, simplest being the OCP; for pregnancy, reduce exercise or induce ovulation.",
+    "img": "<span class='star'>⭐</span>Two different low-estrogen mechanisms produce the same thin, unstable endometrium. Both are treated with the OCP."
+   },
+   {
+    "n": "Atrophic endometrium — iatrogenic causes",
+    "g": "<span class='pill'>Breakthrough bleeding</span><span class='pill'>Dopamine blockers</span> <b>Hormonal contraceptives:</b> unscheduled bleeding during cyclic combined estrogen–progestin or progestin-only pills is called <mark>break-through bleeding (BTB)</mark>. With continuous regimens the aim is amenorrhoea, so any bleeding is unscheduled. Many episodes of spotting follow <b>missed or erratic use</b> of pills, patches or rings.",
+    "b": "<mark>Simultaneous exposure to estrogen AND progestin for a long time — long-term OCP use or combined HRT in postmenopausal women — produces an ATROPHIC endometrium with a very thin lining</mark>, and therefore irregular spotting from a fragile, unstable endometrium.",
+    "d": "<b>Medications:</b> drugs impairing dopamine action — <mark>tricyclic antidepressants, phenothiazines, antipsychotics</mark> — reduce inhibition of prolactin release, causing prolactin-related disruption of the HPO axis and disorders of ovulation including anovulation. <b>SSRIs and any drug affecting serotonin reuptake</b> can also cause ovulatory dysfunction, amenorrhoea or irregular bleeding.",
+    "e": "<span class='star'>⭐</span>Long-term combined hormones make the lining THIN, not thick — a counterintuitive point that is deliberately tested.",
+    "img": ""
+   },
+   {
+    "n": "PCOS — thickened endometrium from unopposed estrogen",
+    "g": "<span class='pill'>Rotterdam 2 of 3</span><span class='pill'>LH:FSH &gt; 3:1</span> <b>PCOS is unexplained hyperandrogenic chronic anovulation associated with excessive estrogen.</b> <mark>Rotterdam criteria — two out of three: hyperandrogenism (hirsutism, acne, alopecia); oligomenorrhoea or amenorrhoea; polycystic ovaries on ultrasound.</mark>",
+    "b": "<b>Examination:</b> increased BMI, <mark>acanthosis nigricans — velvety hyperpigmented skin under the breasts, in the axilla and at the back of the neck, a sign of insulin resistance</mark>, hirsutism, acne. <b>Bloods:</b> <mark>LH/FSH ratio &gt; 3:1</mark>, SHBG elevated, testosterone elevated, DHEA-S elevated, plus TFTs, prolactin and glucose intolerance screening.",
+    "d": "<mark>Anovulation with ESTROGEN EXCESS (unopposed estrogen, no progesterone) → thickened proliferative endometrium → endometrial hyperplasia → endometrial carcinoma</mark>; histologically 'back to back' glands with little stroma, bleeding 'off the top'. <b>Management:</b> health counselling — weight loss, dietary change, exercise; <mark>clomiphene citrate if pregnancy is desired</mark>; OCPs or cyclic progestogen otherwise; <mark>spironolactone</mark> — competes for the androgen receptor and decreases androgen production, but also blocks aldosterone, so <b>beware hyperkalaemia</b>.",
+    "e": "<span class='star'>⭐</span><b>Risks:</b> infertility from chronic anovulation, cardiovascular disease and hypertension, sleep apnoea, obesity, diabetes, lipid abnormalities, menstrual disorders and <mark>increased risk of endometrial cancer</mark>.",
+    "img": ""
+   },
+   {
+    "n": "Endometrial hyperplasia and carcinoma",
+    "g": "<span class='pill'>Simple / complex / atypical</span><span class='pill'>Progestin vs hysterectomy</span> An <b>estrogen-dependent</b> hyperplasia affecting mainly postmenopausal women; <mark>incidence peaks between ages 50 and 60</mark>. <b>Risk factors:</b> increased estrogen exposure, <mark>unopposed postmenopausal estrogen replacement</mark>, obesity, nulliparity, <b>late menopause (after age 52)</b>, PCOS, estrogen-producing tumours, anovulation, and <b>hereditary nonpolyposis colon cancer</b>.",
+    "b": "<b>Three classes of severity:</b> <b>simple</b> — increased number of glands with no crowding; <b>complex</b> — increased branching glands with crowding; <mark><b>atypical</b> — increased atypical glands with crowding; the highest risk of progression to endometrial cancer</mark>. On TVUS: thickened echogenic endometrium with variable-sized cysts.",
+    "d": "<mark>Treatment: hyperplasia WITHOUT atypia → progestin. Hyperplasia WITH atypia, and malignancy → hysterectomy.</mark>",
+    "e": "<span class='star'>⭐</span><b>Risk factors for endometrial cancer:</b> age over 50, obesity, increased number of menstrual cycles, diabetes, HRT, hypertension, and <mark>tamoxifen</mark> used as hormone therapy for breast cancer.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p39_unopposed_estrogen_normal_hyperplasia_carcinoma.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p39_unopposed_estrogen_normal_hyperplasia_carcinoma.jpg\" loading=\"lazy\" alt=\"unopposed estrogen normal hyperplasia carcinoma\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Postmenopausal bleeding",
+    "g": "<span class='pill'>Stripe ≤ 4 mm</span><span class='pill'>Endometrial biopsy</span> <b>Aetiology:</b> thinning of the vaginal wall lining, atrophic endometrium, endometrial polyps, uterine fibroids, endometrial hyperplasia, <b>endometrial cancer</b>, cervical abnormalities.",
+    "b": "<b>History and examination:</b> risk factors for endometrial cancer, previous gynaecological history, size of uterus, adnexal mass.",
+    "d": "<mark>Transvaginal scan for endometrial thickness — should not exceed 4 mm — plus assessment for polyps, followed by ENDOMETRIAL BIOPSY.</mark>",
+    "e": "<span class='star'>⭐</span>Postmenopausal bleeding is endometrial carcinoma until proven otherwise, and the proof is histological. Note the 4 mm figure used here.",
+    "img": ""
+   },
+   {
+    "n": "Evaluation and management of AUB",
+    "g": "<span class='pill'>Pregnancy test first</span><span class='pill'>LNG-IUS</span> <b>History:</b> menstrual (heavy? painful? spotting?), sexual (active? pregnancy risk? contraception? pain?), medications (anticoagulants, antidepressants, hormone therapy), adult illnesses (DM, hypertension, cancer, bleeding disorders). <b>Examination:</b> signs of anaemia, abdominal, bimanual, speculum, thyroid and skin.",
+    "b": "<b>Labs:</b> <mark>pregnancy test — don't forget</mark>, CBC, TSH, prolactin, LFTs, coagulation panel (PT, PTT, thrombin time) and a coagulopathy panel if prolonged, testosterone and DHEAS, Pap smear, endometrial biopsy. <b>Imaging:</b> ultrasound, saline infusion study. <b>Surgical:</b> D&amp;C, hysteroscopy.",
+    "d": "<b>Medical:</b> iron, <b>tranexamic acid</b>, NSAIDs; progestin, IV estrogen, combined OCPs; GnRH agonist; <mark>levonorgestrel intrauterine system (LNG-IUS)</mark>. <mark>Special case — coagulopathy: do NOT give NSAIDs or GnRH.</mark> <b>Surgical:</b> D&amp;C, endometrial ablation, myomectomy, uterine artery embolization, and <b>hysterectomy especially for hyperplasia with atypia or malignancy</b>.",
+    "e": "<span class='star'>⭐</span><b>AUB-Coagulopathy:</b> an inherited bleeding disorder is found in ~13% of women with AUB — <mark>most often von Willebrand disease</mark>, platelet function defects or ITP; anticoagulants produce the same picture. Always start with a pregnancy test.",
+    "img": "<a href=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p50_aub_differential_summary.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/introduction_to_gynecology_2/introduction_to_gynecology_2_p50_aub_differential_summary.jpg\" loading=\"lazy\" alt=\"aub differential summary\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Clinical Approach to Amenorrhea  [GYN] · workup algorithm",
+  "rows": [
+   {
+    "n": "Definitions and the four-compartment framework",
+    "g": "<span class='pill'>Primary</span><span class='pill'>Secondary</span><span class='pill'>Compartments I–IV</span> <mark>PRIMARY amenorrhoea: no menses by age 13 in the ABSENCE of secondary sexual characteristics, OR no menses by age 15 in the PRESENCE of normal growth and secondary sexual characteristics.</mark> <mark>SECONDARY amenorrhoea: cessation of menses for a duration in which 3 normal cycles would have occurred, OR amenorrhoea of 6 months.</mark>",
+    "b": "<b>The organising algorithm is anatomical, from the top down:</b> environment/CNS → <mark>hypothalamus (GnRH) = COMPARTMENT IV</mark> → <mark>anterior pituitary (FSH, LH) = COMPARTMENT III</mark> → <mark>ovary (estrogen, progesterone) = COMPARTMENT II</mark> → <mark>uterus, cervix, vagina = COMPARTMENT I</mark> → menses.",
+    "d": "<b>Causes by compartment:</b> <b>IV/III</b> hypothalamic and pituitary dysfunction; <b>II</b> gonadal dysgenesis (pure and Turner's), premature ovarian insufficiency; <b>I</b> obstructive outflow tract, Müllerian agenesis. Plus receptor and enzyme defects: androgen insensitivity, Swyer's (SRY/TDF defect), 5α-reductase deficiency.",
+    "e": "<span class='star'>⭐</span><mark>The three most common causes of PRIMARY amenorrhoea, in order: 1st gonadal dysgenesis, 2nd Müllerian agenesis, 3rd constitutional delay of puberty.</mark>",
+    "img": "<a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p26_amenorrhea_four_compartments.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p26_amenorrhea_four_compartments.jpg\" loading=\"lazy\" alt=\"amenorrhea four compartments\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p30_primary_amenorrhea_algorithm.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p30_primary_amenorrhea_algorithm.jpg\" loading=\"lazy\" alt=\"amenorrhea algorithm\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Reading the gonadotropins — the branch point",
+    "g": "<span class='pill'>LOW FSH/LH</span><span class='pill'>HIGH FSH/LH</span> Once amenorrhoea is confirmed and pregnancy excluded, <b>the FSH and LH split the differential in two</b>. This is the single decision that drives the rest of the workup.",
+    "b": "<mark>LOW FSH AND LH (hypogonadotropic hypogonadism) → the problem is ABOVE the ovary — compartment IV or III:</mark> Kallmann's syndrome, exercise-induced/stress hypothalamic suppression, anorexia, <b>prolactin-secreting pituitary adenoma</b>.",
+    "d": "<mark>HIGH FSH AND LH (hypergonadotropic hypogonadism) → the problem IS the ovary — compartment II:</mark> gonadal dysgenesis/Turner's, <b>premature ovarian insufficiency</b>. <b>Normal gonadotropins with normal secondary sexual characteristics</b> → look at the outflow tract (compartment I) and at Müllerian anomalies.",
+    "e": "<span class='star'>⭐</span>High vs low gonadotropins is the pivot of the entire algorithm. Get this branch right and the diagnosis usually follows from one more feature.",
+    "img": "<a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p31_secondary_amenorrhea_algorithm.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p31_secondary_amenorrhea_algorithm.jpg\" loading=\"lazy\" alt=\"secondary amenorrhea algorithm\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Kallmann's syndrome",
+    "g": "<span class='pill'>Anosmia</span><span class='pill'>Low gonadotropins</span><span class='pill'>46,XX</span> <mark>Hypogonadotropic hypogonadism secondary to ABSENT GnRH</mark>, with <mark>anosmia or hyposmia</mark>. <b>The gonads are completely normal.</b>",
+    "b": "<b>Presentation:</b> primary amenorrhoea, infantile sexual development, low gonadotropins, <mark>NORMAL FEMALE KARYOTYPE</mark>. Variable inheritance patterns. MRI shows <b>absence of the olfactory bulbs, straight gyrus (gyrus rectus) and medial orbital gyrus</b>.",
+    "d": "<b>Treatment: estrogen/progesterone replacement.</b> <mark>If conception is desired: ovulation induction.</mark>",
+    "e": "<span class='star'>⭐</span>Amenorrhoea + cannot smell = Kallmann. Normal karyotype and normal ovaries — the defect is the absent GnRH neurons.",
+    "img": ""
+   },
+   {
+    "n": "Hypothalamic suppression (exercise / stress / anorexia)",
+    "g": "<span class='pill'>Body fat ~22%</span><span class='pill'>Female athlete triad</span> <mark>LOW FSH AND LH.</mark> Amenorrhoea (or oligo-/hypomenorrhoea) with <mark>low gonadotropins, NORMAL prolactin and a NORMAL sella turcica</mark> — the normal prolactin and sella are what exclude an adenoma. High incidence in competitive athletes and demanding activities.",
+    "b": "<mark>Two major influences: a critical amount of body fat (about 22%) PLUS stress itself.</mark> A competitive athlete may have 50% less body fat than a non-competitor, far under the critical 10th percentile, with a BMI around 16. Mechanism: <mark>↑ endorphins suppress GnRH secretion from the arcuate nucleus; CRH directly inhibits GnRH release by augmenting endogenous opiate release</mark>; ↑ ACTH → ↑ cortisol.",
+    "d": "<b>Resembles anorexia nervosa</b> — exercise, body control and preoccupation, striving for perfection. These patients are <mark>markedly estrogen deficient</mark>, with risk of cardiovascular disease, osteoporosis/fracture and vaginal atrophy. <b>Treatment: estrogen/progestin replacement (the OCP is a great choice).</b> For pregnancy: decreased exercise, or ovulation induction with gonadotropins.",
+    "e": "<span class='star'>⭐</span><mark>The Female Athlete Triad: menstrual dysfunction + low bone mineral density + eating disorders.</mark>",
+    "img": ""
+   },
+   {
+    "n": "Prolactin-secreting pituitary adenoma",
+    "g": "<span class='pill'>LOW FSH/LH</span><span class='pill'>Only ⅓ galactorrhea</span><span class='pill'>Dopamine agonist</span> <mark>LOW FSH AND LH.</mark> A <b>small</b> tumour commonly causes amenorrhoea. <mark>Only 1/3 of patients develop galactorrhoea</mark> — its absence does not exclude the diagnosis.",
+    "b": "<b>Mechanism:</b> <mark>↑ prolactin → suppression of GnRH → ↓ LH, ↓ FSH → ↓ estrogen, ↓ testosterone → hypogonadotropic hypogonadism</mark>. <b>Risks:</b> osteoporosis, cardiovascular disease, vaginal atrophy — not unlike the menopausal female without HRT.",
+    "d": "<b>Most common treatment: DOPAMINE AGONIST</b> — <mark>bromocriptine (Parlodel) or cabergoline (Dostinex)</mark>. <mark>Note: the ovaries will respond normally to FSH/LH stimulation</mark>, so fertility is recoverable. <b>Surgical:</b> transsphenoidal resection — upper lip → sphenoid sinus → pituitary fossa → dura → remove tumour → reconstitute the anterior wall. Risks: incomplete resection, recurrence, CSF leak, meningitis, diabetes insipidus.",
+    "e": "<span class='star'>⭐</span>Two thirds have NO galactorrhoea. A dopamine agonist is first-line — surgery is not.",
+    "img": ""
+   },
+   {
+    "n": "Gonadal dysgenesis — Turner syndrome",
+    "g": "<span class='pill'>45,XO</span><span class='pill'>Streak gonads</span><span class='pill'>HIGH FSH/LH</span> Sporadic/spontaneous. <mark>X-chromosome monosomy (45,XO)</mark>, X-chromosome mosaicism (45,XO/46,XX), or X-chromosome structural defects. <b>The most common cause of primary amenorrhoea.</b>",
+    "b": "<mark>Ovary shows 'streak gonads'</mark> — accelerated oocyte loss from week 20 of gestation onwards and through the first few postnatal months and years. The number of primordial follicles remaining varies between patients.",
+    "d": "<b>Management:</b> <mark>hormone replacement from around age 12</mark> — <b>estrogen</b> for sexual development, <b>progestin</b> to prevent endometrial hyperplasia, <b>growth hormone</b> for short stature, <b>androgens</b> to encourage muscle growth.",
+    "e": "<span class='star'>⭐</span>Streak gonads → no estrogen → no negative feedback → <mark>HIGH FSH and LH</mark>. That is the compartment II signature.",
+    "img": ""
+   },
+   {
+    "n": "Premature ovarian insufficiency",
+    "g": "<span class='pill'>&lt; 40 years</span><span class='pill'>HIGH FSH/LH</span><span class='pill'>Fragile X</span> <mark>Primary ovarian insufficiency = ovarian 'failure' before 40 years of age</mark>, often presenting as infertility. <mark>HIGH FSH AND LH.</mark> Causes include Turner syndrome, Fragile X, chemotherapy, radiation and autoimmune conditions. Menopause normally occurs at 50–51.",
+    "b": "<b>Workup: check karyotype AND Fragile X screening.</b> <mark>CGG repeats: &lt; 44 normal · 45–54 intermediate 'grey zone' · 55–200 premutation carrier · &gt; 200 Fragile X syndrome.</mark>",
+    "d": "<mark>Frequent intermittent ovarian function and spontaneous menses occur</mark> — so it is 'insufficiency', not absolute failure, and pregnancy remains possible. <mark>Increased risk of AUTOIMMUNE ADRENAL INSUFFICIENCY — potentially fatal; Addison's risk is 300-fold that of the general population</mark> — plus polyglandular failure, hypothyroidism, myasthenia gravis, Sjögren's and lupus. Risk factors: previous ovarian surgery, chemotherapy, radiation.",
+    "e": "<span class='star'>⭐</span>The Fragile X premutation range (55–200) is the number to carry, and the Addison's association is the one that kills.",
+    "img": ""
+   },
+   {
+    "n": "Outflow tract obstruction — imperforate hymen and transverse septum",
+    "g": "<span class='pill'>Cyclic pain</span><span class='pill'>Hematocolpos</span> <b>Compartment I.</b> <mark>Cyclic pelvic pain at puberty WITH absence of menstrual flow (primary amenorrhoea)</mark> — the combination of pain and no bleeding is the signature of an obstructed but otherwise functioning tract.",
+    "b": "<b>Imperforate hymen:</b> <mark>bulging hymen with the Valsalva manoeuvre</mark>; <b>hematocolpos</b> (blood in the vagina) and <b>hematometra</b> (blood in the uterus) on ultrasound. May predispose to <b>endometriosis</b> via retrograde flow.",
+    "d": "<b>Treatment: a cruciate incision in the hymen</b> allows egress of retained menstrual blood. <b>Distinguish from a transverse vaginal septum</b>, which produces the same obstruction at a higher level.",
+    "e": "<span class='star'>⭐</span><mark>Müllerian fusion defects WITH obstruction HURT</mark> — e.g. a non-communicating horn of a unicornuate uterus causing hematosalpinx. Non-obstructed Müllerian anomalies do NOT cause pain.",
+    "img": "<a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p45_imperforate_hymen_vs_transverse_septum.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p45_imperforate_hymen_vs_transverse_septum.jpg\" loading=\"lazy\" alt=\"imperforate hymen vs transverse septum\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Müllerian anomalies",
+    "g": "<span class='pill'>Septate</span><span class='pill'>Bicornuate</span><span class='pill'>Didelphys</span><span class='pill'>Unicornuate</span> Normal ovarian function with normal secondary sexual characteristics. <b>Errors in organogenesis</b> — <mark>Müllerian agenesis (Mayer-Rokitansky-Küster-Hauser)</mark>. <b>Errors in fusion</b> — <b>uterine didelphys</b> ('double uterus', ducts fail to fuse, duplication of structures), <b>bicornuate</b> (fundus indented, partial fusion), <b>unicornuate</b> (asymmetric lateral fusion defect, one cavity normal ± rudimentary horn). <b>Errors in septal resorption</b> — <b>septate</b> (complete or partial; <mark>NORMAL external fundal surface</mark>) and <b>arcuate</b> (slight midline septum, minimal broad fundal indentation).",
+    "b": "<b>No obstruction to menstrual flow, so the patient does NOT present with pain.</b> Decreased uterine musculature may lead to <mark>premature delivery</mark>. <mark>The septate uterus has an avascular, space-occupying septum → implantation difficulties and recurrent miscarriage → excise it.</mark>",
+    "d": "<b>Imaging:</b> HSG and hysteroscopy <mark>CANNOT distinguish bicornuate from septate; 3D ultrasound CAN</mark> — the septate uterus has a <b>unified uterine fundus</b>. MRI and laparoscopy also distinguish them; a bicornuate uterus has one cervix.",
+    "e": "<span class='star'>⭐</span><mark>The paramesonephric system develops with the renal system (both from the urogenital ridge) — renal anomalies occur in 20–30% of women with Müllerian defects, so a RENAL ULTRASOUND is needed.</mark>",
+    "img": "<a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p15_mullerian_anomalies_types.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p15_mullerian_anomalies_types.jpg\" loading=\"lazy\" alt=\"mullerian anomalies types\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p19_bicornuate_vs_septate_imaging.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p19_bicornuate_vs_septate_imaging.jpg\" loading=\"lazy\" alt=\"bicornuate vs septate imaging\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Complete Müllerian agenesis (MRKH)",
+    "g": "<span class='pill'>46,XX</span><span class='pill'>Normal ovaries</span><span class='pill'>Absent vagina</span> Mayer-Rokitansky-Küster-Hauser syndrome. <b>Presentation: primary amenorrhoea with an absent (or hypoplastic) vagina.</b> In the complete form there is <b>no Müllerian system development</b> (rudimentary cords may exist).",
+    "b": "<mark>OVARIAN FUNCTION IS NORMAL. Physical growth and development are NORMAL.</mark> Because the ovaries work, secondary sexual characteristics develop normally — the patient looks entirely typical.",
+    "d": "<mark>33% have urinary tract abnormalities</mark> (ectopic kidney, renal agenesis, horseshoe kidney, abnormal collecting system) and <mark>12% have skeletal anomalies, usually of the spine</mark>. <b>Treatment:</b> usually no indication to remove Müllerian tissue <b>unless there is active endometrial activity without egress</b>; patients wishing to be sexually active usually require surgery to create a neovagina — the <b>laparoscopic Vecchietti procedure</b> and its variants are very successful.",
+    "e": "<span class='star'>⭐</span>MRKH is the <b>second</b> most common cause of primary amenorrhoea. Distinguish from CAIS by karyotype, pubic hair and associated anomalies.",
+    "img": ""
+   },
+   {
+    "n": "Complete androgen insensitivity syndrome (CAIS)",
+    "g": "<span class='pill'>46,XY</span><span class='pill'>Testes present</span><span class='pill'>52% neoplasia</span> <b>Maternal X-linked recessive.</b> Complete inability of the cell to respond to androgens, preventing masculinization of the male genitalia in the developing fetus. <mark>Karyotype XY.</mark>",
+    "b": "<mark>Testes are present — half intra-abdominal, half in the inguinal canal.</mark> Short vagina, usually managed with dilators. <mark>Testosterone is converted to estrogen peripherally, allowing breast development even though estrogen is at 'low female' levels — because estrogen acts UNOPPOSED.</mark> Physically may be eunuchoid and tall. <mark>Other physical abnormalities are RARE — unlike Müllerian agenesis.</mark>",
+    "d": "<mark>TREATMENT: the testes are predisposed to neoplasia and must be removed — 52% neoplasia risk, 22% malignant.</mark> <mark>This is the ONLY exception where gonadectomy can be deferred until after complete pubertal development</mark>: pubertal development → gonadectomy → estrogen replacement.",
+    "e": "<span class='star'>⭐</span>CAIS vs MRKH: both 'female' with primary amenorrhoea and a short vagina, but CAIS is 46,XY with testes and no associated renal/skeletal anomalies, and MRKH is 46,XX with normal ovaries and 33% renal anomalies.",
+    "img": ""
+   },
+   {
+    "n": "Swyer's syndrome — 46,XY female",
+    "g": "<span class='pill'>SRY mutation</span><span class='pill'>Streak gonads</span><span class='pill'>Uterus PRESENT</span> <b>Mutations of the SRY gene</b> → defective Testes Determining Factor protein → <mark>the indifferent gonads do not differentiate into testes</mark>. <b>No Leydig or Sertoli cells → no testosterone and no anti-Müllerian hormone.</b>",
+    "b": "<b>No testosterone</b> → Wolffian ducts degenerate → no internal male organs; and no testosterone means no DHT → <b>external genitalia fail to virilize → female genitalia</b>. <mark>No AMH → the Müllerian ducts persist → uterus, fallopian tubes, cervix and vagina are all PRESENT.</mark>",
+    "d": "<b>Gonads are undeveloped clumps — 'streak gonads'</b>, with a <mark>high predisposition to gonadoblastoma or dysgerminoma → surgical excision early in life</mark>. Estrogen deficient → begin HRT during adolescence to induce menstruation and female secondary sexual characteristics, which also reduces osteopenia/osteoporosis risk. <mark>They do not produce ova, but CAN become pregnant through egg or embryo donation</mark> — because they have a uterus.",
+    "e": "<span class='star'>⭐</span>The key contrast with CAIS: Swyer's has <b>no AMH so the uterus is present</b> (pregnancy possible by donation); CAIS has AMH so there is no uterus. Gonadectomy is early in Swyer's, deferred in CAIS.",
+    "img": ""
+   },
+   {
+    "n": "5α-reductase deficiency",
+    "g": "<span class='pill'>46,XY</span><span class='pill'>↑ T/DHT ratio</span><span class='pill'>Autosomal recessive</span> <mark>Karyotype 46,XY. Autosomal recessive, mutations in the SRD5A2 gene.</mark> 5α-reductase converts testosterone → dihydrotestosterone; the defect blocks that conversion, so <mark>the T/DHT ratio is INCREASED</mark>. Testosterone and estrogen are at normal male levels.",
+    "b": "<b>Genitalia:</b> usually ambiguous, with a small hypospadiac phallus and a <b>blind vaginal pouch</b>. <mark>MIF (AMH) works, so there is a normal epididymis, vas deferens, seminal vesicles and ejaculatory ducts — all emptying into the blind-ending vagina.</mark> Wolffian derivatives normal; Müllerian structures absent; gonads are normal testes. Body habitus: decreased facial and body hair, no temporal recession, prostate not palpable. FSH usually elevated.",
+    "d": "<mark>Virilization occurs AT PUBERTY</mark>: increased testicular testosterone production drives the residual T→DHT conversion. <b>Increased incidence in the Dominican Republic, Turkey and the highlands of New Guinea.</b> <mark>Gender role behaviour can change from female (sex of rearing) to male at puberty.</mark> <b>Treatment if male reassignment is chosen: high-dose testosterone and surgical repair of hypospadias.</b> <mark>Fertility is possible, but IVF/ICSI is often required.</mark>",
+    "e": "<span class='star'>⭐</span>DHT builds the external genitalia; testosterone builds the internal Wolffian structures. That division explains the entire phenotype.",
+    "img": "<a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p54_testosterone_to_dht_pathway.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p54_testosterone_to_dht_pathway.jpg\" loading=\"lazy\" alt=\"athway\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p56_five_alpha_reductase_summary.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clincal_approach_to_amenorrhea/clincal_approach_to_amenorrhea_p56_five_alpha_reductase_summary.jpg\" loading=\"lazy\" alt=\"five alpha reductase summary\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Secondary amenorrhea — causes by compartment",
+    "g": "<span class='pill'>Asherman</span><span class='pill'>Sheehan</span><span class='pill'>PCOS</span> <b>Absence of menses in a previously menstruating woman for 6 months.</b> Work through the same four compartments.",
+    "b": "<b>Hypothalamic:</b> excessive exercise, weight loss, stress, hypothyroidism, hyperprolactinaemia. <b>Pituitary:</b> <mark>Sheehan's syndrome</mark>, irradiation or surgery to the pituitary.",
+    "d": "<b>Ovarian:</b> PCOS, premature ovarian insufficiency. <b>Outflow tract:</b> <mark>intrauterine adhesions — Asherman's syndrome</mark>.",
+    "e": "<span class='star'>⭐</span><mark>Sheehan's = panhypopituitarism from ischaemia of the pituitary caused by massive obstetric haemorrhage</mark> — suspect it in a woman who cannot lactate after a delivery requiring transfusion. Always exclude pregnancy first.",
+    "img": ""
+   },
+   {
+    "n": "Perimenopause and menopause",
+    "g": "<span class='pill'>12 months</span><span class='pill'>Age 51</span><span class='pill'>↑ FSH</span> <mark>Menopause is a RETROSPECTIVE diagnosis: cessation of menses for 12 consecutive months.</mark> Average age <mark>51</mark>. <b>Perimenopause starts around age 40</b>, and <b>irregular bleeding is common in perimenopause</b>.",
+    "b": "<b>Symptoms:</b> hot flashes, mood changes, dry skin, irregular periods, sleep disturbance, <b>genitourinary syndrome of menopause</b>, decreased libido, dyspareunia, and increased risk of cardiovascular disease, osteoporosis and depression.",
+    "d": "<b>Diagnosis is clinical</b>; hormone tests show <mark>FSH elevated</mark> with low oestradiol. <b>Management:</b> lifestyle changes for symptom relief, and hormone replacement therapy.",
+    "e": "<span class='star'>⭐</span>12 months, retrospectively, average age 51. Irregular bleeding in perimenopause is expected — but bleeding AFTER the 12 months is postmenopausal bleeding and needs biopsy.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Clinical Approach to Infertility  [GYN] · workup algorithm",
+  "rows": [
+   {
+    "n": "Definition and epidemiology",
+    "g": "<span class='pill'>1 year &lt; 35</span><span class='pill'>6 months &gt; 35</span><span class='pill'>Immediately &gt; 40</span> <mark>Infertility = inability to conceive after 1 year of regular, unprotected intercourse in women younger than 35, or within 6 months in women older than 35.</mark> Prevalence ~15%, affecting ~48 million couples globally. <b>Primary</b> — inability to achieve any pregnancy. <b>Secondary</b> — inability to conceive after a previously successful conception.",
+    "b": "<mark>Frequent unprotected intercourse results in conception for 50% of couples within 3 months, 75% within 6 months and 90% within 1 year.</mark>",
+    "d": "<mark>Female factors 30–40% · male factors 40–50% · both 20–30% · unexplained 10–15%.</mark> Because multiple causes are common, <b>a complete workup of BOTH partners is recommended in all couples</b>. <b>Timing of evaluation:</b> after 1 year normally; <mark>after 6 months if the woman is over 35; immediately if over 40</mark>, or earlier if risk factors are present.",
+    "e": "<span class='star'>⭐</span>The three age-based evaluation thresholds (1 year / 6 months / immediately) and the causes split. Note male factor is the single largest category.",
+    "img": "<a href=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p4_etiology_of_infertility_table.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p4_etiology_of_infertility_table.jpg\" loading=\"lazy\" alt=\"etiology of infertility table\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p3_causes_of_infertility.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p3_causes_of_infertility.jpg\" loading=\"lazy\" alt=\"causes of infertility\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Fertility evaluation — the female partner",
+    "g": "<span class='pill'>Day 21 progesterone</span><span class='pill'>AMH</span><span class='pill'>HSG</span> <b>History:</b> menstrual frequency, menorrhagia, dysmenorrhoea, STIs, endometriosis, medical and endocrine history, pelvic radiation, abdominal/pelvic surgery, tobacco and alcohol, medications (e.g. cytotoxics), <b>family history of early menopause</b>, previous pregnancies, intercourse frequency and timing, ovulation detection methods, sexual dysfunction.",
+    "b": "<b>Physical exam:</b> weight, BP, thyroid and breast exams, <b>signs of hyperandrogenism</b>, pelvic exam (uterine size, adnexal masses, factors affecting intercourse).",
+    "d": "<b>Ovulation assessment:</b> <mark>serum progesterone on day 21 of the cycle</mark>, ovulation predictor kits detecting urinary LH, and basal body temperature charting. <b>Hormonal evaluation:</b> <mark>FSH, estradiol, anti-Müllerian hormone (AMH), TSH, prolactin and androgens</mark>.",
+    "e": "<span class='star'>⭐</span>Day-21 progesterone confirms ovulation; AMH and FSH assess ovarian reserve. Also address lifestyle and environmental toxins, and give preconception counselling.",
+    "img": "<a href=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p6_infertility_evaluation_algorithm.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p6_infertility_evaluation_algorithm.jpg\" loading=\"lazy\" alt=\"infertility evaluation algorithm\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Fertility evaluation — the male partner and semen analysis",
+    "g": "<span class='pill'>Semen analysis</span><span class='pill'>Karyotype</span><span class='pill'>Y microdeletion</span> <b>Male factor accounts for 40–50% of infertility</b> and may be due to problems of sperm production, function or delivery. <mark>Severe male factor infertility is defined as a total sperm count consistently less than 5 million.</mark>",
+    "b": "<b>Evaluation:</b> comprehensive history, physical examination, <mark>semen analysis (WHO reference values)</mark>, hormonal evaluation — <b>FSH, LH, testosterone, TSH and prolactin</b> — and sometimes imaging.",
+    "d": "<b>Genetic testing:</b> <mark>karyotype analysis and Y chromosome microdeletion testing</mark>.",
+    "e": "<span class='star'>⭐</span>Semen analysis is the single most important male test and should be done early — it is cheap and non-invasive, unlike the female workup.",
+    "img": "<a href=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p16_semen_analysis_normal_values.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p16_semen_analysis_normal_values.jpg\" loading=\"lazy\" alt=\"semen analysis normal values\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Female factor — POI, Fragile X and PCOS",
+    "g": "<span class='pill'>FMR1</span><span class='pill'>55–200 premutation</span><span class='pill'>Rotterdam</span> <b>Primary ovarian insufficiency</b> — ovaries stop functioning normally before 40. Ovulation ceases or occurs only intermittently. Symptoms: irregular menses, amenorrhoea, infertility, and menopausal symptoms (hot flashes, night sweats, sleep disturbance, vaginal dryness, decreased sex drive). Causes: Turner's, Fragile X, chemotherapy, radiation, autoimmune conditions.",
+    "b": "<b>Fragile X</b> — abnormality of the <b>FMR1</b> gene on the X chromosome; <mark>the most common INHERITED cause of intellectual disability</mark>; 1/4000 males and 1/8000 females; X-linked and not always symptomatic in females. <mark>Unstable triplet repeat expansion: unaffected &lt; 54 CGG repeats; Fragile X syndrome &gt; 200; 55–200 = PREMUTATION</mark>, which increases the likelihood of expansion beyond 200 in a subsequent generation.",
+    "d": "<b>PCOS</b> — hirsutism, acne, obesity, often with insulin resistance and increased risk of type 2 diabetes and metabolic syndrome. <mark>Diagnosis by the Rotterdam criteria: two of three — oligo/anovulation, clinical or biochemical hyperandrogenism, polycystic ovaries on ultrasound.</mark>",
+    "e": "<span class='star'>⭐</span>The Fragile X premutation carrier is the link between the genetics and the infertility clinic — she is at risk of POI and of an affected grandchild.",
+    "img": ""
+   },
+   {
+    "n": "PCOS infertility — the stepwise treatment algorithm",
+    "g": "<span class='pill'>1. Lifestyle</span><span class='pill'>2. Clomiphene</span><span class='pill'>3. Metformin</span><span class='pill'>4. ART</span> A stepwise approach tailored to symptoms, reproductive goals and history.",
+    "b": "<b>1. Lifestyle modification</b> — weight loss through diet and exercise to improve insulin sensitivity and regulate cycles. <b>2. Ovulation induction</b> — <mark>first-line treatment for anovulatory infertility in PCOS; clomiphene citrate is the initial agent</mark>; <mark>if clomiphene is ineffective or contraindicated, letrozole (an aromatase inhibitor)</mark>.",
+    "d": "<b>3. Metformin</b> — to improve insulin sensitivity, which can help regulate ovulation, especially with insulin resistance. <b>4. Assisted reproductive technologies</b> — where ovulation induction fails or other factors coexist.",
+    "e": "<span class='star'>⭐</span>Lifestyle → clomiphene → letrozole → metformin → ART. The order is the answer; do not jump to IVF.",
+    "img": "<a href=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p9_pcos_infertility_management_algorithm.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p9_pcos_infertility_management_algorithm.jpg\" loading=\"lazy\" alt=\"infertility management algorithm\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Intrauterine insemination (IUI)",
+    "g": "<span class='pill'>10–15% per cycle</span><span class='pill'>≥ 5 million motile</span> Sperm from the partner or a donor is <b>prepared by washing and concentrating</b>, then released into the uterus via a catheter through the cervix. Usually done with <b>controlled ovarian hyperstimulation (COH)</b>, tracking ovulation by transvaginal ultrasound. <b>Aims:</b> <mark>bypass the vagina and cervix, capacitate sperm by washing, and deposit sperm close to the oocytes</mark>.",
+    "b": "<mark>Often first-line for anovulatory infertility, mild-moderate male factor infertility, and unexplained infertility. Success 10–15% per cycle.</mark> <mark>NOT suitable for patients with blocked fallopian tubes.</mark>",
+    "d": "<b>Indications for IUI with superovulation:</b> unexplained infertility, mild-moderate endometriosis, cervical factors, age-related decline, decreased ovarian reserve, ejaculatory failure (hypospadias, impotency, retrograde ejaculation), and <mark>mild male factor — inseminate with at least 5 million motile sperm</mark>.",
+    "e": "<span class='star'>⭐</span>COH-IUI recruits an unpredictable cohort of follicles, so candidates should be open to selective reduction. <b>IVF rescue:</b> if a COH-IUI patient overstimulates, the cycle can be converted to IVF to avoid high-order multiple gestation.",
+    "img": "<a href=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p10_intrauterine_insemination.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p10_intrauterine_insemination.jpg\" loading=\"lazy\" alt=\"intrauterine insemination\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "In vitro fertilization — indications and the 9 steps",
+    "g": "<span class='pill'>COH</span><span class='pill'>Retrieval 36 hr post-hCG</span><span class='pill'>β-hCG at 10–14 d</span> <b>Indications:</b> unexplained infertility especially with advanced maternal age, male factor infertility (often with ICSI), severe endometriosis, age-related decline, decreased ovarian reserve, <b>preimplantation genetic diagnosis</b> in couples at risk of passing on genetic disorders, donor egg and surrogacy, same-sex couples, gender selection and family balancing.",
+    "b": "<b>Steps:</b> <b>1.</b> Ovarian stimulation (COH with gonadotropins, monitored by TVUS and serum hormones). <b>2.</b> <mark>Egg retrieval — ovulation triggered with hCG, retrieval ~36 hours later</mark>. <b>3–4.</b> Fertilization by conventional IVF or ICSI. <b>5.</b> Embryo culture. <b>6.</b> Embryo transfer of best-quality embryos under ultrasound guidance. <b>7.</b> <mark>Luteal phase support with progesterone</mark> to optimise endometrial receptivity.",
+    "d": "<b>8.</b> <mark>Pregnancy testing — serum β-hCG approximately 10–14 days after embryo transfer.</mark> <b>9.</b> Follow-up with serial ultrasound and hormonal assessment.",
+    "e": "<span class='star'>⭐</span>IVF allows the number of embryos transferred to be chosen and their quality evaluated — that is why it prevents the high-order multiples that COH-IUI risks.",
+    "img": "<a href=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p13_in_vitro_fertilization.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/clinical_approach_to_infertility/clinical_approach_to_infertility_p13_in_vitro_fertilization.jpg\" loading=\"lazy\" alt=\"in vitro fertilization\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "PGD, PGS and ICSI",
+    "g": "<span class='pill'>PGD = known mutation</span><span class='pill'>PGS = aneuploidy</span><span class='pill'>ICSI</span> <b>Preimplantation Genetic Diagnosis (PGD)</b> — a few cells are biopsied from an embryo <b>at the blastocyst stage</b> and analysed for <mark>specific genetic mutations or chromosomal abnormalities that the parents carry</mark> — cystic fibrosis, Huntington's, sickle cell anaemia, chromosomal translocations. <b>Preimplantation Genetic Screening (PGS)</b> — <mark>broader screening for overall chromosomal normalcy, detecting aneuploidies</mark> that cause implantation failure, miscarriage or Down syndrome; used for age-related and unexplained infertility and multiple miscarriages. Its use for karyotyping and <b>sex selection</b> remains an area of debate in reproductive ethics.",
+    "b": "<b>ICSI</b> — direct injection of a single sperm into the cytoplasm of an egg. <b>Indications:</b> <mark>severe male factor (oligospermia &lt; 2 million motile sperm, asthenozoospermia, teratozoospermia)</mark>, azoospermia with surgically retrieved sperm, previous fertilization failure, antisperm antibodies, frozen sperm limited in number/quality, and low egg numbers.",
+    "d": "<b>TESE (testicular sperm extraction)</b> — an open technique removing several pieces of testicular tissue; fine-needle dissection separates sperm from the seminiferous tubules, evaluated by stereomicroscope for motile or immotile spermatozoa.",
+    "e": "<span class='star'>⭐</span>PGD looks for a <b>known</b> familial mutation; PGS screens broadly for aneuploidy. The distinction is routinely tested.",
+    "img": ""
+   },
+   {
+    "n": "Ovarian hyperstimulation syndrome (OHSS)",
+    "g": "<span class='pill'>VEGF</span><span class='pill'>Fluid shift</span><span class='pill'>Iatrogenic</span> <mark>A rare, IATROGENIC complication of ovarian stimulation</mark>, developing several days after oocyte retrieval or assisted ovulation following supraphysiologic doses of gonadotropin therapy. Characterised by <b>ovarian enlargement from multiple cysts and an acute fluid shift into the extravascular space</b>.",
+    "b": "<b>Mechanism:</b> follicular fluid and perifollicular blood containing large amounts of <mark>VEGF, which increases vascular permeability</mark>, escape into the peritoneal cavity. Blood vessels within and outside the ovary become functionally impaired → leakage → <mark>massive fluid shift from the intravascular to the extravascular compartment → intravascular hypovolaemia with oedema, ascites, hydrothorax and hydropericardium</mark>.",
+    "d": "<b>Symptoms:</b> abdominal pain and distension, ascites, GI problems, respiratory compromise, oliguria, <b>haemoconcentration and thromboembolism</b>.",
+    "e": "<span class='star'>⭐</span>VEGF-driven capillary leak. The paradox to state clearly: the patient is oedematous and ascitic yet <b>intravascularly hypovolaemic</b>.",
+    "img": ""
+   },
+   {
+    "n": "Male factor — CF, Klinefelter and varicocele",
+    "g": "<span class='pill'>CFTR / CBAVD</span><span class='pill'>47,XXY</span><span class='pill'>Bag of worms</span> <b>Cystic fibrosis and male infertility:</b> mutations in <b>CFTR</b> disrupt the chloride channel, preventing normal flow of chloride and water; cells in the male genital tract produce abnormally thick, sticky mucus that <mark>clogs the vas deferens as it forms</mark> — congenital bilateral absence of the vas deferens.",
+    "b": "<b>Klinefelter's syndrome</b> — <mark>micro-TESE and ICSI have allowed some men with KS to father biological children.</mark>",
+    "d": "<b>Varicocele</b> — enlargement of the veins within the scrotum giving a <mark>'bag of worms' appearance</mark>. <mark>Affects ~15% of all men and up to 40% of men with primary infertility.</mark> Impairs sperm production and function by <b>increasing scrotal temperature, causing oxidative stress and disrupting blood flow</b>; reduced sperm count, decreased motility and abnormal morphology. Diagnosed on physical examination, confirmed by scrotal ultrasound. <b>Treatment: varicocelectomy</b>, which can improve semen parameters and the likelihood of conception naturally or with ART.",
+    "e": "<span class='star'>⭐</span>Varicocele is the most common <b>correctable</b> cause of male infertility — hence the 15% / 40% figures.",
+    "img": ""
+   },
+   {
+    "n": "Epigenetics and the risks of ovulation induction",
+    "g": "<span class='pill'>Imprinting</span><span class='pill'>BWS</span><span class='pill'>Angelman</span> Epigenetics is the study of heritable changes in gene function <b>not attributed to alterations of the DNA sequence</b>.",
+    "b": "<mark>The many procedures required for IVF occur during critical periods of epigenetic reprogramming</mark> — erasure of existing epigenetic modifications followed by replacement with new ones, in both the gamete and the somatic tissues of the embryo.",
+    "d": "Because environmental exposures are known to cause stable epigenetic changes, the perturbations of ART could plausibly alter DNA methylation dynamics during gametogenesis and early embryo development. <mark>In some studies, women who underwent ovarian stimulation had children with Beckwith-Wiedemann syndrome and Angelman syndrome</mark> — both imprinting disorders.",
+    "e": "<span class='star'>⭐</span>Both named syndromes are imprinting disorders, which is exactly why they are the ones flagged for ART.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Genetic Counseling of Breast Cancer  [GYN] · entity table",
+  "rows": [
+   {
+    "n": "Epidemiology — sporadic, familial and inherited",
+    "g": "<span class='pill'>Lifetime risk 1/6</span><span class='pill'>~6% inherited</span> <mark>Breast cancer is the most common female cancer, lifetime risk 1/6.</mark> <mark>At least 6% of cases are due to an inherited single (major) gene mutation</mark> — population dependent, 15.5% in Nigeria. The rest are best considered <b>multifactorial</b>, with increased risk when any relative is affected, and are usually separated into <b>sporadic</b> versus <b>familial</b>.",
+    "b": "Even though inherited breast cancer is rare in the population overall, it is a significant proportion of breast cancer cases. <mark>An even larger proportion of cases are inherited if the person is young</mark> — but an older person can still have inherited breast cancer.",
+    "d": "<mark>Female:male incidence is 100:1.</mark> Small family size is a real limitation on pedigree analysis.",
+    "e": "<span class='star'>⭐</span>Distinguish sporadic / familial / inherited, and know that ~6% is single-gene. Statistics are usually quoted as risk from birth to age 70.",
+    "img": "<a href=\"mini2_clinical_images/genetic_counseling_of_breast_cancer/genetic_counseling_of_breast_cancer_p5_breast_cancer_risk_by_age.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/genetic_counseling_of_breast_cancer/genetic_counseling_of_breast_cancer_p5_breast_cancer_risk_by_age.jpg\" loading=\"lazy\" alt=\"breast cancer risk by age\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "BRCA1 and BRCA2",
+    "g": "<span class='pill'>BRCA1: BC 57%, OC 40–50%</span><span class='pill'>BRCA2: BC 49%, OC 10–25%</span> Together they account for <mark>about two-thirds of inherited breast cancer</mark>. A heterozygote for a mutation in either gene has <b>Hereditary Breast and Ovarian Cancer (HBOC) syndrome</b>. <b>Associated cancers:</b> male breast cancer, prostate, pancreatic, second breast cancer.",
+    "b": "<mark>BRCA1 carriers (to age 70): breast 57% (95% CI 47–66%), ovarian 40–50%.</mark> <mark>BRCA2 carriers: breast 49% (95% CI 40–57%), ovarian 10–25%</mark>; male breast cancer 6% risk vs 0.1%, prostate 4.7× and pancreatic 3.5× relative risk. BRCA1 other cancers: male BC, prostate, pancreatic (2.3× RR), and less data for cervix, uterus and gastric.",
+    "d": "<b>Both proteins act in the BRCA/Fanconi anemia pathway of DNA repair</b> — repair of DNA double-strand crosslinks and breaks (or induction of apoptosis if repair fails) — and <b>both act as tumour suppressors</b>, with <mark>loss of heterozygosity observed in tumours</mark>; expression may alternatively be shut down by <b>methylation</b>. <mark>12% of BC cases show body-wide BRCA1 methylation; in 2/3 of these, high methylation is seen in the tumour, producing early-onset BC mimicking BRCA1-driven disease.</mark>",
+    "e": "<span class='star'>⭐</span>Do not memorise the exact percentages — <mark>apply the PATTERN: in BRCA1 breast and ovarian risk are roughly equal; in BRCA2 the ovarian risk is about half</mark>.",
+    "img": "<a href=\"mini2_clinical_images/genetic_counseling_of_breast_cancer/genetic_counseling_of_breast_cancer_p11_loss_of_heterozygosity_interpretation.jpg\" target=\"_blank\"><img src=\"mini2_clinical_images/genetic_counseling_of_breast_cancer/genetic_counseling_of_breast_cancer_p11_loss_of_heterozygosity_interpretation.jpg\" loading=\"lazy\" alt=\"loss of heterozygosity interpretation\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "When to suspect inherited breast cancer",
+    "g": "<span class='pill'>Onset &lt; 50</span><span class='pill'>Bilateral</span><span class='pill'>Male BC</span><span class='pill'>Triple negative</span> <b>Suspect an inherited breast cancer with:</b> <mark>onset before age 50</mark>; two primary cancers (bilateral in many cases); multiple breast or ovarian cancers in the family; <mark>male breast cancer</mark>; <mark>triple negative breast cancer</mark>; other associated cancers in the family.",
+    "b": "<mark>Evaluate paternal and maternal sides of the family SEPARATELY.</mark> HBOC is dominant — the patient needs only one bad allele — so the question is whether there is a causative allele on the father's side, and separately whether there is one on the mother's side.",
+    "d": "<b>Male breast cancer:</b> among those affected, <mark>0–4% have BRCA1 mutations, 5–15% have BRCA2 mutations</mark>, and 15–20% have a family history of breast cancer — so <b>NCCN recommends ALL males with breast cancer receive full BRCA1/2 genetic counseling</b>. <b>Triple negative</b> (no ER, PR or HER2 expression): <mark>BRCA1 in 7%, BRCA2 in 4%</mark>, higher in younger cases — <mark>anyone with a triple negative tumour under 60 should be offered BRCA counseling</mark>.",
+    "e": "<span class='star'>⭐</span>Male breast cancer and triple-negative disease are both standalone referral criteria regardless of family history.",
+    "img": ""
+   },
+   {
+    "n": "Fanconi anemia and its link to BRCA",
+    "g": "<span class='pill'>Autosomal recessive</span><span class='pill'>BRCA2 = FANCD1</span> Early-onset bone marrow failure defines the syndrome. <mark>30% present with malignancy</mark> — often myelodysplastic syndrome, AML, or squamous cell carcinoma of the head and neck or vulva. <mark>70% have one or more of: short stature, hypopigmented and café-au-lait spots, abnormality of thumbs, microcephaly or hydrocephaly, hypogonadism, developmental delay</mark> — and these also develop malignancies as they grow older.",
+    "b": "<b>Autosomal recessive (or X-linked); 23 different genes (FANCA to FANCY).</b> All the proteins are involved in DNA repair, especially of double-strand crosslinks and breaks, one aspect being homologous recombination. <mark>Cells from patients are sensitive to crosslinking agents — the lab diagnosis is to demonstrate DNA breaks after adding crosslinking agents to patient cells.</mark> Most commonly mutated is FANCA.",
+    "d": "<mark>BRCA2 = FANCD1 · BRCA1 = FANCS · PALB2 = FANCN.</mark> <mark>ONE mutated version inherited → Hereditary Breast and Ovarian Cancer. TWO mutated versions inherited → Fanconi anemia.</mark>",
+    "e": "<span class='star'>⭐</span>Fanconi anemia is what happens when a person inherits a double dose of BRCA2. That single sentence is the link the lecture is built around.",
+    "img": ""
+   },
+   {
+    "n": "Genetic testing — method, populations and reporting",
+    "g": "<span class='pill'>Sequencing = gold standard</span><span class='pill'>Ashkenazi 1/40</span> Hundreds of pathological variants exist across the genes, so <mark>DNA sequencing is the gold standard</mark> — any suspected carrier must be investigated everywhere in both genes.",
+    "b": "<b>Founder effects:</b> <mark>Ashkenazi Jews have three common mutations — BRCA1 c.68_69delAG and c.5266dupC, and BRCA2 c.5946delT — with a combined carrier risk of 1/40</mark>; all three cause frameshifts and together account for up to 99% of pathogenic variants in that population. <mark>Testing in this population is stepwise: test for these three first, and only sequence if negative.</mark> Other founder sets exist (Netherlands, Sweden, Hungary, Iceland, French Canada) but are <b>not</b> used — full sequencing is done instead.",
+    "d": "<b>Reporting whole-gene sequencing gives three answers:</b> <b>a)</b> no variant detected, <b>b)</b> deleterious change detected, <b>c)</b> <mark>variant of uncertain significance — 10–15% of those tested</mark>. <mark>If a) or c), continue by looking for large-scale deletions and duplications. If b), use the information to test other family members for the family-specific mutation</mark> — which requires their cooperation.",
+    "e": "<span class='star'>⭐</span>The stepwise-then-sequence logic for Ashkenazi ancestry, and what to do with each of the three possible reports.",
+    "img": ""
+   },
+   {
+    "n": "Who to test, and counseling before testing",
+    "g": "<span class='pill'>Test the affected person</span><span class='pill'>3-generation pedigree</span><span class='pill'>GINA</span> <mark>THE FIRST PERSON IN A FAMILY TO BE TESTED SHOULD BE SOMEONE WHO HAS HAD THE CANCER — because that person must carry the familial bad allele.</mark> Once the bad allele is identified, other family members can be tested for whether they inherited that specific allele.",
+    "b": "<b>Counseling before testing:</b> take at least a <mark>three-generation family history</mark> — needed to distinguish multifactorial cases (two generations suffice for counseling) from inherited cases. Discuss the <mark>Genetic Information Nondiscrimination Act (GINA)</mark>, and discuss disclosure and collaboration with other family members. Make sure the consent form allows the information to be used for the benefit of other family members.",
+    "d": "<b>NCCN criteria for BRCA1/2 counseling</b> include: a family member with a known BRCA1/2 mutation; personal history of breast cancer plus any of — <mark>diagnosis ≤ 45; diagnosis ≤ 50 with one relative with BC ≤ 50 or one relative with ovarian cancer at any age; diagnosis ≤ 50 with a second primary BC; triple negative BC ≤ 60; diagnosis ≤ 50 with a family too small to assess; any age with ≥ 2 other BC/OC relatives; a relative with male BC; belonging to a high-risk ethnic group</mark>. Also: personal history of epithelial ovarian/fallopian tube/primary peritoneal cancer at any age; personal history of male breast cancer; pancreatic cancer with ≥ 2 relatives with BC/OC/pancreatic cancer; and family history alone of a 1st/2nd degree relative meeting any of the above. <b>Refer anyone with relatives up to third degree meeting these.</b>",
+    "e": "<span class='star'>⭐</span><mark>Test the person with the tumour, not the worried relative</mark> — a case where a proband had a variant of unknown significance and chose mastectomy, while her mother carried a different, pathogenic variant. You are required to know the criteria but not to assign them to lettered sections.",
+    "img": ""
+   },
+   {
+    "n": "Polygenic risk scores and their limits",
+    "g": "<span class='pill'>GWAS</span><span class='pill'>Odds ratios</span><span class='pill'>Ethnic bias</span> For multifactorial (sporadic) breast cancer, risk can be quantified with a <b>Polygenic Risk Score (PRS)</b>.",
+    "b": "<b>Method:</b> run a GWAS on thousands of people from the population with known phenotype; calculate the likelihood of each marker affecting risk (needs known allele frequency and an odds ratio per genotype); include the most significant markers in a set; genotype unknown persons with that set; <mark>multiply the odds ratios for all markers together</mark>; include other important items such as age and hormone levels. <b>The end result is a percent risk of breast cancer within a 5-year period.</b>",
+    "d": "<mark>High-risk individuals are recommended to have mammograms more frequently or earlier in life.</mark>",
+    "e": "<span class='star'>⭐</span><mark>The limitation is ethnic bias: the OR per marker depends on the population and its allele frequencies (e.g. differing linkage disequilibrium). As of 2016, &gt; 80% of GWAS studies were of European descent</mark>, so PRS performs worst for the populations least studied.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Female Repro Doc MASTER NOTES  [summary]",
+  "rows": [
+   {
+    "n": "Ectopic pregnancy — the clinical triad",
+    "g": "<span class='pill'>Ampulla</span><span class='pill'>Bagel sign</span><span class='pill'>Methotrexate</span> Implantation of a fertilized ovum outside the normal intrauterine location. <mark>Most common site is the lumen of the fallopian tube</mark> — the broad ampullary portion below the fimbriae, the isthmus, or the fimbrial region; less commonly the interstitial part, or the abdominal cavity.",
+    "b": "<mark>Triad: vaginal bleeding + adnexal pain + adnexal mass.</mark> Lower abdominal pain and tenderness, <b>clinically mistaken for appendicitis</b>; first-trimester vaginal bleeding about 6 weeks after the LMP. <b>Suspect in any patient with amenorrhoea.</b> <b>Risk factors:</b> <mark>scarring from previous PID (most common)</mark>, endometriosis, copper IUCD, IVF.",
+    "d": "<b>Screening test: β-hCG</b> — <mark>a lower-than-expected rise (β-hCG doubles in a viable pregnancy)</mark>. <b>Confirm with transvaginal ultrasound</b> — fetal pole, yolk sac, or extra-ovarian adnexal mass; the <b>'bagel sign'</b>. <b>Treatment: methotrexate or surgery.</b> <b>Complications:</b> ruptured tube → intra-abdominal bleeding → <mark>hypovolaemic shock, a surgical emergency</mark>; haematosalpinx.",
+    "e": "<span class='star'>⭐</span>'Doubles in a viable pregnancy' is the rule the whole β-hCG workup hangs on. PID scarring is the leading risk factor.",
+    "img": ""
+   },
+   {
+    "n": "Placental abruption — stabilize first",
+    "g": "<span class='pill'>Hypertension = most important</span><span class='pill'>DIC</span> Premature separation of the placenta from the uterus before fetal delivery; partial or total, with visible or concealed bleeding. <mark>A common cause of stillbirth.</mark>",
+    "b": "Third-trimester vaginal bleeding (<b>may be absent</b>), uterine pain and tenderness, <mark>firm contracted uterus (uterine irritability) — thrombin causes strong uterine contractions</mark>, fetal compromise. <b>Maternal complications: shock, DIC (consumptive coagulopathy), renal failure.</b>",
+    "d": "<b>Risk factors:</b> <mark>hypertension (most important)</mark>, advanced maternal age, cocaine, smoking, trauma, previous abruption, PPROM. <b>Management depends on gestational age plus maternal and fetal status:</b> <mark>STABILIZE FIRST — treat hypovolaemia, anaemia and hypoxia — THEN decide delivery vs expectant management</mark>; C-section or vaginal depending on the situation.",
+    "e": "<span class='star'>⭐</span>The sequencing is the exam point: stabilise the mother before making the delivery decision.",
+    "img": ""
+   },
+   {
+    "n": "Placenta accreta spectrum",
+    "g": "<span class='pill'>Previa + prior C-section</span><span class='pill'>US &gt; 85%</span> Abnormal adherence of the placenta to the myometrium <b>with little or no decidua</b>. <b>Accreta</b> — villi attach to myometrium. <b>Increta</b> — villi invade into myometrium. <b>Percreta</b> — villi penetrate through the myometrium and may reach the serosa or other organs.",
+    "b": "<b>Diagnosis: ultrasound (&gt; 85% sensitive and specific), or MRI if unclear.</b>",
+    "d": "<mark>Risk factors: placenta previa PLUS prior C-section is the key combination</mark>, with risk rising with the number of C-sections; also prior uterine curettage.",
+    "e": "<span class='star'>⭐</span>Previa + prior cesarean is the single highest-yield risk-factor pairing in obstetrics.",
+    "img": ""
+   },
+   {
+    "n": "Polyhydramnios and oligohydramnios — the two mechanisms",
+    "g": "<span class='pill'>AFI &gt; 25 cm</span><span class='pill'>AFI &lt; 5 cm</span> <b>Polyhydramnios</b> — excess amniotic fluid, <mark>AFI &gt; 25 cm or &gt; 2 L</mark>, often due to <mark>impaired fetal SWALLOWING or increased fetal urine production</mark>. <b>Oligohydramnios</b> — <mark>AFI &lt; 5 cm</mark>, commonly due to <mark>reduced fetal URINE production or placental insufficiency</mark>.",
+    "b": "<b>Polyhydramnios causes:</b> CNS malformations (open neural tube defects), GI atresias (oesophageal, duodenal), chromosomal abnormalities, fetal anaemia, maternal diabetes, multiple gestation, <b>idiopathic ~50%</b>. <b>Maternal risks:</b> dyspnoea, oedema, abruption, uterine dysfunction, postpartum haemorrhage, malpresentation, operative delivery.",
+    "d": "<b>Evaluation:</b> check <mark>TORCH — toxoplasmosis, syphilis, listeria, varicella, parvovirus B19, rubella, CMV, herpes</mark>; amniocentesis. <b>Management:</b> conservative; <b>indomethacin</b> — decreases fetal urine production, increases fluid absorption into the lungs, and increases fluid movement across the membranes.",
+    "e": "<span class='star'>⭐</span>Two opposite mechanisms with one shared logic: can't swallow → too much; can't pee → too little.",
+    "img": ""
+   },
+   {
+    "n": "Postpartum hemorrhage — the 4 Ts",
+    "g": "<span class='pill'>Tone</span><span class='pill'>Trauma</span><span class='pill'>Tissue</span><span class='pill'>Thrombin</span> Greater than expected blood loss after delivery — <mark>500 mL with vaginal delivery, 1000 mL with cesarean section</mark>. <mark>The LEADING CAUSE OF MATERNAL MORTALITY.</mark> Remember there is a physiological increase in blood volume of 1500–2000 mL during pregnancy, which masks early loss.",
+    "b": "<mark>The 4 Ts: TONE — uterine atony giving a soft, boggy uterus (most common); TRAUMA — laceration, incisions, uterine rupture; TISSUE — retained products of conception; THROMBIN — coagulopathy.</mark>",
+    "d": "<b>Treatment in order:</b> <mark>uterine massage → oxytocin → if refractory, surgical ligation of the uterine or internal iliac arteries (which preserves fertility)</mark>.",
+    "e": "<span class='star'>⭐</span>The 4 Ts give you the complete differential in the order of frequency, and arterial ligation is the fertility-preserving surgical step before hysterectomy.",
+    "img": ""
+   },
+   {
+    "n": "Gestational diabetes — hPL and the fetal glucose shunt",
+    "g": "<span class='pill'>hPL</span><span class='pill'>≥ 2 abnormal values</span> New-onset diabetes during pregnancy from <b>insulin resistance plus an inadequate maternal insulin response</b>, producing maternal and fetal hyperglycaemia. <b>Early pregnancy:</b> ↑ insulin secretion, ↓ glucose, ↑ fat storage. <b>Late pregnancy (KEY):</b> <mark>human placental lactogen (hPL) is the MAIN hormone causing insulin resistance</mark>; the pancreas increases insulin output by 50–100%; it worsens as the placenta enlarges and releases more hPL.",
+    "b": "<mark>Glucose is shunted to the fetus → continuous fetal glucose use.</mark> <b>Risk factors:</b> age ≥ 25–30, obesity (BMI &gt; 30), excess weight gain, history of GDM, PCOS or glucose intolerance, family history, <b>previous large baby (&gt; 9 lb)</b>, high-risk ethnic groups.",
+    "d": "<b>Diagnosis by OGTT:</b> <b>1.</b> 50 g screening, <b>2.</b> 100 g confirmatory with fasting + 1 h + 2 h + 3 h values — <mark>≥ 2 abnormal values = GDM</mark>. <b>Complications:</b> maternal — pre-eclampsia and polyhydramnios (from fetal polyuria); fetal — <mark>macrosomia (most common)</mark>, shoulder dystocia with brachial plexus injury (Erb's palsy), prematurity; neonatal — <mark>hypoglycaemia, hypocalcaemia, polycythaemia, hyperbilirubinaemia</mark>.",
+    "e": "<span class='star'>⭐</span>The '≥ 2 abnormal values' rule on the 3-hour test, and the four neonatal complications as a set.",
+    "img": ""
+   },
+   {
+    "n": "Malformation, disruption, deformation and sequence",
+    "g": "<span class='pill'>Malformation</span><span class='pill'>Disruption</span><span class='pill'>Deformation</span><span class='pill'>Sequence</span> <b>Malformation</b> — consequence of an <mark>intrinsically abnormal developmental process</mark>: polydactyly, cleft lip, spina bifida, anencephaly, holoprosencephaly. <b>Disruption</b> — <mark>secondary destruction of an organ or region that was previously developing normally</mark>: amniotic band syndrome with limb amputation.",
+    "b": "<b>Deformation</b> — <mark>localized or generalized compression of the growing fetus by abnormal biomechanical forces</mark> producing structural abnormality: clubfeet. <b>Sequence</b> — <mark>a cascade of anomalies triggered by one initiating defect</mark>: Potter (oligohydramnios) sequence.",
+    "d": "<b>Potter sequence / facies:</b> flattened nose, recessed chin, prominent epicanthal folds, low-set abnormal ears, and clubfeet. <b>Agenesis</b> — complete absence of an organ.",
+    "e": "<span class='star'>⭐</span>The discriminator is whether development was ever normal: malformation = never normal; disruption = was normal, then destroyed; deformation = normal but compressed.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Female Reproductive Pathology  [summary]",
+  "rows": [
+   {
+    "n": "PCOS — clinical diagnosis and treatment",
+    "g": "<span class='pill'>OCP</span><span class='pill'>Spironolactone</span><span class='pill'>Clomiphene</span> <b>Hormonal basis:</b> <mark>androgen excess causes virilizing symptoms — hirsutism and acne</mark>; <b>estrogen</b> arises from aromatization of androgens in adipose tissue; <b>progesterone</b> is low because irregular ovulation means no corpus luteum production.",
+    "b": "<b>Diagnosis — clinical features:</b> overweight, hypertension, virilizing signs (acne, hirsutism), an ovarian mass that may or may not be palpable on exam, and amenorrhoea. <mark>Rule out pregnancy first.</mark> <b>Labs:</b> HbA1c, plus tests for TSH, prolactin, testosterone, cortisol and IGF.",
+    "d": "<b>Treatment, matched to the problem:</b> <mark>oral contraceptives to treat irregular menses</mark>; <mark>androgen blockers — cyproterone acetate, spironolactone — to treat hirsutism</mark>; <mark>a SERM (clomiphene) to treat infertility</mark>.",
+    "e": "<span class='star'>⭐</span>Each PCOS drug targets a different complaint — pick the agent from what the patient actually wants treated (cycles, hair, or fertility).",
+    "img": ""
+   }
+  ]
+ }
+];
+
+const tbody=document.getElementById('tbody');
+const chipsEl=document.getElementById('chips');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}</span></span></td>`;
+  tbody.appendChild(secRow);
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td><td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// chips
+const chipAll=document.createElement('div');
+chipAll.className='chip active';chipAll.textContent='All systems';chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach((grp,gi)=>{
+  const c=document.createElement('div');
+  c.className='chip';c.dataset.sec=gi;
+  c.textContent=grp.sec.replace(/ \(.*?\)/,'').replace(' / ',' / ');
+  chipsEl.appendChild(c);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> pathologies`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active');
+  activeSec=c.dataset.sec;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + chips). Measured live so fullscreen, resize, font load, and
+// chip-wrapping changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var MINIS=[
+    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+      ['mini1.html','Overview'],
+      ['master_table.html','Master'],
+      ['pathology_table.html','Pathology'],
+      ['pathology_checklist.html','Path Checklist'],
+      ['physio_table.html','Physiology'],
+      ['drugs_table.html','Drugs'],
+      ['biochem_table.html','Biochem'],
+      ['embryo_anatomy_table.html','Embryo / Anatomy'],
+      ['pattern_recognition.html','Patterns'],
+      ['lecture_recall.html','Lecture Recall'],
+      ['physio_quiz.html','Physio Quiz'],
+      ['endocrine_path_quiz.html','Endo Path Quiz'],
+      ['male_path_quiz.html','Male Path Quiz'],
+      ['physio_ext1_quiz.html','Repro Physio Q'],
+      ['physio_ext2_quiz.html','Physio Bank 1'],
+      ['physio_ext3_quiz.html','Physio Bank 2'],
+      ['pharmq_quiz.html','Pharm Quiz'],
+      ['review_planner.html','Planner'],
+      ['gi_path_table.html','GI Path']
+    ]},
+    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+      ['mini2.html','Overview'],
+      ['mini2_pathology_table.html','Pathology'],
+      ['mini2_physio_table.html','Physiology'],
+      ['mini2_drugs_table.html','Drugs'],
+      ['mini2_foundations_table.html','Foundations'],
+      ['mini2_clinical_obgyn_table.html','Clinical OB/GYN'],
+      ['mini2_study_guide.html','Resource Guide']
+    ]}
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
+  var sw=document.createElement('span'); sw.className='sk-minis';
+  MINIS.forEach(function(m){
+    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+    sw.appendChild(a);
+  });
+  nav.appendChild(sw);
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>
