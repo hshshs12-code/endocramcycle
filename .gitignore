@@ -25,3 +25,6 @@ summaries/
 !slides/*.pdf
 # ...but never the macOS AppleDouble junk the exception would otherwise re-include
 slides/._*
+
+# ===== local pre-edit backups (never publish) =====
+*.pre-*-backup.html

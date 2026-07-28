@@ -167,6 +167,12 @@ td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var
   <p class="sub">Female reproductive physiology, establishment of pregnancy, maternal adaptation and parturition on one scannable grid. Each section states the format it uses — <b>axis / feedback flow</b> for the HPO axis, <b>process / sequence</b> for ordered content, <b>compare</b> for contrasts, <b>hormone table</b> otherwise. Teal = hormone, receptor or value. Highlighted = the key buzzword or number. The crimson rail is the single fact most likely to anchor a question stem. Directional changes (↑/↓) in the maternal adaptations are written out so they scan.</p>
 </header>
 
+<div class="tabbar" role="tablist">
+  <button class="tabbtn active" id="tab-table" role="tab" aria-selected="true">Reference table</button>
+  <button class="tabbtn" id="tab-sim" role="tab" aria-selected="false">Interactive models <span class="tabcount">8</span></button>
+</div>
+
+<div id="pane-table">
 <div class="stickytop">
 <div class="controls">
   <div class="controls-inner">
@@ -205,6 +211,14 @@ td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var
       <tbody id="tbody"></tbody>
     </table>
     <div class="noresults" id="noresults">No concept matches that search.</div>
+  </div>
+</div>
+</div><!-- /#pane-table -->
+
+<div id="pane-sim" hidden>
+  <div class="wrap">
+    <div id="simgallery" class="simgrid"></div>
+    <div id="simstage" hidden></div>
   </div>
 </div>
 
@@ -400,6 +414,1619 @@ setTimeout(syncHeaderOffset, 300);
 if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
 if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
 </script>
+<!-- ===== INTERACTIVE PHYSIOLOGY MODELS ===== -->
+<style>
+  .tabbar{max-width:1500px;margin:18px auto 0;padding:0 28px;display:flex;gap:6px;
+          border-bottom:1px solid var(--line-strong)}
+  .tabbtn{appearance:none;border:1px solid var(--line-strong);border-bottom:none;background:transparent;
+          font:inherit;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;
+          padding:9px 18px;border-radius:9px 9px 0 0;position:relative;top:1px}
+  .tabbtn:hover{color:var(--ink)}
+  .tabbtn.active{background:var(--surface);color:var(--ink);border-color:var(--line-strong);
+                 box-shadow:0 -1px 0 var(--surface) inset}
+  .tabcount{display:inline-block;margin-left:6px;background:var(--exam-bg);color:var(--exam-ink);
+            font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;
+            padding:1px 6px;border-radius:20px;vertical-align:1px}
+  @media(max-width:600px){ .tabbar{padding:0 14px} .tabbtn{padding:9px 12px;font-size:12px} }
+
+  /* ---------- gallery ---------- */
+  .simgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));padding:22px 0 10px}
+  .simcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 17px 14px;
+           cursor:pointer;text-align:left;font:inherit;color:var(--ink);display:flex;flex-direction:column;gap:7px;
+           transition:border-color .12s,box-shadow .12s}
+  .simcard:hover{border-color:var(--line-strong);box-shadow:0 3px 14px rgba(28,32,36,.07)}
+  .simcard .sc-n{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--muted)}
+  .simcard h3{margin:0;font-family:'Fraunces',Georgia,serif;font-size:18px;font-weight:600;line-height:1.2}
+  .simcard p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
+  .simcard .sc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+  .sc-tag{background:var(--gene-bg);color:var(--gene-ink);font-size:10.5px;font-weight:600;
+          padding:2px 7px;border-radius:20px}
+
+  /* ---------- stage ---------- */
+  .simhead{display:flex;align-items:flex-start;gap:14px;padding:20px 0 4px;flex-wrap:wrap}
+  .simback{appearance:none;border:1px solid var(--line-strong);background:var(--surface);font:inherit;
+           font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:7px 13px;border-radius:8px;flex:0 0 auto}
+  .simback:hover{border-color:var(--ink)}
+  .simhead h2{margin:0;font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:600;line-height:1.15;flex:1 1 260px}
+  .simsrc{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);
+          background:var(--paper);border:1px solid var(--line);padding:5px 9px;border-radius:7px;flex:0 0 auto}
+  .simintro{font-size:13px;color:var(--muted);max-width:900px;margin:0 0 16px;line-height:1.5}
+
+  .simbody{display:grid;gap:16px;grid-template-columns:340px minmax(0,1fr);align-items:start;padding-bottom:36px}
+  @media(max-width:900px){ .simbody{grid-template-columns:1fr} }
+
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .panel h4{margin:0 0 11px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+            text-transform:uppercase;color:var(--muted);font-weight:600}
+  .panel + .panel{margin-top:14px}
+
+  /* controls */
+  .ctl{margin-bottom:14px}
+  .ctl:last-child{margin-bottom:0}
+  .ctl-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:5px}
+  .ctl-lab{font-size:12.5px;font-weight:600}
+  .ctl-val{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--gene-ink);
+           background:var(--gene-bg);padding:1px 7px;border-radius:5px;white-space:nowrap}
+  .ctl input[type=range]{width:100%;margin:0;accent-color:#0c5247;height:18px}
+  .ctl-hint{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .ctl-band{position:relative;height:4px;background:var(--line);border-radius:3px;margin:3px 0 1px;overflow:hidden}
+  .ctl-band i{position:absolute;top:0;bottom:0;background:#bfe3d9;display:block}
+
+  .segrow{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .segbtn{appearance:none;border:1px solid var(--line-strong);background:var(--surface);font:inherit;
+          font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;padding:5px 10px;border-radius:7px}
+  .segbtn:hover{border-color:var(--ink);color:var(--ink)}
+  .segbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  .presetrow{display:flex;flex-wrap:wrap;gap:5px}
+  .preset{appearance:none;border:1px dashed var(--line-strong);background:transparent;font:inherit;
+          font-size:11.5px;color:var(--ink);cursor:pointer;padding:5px 10px;border-radius:7px}
+  .preset:hover{border-style:solid;border-color:var(--exam-ink);color:var(--exam-ink)}
+
+  /* readouts */
+  .ro{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .ro-lab{flex:0 0 128px;font-size:12px;font-weight:600}
+  .ro-bar{flex:1 1 auto;height:15px;background:var(--paper);border:1px solid var(--line);
+          border-radius:4px;position:relative;overflow:hidden;min-width:60px}
+  .ro-fill{position:absolute;left:0;top:0;bottom:0;border-radius:3px 0 0 3px;transition:width .18s ease}
+  .ro-norm{position:absolute;top:-1px;bottom:-1px;border-left:1px dashed var(--line-strong);
+           border-right:1px dashed var(--line-strong);background:rgba(191,227,217,.32)}
+  .ro-val{flex:0 0 96px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11.5px;white-space:nowrap}
+  .ro-up{color:#9a1f2e;font-weight:700}
+  .ro-dn{color:#1d4e89;font-weight:700}
+  .ro-ok{color:var(--gene-ink);font-weight:600}
+
+  /* verdict */
+  .verdict{border-left:4px solid var(--sec-bar);background:var(--exam-bg);border-radius:0 10px 10px 0;
+           padding:13px 15px;margin-top:2px}
+  .verdict.ok{border-left-color:#0c5247;background:var(--gene-bg)}
+  .verdict .v-n{font-family:'Fraunces',Georgia,serif;font-size:19px;font-weight:600;
+                color:var(--exam-strong);line-height:1.2;margin-bottom:5px}
+  .verdict.ok .v-n{color:var(--gene-ink)}
+  .verdict .v-b{font-size:12.5px;line-height:1.5}
+  .verdict .v-b b{font-weight:700}
+  .verdict ul{margin:6px 0 0;padding-left:17px}
+  .verdict li{font-size:12.5px;line-height:1.45;margin-bottom:2px}
+
+  .simsvg{width:100%;height:auto;display:block;overflow:visible}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:10px;
+        border-top:1px dashed var(--line);padding-top:9px}
+  .note b{color:var(--ink)}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12.5px;margin-top:4px}
+  .kv dt{font-weight:600}
+  .kv dd{margin:0;color:var(--muted)}
+</style>
+
+<script>
+/* ============================================================================
+   INTERACTIVE PHYSIOLOGY MODELS — Mini 2
+   Rule-based and lecture-faithful. Where a lecture states a number it is used
+   verbatim; where it states only a direction the model moves in bands. These
+   are teaching models of the stated relationships, not numerical simulations.
+   ========================================================================== */
+(function(){
+"use strict";
+
+/* ---------- tiny helpers ---------- */
+var SVGNS="http://www.w3.org/2000/svg";
+function el(t,a,kids){var e=document.createElement(t);a=a||{};
+  for(var k in a){ if(k==="class")e.className=a[k]; else if(k==="html")e.innerHTML=a[k];
+    else if(k==="text")e.textContent=a[k]; else e.setAttribute(k,a[k]); }
+  (kids||[]).forEach(function(c){ e.appendChild(c); }); return e;}
+function sv(t,a){var e=document.createElementNS(SVGNS,t);a=a||{};
+  for(var k in a){ if(k==="text")e.textContent=a[k]; else e.setAttribute(k,a[k]); } return e;}
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(v,d){ d=d==null?1:d; return (Math.round(v*Math.pow(10,d))/Math.pow(10,d)).toFixed(d); }
+/* smooth bump centred at c with width w */
+function bump(x,c,w){var z=(x-c)/w; return Math.exp(-z*z);}
+
+/* ---------- control factory ---------- */
+function slider(o){
+  // o: {label, min, max, value, step, unit, normLo, normHi, hint, fmtv, onInput}
+  var val=el("span",{class:"ctl-val"});
+  var inp=el("input",{type:"range",min:o.min,max:o.max,step:o.step||1,value:o.value});
+  var band=null;
+  if(o.normLo!=null){
+    var f=el("i"); band=el("div",{class:"ctl-band"},[f]);
+    var lo=(o.normLo-o.min)/(o.max-o.min)*100, hi=(o.normHi-o.min)/(o.max-o.min)*100;
+    f.style.left=lo+"%"; f.style.width=Math.max(hi-lo,0.8)+"%";
+  }
+  function show(){ val.textContent = o.fmtv? o.fmtv(+inp.value) : (inp.value+(o.unit||"")); }
+  show();
+  inp.addEventListener("input",function(){ show(); o.onInput(+inp.value); });
+  var kids=[el("div",{class:"ctl-top"},[el("span",{class:"ctl-lab",text:o.label}),val])];
+  if(band)kids.push(band);
+  kids.push(inp);
+  if(o.hint)kids.push(el("div",{class:"ctl-hint",html:o.hint}));
+  var wrap=el("div",{class:"ctl"},kids);
+  wrap.set=function(v){ inp.value=v; show(); };
+  return wrap;
+}
+function segmented(labels,active,onPick){
+  var row=el("div",{class:"segrow"}); var btns=[];
+  labels.forEach(function(L,i){
+    var b=el("button",{class:"segbtn"+(i===active?" on":""),text:L});
+    b.addEventListener("click",function(){ btns.forEach(function(x){x.classList.remove("on");});
+      b.classList.add("on"); onPick(i); });
+    btns.push(b); row.appendChild(b);
+  });
+  row.pick=function(i){ btns.forEach(function(x,j){ x.classList.toggle("on",j===i); }); };
+  return row;
+}
+function presets(list,onPick){
+  var row=el("div",{class:"presetrow"});
+  list.forEach(function(p){
+    var b=el("button",{class:"preset",text:p.name});
+    b.addEventListener("click",function(){ onPick(p); });
+    row.appendChild(b);
+  });
+  return row;
+}
+
+/* ---------- readout bar ---------- */
+function readout(label){
+  var fill=el("div",{class:"ro-fill"});
+  var norm=el("div",{class:"ro-norm"});
+  var bar=el("div",{class:"ro-bar"},[norm,fill]);
+  var val=el("div",{class:"ro-val"});
+  var row=el("div",{class:"ro"},[el("div",{class:"ro-lab",text:label}),bar,val]);
+  /* pct 0-100 of bar; nLo/nHi normal band as pct; txt display; state 'up'|'dn'|'ok' */
+  row.set=function(pct,nLo,nHi,txt,state){
+    fill.style.width=clamp(pct,0,100)+"%";
+    fill.style.background = state==="up"?"#e8b4bb" : state==="dn"?"#b9cbe4" : "#a9d9cd";
+    norm.style.left=nLo+"%"; norm.style.width=Math.max(nHi-nLo,1)+"%";
+    val.innerHTML='<span class="ro-'+state+'">'+txt+'</span>';
+  };
+  return row;
+}
+
+/* ---------- verdict box ---------- */
+function verdict(){
+  var n=el("div",{class:"v-n"}), b=el("div",{class:"v-b"});
+  var box=el("div",{class:"verdict"},[n,b]);
+  box.set=function(name,html,ok){ n.textContent=name; b.innerHTML=html; box.classList.toggle("ok",!!ok); };
+  return box;
+}
+
+/* ---------- line chart ---------- */
+function chart(o){
+  // o:{w,h,x0,x1,xlabel,series:[{name,color,dash,f(x)->0..1}],marks:[{x,label}]}
+  var W=o.w||620,H=o.h||210,PL=44,PR=12,PT=12,PB=26;
+  var svg=sv("svg",{viewBox:"0 0 "+W+" "+H,class:"simsvg","aria-label":o.xlabel||"chart"});
+  var iw=W-PL-PR, ih=H-PT-PB;
+  function X(x){ return PL+(x-o.x0)/(o.x1-o.x0)*iw; }
+  function Y(v){ return PT+ih-clamp(v,0,1)*ih; }
+  // grid
+  [0,.25,.5,.75,1].forEach(function(g){
+    svg.appendChild(sv("line",{x1:PL,x2:PL+iw,y1:Y(g),y2:Y(g),stroke:"#e3ded3","stroke-width":1}));
+  });
+  (o.xticks||[]).forEach(function(t){
+    svg.appendChild(sv("line",{x1:X(t),x2:X(t),y1:PT,y2:PT+ih,stroke:"#efece4","stroke-width":1}));
+    svg.appendChild(sv("text",{x:X(t),y:H-8,"text-anchor":"middle","font-size":10,
+      "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:String(t)}));
+  });
+  if(o.xlabel) svg.appendChild(sv("text",{x:PL,y:H-8,"font-size":10,
+      "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:o.xlabel}));
+  // shaded regions
+  (o.regions||[]).forEach(function(r){
+    svg.appendChild(sv("rect",{x:X(r.a),y:PT,width:X(r.b)-X(r.a),height:ih,fill:r.fill||"rgba(191,227,217,.20)"}));
+    if(r.label) svg.appendChild(sv("text",{x:(X(r.a)+X(r.b))/2,y:PT+11,"text-anchor":"middle","font-size":9.5,
+      "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:r.label}));
+  });
+  var paths=[];
+  o.series.forEach(function(s){
+    var p=sv("path",{fill:"none",stroke:s.color,"stroke-width":s.width||2,
+      "stroke-linejoin":"round","stroke-linecap":"round"});
+    if(s.dash)p.setAttribute("stroke-dasharray",s.dash);
+    svg.appendChild(p); paths.push(p);
+  });
+  // cursor
+  var cur=sv("line",{y1:PT,y2:PT+ih,stroke:"#9a1f2e","stroke-width":1.5,"stroke-dasharray":"3 3",opacity:0});
+  svg.appendChild(cur);
+  var dots=o.series.map(function(s){
+    var c=sv("circle",{r:3.6,fill:s.color,stroke:"#fff","stroke-width":1.5,opacity:0}); svg.appendChild(c); return c;
+  });
+  // legend
+  var lg=el("div",{class:"ctl-hint"});
+  lg.innerHTML=o.series.map(function(s){
+    return '<span style="display:inline-block;margin-right:11px;white-space:nowrap">'+
+      '<span style="display:inline-block;width:16px;height:3px;background:'+s.color+
+      ';vertical-align:2px;margin-right:4px;border-radius:2px"></span>'+s.name+'</span>';}).join("");
+  var host=el("div",{},[svg,lg]);
+  host.draw=function(){
+    o.series.forEach(function(s,i){
+      var d="",N=90;
+      for(var k=0;k<=N;k++){ var x=lerp(o.x0,o.x1,k/N); d+=(k?"L":"M")+fmt(X(x),1)+" "+fmt(Y(s.f(x)),1); }
+      paths[i].setAttribute("d",d);
+    });
+  };
+  host.cursor=function(x){
+    if(x==null){ cur.setAttribute("opacity",0); dots.forEach(function(d){d.setAttribute("opacity",0);}); return; }
+    cur.setAttribute("x1",X(x)); cur.setAttribute("x2",X(x)); cur.setAttribute("opacity",1);
+    o.series.forEach(function(s,i){ dots[i].setAttribute("cx",X(x)); dots[i].setAttribute("cy",Y(s.f(x)));
+      dots[i].setAttribute("opacity",1); });
+  };
+  host.draw();
+  return host;
+}
+
+/* ---------- axis (box + arrow) diagram ---------- */
+function axisDiagram(o){
+  // o:{w,h,nodes:[{id,x,y,w,h,label,sub}], edges:[{from,to,label,side,sign}]}
+  var W=o.w||620,H=o.h||300;
+  var svg=sv("svg",{viewBox:"0 0 "+W+" "+H,class:"simsvg"});
+  var defs=sv("defs");
+  ["#0c5247","#9a1f2e","#1d4e89","#6c7077"].forEach(function(c,i){
+    var m=sv("marker",{id:"ah"+i,viewBox:"0 0 10 10",refX:9,refY:5,markerWidth:6,markerHeight:6,orient:"auto-start-reverse"});
+    m.appendChild(sv("path",{d:"M0 0 L10 5 L0 10 z",fill:c})); defs.appendChild(m);
+  });
+  svg.appendChild(defs);
+  var pos={};
+  var edgeG=sv("g"); svg.appendChild(edgeG);
+  o.nodes.forEach(function(n){
+    pos[n.id]=n;
+    var g=sv("g");
+    g.appendChild(sv("rect",{x:n.x,y:n.y,width:n.w,height:n.h,rx:9,fill:"#fff",
+      stroke:"#cdc6b6","stroke-width":1.4}));
+    g.appendChild(sv("text",{x:n.x+n.w/2,y:n.y+(n.sub?n.h/2-3:n.h/2+4),"text-anchor":"middle",
+      "font-size":12.5,"font-weight":600,"font-family":"Inter,sans-serif",fill:"#1c2024",text:n.label}));
+    if(n.sub) g.appendChild(sv("text",{x:n.x+n.w/2,y:n.y+n.h/2+12,"text-anchor":"middle","font-size":10,
+      "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:n.sub}));
+    svg.appendChild(g);
+  });
+  var arts=[];
+  o.edges.forEach(function(e){
+    var p=sv("path",{fill:"none","stroke-linecap":"round"});
+    var t=sv("text",{"font-size":10.5,"font-family":"IBM Plex Mono, monospace","font-weight":600});
+    edgeG.appendChild(p); edgeG.appendChild(t); arts.push({p:p,t:t,e:e});
+  });
+  svg.setAttribute("data-ready","1");
+  var host=el("div",{},[svg]);
+  /* vals: {edgeLabel: {mag 0..2 where 1=normal, sign '+'|'-'|''}} */
+  host.update=function(vals){
+    arts.forEach(function(a){
+      var e=a.e, v=vals[e.id]||{mag:1,sign:e.sign||""};
+      var A=pos[e.from],B=pos[e.to];
+      var ax,ay,bx,by;
+      if(e.route==="left"){ ax=A.x; ay=A.y+A.h/2; bx=B.x; by=B.y+B.h/2;
+        var off=e.off||60;
+        a.p.setAttribute("d","M"+ax+" "+ay+" C"+(ax-off)+" "+ay+","+(bx-off)+" "+by+","+bx+" "+by);
+        a.t.setAttribute("x",Math.min(ax,bx)-off/2-6); a.t.setAttribute("y",(ay+by)/2);
+        a.t.setAttribute("text-anchor","middle");
+      } else {
+        ax=A.x+A.w/2; ay=A.y+A.h; bx=B.x+B.w/2; by=B.y;
+        a.p.setAttribute("d","M"+ax+" "+ay+" L"+bx+" "+by);
+        a.t.setAttribute("x",(ax+bx)/2+8); a.t.setAttribute("y",(ay+by)/2+4);
+        a.t.setAttribute("text-anchor","start");
+      }
+      var mag=clamp(v.mag,0,2);
+      var col = v.sign==="-" ? "#1d4e89" : v.sign==="+" ? "#9a1f2e" :
+                (mag>1.25?"#9a1f2e": mag<0.75?"#1d4e89":"#0c5247");
+      var mk = col==="#0c5247"?0: col==="#9a1f2e"?1: col==="#1d4e89"?2:3;
+      a.p.setAttribute("stroke",col);
+      a.p.setAttribute("stroke-width",clamp(1+mag*2.4,0.8,6.5));
+      a.p.setAttribute("opacity",clamp(0.28+mag*0.5,0.2,1));
+      a.p.setAttribute("marker-end","url(#ah"+mk+")");
+      if(e.dash) a.p.setAttribute("stroke-dasharray","5 4");
+      a.t.setAttribute("fill",col);
+      a.t.textContent=(v.sign?v.sign+" ":"")+e.label+(v.tag?" "+v.tag:"");
+    });
+  };
+  return host;
+}
+
+/* ============================================================================
+   SIMULATOR REGISTRY
+   ========================================================================== */
+var SIMS=[];
+function reg(s){ SIMS.push(s); }
+
+/* ---- arrow text helper ---- */
+function arrow(ratio){
+  if(ratio>=1.9) return {t:"↑↑",s:"up"};
+  if(ratio>=1.25)return {t:"↑", s:"up"};
+  if(ratio<=0.35)return {t:"↓↓",s:"dn"};
+  if(ratio<=0.75)return {t:"↓", s:"dn"};
+  return {t:"normal",s:"ok"};
+}
+
+/* ============================================================================
+   1 · HPO AXIS & THE MENSTRUAL CYCLE
+   Sources: Female Reproductive Physiology Notes p3-4, 9-11, 20-22, 27-28,
+            33-34, 36, 41-43, 45
+   ========================================================================== */
+reg({
+  id:"hpo",
+  n:"01",
+  title:"HPO Axis & the Menstrual Cycle",
+  blurb:"Drive the hypothalamic–pituitary–ovarian loop. Move GnRH pulse frequency, follicle reserve, prolactin or androgen drive and watch FSH, LH, estradiol and progesterone follow — then read off the condition.",
+  tags:["feedback loop","28-day cycle","lifespan","8 conditions"],
+  src:"Female Repro Physiology p3–4, 9–11, 20–22, 27–28, 36, 41–43, 45",
+  intro:"The loop runs <b>hypothalamus → GnRH → anterior pituitary → FSH &amp; LH → ovary → estradiol, progesterone, inhibin → back to the H–P axis</b>. Three views: <b>Cycle</b> shows the normal 28-day reference curves; <b>Perturb</b> lets you break the axis and name the result; <b>Lifespan</b> tracks gonadotropins from fetal life to menopause.",
+  build:function(root){
+    /* ---------------- normal cycle reference curves ---------------- */
+    // Values are the standard reference shapes for a 28-day ovulatory cycle.
+    // Peak day 13-14 LH surge; progesterone peak ~day 21; menses when P4 < 5 ng/mL.
+    var N={
+      fsh:function(d){ return clamp(0.30*bump(d,3,5)+0.18+0.62*bump(d,13.2,1.5)-0.10*bump(d,20,6),0,1); },
+      lh :function(d){ return clamp(0.12+0.06*bump(d,6,6)+0.92*bump(d,13.5,1.15)+0.05*bump(d,21,5),0,1); },
+      e2 :function(d){ return clamp(0.06+0.80*bump(d,12.4,2.6)+0.34*bump(d,21,4.2),0,1); },
+      p4 :function(d){ return clamp(0.02+0.92*bump(d,21,4.0),0,1); },
+      ihA:function(d){ return clamp(0.05+0.75*bump(d,21.5,4.4),0,1); },
+      ihB:function(d){ return clamp(0.08+0.72*bump(d,7.5,4.2),0,1); },
+      endo:function(d){ return d<=5 ? lerp(0.30,0.06,(d-1)/4)
+                       : d<=14 ? lerp(0.06,0.58,(d-5)/9) : lerp(0.58,0.95,clamp((d-14)/7,0,1)); }
+    };
+    // real-unit scales for the readouts
+    var U={ fsh:[0,18,"mIU/mL"], lh:[0,80,"mIU/mL"], e2:[0,400,"pg/mL"],
+            p4:[0,16,"ng/mL"], ihA:[0,110,"pg/mL"], ihB:[0,180,"pg/mL"] };
+
+    var mode=0; // 0 cycle, 1 perturb, 2 lifespan
+    var day=13;
+    var S={ gnrh:100, reserve:100, prl:100, andro:100 };
+
+    var left=el("div"), right=el("div");
+    var body=el("div",{class:"simbody"},[left,right]);
+    root.appendChild(body);
+
+    var seg=segmented(["Cycle","Perturb","Lifespan"],0,function(i){ mode=i; render(); });
+    left.appendChild(el("div",{class:"panel"},[el("h4",{text:"View"}),seg,
+      el("div",{id:"hpo-ctls"})]));
+    var ctlHost=left.querySelector("#hpo-ctls");
+
+    var vBox=verdict();
+    var roHost=el("div",{class:"panel"},[el("h4",{text:"Hormone levels"})]);
+    var ros={};
+    ["fsh","lh","e2","p4","ihA","ihB"].forEach(function(k){
+      var lab={fsh:"FSH",lh:"LH",e2:"Estradiol",p4:"Progesterone",ihA:"Inhibin A",ihB:"Inhibin B"}[k];
+      ros[k]=readout(lab); roHost.appendChild(ros[k]);
+    });
+    var extraRo=el("div"); roHost.appendChild(extraRo);
+    var roNote=el("div",{class:"note"}); roHost.appendChild(roNote);
+
+    var chartHost=el("div",{class:"panel"},[el("h4",{text:"Reference cycle"})]);
+    var ch=chart({w:640,h:215,x0:1,x1:28,xticks:[1,5,10,14,20,25,28],xlabel:"day of cycle",
+      regions:[{a:1,b:5,label:"menstrual",fill:"rgba(154,31,46,.07)"},
+               {a:6,b:14,label:"proliferative / follicular",fill:"rgba(191,227,217,.20)"},
+               {a:14,b:28,label:"secretory / luteal",fill:"rgba(255,234,167,.20)"}],
+      series:[{name:"FSH",color:"#1d4e89",f:N.fsh},{name:"LH",color:"#9a1f2e",f:N.lh},
+              {name:"Estradiol",color:"#0c5247",f:N.e2},{name:"Progesterone",color:"#c07b23",f:N.p4},
+              {name:"Endometrium",color:"#8a8f96",dash:"4 3",width:1.6,f:N.endo}]});
+    chartHost.appendChild(ch);
+
+    var lifeHost=el("div",{class:"panel"},[el("h4",{text:"Gonadotropins across the lifespan"})]);
+    var lifeChart=chart({w:640,h:215,x0:0,x1:100,
+      xticks:[0,10,20,40,60,80,100],xlabel:"fetal → birth → childhood → puberty → reproductive → menopause",
+      regions:[{a:0,b:12,label:"fetal",fill:"rgba(191,227,217,.18)"},
+               {a:12,b:30,label:"infancy / childhood",fill:"rgba(255,234,167,.14)"},
+               {a:30,b:42,label:"puberty",fill:"rgba(191,227,217,.28)"},
+               {a:42,b:78,label:"reproductive",fill:"rgba(191,227,217,.10)"},
+               {a:78,b:100,label:"menopause",fill:"rgba(154,31,46,.10)"}],
+      series:[
+        {name:"FSH",color:"#1d4e89",f:function(x){
+          return clamp(0.55*bump(x,7,4)+0.16*bump(x,17,4)+0.03+0.30*bump(x,52,26)+0.95*bump(x,92,12),0,1);}},
+        {name:"LH",color:"#9a1f2e",f:function(x){
+          return clamp(0.48*bump(x,7,4)+0.14*bump(x,17,4)+0.03+0.28*bump(x,52,26)+0.72*bump(x,92,12),0,1);}},
+        {name:"Estradiol",color:"#0c5247",f:function(x){
+          return clamp(0.04+0.62*bump(x,55,20)-0.55*bump(x,95,9),0,1);}}
+      ]});
+    lifeHost.appendChild(lifeChart);
+    lifeHost.appendChild(el("div",{class:"note",html:
+      "<b>GnRH</b> is present in the hypothalamus by <b>4 weeks gestation</b>; FSH and LH are in the pituitary by <b>10–12 weeks</b>. Gonadotropins <b>peak at mid-gestation</b>, fall to low levels before birth, and rise again at <b>2 months of age</b>. Childhood levels are very low but detectable. At puberty, increased pulsatile GnRH drives FSH and LH up until LH is sufficient to induce ovulation — <b>menarche</b>. Early pubertal cycles are mostly <b>anovulatory</b> because the surge is not yet regular. At menopause, follicle depletion removes negative feedback and gonadotropins rise — <mark>a rise in FSH is the earliest and most consistent measurable change</mark>."}));
+
+    var diagHost=el("div",{class:"panel"},[el("h4",{text:"The loop"})]);
+    var dia=axisDiagram({w:620,h:322,
+      nodes:[
+        {id:"hyp",x:210,y:6,  w:200,h:46,label:"Hypothalamus",sub:"GnRH pulse generator"},
+        {id:"pit",x:210,y:110,w:200,h:46,label:"Anterior pituitary",sub:"gonadotropes"},
+        {id:"ov", x:210,y:214,w:200,h:46,label:"Ovary",sub:"follicle / corpus luteum"},
+        {id:"ut", x:210,y:284,w:200,h:32,label:"Endometrium"}
+      ],
+      edges:[
+        {id:"gnrh",from:"hyp",to:"pit",label:"GnRH"},
+        {id:"gn",  from:"pit",to:"ov", label:"FSH + LH"},
+        {id:"ster",from:"ov", to:"ut", label:"E2 / P4"},
+        {id:"fbH", from:"ov", to:"hyp",label:"E2/P4",route:"left",off:120,sign:"-"},
+        {id:"fbP", from:"ov", to:"pit",label:"inhibin",route:"left",off:56,sign:"-"}
+      ]});
+    diagHost.appendChild(dia);
+    var diaNote=el("div",{class:"note"}); diagHost.appendChild(diaNote);
+
+    /* ---------------- controls ---------------- */
+    var cycSlider=slider({label:"Day of cycle",min:1,max:28,value:13,
+      fmtv:function(v){return "day "+v;},
+      hint:"Menstrual d1–5 · proliferative d6–14 · secretory d15–28. Ovulation follows the LH surge by <b>~24 h</b>.",
+      onInput:function(v){ day=v; render(); }});
+
+    var sGnrh=slider({label:"GnRH pulse frequency",min:0,max:200,value:100,normLo:80,normHi:120,unit:"%",
+      hint:"↓ by <b>stress/CRH, weight loss, excessive exercise, prolactin, TRH, endorphins, progesterone</b> and low estrogen. ↑ by <b>kisspeptin, leptin</b> and rapidly rising high estrogen.",
+      onInput:function(v){ S.gnrh=v; render(); }});
+    var sRes=slider({label:"Ovarian follicle reserve",min:0,max:130,value:100,normLo:70,normHi:120,unit:"%",
+      hint:"Depletion → ↓ estradiol and ↓ inhibin B → loss of negative feedback → ↑ GnRH → <b>↑↑ FSH</b>.",
+      onInput:function(v){ S.reserve=v; render(); }});
+    var sPrl=slider({label:"Prolactin",min:50,max:400,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"Prolactin <b>inhibits GnRH</b>. High TRH (hypothyroidism) also raises prolactin.",
+      onInput:function(v){ S.prl=v; render(); }});
+    var sAnd=slider({label:"Androgen / LH drive",min:50,max:320,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"Exaggerated GnRH→LH response raises theca androgen; adipose aromatase converts it to estrone, which <b>suppresses FSH</b>.",
+      onInput:function(v){ S.andro=v; render(); }});
+
+    var pres=presets([
+      {name:"Normal",v:{gnrh:100,reserve:100,prl:100,andro:100}},
+      {name:"Hypothalamic amenorrhoea",v:{gnrh:22,reserve:100,prl:100,andro:100}},
+      {name:"Hyperprolactinaemia",v:{gnrh:100,reserve:100,prl:320,andro:100}},
+      {name:"PCOS",v:{gnrh:140,reserve:118,prl:100,andro:300}},
+      {name:"Menopause / POI",v:{gnrh:100,reserve:4,prl:100,andro:100}},
+      {name:"Kallmann",v:{gnrh:0,reserve:100,prl:100,andro:100}}
+    ],function(p){ S.gnrh=p.v.gnrh; S.reserve=p.v.reserve; S.prl=p.v.prl; S.andro=p.v.andro;
+      sGnrh.set(S.gnrh); sRes.set(S.reserve); sPrl.set(S.prl); sAnd.set(S.andro);
+      lastPreset=p.name; render(); });
+    var lastPreset="Normal";
+
+    /* ---------------- the model ---------------- */
+    /* Fixed-point solve of the loop. Every arrow is one the lecture states:
+       GnRH → FSH/LH; FSH×follicles → estradiol + inhibin B; LH×androgen drive →
+       theca androgen → peripheral aromatisation → estrone; estradiol, estrone and
+       inhibin B restrain the pituitary (inhibin B on FSH only). */
+    function solve(gnrh,reserve,prl,andro){
+      var prlPenalty = prl<=130 ? 1 : clamp(1-(prl-130)/300,0.06,1);
+      var drive = clamp(gnrh/100*prlPenalty,0,2);
+      var pool  = clamp(reserve/100,0,1.3);
+      var A     = andro/100;
+      var fsh=drive, lh=drive, e2=1, e1=1, ihB=1, thecaA=1;
+      for(var it=0; it<8; it++){
+        ihB    = clamp(pool*fsh, 0, 1.5);                 // antral follicle product
+        e2     = clamp(pool*fsh, 0, 1.6);                 // granulosa aromatisation
+        thecaA = clamp(lh*A*(0.25+0.75*pool), 0, 3);      // theca androgen (follicle-bound;
+                                                          // residual = stroma + adrenal)
+        e1     = clamp(0.25 + 0.75*thecaA*(0.5+0.5*A), 0, 3); // adipose → estrone
+        var rF = clamp(0.45 + 0.32*ihB + 0.13*e2 + 0.20*Math.max(e1-1,0), 0.40, 2.6);
+        var rL = clamp(0.55 + 0.45*e2, 0.50, 2.0);
+        fsh = clamp(drive/rF, 0, 3.2);
+        lh  = clamp(drive*(0.45+0.55*A)/rL, 0, 3.2);
+      }
+      return {fsh:fsh,lh:lh,e2:e2,e1:e1,ihB:ihB,thecaA:thecaA,drive:drive,pool:pool,A:A};
+    }
+    var BASE = solve(100,100,100,100);   // normalise everything to the intact axis
+
+    function computePerturb(){
+      var r = solve(S.gnrh,S.reserve,S.prl,S.andro);
+      var fsh=r.fsh/BASE.fsh, lh=r.lh/BASE.lh, e2=r.e2/BASE.e2,
+          e1=r.e1/BASE.e1, ihB=r.ihB/BASE.ihB, andro=r.thecaA/BASE.thecaA;
+      var ratio = fsh>0.02 ? lh/fsh : 99;
+      // ovulation needs a real dominant follicle, adequate drive and a clean surge
+      var ovul = (e2>0.60) && (r.drive>0.55) && (r.pool>0.25) && (ratio<2.0);
+      var p4  = ovul ? clamp(0.9*r.pool,0,1.3) : 0.02;
+      var ihA = ovul ? clamp(0.9*r.pool,0,1.3) : 0.03;
+      return {fsh:fsh,lh:lh,e2:e2,e1:e1,ihB:ihB,ihA:ihA,p4:p4,andro:andro,
+              ovul:ovul,ratio:ratio,gnrhEff:r.drive,res:r.pool};
+    }
+
+    function classify(c){
+      // Order matters: the most specific stated picture wins.
+      if(c.res<0.15 && c.fsh>1.4){
+        return {n:"Ovarian follicle depletion — menopause / premature ovarian insufficiency",ok:false,
+          h:"<b>↑↑ FSH, ↑ LH, ↓ estradiol</b> — the classic hallmarks of follicle depletion. Depleted follicles secrete less estradiol and less inhibin B, so negative feedback on the H–P axis is lost, GnRH rises and gonadotropins climb."+
+             "<ul><li><mark>A rise in FSH is the earliest and most consistent measurable change</mark> — measured in the early follicular phase (day 3).</li>"+
+             "<li>FSH rises <b>more than</b> LH, because inhibin B restraint is lost specifically at the pituitary.</li>"+
+             "<li>Before 40 years this is <b>premature ovarian insufficiency</b>; androgens continue from ovarian stroma and adrenal cortex and are aromatised peripherally to <b>estrone</b>.</li></ul>"};
+      }
+      if(c.gnrhEff<0.06){
+        return {n:"No GnRH — congenital hypogonadotropic hypogonadism (Kallmann)",ok:false,
+          h:"With no GnRH there is no gonadotropin drive at all: <b>↓↓ FSH, ↓↓ LH, ↓↓ estradiol</b>, and the ovaries — which are themselves <b>completely normal</b> — are never stimulated."+
+             "<ul><li>Presents as <b>primary amenorrhoea with infantile sexual development</b> and a <b>normal female karyotype</b>.</li>"+
+             "<li>Kallmann adds <b>anosmia or hyposmia</b> from absent olfactory bulbs.</li>"+
+             "<li>Treated with estrogen/progesterone replacement; <b>ovulation induction</b> if conception is wanted.</li></ul>"};
+      }
+      if(S.prl>190 && c.gnrhEff<0.75){
+        return {n:"Hyperprolactinaemia",ok:false,
+          h:"Prolactin <b>inhibits GnRH</b> → ↓ LH and ↓ FSH → ↓ estrogen → <b>hypogonadotropic hypogonadism</b>."+
+             "<ul><li>A small prolactinoma commonly causes amenorrhoea, but <mark>only about one third develop galactorrhoea</mark> — its absence does not exclude it.</li>"+
+             "<li>High TRH (hypothyroidism) also raises prolactin — which is why thyroid disease causes menstrual irregularity.</li>"+
+             "<li>The ovaries respond normally to FSH/LH, so fertility is recoverable. First-line is a <b>dopamine agonist</b>.</li></ul>"};
+      }
+      if(c.ratio>=2.4 && c.andro>1.6){
+        return {n:"Polycystic ovary syndrome — hyperandrogenic chronic anovulation",ok:false,
+          h:"<mark>LH:FSH ratio "+fmt(c.ratio,1)+":1</mark> with raised androgens. An exaggerated GnRH→LH response drives theca androgen production; peripheral adipose aromatase converts it to estrone, which <b>suppresses FSH</b> — so follicles start but never mature."+
+             "<ul><li>Anovulation → <b>no corpus luteum → no progesterone</b> → unopposed estrogen.</li>"+
+             "<li>Unopposed estrogen → thickened proliferative endometrium → <b>hyperplasia → carcinoma</b> risk.</li>"+
+             "<li>Rotterdam: two of three — oligo/anovulation, hyperandrogenism, polycystic ovaries on ultrasound.</li></ul>"};
+      }
+      if(c.gnrhEff<0.5){
+        return {n:"Functional hypothalamic amenorrhoea",ok:false,
+          h:"Reduced GnRH pulsatility → <b>↓ FSH and ↓ LH</b> → ↓ ovarian function (hormone production, folliculogenesis and ovulation all fall)."+
+             "<ul><li>Driven by <b>stress, weight loss, excessive exercise</b>, and mediated by <b>↑ CRH and ↑ endorphins suppressing the arcuate GnRH generator</b>.</li>"+
+             "<li>Gonadotropins are <b>LOW</b> — that is what separates it from ovarian failure, where they are high.</li>"+
+             "<li>Markedly estrogen deficient → risk of <b>osteoporosis, cardiovascular disease, vaginal atrophy</b>. The <b>female athlete triad</b> is menstrual dysfunction + low bone mineral density + disordered eating.</li></ul>"};
+      }
+      if(!c.ovul){
+        return {n:"Anovulatory cycle",ok:false,
+          h:"Drive is present but no dominant follicle reaches the threshold for a clean positive-feedback surge, so <b>no ovulation and no corpus luteum</b> — progesterone stays below 1 ng/mL."+
+             "<ul><li>Without progesterone the endometrium is under <b>unopposed estrogen</b> and sheds irregularly.</li>"+
+             "<li>Physiological in <b>early puberty</b>, where the surge is not yet regular, and in the <b>perimenopause</b>.</li></ul>"};
+      }
+      if(c.e2>1.45){
+        return {n:"Estrogen excess",ok:false,
+          h:"Ovulatory, but estradiol is well above the normal range."+
+             "<ul><li>Causes: hypothalamic/pituitary/ovarian tumour, <b>obesity (excess aromatase activity)</b>, exogenous estrogen.</li>"+
+             "<li>Consequences: precocious puberty, <b>↑ endometrial proliferation and hyperplasia</b>, ↑ risk of endometrial and breast cancer, ↑ venous thromboembolic events.</li></ul>"};
+      }
+      return {n:"Normal ovulatory cycle",ok:true,
+        h:"The loop is intact: adequate GnRH pulsatility → FSH and LH → a dominant follicle → rising estradiol that switches from <b>negative to positive</b> feedback → the <b>LH surge</b> → ovulation ~24 h later → corpus luteum → progesterone."+
+           "<ul><li>Estradiol drives the <b>proliferative</b> endometrium; progesterone drives the <b>secretory</b> endometrium.</li>"+
+           "<li>The corpus luteum regresses after ~14 days → <mark>progesterone falls below 5 ng/mL → menstruation</mark>.</li></ul>"};
+    }
+
+    /* ---------------- render ---------------- */
+    function setRo(k,frac,normFrac){
+      var u=U[k], real=u[0]+frac*(u[1]-u[0]);
+      var a=arrow(normFrac>0.001? frac/normFrac : (frac>0.05?3:1));
+      var pct=clamp(frac*55,0,100);
+      var nLo=clamp(normFrac*55*0.72,0,100), nHi=clamp(normFrac*55*1.30,0,100);
+      ros[k].set(pct,nLo,nHi,fmt(real,real<20?1:0)+" "+u[2]+" "+a.t,a.s);
+    }
+
+    function render(){
+      ctlHost.innerHTML=""; right.innerHTML="";
+      if(mode===0){
+        ctlHost.appendChild(cycSlider);
+        ctlHost.appendChild(el("div",{class:"note",html:
+          "The reference curves are the <b>normal 28-day ovulatory cycle</b>. Scrub the day and read every hormone at that moment."}));
+        right.appendChild(chartHost); right.appendChild(roHost); right.appendChild(diagHost);
+        ch.cursor(day);
+        var f={fsh:N.fsh(day),lh:N.lh(day),e2:N.e2(day),p4:N.p4(day),ihA:N.ihA(day),ihB:N.ihB(day)};
+        ["fsh","lh","e2","p4","ihA","ihB"].forEach(function(k){ setRo(k,f[k],f[k]); ros[k].querySelector(".ro-val").innerHTML=
+          '<span class="ro-ok">'+fmt(U[k][0]+f[k]*(U[k][1]-U[k][0]),f[k]*U[k][1]<20?1:0)+" "+U[k][2]+'</span>'; });
+        extraRo.innerHTML="";
+        var phase = day<=5?"Menstrual (days 1–5)": day<=14?"Proliferative / follicular (days 6–14)":"Secretory / luteal (days 15–28)";
+        var what = day<=5 ? "Progesterone has fallen <b>below 5 ng/mL</b> after corpus luteum regression — <mark>progesterone withdrawal stimulates menstruation</mark>. Normal loss is ~80 mL of non-clotting blood over 2–5 days."
+          : day<11 ? "FSH recruits antral follicles. <b>Estradiol and inhibin B exert negative feedback</b>, pulling FSH back down — which is how a single dominant follicle is selected."
+          : day<=12 ? "The Graafian follicle is pouring out estradiol. Feedback is about to <b>switch from negative to positive</b>."
+          : day<=14 ? "<mark>Positive feedback → the LH surge</mark> (with a smaller FSH surge) → <b>ovulation approximately 24 hours later</b>."
+          : day<=24 ? "The corpus luteum secretes progesterone, estrogen and <b>inhibin A</b>. All three feed back negatively, so FSH and LH are suppressed. Endometrium is secretory."
+          : "The corpus luteum is regressing after ~14 days. Ovarian hormones fall abruptly — progesterone withdrawal is imminent.";
+        vBox.set(phase,what,day>5&&day<=24);
+        right.appendChild(el("div",{class:"panel"},[el("h4",{text:"What is happening"}),vBox]));
+        dia.update({gnrh:{mag:0.9},gn:{mag:0.4+1.2*f.fsh},ster:{mag:0.3+1.3*Math.max(f.e2,f.p4)},
+          fbH:{mag:0.35+1.1*Math.max(f.e2,f.p4),sign:(day>=11&&day<=14)?"+":"-"},
+          fbP:{mag:0.3+1.1*Math.max(f.ihA,f.ihB),sign:"-"}});
+        diaNote.innerHTML=(day>=11&&day<=14)
+          ? "<b>Positive feedback window.</b> High, rapidly rising estradiol reverses the sign of the hypothalamic–pituitary feedback arm — the only time in the cycle it is stimulatory."
+          : "<b>Negative feedback.</b> Estradiol and progesterone inhibit GnRH, LH and FSH; <b>inhibin acts only at the pituitary and only on FSH</b> — it has no hypothalamic effect.";
+        roNote.innerHTML="Reference values are typical ranges for an ovulatory cycle; the lecture figure gives the shapes rather than absolute numbers.";
+      }
+      else if(mode===1){
+        ctlHost.appendChild(sGnrh); ctlHost.appendChild(sRes);
+        ctlHost.appendChild(sPrl); ctlHost.appendChild(sAnd);
+        left.appendChild(el("div",{class:"panel"},[el("h4",{text:"Jump to a condition"}),pres]));
+        var c=computePerturb();
+        right.appendChild(roHost); right.appendChild(el("div",{class:"panel"},[el("h4",{text:"Interpretation"}),vBox]));
+        right.appendChild(diagHost);
+        /* relative to the intact axis — the lecture states directions, not
+           absolute perturbed values, so we show × normal rather than invent units */
+        ["fsh","lh","e2","p4","ihA","ihB"].forEach(function(k){
+          var v=c[k], a=arrow(v);
+          ros[k].set(clamp(v*33,0,100),24,43,fmt(v,2)+"× normal "+a.t,a.s);
+        });
+        extraRo.innerHTML="";
+        [["Estrone",c.e1],["Ovarian androgen",c.andro]].forEach(function(p){
+          var a=arrow(p[1]);
+          var r=el("div",{class:"ro"});
+          r.innerHTML='<div class="ro-lab">'+p[0]+'</div><div class="ro-bar">'+
+            '<div class="ro-norm" style="left:24%;width:19%"></div>'+
+            '<div class="ro-fill" style="width:'+clamp(p[1]*33,0,100)+'%;background:'+
+            (a.s==="up"?"#e8b4bb":a.s==="dn"?"#b9cbe4":"#a9d9cd")+'"></div></div>'+
+            '<div class="ro-val"><span class="ro-'+a.s+'">'+fmt(p[1],2)+'× normal '+a.t+'</span></div>';
+          extraRo.appendChild(r);
+        });
+        var rr=el("div",{class:"ro"});
+        var rs=c.ratio>=2.6?"up":c.ratio<0.6?"dn":"ok";
+        rr.innerHTML='<div class="ro-lab">LH : FSH ratio</div><div class="ro-bar"><div class="ro-norm" style="left:14%;width:22%"></div>'+
+          '<div class="ro-fill" style="width:'+clamp(c.ratio*26,2,100)+'%;background:'+(rs==="up"?"#e8b4bb":rs==="dn"?"#b9cbe4":"#a9d9cd")+'"></div></div>'+
+          '<div class="ro-val"><span class="ro-'+rs+'">'+(c.ratio>20?"—":fmt(c.ratio,2)+" : 1"+(c.ratio>=2.6?" ⚠ &gt;3:1 pattern":""))+'</span></div>';
+        extraRo.appendChild(rr);
+        var ov=el("div",{class:"ro"});
+        ov.innerHTML='<div class="ro-lab">Ovulation</div><div class="ro-bar"><div class="ro-fill" style="width:'+
+          (c.ovul?100:0)+'%;background:#a9d9cd"></div></div><div class="ro-val"><span class="ro-'+(c.ovul?"ok":"dn")+'">'+
+          (c.ovul?"occurs":"does not occur")+'</span></div>';
+        extraRo.appendChild(ov);
+        var v=classify(c); vBox.set(v.n,v.h,v.ok);
+        dia.update({gnrh:{mag:c.gnrhEff},gn:{mag:clamp((c.fsh+c.lh)/2,0,2)},
+          ster:{mag:clamp(Math.max(c.e2,c.p4),0,2)},
+          fbH:{mag:clamp(Math.max(c.e2,c.p4),0,2),sign:"-"},
+          fbP:{mag:clamp(Math.max(c.ihA,c.ihB),0,2),sign:"-"}});
+        diaNote.innerHTML="Arrow thickness follows the level; <span style='color:#9a1f2e'>red</span> = above normal, <span style='color:#1d4e89'>blue</span> = below, <span style='color:#0c5247'>green</span> = normal. The feedback arms carry their sign.";
+        roNote.innerHTML="Bars are shown against the normal band. <b>The single most useful discriminator is whether the gonadotropins are HIGH or LOW</b> — high FSH/LH points to the ovary (compartment II), low points to the hypothalamus or pituitary (III/IV).";
+      }
+      else {
+        ctlHost.appendChild(el("div",{class:"note",html:
+          "Gonadotropin secretion is not flat across life. The same axis produces very different levels depending on whether the ovary is answering back."}));
+        right.appendChild(lifeHost);
+        right.appendChild(el("div",{class:"panel"},[el("h4",{text:"Production rate of steroids at menopause"}),
+          el("div",{html:'<table style="width:100%;border-collapse:collapse;font-size:12.5px">'+
+            '<tr style="text-align:left"><th style="padding:4px 0">Steroid (per day)</th><th>Pre-menopause</th><th>Post-menopause</th></tr>'+
+            [["Progesterone (mg)","1–25","&lt; 1"],["DHEA (mg)","7","0.5"],["Androstenedione (mg)","3000","1.5"],
+             ["Testosterone (mg)","250","50"],["Estrone (mg)","65–350","40"],["Estradiol (mg)","40–675","10"]]
+            .map(function(r){return '<tr style="border-top:1px solid #e3ded3"><td style="padding:4px 0"><b>'+r[0]+
+              '</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>';}).join("")+'</table>'}),
+          el("div",{class:"note",html:"<mark>Estrone becomes the dominant estrogen after menopause</mark>, produced by peripheral aromatisation of adrenal and ovarian-stromal androgens in adipose tissue. Progesterone falls because there is no ovulation and therefore no corpus luteum."})]));
+      }
+    }
+    render();
+  }
+});
+
+/* ---- expose for the second block ---- */
+window.__SIMS=SIMS; window.__simkit={el:el,sv:sv,clamp:clamp,lerp:lerp,fmt:fmt,bump:bump,
+  slider:slider,segmented:segmented,presets:presets,readout:readout,verdict:verdict,
+  chart:chart,axisDiagram:axisDiagram,reg:reg,arrow:arrow};
+
+/* ============================================================================
+   SHELL — tabs, gallery, stage
+   ========================================================================== */
+function boot(){
+  var tabT=document.getElementById("tab-table"), tabS=document.getElementById("tab-sim");
+  var paneT=document.getElementById("pane-table"), paneS=document.getElementById("pane-sim");
+  var gal=document.getElementById("simgallery"), stage=document.getElementById("simstage");
+  if(!tabT||!tabS) return;
+
+  SIMS.forEach(function(s,i){
+    var c=el("button",{class:"simcard"},[
+      el("div",{class:"sc-n",text:"MODEL "+s.n}),
+      el("h3",{text:s.title}),
+      el("p",{text:s.blurb}),
+      el("div",{class:"sc-tags"},s.tags.map(function(t){return el("span",{class:"sc-tag",text:t});}))
+    ]);
+    c.addEventListener("click",function(){ open(i); });
+    gal.appendChild(c);
+  });
+
+  function open(i){
+    var s=SIMS[i];
+    stage.innerHTML="";
+    var back=el("button",{class:"simback",text:"← All models"});
+    back.addEventListener("click",close);
+    stage.appendChild(el("div",{class:"simhead"},[back,el("h2",{text:s.title}),
+      el("div",{class:"simsrc",text:s.src})]));
+    stage.appendChild(el("p",{class:"simintro",html:s.intro}));
+    var host=el("div"); stage.appendChild(host);
+    s.build(host);
+    gal.hidden=true; stage.hidden=false;
+    if(location.hash!=="#model-"+s.id) history.replaceState(null,"","#model-"+s.id);
+    window.scrollTo({top:0,behavior:"instant"});
+  }
+  function close(){ stage.hidden=true; stage.innerHTML=""; gal.hidden=false;
+    history.replaceState(null,"",location.pathname+location.search); }
+
+  function showSim(){ tabS.classList.add("active"); tabT.classList.remove("active");
+    tabS.setAttribute("aria-selected","true"); tabT.setAttribute("aria-selected","false");
+    paneS.hidden=false; paneT.hidden=true; }
+  function showTable(){ tabT.classList.add("active"); tabS.classList.remove("active");
+    tabT.setAttribute("aria-selected","true"); tabS.setAttribute("aria-selected","false");
+    paneT.hidden=false; paneS.hidden=true; close(); }
+
+  tabT.addEventListener("click",showTable);
+  tabS.addEventListener("click",function(){ showSim(); });
+
+  window.__openModel=function(id){
+    var i=-1; SIMS.forEach(function(s,k){ if(s.id===id)i=k; });
+    if(i<0) return false; showSim(); open(i); return true;
+  };
+  var m=/^#model-(.+)$/.exec(location.hash||"");
+  if(m) window.__openModel(m[1]);
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
+</script>
+
+<script>
+/* Models 02–08 — same contract as model 01. */
+(function(){
+"use strict";
+var K=window.__simkit, SIMS=window.__SIMS;
+var el=K.el, sv=K.sv, clamp=K.clamp, lerp=K.lerp, fmt=K.fmt, bump=K.bump;
+var slider=K.slider, segmented=K.segmented, presets=K.presets, readout=K.readout,
+    verdict=K.verdict, chart=K.chart, reg=K.reg, arrow=K.arrow;
+
+function panel(title,kids){ return el("div",{class:"panel"},[el("h4",{text:title})].concat(kids||[])); }
+function twocol(root){ var L=el("div"),R=el("div"); root.appendChild(el("div",{class:"simbody"},[L,R])); return [L,R]; }
+function relRo(list){ // [[label,value]] value = x normal
+  var f=document.createDocumentFragment();
+  list.forEach(function(p){
+    var a=arrow(p[1]), r=el("div",{class:"ro"});
+    r.innerHTML='<div class="ro-lab">'+p[0]+'</div><div class="ro-bar">'+
+      '<div class="ro-norm" style="left:24%;width:19%"></div><div class="ro-fill" style="width:'+
+      clamp(p[1]*33,0,100)+'%;background:'+(a.s==="up"?"#e8b4bb":a.s==="dn"?"#b9cbe4":"#a9d9cd")+
+      '"></div></div><div class="ro-val"><span class="ro-'+a.s+'">'+
+      (p[2]!=null?p[2]:fmt(p[1],2)+"× normal")+" "+a.t+'</span></div>';
+    f.appendChild(r);
+  });
+  return f;
+}
+function absRo(list){ // [[label, value, unit, lo, hi, scaleMax]]
+  var f=document.createDocumentFragment();
+  list.forEach(function(p){
+    var v=p[1], lo=p[3], hi=p[4], max=p[5];
+    var s = v>hi?"up" : v<lo?"dn" : "ok";
+    var t = v>hi?"↑" : v<lo?"↓" : "normal";
+    var r=el("div",{class:"ro"});
+    r.innerHTML='<div class="ro-lab">'+p[0]+'</div><div class="ro-bar">'+
+      '<div class="ro-norm" style="left:'+clamp(lo/max*100,0,100)+'%;width:'+clamp((hi-lo)/max*100,1,100)+
+      '%"></div><div class="ro-fill" style="width:'+clamp(v/max*100,0,100)+'%;background:'+
+      (s==="up"?"#e8b4bb":s==="dn"?"#b9cbe4":"#a9d9cd")+'"></div></div>'+
+      '<div class="ro-val"><span class="ro-'+s+'">'+fmt(v,p[6]==null?1:p[6])+" "+p[2]+" "+t+'</span></div>';
+    f.appendChild(r);
+  });
+  return f;
+}
+
+/* ==========================================================================
+   02 · TWO-CELL, TWO-GONADOTROPIN STEROIDOGENESIS
+   Source: Female Repro Physiology p17–19, 23, 26, 30–31, 42–43
+   ======================================================================== */
+reg({ id:"twocell", n:"02", title:"Two-Cell, Two-Gonadotropin Steroidogenesis",
+  blurb:"Theca makes androgen under LH; granulosa aromatises it to estrogen under FSH. Starve one cell or block aromatase and watch androgens pile up — the mechanism behind PCOS, obesity and the postmenopausal switch to estrone.",
+  tags:["theca vs granulosa","aromatase","PCOS","estrone"],
+  src:"Female Repro Physiology p17–19, 23, 26, 30–31, 42–43",
+  intro:"<mark>No single ovarian cell contains all the enzymes needed for complete steroidogenesis.</mark> <b>Theca cells</b> have 17α-hydroxylase and 17,20-lyase but <b>no aromatase</b>, so they stop at androgen. <b>Granulosa cells</b> have <b>aromatase</b> but no 17α-hydroxylase, so they cannot make androgen — they can only convert what theca sends them. Two cells, two gonadotropins.",
+  build:function(root){
+    var C=twocol(root), L=C[0], R=C[1];
+    var S={lh:100,fsh:100,arom:100,periph:100,phase:0};
+    var out=panel("Steroid output"), outBody=el("div"); out.appendChild(outBody);
+    var vb=verdict();
+    var dg=panel("The two cells"), svgHost=el("div"); dg.appendChild(svgHost);
+    var dgNote=el("div",{class:"note"}); dg.appendChild(dgNote);
+
+    var seg=segmented(["Follicular phase","Luteal phase"],0,function(i){S.phase=i;render();});
+    var sLH=slider({label:"LH → theca cells",min:0,max:300,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"LH drives cholesterol → <b>androstenedione and testosterone</b> in theca. Theca has <b>no aromatase</b>.",
+      onInput:function(v){S.lh=v;render();}});
+    var sFSH=slider({label:"FSH → granulosa cells",min:0,max:300,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"FSH induces <b>aromatase</b> in granulosa, converting theca androgen → <b>estradiol</b>.",
+      onInput:function(v){S.fsh=v;render();}});
+    var sAr=slider({label:"Granulosa aromatase activity",min:0,max:200,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"Zero = <b>aromatase deficiency</b>: androgen cannot be converted, so it accumulates and virilises.",
+      onInput:function(v){S.arom=v;render();}});
+    var sPe=slider({label:"Peripheral (adipose) aromatase",min:0,max:400,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"Adipose tissue aromatises androgen to <b>estrone</b>. Raised by <b>obesity</b>; the dominant route after menopause.",
+      onInput:function(v){S.periph=v;render();}});
+    L.appendChild(panel("Cycle phase",[seg]));
+    L.appendChild(panel("Drive",[sLH,sFSH,sAr,sPe]));
+    L.appendChild(panel("Jump to a state",[presets([
+      {name:"Normal follicular",v:{lh:100,fsh:100,arom:100,periph:100,phase:0}},
+      {name:"PCOS",v:{lh:280,fsh:65,arom:70,periph:170,phase:0}},
+      {name:"Aromatase deficiency",v:{lh:120,fsh:120,arom:0,periph:0,phase:0}},
+      {name:"Obesity",v:{lh:110,fsh:90,arom:100,periph:320,phase:0}},
+      {name:"Postmenopausal",v:{lh:180,fsh:200,arom:8,periph:150,phase:0}}
+    ],function(p){ for(var k in p.v) S[k]=p.v[k];
+      sLH.set(S.lh);sFSH.set(S.fsh);sAr.set(S.arom);sPe.set(S.periph);seg.pick(S.phase);render(); })]));
+    R.appendChild(out); R.appendChild(panel("Interpretation",[vb])); R.appendChild(dg);
+
+    function render(){
+      var lh=S.lh/100, fsh=S.fsh/100, ar=S.arom/100, pe=S.periph/100;
+      var thecaA = clamp(lh,0,3);                       // androstenedione + testosterone pool
+      var conv   = clamp(fsh*ar,0,3);                   // granulosa conversion capacity
+      var toE2   = Math.min(thecaA, thecaA*conv);       // limited by substrate AND by enzyme
+      var e2     = clamp(toE2,0,3);
+      var leftover = clamp(thecaA - toE2*0.85, 0, 3);   // flux for the diagram
+      // circulating androgen: what is NOT aromatised, normalised to the intact axis
+      var androRel = clamp(Math.pow(thecaA,0.9)*(1-0.5*clamp(conv,0,1.2))/0.5, 0, 6);
+      var e1     = clamp((0.5*thecaA + 0.5)*pe, 0, 3);   // adipose aromatises the whole
+                                                          // androgen pool (ovary + adrenal)
+      var p4     = S.phase===1 ? clamp(lh*0.9,0,2.2) : 0.04;
+
+      outBody.innerHTML="";
+      outBody.appendChild(relRo([
+        ["Theca androgen",thecaA],["Estradiol (granulosa)",e2],
+        ["Circulating androgen",androRel],["Estrone (peripheral)",e1],
+        ["Progesterone",p4]
+      ]));
+      var note = S.phase===1
+        ? "In the <b>luteal phase</b> both cell types acquire LH receptors: <b>theca-lutein</b> cells continue androgen, and <b>granulosa-lutein</b> cells make the large amounts of progesterone that define the phase."
+        : "In the <b>follicular phase</b> LH acts only on theca and FSH only on granulosa — the strict division of labour.";
+      outBody.appendChild(el("div",{class:"note",html:note}));
+
+      var v;
+      if(ar<0.12 && pe<0.35) v={n:"Aromatase deficiency",ok:false,
+        h:"Granulosa cannot convert theca androgen, so <b>androgen accumulates and estrogen is absent</b>."+
+          "<ul><li>Substrate is present — the block is the enzyme, not the drive.</li>"+
+          "<li>Produces virilisation with <b>no estrogen-dependent development</b>.</li></ul>"};
+      else if(e1>1.8 && e2<0.9) v={n:"Estrone-dominant state",ok:false,
+        h:"Most estrogen is now made <b>outside</b> the ovary, by adipose aromatisation of androgen to <b>estrone</b>."+
+          "<ul><li>This is the <b>postmenopausal</b> pattern — the ovarian stroma and adrenal cortex keep making androgen precursors after follicles are gone.</li>"+
+          "<li>It is also the <b>obesity</b> pattern in a cycling woman, and the source of unopposed estrogen driving endometrial hyperplasia.</li></ul>"};
+      else if(e1>1.8 && pe>2.2 && e2>=0.9) v={n:"Peripheral estrone excess — the obesity pattern",ok:false,
+        h:"The ovary is working normally, but <b>adipose aromatase</b> is converting androgen to <b>estrone</b> at a greatly increased rate."+
+          "<ul><li>The result is <mark>unopposed estrogen</mark> in a woman who may not be ovulating regularly — the driver of endometrial hyperplasia and carcinoma.</li>"+
+          "<li>Obesity is listed by the lecture as a cause of <b>estrogen excess</b> precisely through <b>excess aromatase activity</b>.</li></ul>"};
+      else if(androRel>1.9 && e2<1.35) v={n:"Hyperandrogenism — the PCOS mechanism",ok:false,
+        h:"High LH drives theca androgen while relatively low FSH limits granulosa aromatase, so <mark>androgen accumulates faster than it can be converted</mark>."+
+          "<ul><li>Excess androgen is aromatised <b>peripherally in adipose</b> to <b>estrone</b> — which suppresses FSH further, closing the loop.</li>"+
+          "<li>Clinically: <b>hirsutism</b> — the most distinctive and visible feature of hyperandrogenism in females — acne, alopecia.</li>"+
+          "<li>Follicles start but arrest; no dominant follicle, no ovulation, no progesterone.</li></ul>"};
+      else if(e2>1.6) v={n:"Estrogen excess",ok:false,
+        h:"Conversion capacity exceeds what the follicle needs. <b>↑ endometrial proliferation and hyperplasia</b>, ↑ risk of endometrial and breast cancer, ↑ venous thromboembolic events."};
+      else if(thecaA<0.3&&e2<0.3) v={n:"Hypoestrogenic — no drive",ok:false,
+        h:"Neither gonadotropin is reaching its cell, so there is no substrate and no product. The block is upstream at the pituitary or hypothalamus, not in the ovary."};
+      else v={n:S.phase===1?"Normal luteal steroidogenesis":"Normal follicular steroidogenesis",ok:true,
+        h:"Theca supplies androgen; granulosa aromatises it to estradiol. <mark>Two cells and two gonadotropins are necessary for ovarian steroid hormone production</mark> — neither cell can do it alone."};
+      vb.set(v.n,v.h,v.ok);
+
+      /* diagram */
+      var W=620,H=250;
+      var s=sv("svg",{viewBox:"0 0 "+W+" "+H,class:"simsvg"});
+      function box(x,y,w,h,t,sub,fill){
+        s.appendChild(sv("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:"#cdc6b6","stroke-width":1.4}));
+        s.appendChild(sv("text",{x:x+w/2,y:y+20,"text-anchor":"middle","font-size":13,"font-weight":600,
+          "font-family":"Inter,sans-serif",fill:"#1c2024",text:t}));
+        if(sub)s.appendChild(sv("text",{x:x+w/2,y:y+36,"text-anchor":"middle","font-size":10,
+          "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:sub}));
+      }
+      box(20,44,190,120,"Theca cell","17α-OHase · 17,20-lyase","#fdf4f4");
+      box(300,44,190,120,"Granulosa cell","aromatase","#f1faf7");
+      box(300,196,190,44,"Adipose tissue","peripheral aromatase","#fffaf0");
+      s.appendChild(sv("text",{x:115,y:82,"text-anchor":"middle","font-size":10.5,
+        "font-family":"IBM Plex Mono, monospace",fill:"#9a1f2e",text:"cholesterol"}));
+      s.appendChild(sv("text",{x:115,y:120,"text-anchor":"middle","font-size":11.5,"font-weight":600,
+        "font-family":"IBM Plex Mono, monospace",fill:"#9a1f2e",text:"androstenedione"}));
+      s.appendChild(sv("text",{x:115,y:136,"text-anchor":"middle","font-size":10.5,
+        "font-family":"IBM Plex Mono, monospace",fill:"#9a1f2e",text:"testosterone"}));
+      s.appendChild(sv("text",{x:395,y:120,"text-anchor":"middle","font-size":11.5,"font-weight":600,
+        "font-family":"IBM Plex Mono, monospace",fill:"#0c5247",text:"estradiol"}));
+      // LH / FSH inputs
+      function inArrow(x,y,label,mag,col){
+        s.appendChild(sv("path",{d:"M"+(x-52)+" "+y+" L"+x+" "+y,stroke:col,
+          "stroke-width":clamp(1+mag*2.6,1,7),"marker-end":"url(#ah"+(col==="#9a1f2e"?1:0)+")",
+          opacity:clamp(.3+mag*.5,.25,1),fill:"none"}));
+        s.appendChild(sv("text",{x:x-56,y:y-7,"text-anchor":"end","font-size":11,"font-weight":600,
+          "font-family":"IBM Plex Mono, monospace",fill:col,text:label}));
+      }
+      inArrow(20,104,"LH",lh,"#9a1f2e"); inArrow(300,104,"FSH",fsh,"#0c5247");
+      // theca -> granulosa transfer
+      var tw=clamp(1+toE2*2.6,1,7);
+      s.appendChild(sv("path",{d:"M210 128 L300 128",stroke:"#c07b23","stroke-width":tw,fill:"none",
+        opacity:clamp(.3+toE2*.5,.25,1),"marker-end":"url(#ah3)"}));
+      s.appendChild(sv("text",{x:255,y:120,"text-anchor":"middle","font-size":10,"font-weight":600,
+        "font-family":"IBM Plex Mono, monospace",fill:"#c07b23",text:"androgen"}));
+      // leftover -> adipose
+      var lw=clamp(1+leftover*2.4,1,7);
+      s.appendChild(sv("path",{d:"M150 164 C150 210, 250 218, 300 218",stroke:"#c07b23","stroke-width":lw,
+        fill:"none",opacity:clamp(.25+leftover*.5,.2,1),"marker-end":"url(#ah3)","stroke-dasharray":"5 4"}));
+      s.appendChild(sv("text",{x:530,y:222,"text-anchor":"middle","font-size":11.5,"font-weight":600,
+        "font-family":"IBM Plex Mono, monospace",fill:"#c07b23",text:"estrone"}));
+      s.appendChild(sv("path",{d:"M490 218 L505 218",stroke:"#c07b23","stroke-width":2,fill:"none"}));
+      svgHost.innerHTML=""; svgHost.appendChild(s);
+      dgNote.innerHTML="Arrow width follows flux. The <b>orange</b> arrow is the androgen handover — the single step that makes this a two-cell system. When granulosa cannot keep up, androgen escapes down the dashed route to adipose and returns as <b>estrone</b>.";
+    }
+    render();
+  }
+});
+
+/* ==========================================================================
+   03 · PREGNANCY HORMONE TIMELINE
+   Source: Establishment of Pregnancy p17–19, 21–25
+   ======================================================================== */
+reg({ id:"preghorm", n:"03", title:"Pregnancy Hormones Across Gestation",
+  blurb:"Scrub 0–40 weeks and watch hCG, progesterone, the estrogens, hPL and placental CRH. Break the trophoblast, the corpus luteum or the fetal adrenal and see which curve fails.",
+  tags:["hCG doubling","luteal–placental shift","estriol","CRH"],
+  src:"Establishment of Pregnancy p17–19, 21–25",
+  intro:"<b>hCG</b> peaks at weeks 9–10 and falls after week 12. <b>Progesterone and estrogens rise steadily</b> — first from the corpus luteum, then from the placenta after around week 9 (the <b>luteal–placental shift</b>). <b>hPL</b> and <b>CRH</b> track placental mass and rise exponentially.",
+  build:function(root){
+    var C=twocol(root), L=C[0], R=C[1];
+    var S={wk:10, troph:100, cl:100, adrenal:100};
+    var ro=panel("Levels at this gestation"), roBody=el("div"); ro.appendChild(roBody);
+    var vb=verdict();
+
+    var F={
+      hcg:function(w){ return clamp(1.02*bump(w,9.5,4.0)+0.10*Math.exp(-Math.max(w-12,0)/26),0,1); },
+      p4 :function(w){ return clamp(0.06+0.90*(1-Math.exp(-w/17)),0,1); },
+      e2 :function(w){ return clamp(0.03+0.92*(1-Math.exp(-w/19)),0,1); },
+      e3 :function(w){ return clamp(Math.pow(clamp(w/40,0,1),2.1),0,1); },
+      hpl:function(w){ return clamp(w<4?0:Math.pow(clamp((w-4)/36,0,1),1.45),0,1); },
+      crh:function(w){ return clamp(0.02+0.98*Math.pow(clamp(w/40,0,1),6.0),0,1); }
+    };
+    var ch=chart({w:640,h:230,x0:0,x1:40,xticks:[0,4,9,12,20,28,34,40],xlabel:"weeks of gestation",
+      regions:[{a:0,b:9,label:"corpus luteum",fill:"rgba(255,234,167,.24)"},
+               {a:9,b:12,label:"shift",fill:"rgba(154,31,46,.10)"},
+               {a:12,b:40,label:"placenta",fill:"rgba(191,227,217,.18)"}],
+      series:[{name:"hCG",color:"#9a1f2e",f:F.hcg},{name:"Progesterone",color:"#c07b23",f:F.p4},
+              {name:"Estradiol",color:"#0c5247",f:F.e2},{name:"Estriol",color:"#4b9d8a",dash:"5 3",f:F.e3},
+              {name:"hPL",color:"#1d4e89",f:F.hpl},{name:"Placental CRH",color:"#7a3fa8",dash:"4 3",f:F.crh}]});
+    var chp=panel("Hormone curves",[ch]);
+
+    var sWk=slider({label:"Gestational age",min:0,max:40,value:10,fmtv:function(v){return "week "+v;},
+      hint:"hCG detectable in maternal serum <b>8–10 days post-fertilisation</b>; peaks <b>weeks 9–10</b>; falls after week 12.",
+      onInput:function(v){S.wk=v;render();}});
+    var sTr=slider({label:"Trophoblast mass / activity",min:0,max:300,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"hCG, hPL and CRH all come from <b>syncytiotrophoblast</b>. hPL's exponential rise <b>reflects placental size</b>.",
+      onInput:function(v){S.troph=v;render();}});
+    var sCL=slider({label:"Corpus luteum function",min:0,max:130,value:100,normLo:80,normHi:120,unit:"%",
+      hint:"hCG binds <b>LH receptors</b> on the CL — 'rescue of the corpus luteum'. Matters only before the shift.",
+      onInput:function(v){S.cl=v;render();}});
+    var sAd=slider({label:"Fetal adrenal (DHEAS supply)",min:0,max:150,value:100,normLo:80,normHi:120,unit:"%",
+      hint:"Placental CRH stimulates the fetal adrenal to make <b>DHEAS</b>, the obligatory precursor for placental <b>estriol</b>.",
+      onInput:function(v){S.adrenal=v;render();}});
+    L.appendChild(panel("Gestation",[sWk]));
+    L.appendChild(panel("Sources",[sTr,sCL,sAd]));
+    L.appendChild(panel("Jump to a state",[presets([
+      {name:"Normal singleton",v:{troph:100,cl:100,adrenal:100}},
+      {name:"Ectopic / non-viable",v:{troph:28,cl:55,adrenal:100}},
+      {name:"Twin pregnancy",v:{troph:185,cl:100,adrenal:100}},
+      {name:"Complete mole",v:{troph:300,cl:100,adrenal:0}},
+      {name:"Luteal deficiency",v:{troph:100,cl:22,adrenal:100}},
+      {name:"Anencephaly",v:{troph:100,cl:100,adrenal:6}}
+    ],function(p){ for(var k in p.v) S[k]=p.v[k];
+      sTr.set(S.troph);sCL.set(S.cl);sAd.set(S.adrenal);render(); })]));
+    R.appendChild(chp); R.appendChild(ro); R.appendChild(panel("Interpretation",[vb]));
+
+    function render(){
+      var w=S.wk, tr=S.troph/100, cl=S.cl/100, ad=S.adrenal/100;
+      ch.cursor(w);
+      var shift = clamp((w-8)/4,0,1);                       // 0 = CL only, 1 = placenta only
+      var hcg = F.hcg(w)*tr;
+      var p4  = F.p4(w)*(cl*(1-shift) + tr*shift);
+      var e2  = F.e2(w)*(cl*(1-shift) + tr*shift);
+      var e3  = F.e3(w)*tr*ad;
+      var hpl = F.hpl(w)*tr;
+      var crh = F.crh(w)*tr;
+      // real-ish anchors from the lecture
+      var p4ng = p4*180;                                     // term progesterone ~ 150-200 ng/mL
+      roBody.innerHTML="";
+      roBody.appendChild(relRo([
+        ["hCG",hcg/Math.max(F.hcg(w),0.02)],
+        ["Progesterone",p4/Math.max(F.p4(w),0.02),fmt(p4ng,0)+" ng/mL"],
+        ["Estradiol",e2/Math.max(F.e2(w),0.02)],
+        ["Estriol",w<8?1:e3/Math.max(F.e3(w),0.02)],
+        ["hPL",w<5?1:hpl/Math.max(F.hpl(w),0.02)],
+        ["Placental CRH",crh/Math.max(F.crh(w),0.02)]
+      ]));
+      var src = w<8 ? "<b>Corpus luteum</b> is the source of progesterone."
+              : w<12 ? "<mark>Luteal–placental shift in progress</mark> — the placenta is taking over."
+              : "<b>Placenta</b> is the source; the corpus luteum is no longer required.";
+      roBody.appendChild(el("div",{class:"note",html:src+
+        " hCG <b>doubles every 48–72 h</b> in early pregnancy. Progesterone is expressed here against a term value of ~180 ng/mL."}));
+
+      var v;
+      if(tr>2.4 && ad<0.2) v={n:"Very high hCG with no fetal contribution — think molar pregnancy",ok:false,
+        h:"<mark>High hCG indicates multiple pregnancy or gestational trophoblastic disease.</mark> Here trophoblast is proliferating but there is no fetal adrenal supplying DHEAS, so <b>estriol never rises</b>."+
+          "<ul><li>hCG well above the expected curve, with hCG typically <b>&gt; 100,000 mIU/mL</b> in a complete mole.</li>"+
+          "<li>Cross-reactivity of hCG at the <b>TSH receptor</b> explains the hyperthyroid features.</li></ul>"};
+      else if(tr<0.45) v={n:"Low hCG — inadequate implantation, non-viable or ectopic pregnancy",ok:false,
+        h:"<mark>Low hCG indicates inadequate implantation, or a non-viable or ectopic pregnancy.</mark>"+
+          "<ul><li>The diagnostic feature is a <b>lower-than-expected rise</b> — a viable pregnancy doubles every 48–72 h.</li>"+
+          "<li>Quantitative hCG gives an index of fetal and placental health; qualitative testing only diagnoses pregnancy.</li></ul>"};
+      else if(tr>1.6) v={n:"High hCG — multiple pregnancy",ok:false,
+        h:"More trophoblast means more hCG, hPL and CRH. <b>hPL's exponential rise reflects placental mass</b>, so a twin placenta drives insulin resistance harder — one reason multiple pregnancy raises the risk of <b>gestational diabetes</b>."};
+      else if(ad<0.2) v={n:"Low estriol with normal hCG — absent fetal adrenal axis",ok:false,
+        h:"Estriol is the one estrogen that requires the <b>fetus</b>: placental CRH → fetal adrenal <b>DHEAS</b> → 16α-OH-DHEA → placental estriol."+
+          "<ul><li>So <b>estriol is a read-out of fetal wellbeing</b>; estradiol and progesterone can look normal while estriol collapses.</li>"+
+          "<li>Classically low in <b>anencephaly</b>, where the fetal HPA axis never forms.</li></ul>"};
+      else if(w<12 && cl<0.35) v={n:"Corpus luteum failure before the shift",ok:false,
+        h:"Before ~week 8–9 the pregnancy depends entirely on the corpus luteum."+
+          "<ul><li><mark>Progesterone below 10 ng/mL is frequently associated with miscarriage (~80%)</mark>; below 5 ng/mL, pregnancy typically does not occur at all.</li>"+
+          "<li>After the luteal–placental shift the same lesion is harmless — timing is everything.</li></ul>"};
+      else if(w>=12 && cl<0.35) v={n:"Corpus luteum failure after the shift — no effect",ok:true,
+        h:"The corpus luteum has failed but the <b>placenta has already taken over</b> progesterone production, so the pregnancy is unaffected. This is exactly why oophorectomy ends a pregnancy before ~8 weeks but not after ~12."};
+      else v={n:"Normal pregnancy hormone profile",ok:true,
+        h:"hCG rescues the corpus luteum through the first trimester; the placenta then assumes steroidogenesis."+
+          "<ul><li><b>Progesterone</b> maintains the pregnancy — transforms the endometrium, suppresses myometrial contractility, inhibits ovulation.</li>"+
+          "<li><b>hPL</b> rises with placental mass and drives maternal insulin resistance.</li>"+
+          "<li><b>Placental CRH</b> rises exponentially in the third trimester, peaks in labour, and is unusual in that <b>cortisol stimulates it (positive feedback)</b>.</li></ul>"};
+      vb.set(v.n,v.h,v.ok);
+    }
+    render();
+  }
+});
+
+/* ==========================================================================
+   04 · MATERNAL CARDIOVASCULAR & HAEMATOLOGIC ADAPTATION
+   Source: Maternal Physiology p16–19
+   ======================================================================== */
+reg({ id:"matcv", n:"04", title:"Maternal Cardiovascular & Haematologic Adaptation",
+  blurb:"Plasma volume outstrips red cell mass, so haemoglobin falls even though the mother has more blood. Move the components and see where physiological anaemia, unchanged MAP and a 600 mL/min uterine flow come from.",
+  tags:["+40% blood volume","dilutional anaemia","TPR −40%","MAP flat"],
+  src:"Maternal Physiology p16–19",
+  intro:"Pregnancy hypervolaemia averages <mark>~40% by 34 weeks</mark>. It is made of <b>↑ plasma volume 30–50%</b> and <b>↑ red cell mass 20–30%</b> — and because plasma outstrips red cells, the result is <mark>haemodilution: physiological anaemia of pregnancy</mark>.",
+  build:function(root){
+    var C=twocol(root), L=C[0], R=C[1];
+    var S={wk:34, pv:40, rbc:25, tpr:-40};
+    var ro=panel("Maternal values"), roBody=el("div"); ro.appendChild(roBody);
+    var vb=verdict();
+    var ch=chart({w:640,h:225,x0:0,x1:40,xticks:[0,10,20,28,34,40],xlabel:"weeks of gestation",
+      series:[{name:"Plasma volume",color:"#1d4e89",f:function(w){return clamp(Math.pow(clamp(w/34,0,1),.8)*.5,0,1);}},
+              {name:"RBC mass",color:"#9a1f2e",f:function(w){return clamp(Math.pow(clamp(w/34,0,1),1.1)*.31,0,1);}},
+              {name:"Cardiac output",color:"#0c5247",f:function(w){return clamp(Math.pow(clamp(w/28,0,1),.65)*.5,0,1);}},
+              {name:"TPR",color:"#c07b23",dash:"5 3",f:function(w){return clamp(.5-Math.pow(clamp(w/26,0,1),.7)*.4,0,1);}},
+              {name:"Uterine blood flow",color:"#7a3fa8",dash:"4 3",f:function(w){return clamp(Math.pow(clamp(w/40,0,1),2.4),0,1);}}]});
+    var sWk=slider({label:"Gestational age",min:0,max:40,value:34,fmtv:function(v){return "week "+v;},
+      hint:"Hypervolaemia averages ~40% <b>by 34 weeks</b>; haemodynamic changes begin <b>early</b> in pregnancy.",
+      onInput:function(v){S.wk=v;render();}});
+    var sPV=slider({label:"Plasma volume increase",min:0,max:70,value:40,normLo:30,normHi:50,unit:"%",
+      hint:"Normal <b>+30–50%</b>. Inadequate expansion is associated with growth restriction and pre-eclampsia.",
+      onInput:function(v){S.pv=v;render();}});
+    var sRB=slider({label:"Red cell mass increase",min:0,max:50,value:25,normLo:20,normHi:30,unit:"%",
+      hint:"Normal <b>+20–30%</b> — always less than plasma, which is what creates the dilution.",
+      onInput:function(v){S.rbc=v;render();}});
+    var sTP=slider({label:"Change in total peripheral resistance",min:-60,max:20,value:-40,normLo:-50,normHi:-30,unit:"%",
+      hint:"Normal is a <b>massive 40% reduction</b>, driven by vasodilation and the low-resistance uteroplacental circuit.",
+      onInput:function(v){S.tpr=v;render();}});
+    L.appendChild(panel("Gestation",[sWk]));
+    L.appendChild(panel("Components",[sPV,sRB,sTP]));
+    L.appendChild(panel("Jump to a state",[presets([
+      {name:"Normal at term",v:{wk:34,pv:40,rbc:25,tpr:-40}},
+      {name:"Early pregnancy",v:{wk:10,pv:40,rbc:25,tpr:-40}},
+      {name:"Iron-deficiency anaemia",v:{wk:34,pv:45,rbc:4,tpr:-40}},
+      {name:"Poor plasma expansion",v:{wk:34,pv:8,rbc:24,tpr:-40}},
+      {name:"Failure of TPR fall",v:{wk:34,pv:38,rbc:25,tpr:2}}
+    ],function(p){ for(var k in p.v) S[k]=p.v[k];
+      sWk.set(S.wk);sPV.set(S.pv);sRB.set(S.rbc);sTP.set(S.tpr);render(); })]));
+    R.appendChild(panel("Change from pre-pregnancy",[ch])); R.appendChild(ro);
+    R.appendChild(panel("Interpretation",[vb]));
+
+    function render(){
+      var w=S.wk, prog=clamp(Math.pow(clamp(w/34,0,1),0.85),0,1);
+      var pv=1+S.pv/100*prog, rbc=1+S.rbc/100*prog, tpr=1+S.tpr/100*prog;
+      var bv=(pv*2.6+rbc*1.4)/4;                       // plasma ~2.6 L, RBC ~1.4 L pre-pregnancy
+      var hb=13.5*(rbc/pv);                            // dilution
+      var hct=41*(rbc/pv);
+      var co=4.9*clamp(1+(0.42*prog)*(1+(-S.tpr-40)/220),0.6,2.2);
+      var hr=72*(1+0.20*prog);
+      var map=87*(co/4.9)*tpr;
+      var ubf=clamp(Math.pow(clamp(w/40,0,1),2.4)*600,0,900);
+      ch.cursor(w);
+      roBody.innerHTML="";
+      roBody.appendChild(absRo([
+        ["Total blood volume",(bv-1)*100,"%",30,50,70,0],
+        ["Haemoglobin",hb,"g/dL",11,13.5,17,1],
+        ["Haematocrit",hct,"%",33,41,50,0],
+        ["Cardiac output",co,"L/min",6.0,7.5,10,1],
+        ["Heart rate",hr,"bpm",78,92,120,0],
+        ["Mean arterial pressure",map,"mmHg",78,95,130,0],
+        ["Uterine blood flow",ubf,"mL/min",450,700,900,0]
+      ]));
+      roBody.appendChild(el("div",{class:"note",html:
+        "Normal bands are the <b>pregnant</b> ranges, not the non-pregnant ones. At term uterine blood flow is roughly <mark>600 mL/min — about 12% of cardiac output</mark>, and flow approximates 10 mL/min per 100 g of fetal tissue."}));
+      var v;
+      if(S.tpr>-12) v={n:"Total peripheral resistance has not fallen",ok:false,
+        h:"Normally TPR falls by <b>~40%</b>, and cardiac output rises to match, so <mark>mean arterial pressure changes minimally</mark>."+
+          "<ul><li>Without the fall in resistance, the rise in cardiac output translates straight into <b>hypertension</b>.</li>"+
+          "<li>Failure of the low-resistance uteroplacental circuit to develop is the vascular basis of <b>pre-eclampsia</b>.</li></ul>"};
+      else if(S.pv<18) v={n:"Inadequate plasma volume expansion",ok:false,
+        h:"Haemoglobin looks reassuringly normal — but only because the plasma never expanded."+
+          "<ul><li>A <b>falsely normal haemoglobin</b> in late pregnancy is a warning sign, not a good sign.</li>"+
+          "<li>Poor plasma expansion is associated with <b>fetal growth restriction and pre-eclampsia</b>.</li></ul>"};
+      else if(hb<10.4) v={n:"Anaemia beyond the physiological range",ok:false,
+        h:"Dilution alone does not take haemoglobin this low — red cell mass has genuinely failed to rise."+
+          "<ul><li>Physiological (dilutional) anaemia bottoms out around <b>11 g/dL</b>; below that, look for <b>iron deficiency</b>.</li></ul>"};
+      else if(w<12) v={n:"Early pregnancy — changes already underway",ok:true,
+        h:"These haemodynamic changes <b>begin early in pregnancy</b>, well before the uterus is large. Cardiac output and heart rate are already rising and resistance is already falling."};
+      else v={n:"Normal maternal adaptation",ok:true,
+        h:"Plasma volume rises more than red cell mass → <mark>haemodilution → physiological (dilutional) anaemia</mark>, which is normal and does not need treating."+
+          "<ul><li><b>CO ↑30–50%</b>, <b>HR ↑~20%</b> (10–15 bpm), <b>TPR ↓40%</b>, <b>MAP essentially unchanged</b>.</li>"+
+          "<li>Increased plasma volume and reduced renal vascular resistance raise <b>RBF and GFR</b> → increased clearance of creatinine, urea and drugs, and <b>glycosuria and mild proteinuria become normal findings</b>.</li></ul>"};
+      vb.set(v.n,v.h,v.ok);
+    }
+    render();
+  }
+});
+
+/* ==========================================================================
+   05 · PLACENTAL GAS EXCHANGE & FETAL OXYGENATION
+   Source: Maternal Physiology p23–24
+   ======================================================================== */
+reg({ id:"gasx", n:"05", title:"Placental Gas Exchange & Fetal Oxygenation",
+  blurb:"Why a fetus thrives at a PO₂ that would be dangerous in an adult. Shift the HbF curve, cut uterine flow or thicken the membrane and watch fetal saturation move against the real compartment values.",
+  tags:["HbF P50 18–20","left shift","2,3-BPG","4 compartments"],
+  src:"Maternal Physiology p23–24",
+  intro:"Fetal haemoglobin is <b>2α2γ</b> rather than 2α2β. It <b>binds 2,3-BPG poorly</b>, so its dissociation curve is <mark>left-shifted (P50 18–20 vs 26 mmHg)</mark>. At any given PO₂ HbF binds more oxygen than HbA — which is what drives oxygen from maternal to fetal blood.",
+  build:function(root){
+    var C=twocol(root), L=C[0], R=C[1];
+    var S={mpo2:100, flow:100, diff:100, hbf:100};
+    var ro=panel("Fetal blood"), roBody=el("div"); ro.appendChild(roBody);
+    var vb=verdict();
+    var curveHost=panel("Oxygen dissociation curves"), cHost=el("div");
+    curveHost.appendChild(cHost);
+    curveHost.appendChild(el("div",{class:"note",html:
+      "Hill curves plotted from the lecture's own P50 values. <b>Adult HbA</b>: 2α2β, 12 g/dL, P50 <b>26 mmHg</b>, binds 2,3-BPG well. <b>Fetal HbF</b>: 2α2γ, <b>15 g/dL</b>, P50 <b>18–20 mmHg</b>, binds 2,3-BPG poorly."}));
+    var compHost=panel("The four compartments"), cmp=el("div"); compHost.appendChild(cmp);
+
+    function sat(po2,p50){ var n=2.8; return 100*Math.pow(po2,n)/(Math.pow(po2,n)+Math.pow(p50,n)); }
+
+    var sM=slider({label:"Maternal arterial PO₂",min:40,max:120,value:100,normLo:95,normHi:105,unit:" mmHg",
+      hint:"Uterine artery normally <b>PO₂ 100, PCO₂ 32, SO₂ 98%</b>. Maternal hypoxia moves every downstream value.",
+      onInput:function(v){S.mpo2=v;render();}});
+    var sF=slider({label:"Uterine blood flow",min:15,max:150,value:100,normLo:85,normHi:120,unit:"%",
+      hint:"~600 mL/min at term. Falls in pre-eclampsia and abruption.",
+      onInput:function(v){S.flow=v;render();}});
+    var sD=slider({label:"Placental membrane thickness",min:50,max:400,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"The membrane thins with gestation, shortening the diffusion distance. Thickening impairs transfer.",
+      onInput:function(v){S.diff=v;render();}});
+    var sH=slider({label:"HbF fraction",min:0,max:100,value:100,normLo:85,normHi:100,unit:"%",
+      hint:"0% = the fetus carrying adult haemoglobin — the left shift is lost.",
+      onInput:function(v){S.hbf=v;render();}});
+    L.appendChild(panel("Maternal side",[sM,sF]));
+    L.appendChild(panel("Placenta & fetal blood",[sD,sH]));
+    L.appendChild(panel("Jump to a state",[presets([
+      {name:"Normal term",v:{mpo2:100,flow:100,diff:100,hbf:100}},
+      {name:"Placental insufficiency",v:{mpo2:100,flow:42,diff:210,hbf:100}},
+      {name:"Maternal hypoxia",v:{mpo2:55,flow:100,diff:100,hbf:100}},
+      {name:"No left shift (HbA only)",v:{mpo2:100,flow:100,diff:100,hbf:0}}
+    ],function(p){ for(var k in p.v) S[k]=p.v[k];
+      sM.set(S.mpo2);sF.set(S.flow);sD.set(S.diff);sH.set(S.hbf);render(); })]));
+    R.appendChild(curveHost); R.appendChild(compHost); R.appendChild(ro);
+    R.appendChild(panel("Interpretation",[vb]));
+
+    function render(){
+      var p50f = lerp(26,19,S.hbf/100);
+      var transfer = clamp((S.flow/100)*(100/S.diff),0.1,1.6);
+      // intervillous PO2 falls from maternal arterial toward uterine venous
+      var iv = lerp(40,S.mpo2,clamp(transfer*0.65,0,1));
+      var uvPO2 = clamp(iv*0.62*clamp(transfer,0.25,1.25),6,48);   // umbilical vein
+      var uaPO2 = clamp(uvPO2*0.57,3,32);                          // umbilical artery
+      var uvSat = sat(uvPO2,p50f), uaSat = sat(uaPO2,p50f);
+      var content = uvSat/100*15*1.34;                              // HbF 15 g/dL
+
+      /* curves */
+      var W=640,H=225,PL=46,PR=12,PT=12,PB=28, iw=W-PL-PR, ih=H-PT-PB;
+      var s=sv("svg",{viewBox:"0 0 "+W+" "+H,class:"simsvg"});
+      function X(p){return PL+clamp(p,0,110)/110*iw;} function Y(v){return PT+ih-clamp(v,0,100)/100*ih;}
+      [0,25,50,75,100].forEach(function(g){
+        s.appendChild(sv("line",{x1:PL,x2:PL+iw,y1:Y(g),y2:Y(g),stroke:"#e3ded3"}));
+        s.appendChild(sv("text",{x:PL-7,y:Y(g)+3.5,"text-anchor":"end","font-size":9.5,
+          "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:g+"%"}));});
+      [0,20,40,60,80,100].forEach(function(t){
+        s.appendChild(sv("text",{x:X(t),y:H-9,"text-anchor":"middle","font-size":9.5,
+          "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:t}));});
+      s.appendChild(sv("text",{x:PL+iw,y:H-9,"text-anchor":"end","font-size":9.5,
+        "font-family":"IBM Plex Mono, monospace",fill:"#6c7077",text:"PO₂ (mmHg)"}));
+      function curve(p50,col,dash){
+        var d=""; for(var i=0;i<=100;i++){var p=i*1.1; d+=(i?"L":"M")+fmt(X(p),1)+" "+fmt(Y(sat(p,p50)),1);}
+        var pa=sv("path",{d:d,fill:"none",stroke:col,"stroke-width":2.2,"stroke-linecap":"round"});
+        if(dash)pa.setAttribute("stroke-dasharray",dash); s.appendChild(pa);
+      }
+      curve(26,"#9a1f2e");           // HbA
+      curve(p50f,"#0c5247");         // HbF (current)
+      [[uvPO2,uvSat,"umbilical vein","#0c5247"],[uaPO2,uaSat,"umbilical artery","#1d4e89"]].forEach(function(pt){
+        s.appendChild(sv("circle",{cx:X(pt[0]),cy:Y(pt[1]),r:4.6,fill:pt[3],stroke:"#fff","stroke-width":1.8}));
+        s.appendChild(sv("text",{x:X(pt[0])+8,y:Y(pt[1])-6,"font-size":10,"font-weight":600,
+          "font-family":"IBM Plex Mono, monospace",fill:pt[3],text:pt[2]}));
+      });
+      s.appendChild(sv("line",{x1:X(p50f),x2:X(p50f),y1:Y(50),y2:Y(0),stroke:"#0c5247",
+        "stroke-dasharray":"3 3","stroke-width":1.2,opacity:.7}));
+      s.appendChild(sv("line",{x1:X(26),x2:X(26),y1:Y(50),y2:Y(0),stroke:"#9a1f2e",
+        "stroke-dasharray":"3 3","stroke-width":1.2,opacity:.7}));
+      s.appendChild(sv("text",{x:X(p50f),y:Y(0)+0,"text-anchor":"middle","font-size":9.5,
+        "font-family":"IBM Plex Mono, monospace",fill:"#0c5247",text:"P50 "+fmt(p50f,0)}));
+      cHost.innerHTML=""; cHost.appendChild(s);
+      cHost.appendChild(el("div",{class:"ctl-hint",html:
+        '<span style="display:inline-block;width:16px;height:3px;background:#9a1f2e;vertical-align:2px;margin-right:4px;border-radius:2px"></span>Adult HbA (P50 26)'+
+        '<span style="display:inline-block;width:16px;height:3px;background:#0c5247;vertical-align:2px;margin:0 4px 0 14px;border-radius:2px"></span>Fetal HbF (P50 '+fmt(p50f,0)+')'}));
+
+      /* compartments */
+      cmp.innerHTML='<div class="kv" style="grid-template-columns:1fr auto auto auto">'+
+        '<dt></dt><dd style="text-align:right"><b>PO₂</b></dd><dd style="text-align:right"><b>PCO₂</b></dd><dd style="text-align:right"><b>SO₂</b></dd>'+
+        [["Uterine artery",100,32,98,"ref"],["Uterine vein",40,45,75,"ref"],
+         ["Umbilical vein (to fetus)",fmt(uvPO2,0),40,fmt(uvSat,0),"live"],
+         ["Umbilical artery (from fetus)",fmt(uaPO2,0),55,fmt(uaSat,0),"live"]]
+        .map(function(r){ return '<dt style="'+(r[4]==="live"?"color:#0c5247":"")+'">'+r[0]+
+          (r[4]==="live"?" <span style=\"font-size:10px;color:#6c7077\">live</span>":"")+'</dt>'+
+          '<dd style="text-align:right;font-family:IBM Plex Mono,monospace">'+r[1]+'</dd>'+
+          '<dd style="text-align:right;font-family:IBM Plex Mono,monospace">'+r[2]+'</dd>'+
+          '<dd style="text-align:right;font-family:IBM Plex Mono,monospace">'+r[3]+'%</dd>'; }).join("")+'</div>'+
+        '<div class="note">Uterine artery and vein are shown at their reference values; the two umbilical figures respond to your settings. <b>Normal umbilical vein PO₂ is only 30 mmHg</b> — a value that would signal severe hypoxaemia in an adult, yet gives <b>85% saturation</b> because of the left-shifted HbF curve.</div>';
+
+      roBody.innerHTML="";
+      roBody.appendChild(absRo([
+        ["Umbilical vein PO₂",uvPO2,"mmHg",26,34,50,0],
+        ["Umbilical vein SO₂",uvSat,"%",80,90,100,0],
+        ["Umbilical artery SO₂",uaSat,"%",40,52,100,0],
+        ["O₂ content (fetal)",content,"mL/dL",16,21,28,1]
+      ]));
+
+      var v;
+      if(S.hbf<25) v={n:"Left shift lost — fetus carrying adult haemoglobin",ok:false,
+        h:"With HbA the P50 is <b>26 mmHg</b>, so at the same umbilical vein PO₂ the saturation falls sharply."+
+          "<ul><li><mark>HbF has a higher O₂ binding affinity because it binds 2,3-BPG poorly</mark> — remove that and the fetus cannot extract oxygen at placental PO₂.</li>"+
+          "<li>Higher fetal haemoglobin concentration (<b>15 vs 12 g/dL</b>) partially compensates, but affinity is what matters here.</li></ul>"};
+      else if(transfer<0.45) v={n:"Impaired placental transfer",ok:false,
+        h:"Reduced uterine flow and/or a thickened membrane lower the intervillous PO₂, so umbilical vein PO₂ and saturation both fall."+
+          "<ul><li>This is <b>uteroplacental insufficiency</b> — the mechanism behind <b>late decelerations</b> and fetal growth restriction.</li>"+
+          "<li>Note the fetus is already operating at the steep part of its curve, so a small PO₂ drop costs a lot of saturation.</li></ul>"};
+      else if(S.mpo2<70) v={n:"Maternal hypoxaemia",ok:false,
+        h:"Everything downstream of the uterine artery is shifted down. The placenta cannot deliver oxygen it never received."};
+      else v={n:"Normal placental gas exchange",ok:true,
+        h:"Maternal blood is in direct contact with the trophoblast in the intervillous space, and oxygen moves down its gradient into fetal capillaries."+
+          "<ul><li><mark>At any given PO₂, HbF binds more O₂ than HbA — this favours transfer of O₂ from maternal to fetal blood.</mark></li>"+
+          "<li>Fetal Hb reaches ~<b>15 g/dL by midgestation</b>, adding carrying capacity on top of the affinity advantage.</li></ul>"};
+      vb.set(v.n,v.h,v.ok);
+    }
+    render();
+  }
+});
+
+/* ==========================================================================
+   06 · PARTURITION CASCADE & THE FERGUSON LOOP
+   Source: Parturition & Transition to Neonatal Life p3, 5–11, 16–18
+   ======================================================================== */
+reg({ id:"parturition", n:"06", title:"Parturition Cascade & the Ferguson Loop",
+  blurb:"Progesterone holds the uterus quiet; estrogen, CRH, prostaglandins and oxytocin receptors take it to labour. Tip the balance and watch the phases — and the positive feedback loop — switch on.",
+  tags:["4 phases","OTR ×200–300","CAPs","positive feedback"],
+  src:"Parturition & Transition to Neonatal Life p3, 5–11, 16–18",
+  intro:"Four phases: <b>1 Quiescence</b> (~95% of gestation, progesterone-dominated) → <b>2 Activation</b> (final 6–8 weeks, estrogen rises) → <b>3 Stimulation</b> (labour, 3 stages) → <b>4 Involution</b>. The switch is <mark>functional progesterone withdrawal</mark> — in humans progesterone does not fall, receptor expression changes.",
+  build:function(root){
+    var C=twocol(root), L=C[0], R=C[1];
+    var S={pr:100, er:100, crh:20, ot:100, pg:100};
+    var ro=panel("Myometrium & cervix"), roBody=el("div"); ro.appendChild(roBody);
+    var vb=verdict();
+    var loopHost=panel("Ferguson reflex"), lp=el("div"); loopHost.appendChild(lp);
+
+    var sPR=slider({label:"Progesterone action (PR)",min:0,max:160,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"Keeps the uterus quiescent: ↓ CAPs (Cx43, oxytocin receptor, PG enzymes), ↑ Ca²⁺ uptake into SR, ↑ K⁺ efflux.",
+      onInput:function(v){S.pr=v;render();}});
+    var sER=slider({label:"Estrogen action (ER)",min:0,max:250,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"Drives <b>CAPs</b>, gap junctions, oxytocin receptors and cervical ripening.",
+      onInput:function(v){S.er=v;render();}});
+    var sCR=slider({label:"Placental CRH",min:0,max:250,value:20,normLo:10,normHi:40,unit:"%",
+      hint:"The clock: ↑ placental CRH → ↑ fetal ACTH → ↑ cortisol + DHEAS → ↑ estrogen. <b>Cortisol stimulates CRH (positive feedback)</b>.",
+      onInput:function(v){S.crh=v;render();}});
+    var sOT=slider({label:"Oxytocin + receptor density",min:0,max:300,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"<mark>Oxytocin receptor number increases 200- to 300-fold during pregnancy</mark>, peaking in early labour — which is why oxytocin works at term but not early.",
+      onInput:function(v){S.ot=v;render();}});
+    var sPG=slider({label:"Prostaglandins",min:0,max:300,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"PGF2α contracts via FP and promotes gap junctions; PGE2 contracts via EP1/EP3 but <b>ripens the cervix via EP2/EP4</b>.",
+      onInput:function(v){S.pg=v;render();}});
+    L.appendChild(panel("Steroid balance",[sPR,sER,sCR]));
+    L.appendChild(panel("Uterotonics",[sOT,sPG]));
+    L.appendChild(panel("Jump to a phase",[presets([
+      {name:"Phase 1 — quiescence",v:{pr:100,er:60,crh:12,ot:18,pg:35}},
+      {name:"Phase 2 — activation",v:{pr:80,er:150,crh:120,ot:110,pg:110}},
+      {name:"Phase 3 — labour",v:{pr:35,er:230,crh:220,ot:260,pg:250}},
+      {name:"Preterm labour",v:{pr:40,er:150,crh:95,ot:230,pg:250}},
+      {name:"Tocolysis",v:{pr:130,er:150,crh:120,ot:35,pg:12}}
+    ],function(p){ for(var k in p.v) S[k]=p.v[k];
+      sPR.set(S.pr);sER.set(S.er);sCR.set(S.crh);sOT.set(S.ot);sPG.set(S.pg);render(); })]));
+    R.appendChild(ro); R.appendChild(panel("Interpretation",[vb])); R.appendChild(loopHost);
+
+    function render(){
+      var pr=S.pr/100, er=S.er/100, crh=S.crh/100, ot=S.ot/100, pg=S.pg/100;
+      var erEff = clamp(er*(0.6+0.4*clamp(crh*1.4,0,2)),0,3);
+      var ratio = erEff/Math.max(pr,0.05);                 // estrogen action vs progesterone action
+      var caps  = clamp(ratio*0.75,0,2.5);                 // contractile-associated proteins
+      var gj    = clamp(caps*0.9*(0.6+0.4*pg),0,2.5);      // gap junctions
+      var otr   = clamp(caps*(0.5+0.5*ot),0,3);
+      var contract = clamp((0.45*otr + 0.35*pg*caps + 0.2*gj) * (1/(0.5+0.5*pr)) / 2.3,0,3);
+      var cervix   = clamp((0.30*er*(0.5+0.5*pg) + 0.45*ratio*pg*0.55)/1.6,0,3);
+      var ferguson = contract>1.25 && cervix>0.95;
+
+      roBody.innerHTML="";
+      roBody.appendChild(relRo([
+        ["Estrogen : progesterone",ratio],
+        ["Contractile proteins (CAPs)",caps],
+        ["Gap junctions (Cx43)",gj],
+        ["Oxytocin receptors",otr],
+        ["Myometrial contractility",contract],
+        ["Cervical ripening",cervix]
+      ]));
+      var phase = contract<0.45 ? "Phase 1 — Quiescence"
+                : contract<1.15 ? "Phase 2 — Activation"
+                : "Phase 3 — Stimulation (labour)";
+      roBody.appendChild(el("div",{class:"note",html:"Current phase: <b>"+phase+"</b>. "+
+        "Quiescence covers <b>~95% of gestation (32+ weeks)</b>; activation is the <b>final 6–8 weeks</b>; stimulation is labour itself."}));
+
+      var v;
+      if(pr>1.15 && ot<0.5) v={n:"Tocolysed / quiescent",ok:true,
+        h:"Progesterone dominance plus withdrawal of uterotonic drive holds the myometrium quiet."+
+          "<ul><li>Progesterone ↓ myometrial responsiveness to estrogen by <b>↓ ER expression</b>, ↓ CAPs, ↑ Ca²⁺ uptake into SR and ↑ K⁺ efflux.</li></ul>"};
+      else if(contract>1.25 && cervix<0.9) v={n:"Contractions without cervical change",ok:false,
+        h:"The myometrium is contracting but the cervix has not ripened — contractions alone are not labour."+
+          "<ul><li><mark>Labour requires regular painful contractions producing progressive cervical effacement AND dilation.</mark></li>"+
+          "<li>Cervical ripening is a <b>connective-tissue remodelling</b> event driven by <b>PGE2 via EP2/EP4</b>, not a muscular one.</li></ul>"};
+      else if(contract>1.25 && crh<1.0) v={n:"Preterm labour",ok:false,
+        h:"Uterotonic drive has switched on before the placental CRH clock has run."+
+          "<ul><li>Diagnosis needs contractions <b>plus</b> cervical change — effacement &gt; 80% or dilation &gt; 2 cm.</li>"+
+          "<li>Give <b>antenatal corticosteroids</b> for fetal lung maturity and a <b>tocolytic</b> if there is no infection.</li></ul>"};
+      else if(ferguson) v={n:"Established labour — Ferguson reflex running",ok:false,
+        h:"Estrogen action now exceeds progesterone action, CAPs and gap junctions have risen, and oxytocin receptors are maximal."+
+          "<ul><li><mark>Ferguson reflex: cervical stretch → ↑ oxytocin release → ↑ contractions → more stretch</mark> — a true <b>positive</b> feedback loop.</li>"+
+          "<li>Once labour begins, contractions continue until fetus and placenta are delivered.</li>"+
+          "<li>Relaxation between contractions is essential — that is when placental perfusion happens.</li></ul>"};
+      else if(contract<0.45) v={n:"Phase 1 — quiescence",ok:true,
+        h:"A progesterone-dominated state covering ~95% of gestation. The myometrium is functionally quiet and the cervix is firm and closed."};
+      else v={n:"Phase 2 — activation",ok:true,
+        h:"The estrogen:progesterone <b>action</b> ratio is rising and the uterus is being prepared, but labour has not started."+
+          "<ul><li>Driven by the fetal HPA clock: <mark>↑ placental CRH → ↑ fetal ACTH → ↑ cortisol + DHEAS → ↑ estrogen</mark>.</li>"+
+          "<li>Cervical ripening and ↑ CAP expression happen here, before contractions become productive.</li></ul>"};
+      vb.set(v.n,v.h,v.ok);
+
+      /* loop diagram */
+      var W=620,H=190; var s=sv("svg",{viewBox:"0 0 "+W+" "+H,class:"simsvg"});
+      var on=ferguson, col=on?"#9a1f2e":"#8a8f96", wdt=on?3.4:1.6, op=on?1:.45;
+      var nodes=[[70,72,180,44,"Cervical stretch"],[300,20,180,44,"↑ Oxytocin release"],
+                 [300,124,180,44,"↑ Uterine contractions"]];
+      nodes.forEach(function(n){
+        s.appendChild(sv("rect",{x:n[0],y:n[1],width:n[2],height:n[3],rx:9,fill:"#fff",
+          stroke:on?"#9a1f2e":"#cdc6b6","stroke-width":1.5}));
+        s.appendChild(sv("text",{x:n[0]+n[2]/2,y:n[1]+27,"text-anchor":"middle","font-size":12.5,
+          "font-weight":600,"font-family":"Inter,sans-serif",fill:"#1c2024",text:n[4]}));
+      });
+      [["M250 86 C280 86, 300 60, 300 44"],["M390 64 L390 124"],["M300 158 C250 172, 180 150, 160 116"]]
+        .forEach(function(p){ s.appendChild(sv("path",{d:p[0],fill:"none",stroke:col,"stroke-width":wdt,
+          opacity:op,"marker-end":"url(#ah"+(on?1:3)+")","stroke-linecap":"round"})); });
+      s.appendChild(sv("text",{x:520,y:78,"text-anchor":"middle","font-size":26,"font-weight":700,
+        "font-family":"Inter,sans-serif",fill:col,opacity:op,text:"+"}));
+      s.appendChild(sv("text",{x:520,y:98,"text-anchor":"middle","font-size":10.5,
+        "font-family":"IBM Plex Mono, monospace",fill:col,opacity:op,text:on?"ACTIVE":"inactive"}));
+      lp.innerHTML=""; lp.appendChild(s);
+      lp.appendChild(el("div",{class:"note",html:"<b>Oxytocin is the most potent endogenous uterotonic known.</b> It is made in the <b>supraoptic and paraventricular nuclei</b> and released from the <b>posterior</b> pituitary on cervical distension. The loop only closes once receptor density and cervical readiness are both sufficient."}));
+    }
+    render();
+  }
+});
+
+/* ==========================================================================
+   07 · MATERNAL GLUCOSE & GESTATIONAL DIABETES
+   Source: Maternal Physiology p11–14; Nutrition in Pregnancy
+   ======================================================================== */
+reg({ id:"gdm", n:"07", title:"Maternal Glucose & Gestational Diabetes",
+  blurb:"hPL rises with placental mass and drives insulin resistance. Set the β-cell reserve and watch the anabolic phase flip to catabolic — and glucose spill across to the fetus.",
+  tags:["anabolic → catabolic","hPL","OGTT cutoffs","macrosomia"],
+  src:"Maternal Physiology p11–14 · Nutrition in Pregnancy",
+  intro:"<b>Anabolic phase (~weeks 0–27):</b> ↑ appetite, ↑ first-phase insulin response, ↑ glycogenesis and lipogenesis, ↑ maternal fat storage. <b>Catabolic phase (~weeks 28–40):</b> <mark>hPL is the main hormone causing insulin resistance</mark>; the pancreas must raise insulin output <b>50–100%</b>. If it cannot, hyperglycaemia develops.",
+  build:function(root){
+    var C=twocol(root), L=C[0], R=C[1];
+    var S={wk:28, beta:100, sens:100, mass:100};
+    var ro=panel("Maternal & fetal"), roBody=el("div"); ro.appendChild(roBody);
+    var vb=verdict();
+    var ch=chart({w:640,h:210,x0:0,x1:40,xticks:[0,10,20,24,28,34,40],xlabel:"weeks of gestation",
+      regions:[{a:0,b:27,label:"anabolic",fill:"rgba(191,227,217,.20)"},
+               {a:27,b:40,label:"catabolic",fill:"rgba(255,234,167,.24)"},
+               {a:24,b:28,label:"screen",fill:"rgba(154,31,46,.10)"}],
+      series:[{name:"hPL",color:"#1d4e89",f:function(w){return clamp(w<4?0:Math.pow(clamp((w-4)/36,0,1),1.45),0,1);}},
+              {name:"Insulin resistance",color:"#9a1f2e",f:function(w){return clamp(0.12+0.80*Math.pow(clamp(w/38,0,1),2.0),0,1);}},
+              {name:"Insulin secretion",color:"#0c5247",f:function(w){return clamp(0.22+0.62*Math.pow(clamp(w/38,0,1),1.7),0,1);}}]});
+    var sWk=slider({label:"Gestational age",min:0,max:40,value:28,fmtv:function(v){return "week "+v;},
+      hint:"<mark>Universal screening at 24–28 weeks.</mark> Resistance worsens as the placenta enlarges and releases more hPL.",
+      onInput:function(v){S.wk=v;render();}});
+    var sB=slider({label:"Maternal β-cell reserve",min:20,max:170,value:100,normLo:85,normHi:140,unit:"%",
+      hint:"Must rise <b>50–100%</b> to keep pace. GDM is insulin resistance <b>plus</b> an inadequate secretory response.",
+      onInput:function(v){S.beta=v;render();}});
+    var sS=slider({label:"Baseline insulin sensitivity",min:30,max:130,value:100,normLo:85,normHi:120,unit:"%",
+      hint:"Lowered by obesity (BMI &gt; 30) — a leading GDM risk factor, along with age ≥ 25–30 and prior GDM.",
+      onInput:function(v){S.sens=v;render();}});
+    var sM=slider({label:"Placental mass (hPL output)",min:50,max:220,value:100,normLo:85,normHi:125,unit:"%",
+      hint:"Twins mean more placenta, more hPL, and more resistance.",
+      onInput:function(v){S.mass=v;render();}});
+    L.appendChild(panel("Gestation",[sWk]));
+    L.appendChild(panel("Maternal & placental",[sB,sS,sM]));
+    L.appendChild(panel("Jump to a state",[presets([
+      {name:"Normal, 2nd trimester",v:{wk:20,beta:100,sens:100,mass:100}},
+      {name:"Normal, term",v:{wk:38,beta:100,sens:100,mass:100}},
+      {name:"GDM",v:{wk:30,beta:52,sens:66,mass:100}},
+      {name:"GDM with twins",v:{wk:30,beta:60,sens:70,mass:190}},
+      {name:"Well-controlled GDM",v:{wk:30,beta:95,sens:82,mass:100}}
+    ],function(p){ for(var k in p.v) S[k]=p.v[k];
+      sWk.set(S.wk);sB.set(S.beta);sS.set(S.sens);sM.set(S.mass);render(); })]));
+    R.appendChild(panel("Through gestation",[ch])); R.appendChild(ro);
+    R.appendChild(panel("Interpretation",[vb]));
+
+    function render(){
+      var w=S.wk;
+      ch.cursor(w);
+      var hpl = clamp(w<4?0:Math.pow(clamp((w-4)/36,0,1),1.45),0,1)*(S.mass/100);
+      var resist = clamp(0.25+1.15*hpl,0,2.4);
+      var sens = clamp((S.sens/100)/Math.max(resist,0.1),0,3);
+      var supply = clamp(S.beta/100*(1+0.7*clamp(hpl,0,1.2))*0.80,0,3); // 50-100% rise if reserve intact
+      var need = 1/Math.max(sens,0.12);
+      var gap = need/Math.max(supply,0.1);
+      var fasting = clamp(78*Math.pow(gap,0.45),60,155);
+      var ogtt1h  = clamp(110*Math.pow(gap,0.68),75,265);
+      var fetalGlu= clamp(fasting*0.92,50,145);
+      var fetalIns= clamp(Math.pow(clamp(fetalGlu/78,0.6,2.4),3.0),0.3,4);
+      var macro   = clamp((fetalIns-1)*0.55,0,2);
+
+      roBody.innerHTML="";
+      roBody.appendChild(absRo([
+        ["Fasting plasma glucose",fasting,"mg/dL",60,95,160,0],
+        ["1-hour 50 g OGTT",ogtt1h,"mg/dL",70,140,260,0],
+        ["Fetal glucose",fetalGlu,"mg/dL",50,90,150,0]
+      ]));
+      roBody.appendChild(relRo([["Fetal insulin",fetalIns],["Macrosomia risk",1+macro]]));
+      roBody.appendChild(el("div",{class:"note",html:
+        "<b>Cutoffs:</b> fasting <b>&gt; 125</b> suspect DM, <b>&lt; 95</b> normal. 1-hour 50 g <mark>&gt; 140 suspects GDM — a very SENSITIVE test, so a negative rules it out</mark>. Confirm with the 3-hour 100 g: abnormal is <b>&gt; 180 at 1 h, &gt; 155 at 2 h, &gt; 140 at 3 h</b>; <mark>≥ 2 abnormal values = GDM</mark> — a very SPECIFIC test, so a positive rules it in. <b>Urine glucose is not useful — glycosuria is normal in pregnancy.</b>"}));
+
+      var v;
+      if(w<27 && gap<1.25) v={n:"Anabolic phase — normal",ok:true,
+        h:"In the first half of pregnancy the mother is <b>building stores</b>: ↑ appetite, ↑ first-phase insulin response, ↑ glycogenesis and lipogenesis, ↑ fat storage, with limited fetal growth."+
+          "<ul><li>Postprandial hypoglycaemia is common because <b>the fetus draws glucose continuously</b>, between meals and during sleep.</li></ul>"};
+      else if(ogtt1h>140 && fasting>95) v={n:"Gestational diabetes",ok:false,
+        h:"Insulin resistance from hPL has outrun the β-cell response, so <b>maternal and fetal hyperglycaemia</b> develop."+
+          "<ul><li><mark>Glucose is shunted to the fetus → continuous fetal glucose use → fetal hyperinsulinaemia.</mark></li>"+
+          "<li>Fetal: <b>macrosomia (most common)</b>, shoulder dystocia with brachial plexus injury, prematurity. Neonatal: <b>hypoglycaemia, hypocalcaemia, polycythaemia, hyperbilirubinaemia</b>.</li>"+
+          "<li>Maternal: pre-eclampsia (2×), polyhydramnios from fetal polyuria, and <b>type 2 DM later in life (50%)</b>.</li>"+
+          "<li>Treat conservatively first — <b>diet and exercise</b>; then insulin, metformin or glyburide.</li></ul>"};
+      else if(ogtt1h>140) v={n:"Screen positive — needs the confirmatory 3-hour test",ok:false,
+        h:"The 1-hour 50 g screen is <b>sensitive but not specific</b>, so a positive result must be confirmed with the 3-hour 100 g OGTT before diagnosing GDM."};
+      else if(w>=27) v={n:"Catabolic phase — normal",ok:true,
+        h:"Resistance has risen but the pancreas has kept pace, raising insulin output as required."+
+          "<ul><li>↑ lipolysis with glycerol and free fatty acid mobilisation; FFAs become the mother's main fuel, sparing glucose for the fetus.</li>"+
+          "<li>Nutrient transfer priority: <b>glucose &gt; ketones &gt; amino acids &gt; FFAs</b>.</li></ul>"};
+      else v={n:"Normal glucose handling",ok:true,
+        h:"Insulin supply matches the resistance imposed by placental hormones."};
+      vb.set(v.n,v.h,v.ok);
+    }
+    render();
+  }
+});
+
+/* ==========================================================================
+   08 · NEONATAL BILIRUBIN & JAUNDICE
+   Source: Parturition & Transition to Neonatal Life p22–25
+   ======================================================================== */
+reg({ id:"bili", n:"08", title:"Neonatal Bilirubin & Jaundice",
+  blurb:"The placenta stops clearing bilirubin at birth and an immature liver takes over. Drive haemolysis, UGT1A1 activity and gut recirculation to separate physiological jaundice from the dangerous kind.",
+  tags:["UGT1A1","enterohepatic loop","phototherapy","kernicterus"],
+  src:"Parturition & Transition to Neonatal Life p22–25",
+  intro:"Fetal bilirubin is cleared by the <b>placenta</b> and excreted by the <b>maternal</b> liver. At birth the neonatal liver must take over — but <mark>UGT1A1 levels are low</mark>, and because the gut flora that convert bilirubin to urobilinogen are also undeveloped, an <mark>enterohepatic circulation of unconjugated bilirubin</mark> is established.",
+  build:function(root){
+    var C=twocol(root), L=C[0], R=C[1];
+    var S={hem:100, ugt:100, ehc:100, ga:39, photo:0};
+    var ro=panel("Bilirubin"), roBody=el("div"); ro.appendChild(roBody);
+    var vb=verdict();
+    var chHost=panel("Bilirubin over the first week"), cH=el("div"); chHost.appendChild(cH);
+
+    var sH=slider({label:"Haemolysis rate",min:50,max:400,value:100,normLo:85,normHi:130,unit:"%",
+      hint:"<b>70–90% of bilirubin comes from degradation of haemoglobin from senescent red cells.</b> Raised in Rh and ABO disease.",
+      onInput:function(v){S.hem=v;render();}});
+    var sU=slider({label:"UGT1A1 activity",min:0,max:150,value:100,normLo:80,normHi:130,unit:"%",
+      hint:"Conjugating enzyme. Physiologically low at birth; near-absent in <b>Crigler–Najjar</b>.",
+      onInput:function(v){S.ugt=v;render();}});
+    var sE=slider({label:"Enterohepatic recirculation",min:40,max:300,value:100,normLo:85,normHi:130,unit:"%",
+      hint:"Undeveloped gut flora cannot convert bilirubin to urobilinogen, so it is reabsorbed instead of excreted.",
+      onInput:function(v){S.ehc=v;render();}});
+    var sG=slider({label:"Gestational age at birth",min:28,max:42,value:39,unit:" wk",normLo:37,normHi:42,
+      hint:"Prematurity means even less UGT1A1 and a higher risk at any given level.",
+      onInput:function(v){S.ga=v;render();}});
+    var segP=segmented(["No phototherapy","Phototherapy"],0,function(i){S.photo=i;render();});
+    L.appendChild(panel("Production & clearance",[sH,sU,sE,sG]));
+    L.appendChild(panel("Treatment",[segP]));
+    L.appendChild(panel("Jump to a state",[presets([
+      {name:"Physiological jaundice",v:{hem:100,ugt:100,ehc:100,ga:39,photo:0}},
+      {name:"Rh haemolytic disease",v:{hem:330,ugt:95,ehc:110,ga:37,photo:0}},
+      {name:"Preterm",v:{hem:115,ugt:55,ehc:130,ga:30,photo:0}},
+      {name:"Crigler–Najjar",v:{hem:100,ugt:2,ehc:110,ga:39,photo:0}},
+      {name:"Rh disease on phototherapy",v:{hem:330,ugt:95,ehc:110,ga:37,photo:1}}
+    ],function(p){ for(var k in p.v) S[k]=p.v[k];
+      sH.set(S.hem);sU.set(S.ugt);sE.set(S.ehc);sG.set(S.ga);segP.pick(S.photo);render(); })]));
+    R.appendChild(chHost); R.appendChild(ro); R.appendChild(panel("Interpretation",[vb]));
+
+    function peak(){
+      var prem = clamp((39-S.ga)/11,0,1);
+      var ugtEff = clamp(S.ugt/100*(1-0.35*prem),0.02,1.6);
+      var prod = S.hem/100;
+      var clear = clamp(ugtEff/(S.ehc/100), 0.02, 3);
+      var b = clamp(1.5 + 7.0*prod*Math.pow(1/Math.max(clear,0.10),0.5), 1, 42);
+      if(S.photo) b = clamp(b*0.52, 1, 42);
+      return b;
+    }
+    function render(){
+      var pk=peak();
+      var kern = 20 + (S.ga>=37?5:0);           // exchange-level threshold band
+      var f=function(d){ // day 0-7 trajectory: rise to ~day 3-5 then fall
+        var shape = clamp(1.15*bump(d,3.6,2.4)+0.10,0,1.25);
+        return clamp(shape*pk/42,0,1);
+      };
+      var c=chart({w:640,h:205,x0:0,x1:7,xticks:[0,1,2,3,4,5,6,7],xlabel:"days of life",
+        series:[{name:"Unconjugated bilirubin",color:"#c07b23",f:f},
+                {name:"Phototherapy threshold",color:"#1d4e89",dash:"5 3",width:1.5,f:function(){return 15/42;}},
+                {name:"Exchange / kernicterus risk",color:"#9a1f2e",dash:"4 3",width:1.5,f:function(){return kern/42;}}]});
+      cH.innerHTML=""; cH.appendChild(c);
+      cH.appendChild(el("div",{class:"note",html:
+        "Vertical scale 0–42 mg/dL. <b>Normal circulating bilirubin in adults is &lt; 0.5 mg/dL.</b> Physiological jaundice peaks around <b>day 3–5</b> and resolves; a level that is high on <b>day 1</b>, or still climbing after day 5, is not physiological."}));
+
+      roBody.innerHTML="";
+      roBody.appendChild(absRo([["Peak unconjugated bilirubin",pk,"mg/dL",4,13,42,1]]));
+      roBody.appendChild(relRo([["Bilirubin production",S.hem/100],
+        ["Conjugation capacity",clamp(S.ugt/100*(1-0.55*clamp((39-S.ga)/11,0,1)),0,2)],
+        ["Enterohepatic reabsorption",S.ehc/100]]));
+
+      var v;
+      if(S.ugt<0.08*100) v={n:"Crigler–Najjar — near-absent conjugation",ok:false,
+        h:"With essentially no UGT1A1, unconjugated bilirubin accumulates relentlessly regardless of production rate."+
+          "<ul><li>Phototherapy still helps, because <mark>it converts bilirubin to less toxic, less lipophilic isomers that are excreted WITHOUT hepatic conjugation</mark> — it bypasses the missing enzyme entirely.</li></ul>"};
+      else if(pk>=kern) v={n:"Severe hyperbilirubinaemia — kernicterus risk",ok:false,
+        h:"Unconjugated bilirubin is insoluble and travels <b>bound to albumin</b>; when it exceeds binding capacity, free bilirubin crosses the <b>immature blood–brain barrier</b> and deposits in the <b>basal ganglia</b>."+
+          "<ul><li><mark>The objective of treatment is preventing bilirubin neurotoxicity.</mark></li>"+
+          "<li>Phototherapy is the mainstay; exchange transfusion for levels above threshold.</li></ul>"};
+      else if(S.hem>250) v={n:"Haemolytic jaundice",ok:false,
+        h:"Production is far above what an immature liver can clear."+
+          "<ul><li>In <b>Rh disease</b>, maternal IgG anti-D crosses the placenta and destroys fetal red cells — <b>extravascular haemolysis</b>.</li>"+
+          "<li><b>ABO disease</b> is milder, can affect the first pregnancy, and shows spherocytes.</li></ul>"};
+      else if(S.ga<34) v={n:"Preterm — reduced conjugation reserve",ok:false,
+        h:"Prematurity compounds every mechanism: <b>even lower UGT1A1</b>, more enterohepatic recirculation, and a more permeable blood–brain barrier — so the threshold for intervention is lower at any given bilirubin level."};
+      else if(pk>15) v={n:"Jaundice above the phototherapy threshold",ok:false,
+        h:"<b>Phototherapy is the mainstay of treatment for unconjugated hyperbilirubinaemia.</b> Exposure to light causes <b>structural and configurational isomerisation</b> to products excreted efficiently without conjugation."};
+      else v={n:"Physiological jaundice",ok:true,
+        h:"The expected newborn pattern: <b>low UGT1A1</b> plus an <b>enterohepatic circulation of unconjugated bilirubin</b> because gut flora are undeveloped."+
+          "<ul><li>Peaks around day 3–5 and resolves as the liver matures and the gut is colonised.</li>"+
+          "<li><b>70–90% of bilirubin derives from the haemoglobin of senescent red blood cells.</b></li></ul>"};
+      vb.set(v.n,v.h,v.ok);
+    }
+    render();
+  }
+});
+
+})();
+</script>
+
+<script>
+/* Row-level deep links: a small "model" chip on table rows the models cover. */
+(function(){
+"use strict";
+var MAP=[
+ [/HPO axis|GnRH puls|Modulators of the GnRH|feedback switch|Cycle phases|Endometrial cycle|Progesterone withdrawal|Gonadotropins across the lifespan|Menopause — hormonal|Amenorrhea — primary|Dominant follicle|Ovulation — the mechanics|Corpus luteum$/i,"hpo","HPO axis model"],
+ [/Two-cell, two-gonadotropin|Ovarian steroid|Androgens in the female|Estradiol \(17|^Progesterone$|Inhibin A and Inhibin B|PCOS — the hormonal cascade/i,"twocell","steroidogenesis model"],
+ [/chorionic gonadotropin|Progesterone in pregnancy|Estrogens in pregnancy|maternal–placental–fetal|Placental CRH|placental lactogen|Changes in hormone production/i,"preghorm","pregnancy hormone model"],
+ [/^Hematologic$|^Cardiovascular$|^Renal$|Uterine blood flow/i,"matcv","maternal adaptation model"],
+ [/Placental gas exchange|Fetal hemoglobin|^Respiratory$/i,"gasx","gas exchange model"],
+ [/phases of parturition|Phase 1 — quiescence|Phase 2 — activation|Phase 2 → Phase 3|Oxytocin and the Ferguson|Prostaglandins in parturition|three stages of labour|Phase 4 — involution/i,"parturition","parturition model"],
+ [/Gestational diabetes|Metabolic — anabolic/i,"gdm","glucose model"],
+ [/Neonatal jaundice/i,"bili","bilirubin model"]
+];
+function boot(){
+  var tb=document.getElementById("tbody"); if(!tb||!window.__openModel) return;
+  function decorate(){
+    var cells=tb.querySelectorAll("td.name, tr:not(.sec) td:first-child");
+    [].forEach.call(cells,function(td){
+      if(td.querySelector(".modelchip")) return;
+      if(td.closest("tr").classList.contains("sec")) return;
+      var txt=(td.textContent||"").trim(); if(!txt) return;
+      for(var i=0;i<MAP.length;i++){
+        if(MAP[i][0].test(txt)){
+          var id=MAP[i][1];
+          var a=document.createElement("button");
+          a.className="modelchip"; a.type="button";
+          a.innerHTML="▶ "+MAP[i][2];
+          a.addEventListener("click",function(e){ e.stopPropagation(); window.__openModel(id); });
+          td.appendChild(a); break;
+        }
+      }
+    });
+  }
+  decorate();
+  new MutationObserver(decorate).observe(tb,{childList:true});
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
+</script>
+<style>
+  .modelchip{display:inline-block;margin-top:7px;appearance:none;cursor:pointer;
+    border:1px solid #cdc6b6;background:#fff;font:inherit;font-size:10.5px;font-weight:600;
+    font-family:'IBM Plex Mono',monospace;color:#0c5247;padding:3px 9px;border-radius:20px;
+    letter-spacing:.02em;line-height:1.3}
+  .modelchip:hover{border-color:#0c5247;background:#d8efe9}
+</style>
+
 <!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
 <style id="sitekit">
   :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
