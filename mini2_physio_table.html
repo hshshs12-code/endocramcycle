@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini 2 Physiology — Female Reproductive, Pregnancy &amp; Parturition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:6px 11px;border:1px solid var(--line-strong);border-radius:99px;
+    background:var(--surface);color:var(--muted);cursor:pointer;user-select:none;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:13%}
+  col.c-gene{width:22%}
+  col.c-buzz{width:21%}
+  col.c-diff{width:20%}
+  col.c-exam{width:15%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+.c-img{width:9%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Mini 2 · Physiology · Rapid Reference</p>
+  <h1>The axes, the feedback switches,<br>and every arrow that <em>will</em> be tested.</h1>
+  <p class="sub">Female reproductive physiology, establishment of pregnancy, maternal adaptation and parturition on one scannable grid. Each section states the format it uses — <b>axis / feedback flow</b> for the HPO axis, <b>process / sequence</b> for ordered content, <b>compare</b> for contrasts, <b>hormone table</b> otherwise. Teal = hormone, receptor or value. Highlighted = the key buzzword or number. The crimson rail is the single fact most likely to anchor a question stem. Directional changes (↑/↓) in the maternal adaptations are written out so they scan.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search hormone, axis, phase, value…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Hormone / receptor</span>
+      <span><i class="sw b"></i>Key value / buzzword</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Concept / Hormone</th>
+          <th>Axis, Regulation &amp; Sequence</th>
+          <th>Actions &amp; Targets</th>
+          <th>Contrast / Correlate</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No concept matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Study reference compiled from the Mini 2 physiology lectures — Female Reproductive Physiology, Establishment of Pregnancy, Maternal Physiology and Parturition &amp; Transition to Neonatal Life. Each of those exists as a Notes and a Slides file with identical page counts and titles; the Notes version is a superset (slides plus speaker notes) and is the source used throughout. Sections tagged [summary] come from the Summaries folder and intentionally overlap the lecture sections. Verify against your primary lecture material where anything differs — not a substitute for the notes.
+</footer>
+
+<script>
+const DATA = [
+ {sec:"HPO Axis & Feedback Control  [axis / feedback flow]", rows:[
+  {n:"The HPO axis — the whole loop in one chain", g:"<span class='pill'>GnRH</span><span class='pill'>LH</span><span class='pill'>FSH</span><span class='pill'>Estrogen</span><span class='pill'>Progesterone</span><span class='pill'>Inhibin</span> <mark>Hypothalamus → GnRH → anterior pituitary → LH & FSH → ovary → estrogen, progesterone, inhibin → back to hypothalamus & pituitary</mark>. Ovarian hormones then act via classical <b>negative (and positive)</b> feedback loops to inhibit or stimulate GnRH and gonadotropin secretion.", b:"GnRH stimulates secretion of LH and FSH; LH and FSH stimulate ovarian hormone secretion; ovarian hormones feed back to the H-P axis and modulate GnRH, LH and FSH.", d:"<b>The principal regulator of pituitary gonadotropin secretion is GnRH.</b> Inhibin is the one arm that acts <mark>only at the pituitary</mark> and <mark>only on FSH</mark> — it has no effect on hypothalamic GnRH.", e:"<span class='star'>⭐</span>Trace the loop in both directions. The single most tested branch point is <b>where estrogen switches from negative to positive feedback</b>.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p4_hpo_axis_feedback_loop.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p4_hpo_axis_feedback_loop.jpg\" loading=\"lazy\" alt=\"hpo axis feedback loop\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p11_hpo_axis_positive_negative_feedback.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p11_hpo_axis_positive_negative_feedback.jpg\" loading=\"lazy\" alt=\"hpo axis positive negative feedback\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"GnRH pulsatility — pulsatile vs continuous", g:"<span class='pill'>GnRH</span><span class='pill'>Arcuate & preoptic nuclei</span> GnRH neurons in the <b>arcuate and preoptic areas</b> secrete GnRH in <mark>rhythmic pulses roughly every 90–120 minutes</mark>, not continuously. Intermittent stimulation of gonadotropes → pulses of LH and FSH.", b:"GnRH binds a <b>Gq GPCR</b> on gonadotropes → PLC → PIP₂ hydrolysed to IP₃ and DAG → IP₃ releases Ca²⁺ from ER and DAG activates PKC → PKC phosphorylates transcription factors → LH and FSH gene transcription and vesicle exocytosis.", d:"<mark>Continuous (non-pulsatile) GnRH down-regulates GnRH receptors and SUPPRESSES gonadotropin release.</mark> That is the therapeutic basis of continuous GnRH agonists such as leuprolide.", e:"<span class='star'>⭐</span>Pulsatile = stimulation. Continuous = chemical castration. This single contrast explains both infertility treatment and endometriosis/prostate cancer therapy.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p8_gnrh_pulsatile_vs_continuous.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p8_gnrh_pulsatile_vs_continuous.jpg\" loading=\"lazy\" alt=\"gnrh pulsatile vs continuous\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Modulators of the GnRH pulse generator", g:"<span class='pill'>Kisspeptin ↑</span><span class='pill'>Leptin ↑</span><span class='pill'>Prolactin ↓</span><span class='pill'>CRH ↓</span><span class='pill'>Endorphins ↓</span> Pulsatility is an intrinsic property of GnRH neurons, modulated by: <mark>estrogen (low = ↓, high = ↑)</mark>, <b>progesterone always ↓</b>, CRH ↓, endorphins and other opioids ↓, prolactin ↓, <b>kisspeptin ↑</b>, leptin ↑.", b:"Kisspeptin is a polypeptide from kisspeptin neurons in the arcuate nucleus — a required upstream driver of GnRH release. Leptin links energy stores to reproductive capacity.", d:"<mark>Stress, weight loss, excessive exercise, prolactin and TRH all decrease GnRH pulsatility</mark> → ↓ GnRH → ↓ FSH/LH → ↓ ovarian function. High TRH stimulates prolactin, and prolactin inhibits GnRH — the route by which <b>hypothyroidism causes menstrual irregularity</b>.", e:"<span class='star'>⭐</span>Hyperthyroidism works differently: thyroid hormone <b>raises SHBG</b>, reducing bioavailable estrogen and disturbing ovulation.", img:""},
+  {n:"Estrogen's feedback switch — negative to positive", g:"<span class='pill'>Estradiol</span><span class='pill'>Inhibin B</span> <b>Early–mid follicular:</b> antral follicles secrete estradiol → <mark>NEGATIVE feedback</mark> on the H-P axis, reducing GnRH, LH and FSH; inhibin B additionally inhibits pituitary FSH. <b>Late follicular:</b> the Graafian follicle secretes high estrogen at a high rate → feedback flips to <mark>POSITIVE</mark> → LH surge (with a smaller FSH surge).", b:"The positive-feedback surge induces ovulation approximately <b>24 hours</b> later.", d:"<mark>REMEMBER: the positive feedback effect of estrogen occurs ONLY in the late follicular phase just prior to ovulation.</mark> At every other point in the cycle estrogen is inhibitory.", e:"<span class='star'>⭐</span>It is not estrogen level alone — it is <b>high level sustained at a high rate</b> that flips the sign. That distinction is the classic exam trap.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p20_early_follicular_negative_feedback.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p20_early_follicular_negative_feedback.jpg\" loading=\"lazy\" alt=\"early follicular negative feedback\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p22_late_follicular_positive_feedback_lh_surge.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p22_late_follicular_positive_feedback_lh_surge.jpg\" loading=\"lazy\" alt=\"late follicular positive feedback lh surge\" style=\"max-height:64px;border-radius:6px\"></a>"},
+ ]},
+ {sec:"Ovarian Hormones  [hormone table]", rows:[
+  {n:"Estradiol (17β-estradiol)", g:"<span class='pill'>Granulosa cells</span><span class='pill'>Aromatase</span><span class='pill'>Nuclear ER</span> Secreted by granulosa and granulosa-lutein cells by <mark>aromatisation of thecal androgens</mark>. Regulated by FSH acting on granulosa cells. Feeds back negatively on the H-P axis except in the late follicular phase, when feedback becomes positive.", b:"<b>Reproductive:</b> endometrial proliferation and thickening; thin, non-viscous, elastic, alkaline <b>cervical mucus that facilitates sperm entry</b>; vaginal epithelial glycogen → ↑ lactic acid → ↓ vaginal pH; ↑ ciliary and secretory activity in the fallopian tubes. <b>Systemic:</b> closure of epiphyseal plates, promotes osteoblast survival and osteoclast apoptosis; ↑ HDL and regulates SHBG; premenopausal cardiovascular protection. <mark>Estrogen increases progesterone receptor expression.</mark>", d:"<b>DEFICIENCY</b> (hypothalamic/pituitary/ovarian failure, menopause): delayed puberty and absent secondary sex development, vulvovaginal atrophy and dryness with dyspareunia, hot flashes, ↑ cardiovascular risk, ↓ bone density and osteoporosis. <b>EXCESS</b> (H-P-O tumour, obesity via aromatase, exogenous therapy): precocious puberty, ↑ endometrial proliferation and hyperplasia, ↑ endometrial cancer risk, ↑ breast cancer risk, ↑ venous thromboembolic events.", e:"<span class='star'>⭐</span>Three estrogens, three eras: <mark>estradiol = menstrual cycle (most potent), estrone = menopause, estriol = pregnancy</mark>.", img:""},
+  {n:"Progesterone", g:"<span class='pill'>Corpus luteum</span><span class='pill'>Granulosa-lutein cells</span><span class='pill'>Dimeric PR</span> Produced by the ovary (corpus luteum) and the placenta. LH delivered to granulosa-lutein cells drives progesterone synthesis. <mark>Progesterone always suppresses GnRH pulsatility</mark> and feeds back negatively on hypothalamus and pituitary.", b:"\"<b>Pro-gestation</b>\": <b>endometrium</b> — ↑ vascularisation, spiral artery extension, ↑ size and coiling of glands into a <mark>corkscrew shape</mark>, ↑ glandular secretion, stromal edema and differentiation; <b>cervix</b> — thick, non-elastic, viscous mucus forming the mucus plug; <b>myometrium</b> — ↓ contractility, quiescence; <b>brain</b> — negative feedback and <mark>↑ basal body temperature by ~0.5 °C</mark>; <b>breast</b> — growth of lobules and alveoli, premenstrual swelling and tenderness.", d:"Contrast with estrogen at every site: estrogen makes cervical mucus thin and sperm-friendly, progesterone makes it a thick plug; estrogen proliferates the endometrium, progesterone makes it secretory.", e:"<span class='star'>⭐</span><mark>Progesterone withdrawal — levels falling below 5 ng/mL — is what triggers menstruation.</mark>", img:""},
+  {n:"Inhibin A and Inhibin B", g:"<span class='pill'>Inhibin B — granulosa cells</span><span class='pill'>Inhibin A — granulosa-lutein cells</span> <b>Inhibin B:</b> secreted by granulosa cells of small antral follicles, stimulated by FSH, peaks in the <mark>follicular phase</mark>. <b>Inhibin A:</b> secreted by granulosa-lutein cells of the corpus luteum, stimulated by FSH, peaks in the <mark>luteal phase</mark>.", b:"Both <mark>inhibit pituitary FSH synthesis and secretion</mark> — and only FSH.", d:"<b>Inhibins act at the pituitary only; they have no effect on hypothalamic GnRH.</b> That is what separates them from estrogen and progesterone feedback.", e:"<span class='star'>⭐</span>Phase tells you which inhibin: B = follicular (Before ovulation), A = luteal (After ovulation).", img:""},
+  {n:"Anti-Müllerian hormone (AMH)", g:"<span class='pill'>Granulosa cells of growing follicles</span> Dimeric glycoprotein secreted from granulosa cells of growing follicles, at levels measurable in serum <mark>proportional to the number of developing follicles</mark>.", b:"Regulates initiation of follicle growth and follicle sensitivity to FSH.", d:"<mark>Marker of ovarian reserve and reproductive lifespan.</mark> It is a <b>quantitative</b> test — it gives no information about egg quality.", e:"<span class='star'>⭐</span>AMH = MIS (Müllerian inhibiting substance), also secreted by Sertoli cells where it drives Müllerian duct regression in males.", img:""},
+  {n:"Androgens in the female", g:"<span class='pill'>DHEAS &gt; DHEA &gt; androstenedione &gt; testosterone &gt; DHT</span><span class='pill'>Adrenal + ovary</span> Produced in the adrenal gland, the ovary, and by peripheral conversion of prohormones. ACTH stimulates adrenal androgens; LH stimulates ovarian androgens. <mark>There is NO feedback regulatory loop controlling androgen secretion in females</mark> — androgens do not feed back on ACTH (cortisol does) or on the pituitary (estrogens do).", b:"Serve as the <b>substrate for estrogen synthesis</b>; proposed roles in sexual function and bone health (weak associations). DHEAS, DHEA and androstenedione must be converted to testosterone or DHT to have androgenic effect.", d:"<b>EXCESS</b> — most commonly PCOS: <mark>hirsutism</mark> (thick pigmented terminal hair in a male distribution — upper lip, chin, linea alba, around nipples), acne, male-pattern alopecia, voice deepening, ↑ muscle strength, clitoromegaly; proposed ↑ CVD risk via ↓ HDL. Hyperandrogenemia may also arise from ↓ SHBG (↑ free testosterone) or anabolic steroid use.", e:"<span class='star'>⭐</span>The absence of a feedback loop is itself the tested point — it is why androgen excess is unchecked.", img:""},
+ ]},
+ {sec:"Ovarian Steroidogenesis  [process / sequence]", rows:[
+  {n:"Two-cell, two-gonadotropin theory — follicular phase", g:"<span class='pill'>LH → theca</span><span class='pill'>FSH → granulosa</span> <b>1.</b> LH reaches theca cells → androstenedione (mainly) and some testosterone. <b>2.</b> Androgens diffuse into granulosa cells. <b>3.</b> FSH drives <mark>aromatase</mark> in granulosa cells → estradiol (mainly) and some estrone.", b:"<mark>Theca cells lack aromatase</mark> so cannot make estrogen; <mark>granulosa cells lack 17α-hydroxylase and 17,20-lyase</mark> so cannot make androgen from pregnenolone. Neither cell can complete steroid synthesis alone.", d:"This is the pathway of <b>antral follicles in the follicular phase — BEFORE ovulation</b>. The primary hormone secreted is estradiol.", e:"<span class='star'>⭐</span>\"LH–theca–androgen, FSH–granulosa–estrogen.\" Then repeat it for the luteal phase with the lutein cells.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p19_two_cell_two_gonadotropin_theory.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p19_two_cell_two_gonadotropin_theory.jpg\" loading=\"lazy\" alt=\"two cell two gonadotropin theory\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p17_ovarian_steroid_biosynthesis_pathway.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p17_ovarian_steroid_biosynthesis_pathway.jpg\" loading=\"lazy\" alt=\"ovarian steroid biosynthesis pathway\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Two-cell, two-gonadotropin theory — luteal phase", g:"<span class='pill'>LH → theca-lutein</span><span class='pill'>FSH → granulosa-lutein</span> <b>1.</b> LH → theca-lutein cells → androstenedione and testosterone. <b>2.</b> Androgens diffuse to granulosa-lutein cells. <b>3.</b> FSH drives aromatase → estradiol and estrone. <b>4.</b> <mark>LH also acts directly on granulosa-lutein cells to drive progesterone synthesis.</mark>", b:"Theca-lutein cells carry LH receptors and make mostly androgen; granulosa-lutein cells carry LH <i>and</i> FSH receptors and make mostly progesterone plus some estrogen and inhibin A.", d:"Same two-cell logic as the follicular phase, but the dominant output has shifted from <b>estradiol</b> to <b>progesterone</b>.", e:"<span class='star'>⭐</span>The luteinisation switch: genes for GC proliferation go down, genes for the <b>LH receptor and progesterone synthesis</b> go up.", img:""},
+ ]},
+ {sec:"Folliculogenesis & Ovulation  [process / sequence]", rows:[
+  {n:"Follicle stages — primordial to Graafian", g:"<span class='pill'>FSHR on granulosa</span><span class='pill'>LHR on theca interna</span> <b>1. Primordial</b> — primary oocyte (25 µm) arrested in <mark>prophase I</mark>, single layer of squamous granulosa cells. <b>2. Primary (unilaminar, 60 µm)</b> — oocyte grows to 30 µm, single cuboidal granulosa layer expressing <b>FSH receptors</b>, zona pellucida begins. <b>3. Secondary (multilaminar, 200 µm)</b> — fully grown oocyte (100 µm), 2–10 granulosa layers, theca laid down outside the basal lamina, <b>theca interna expresses LH receptors</b>. <b>4. Tertiary/antral (1 mm)</b> — follicular fluid antrum, theca differentiates into steroidogenic theca interna (LHR) and smooth-muscle-like theca externa. <b>5. Graafian</b> — largest pre-ovulatory dominant follicle.", b:"A follicle is a single oocyte surrounded by granulosa and theca cells. <b>The ovarian follicle is the basic functional unit of the female reproductive system.</b>", d:"The dominant follicle grows over ~10 days to <mark>20 mm</mark> before ovulating; subordinate follicles undergo atresia and <b>atretic antral follicles rarely exceed 10 mm</b>.", e:"<span class='star'>⭐</span>Match the receptor to the layer: <b>FSHR on granulosa, LHR on theca interna</b> — that is what makes the two-cell theory work.", img:""},
+  {n:"Dominant follicle selection", g:"<span class='pill'>FSH</span><span class='pill'>Mural granulosa cells</span> FSH continues to stimulate antral granulosa cells → one follicle emerges as dominant. Mural granulosa cells <mark>cease proliferating</mark> and cytodifferentiate: ↑ FSH receptor, ↑ aromatase and 17β-HSD, ↑ estradiol synthesis, and critically <mark>they begin to express the LH receptor</mark> and make progesterone.", b:"Granulosa proliferation → antral expansion → cytodifferentiation.", d:"Acquisition of the LH receptor on granulosa cells is what allows the follicle to respond to the LH surge and later luteinise.", e:"<span class='star'>⭐</span>Without granulosa LH receptors there is no ovulation and no corpus luteum.", img:""},
+  {n:"Ovulation — the mechanics", g:"<span class='pill'>LH surge</span><span class='pill'>Hyaluronan</span><span class='pill'>Proteolytic enzymes</span> <b>1.</b> LH surge. <b>2. Meiosis resumes</b> — the primary oocyte arrested in prophase I matures to a secondary oocyte with emission of the first polar body, then <mark>arrests again at metaphase II</mark>. <b>3. Cumulus expansion</b> — FSH and LH drive cumulus cells to secrete <b>hyaluronan</b>, expanding the cumulus-oocyte complex. <b>4. Follicle wall breakdown</b> — FSH and LH stimulate proteolytic enzymes and prostaglandins that disintegrate the <mark>stigma</mark>, releasing the COC into the peritoneal cavity.", b:"Ovulation occurs approximately <b>24 hours after the LH surge</b>. The released structure is the cumulus-oocyte complex (oocyte + surrounding cumulus cells).", d:"The oocyte does not complete meiosis II unless it is fertilised — it ovulates arrested in <b>metaphase II</b>.", e:"<span class='star'>⭐</span>Two arrests: prophase I from fetal life until the LH surge; metaphase II from ovulation until fertilisation.", img:""},
+  {n:"Corpus luteum", g:"<span class='pill'>LH</span><span class='pill'>Granulosa-lutein & theca-lutein cells</span> After ovulation the remnants of the ruptured follicle luteinise: granulosa and theca cells reorganise into a well-vascularised temporary endocrine gland. Neovascularisation is essential — it lets gonadotropins (and later hCG) reach the corpus luteum and lets secretory products enter the circulation.", b:"Secretes <b>progesterone (mostly), estrogen and inhibin A</b> under LH direction.", d:"<mark>Functional lifespan of ~14 days</mark> in a non-fertile cycle, after which it becomes the avascular <b>corpus albicans</b>. Progesterone and estrogen begin declining in the mid-luteal phase as CL function fails.", e:"<span class='star'>⭐</span>The 14-day luteal lifespan is fixed — cycle length varies because the <b>follicular</b> phase varies, not the luteal.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p27_luteal_phase_negative_feedback.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p27_luteal_phase_negative_feedback.jpg\" loading=\"lazy\" alt=\"luteal phase negative feedback\" style=\"max-height:64px;border-radius:6px\"></a>"},
+ ]},
+ {sec:"The Menstrual & Endometrial Cycle  [process / sequence + compare]", rows:[
+  {n:"Cycle phases — the 28-day map", g:"<span class='pill'>Menstrual d1–5</span><span class='pill'>Proliferative d6–14</span><span class='pill'>Secretory d15–28</span> <b>Menstrual phase (days 1–5)</b> — loss of the functional layer; <mark>day 1 is the day bleeding begins</mark>; lasts 2–5 days. <b>Proliferative phase (days 6–14)</b> — regrowth of the endometrial functional layer. <b>Secretory phase (days 15–28)</b> — glandular secretion under progesterone.", b:"Ovarian phases map onto endometrial phases: <b>follicular phase ↔ proliferative</b>, <b>luteal phase ↔ secretory</b>.", d:"Normal parameters: <mark>~80 mL of non-clotting blood and endometrial tissue over 2–5 days, every 21–35 days (mean 28)</mark>. Bleeding outside these parameters is abnormal uterine bleeding.", e:"<span class='star'>⭐</span>Anchor every hormone curve to this timeline — the exam figures are always this axis.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p3_cycle_overview_gonadotropin_endometrial_curves.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p3_cycle_overview_gonadotropin_endometrial_curves.jpg\" loading=\"lazy\" alt=\"cycle overview gonadotropin endometrial curves\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Endometrial cycle — what each phase looks like", g:"<span class='pill'>Estrogen-dominated</span><span class='pill'>Progesterone-dominated</span> <b>MENSES (progesterone withdrawal), d1–5:</b> prostaglandin-mediated vasoconstriction, degradation and sloughing of the functional layer. <b>PROLIFERATIVE (estrogen), d6–14:</b> regeneration of the functional layer, proliferation of glandular epithelium, stroma and artery endothelium, lengthening of glands and arteries, endometrial thickening. <b>SECRETORY (progesterone) early d15–23:</b> glandular synthesis and secretion of glycogen, glandular dilation and coiling into a <mark>corkscrew shape</mark>, stromal edema, spiral artery elongation. <b>Late d24–28:</b> stromal cells become rounded and glycogen/lipid-laden — <b>predecidualisation</b>; glands and stroma begin to regress.", b:"Histology follows function: round glands with mitotic figures = proliferative; corkscrew glands with subnuclear vacuoles = secretory.", d:"<b>Estrogen builds it, progesterone matures it, progesterone withdrawal sheds it.</b>", e:"<span class='star'>⭐</span>Predecidualisation in the late secretory phase is the same process that becomes decidualisation if implantation occurs.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p29_endometrial_cycle_phases.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p29_endometrial_cycle_phases.jpg\" loading=\"lazy\" alt=\"endometrial cycle phases\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Progesterone withdrawal → menstruation", g:"<span class='pill'>Progesterone &lt; 5 ng/mL</span><span class='pill'>Prostaglandins, MMPs, VEGF</span> Corpus luteum regression → falling progesterone — <mark>\"progesterone withdrawal\"</mark>. <b>Levels below 5 ng/mL stimulate menses.</b> Withdrawal induces an inflammatory response: leukocyte recruitment and increased endometrial prostaglandins, cytokines, matrix metalloproteinases and VEGF.", b:"The same mechanism operates when progesterone-containing contraceptives are withdrawn.", d:"Anovulation → no corpus luteum → no progesterone → no withdrawal → <b>prolonged unopposed estrogen and endometrial build-up</b>, manifesting as irregular, often heavy bleeding.", e:"<span class='star'>⭐</span>This links physiology straight to pathology: anovulatory cycles are the mechanism behind oligomenorrhea and endometrial hyperplasia.", img:""},
+ ]},
+ {sec:"Lifespan: Puberty to Menopause  [process / sequence + compare]", rows:[
+  {n:"Gonadotropins across the lifespan", g:"<span class='pill'>GnRH pulse generator</span> GnRH present by <b>4 weeks gestation</b>; FSH and LH in the pituitary by 10–12 weeks. Gonadotropins <mark>peak at mid-gestation, fall before birth, rise again at ~2 months of age</mark>, then remain low but detectable through childhood. At puberty increased pulsatile GnRH raises FSH and LH until LH is sufficient to induce ovulation — <b>menarche</b>.", b:"Reactivation of the GnRH pulse generator is the event that starts puberty.", d:"<mark>The gonadotropin surge is not regular early in puberty, so most early cycles are anovulatory.</mark>", e:"<span class='star'>⭐</span>That explains why adolescents commonly present with irregular, heavy bleeding — physiologic anovulation.", img:""},
+  {n:"Puberty — sequence and Tanner staging", g:"<span class='pill'>Adrenarche</span><span class='pill'>Thelarche</span><span class='pill'>Pubarche</span><span class='pill'>Menarche</span> <b>1. Adrenarche</b> — 2 years pre-puberty, DHEA and DHEAS rise from the adrenal zona reticularis. <b>2. Thelarche</b> — breast bud, mean onset <mark>10.5 years</mark>. <b>3. Pubarche</b> — pubic hair, soon after. <b>4. Growth spurt</b> ~11.5 years. <b>5. Menarche</b> ~13 years. Progression through all stages takes 2–4 years.", b:"<b>Tanner stages 1–5</b>: 1 preadolescent, no palpable breast tissue or pubic hair; 2 breast bud with areolar enlargement, sparse straight hair on labia majora; 3 further enlargement of breast and areola with no contour separation, curlier and more pigmented hair; 4 areola and nipple form a <b>secondary mound</b>, adult-type hair not spread to medial thighs; 5 areola recedes to the breast contour, adult hair quantity and distribution.", d:"Tanner staging is a sexual maturity rating used when delayed or precocious puberty is suspected.", e:"<span class='star'>⭐</span>The order — adrenarche, thelarche, pubarche, growth spurt, menarche — is itself a common question.", img:""},
+  {n:"Ovarian reserve — the oocyte count", g:"<span class='pill'>Atresia</span> <mark>~7 million oocytes at mid-gestation → 1–2 million follicles at birth → &lt;400,000 at menarche → 400–500 ovulated in a lifetime.</mark> <b>99.9% of a woman's follicles undergo atresia.</b>", b:"Depletion of the ovarian follicle reserve ends menstrual cyclicity and ovarian hormone production.", d:"<b>Before 40 years = premature ovarian insufficiency. After 40 years = menopause.</b>", e:"<span class='star'>⭐</span>The numbers are memorisable and heavily tested: 7 million → 1–2 million → 400,000 → ~450.", img:""},
+  {n:"Menopause — hormonal changes", g:"<span class='pill'>↑↑ FSH</span><span class='pill'>↑ LH</span><span class='pill'>↓ estradiol</span><span class='pill'>↓ inhibin B</span> <b>1.</b> Follicle depletion → ↓ estradiol and ↓ inhibin B. <b>2.</b> Loss of negative feedback → ↑ GnRH. <b>3.</b> → <mark>↑ FSH and LH</mark>. <b>4.</b> Ovarian stroma and adrenal cortex continue making androstenedione and testosterone. <b>5.</b> These are aromatised peripherally in adipose tissue → <mark>estrone becomes the predominant post-menopausal estrogen</mark>.", b:"Defined as the last menstrual period, confirmed after 12 months; preceded by ~4 years of perimenopause; <b>average age 52</b>. Symptoms follow reduced ovarian steroid synthesis.", d:"<mark>A rise in early-follicular-phase FSH is the earliest and most consistent clinically measurable change</mark> — measured on day 3. <b>↑ FSH and LH with ↓ estrogen are the classic hallmarks of follicle depletion.</b> LH rises too, but not to the same extent as FSH.", e:"<span class='star'>⭐</span>Production rates after menopause: progesterone &lt;1 mg/day, estradiol 10 vs 40–675, estrone 40 vs 65–350 — <b>estrone dominates but is still lower than premenopausal levels</b>.", img:"<a href=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p42_menopause_hormonal_changes.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/female_reproductive_physiology_notes/female_reproductive_physiology_notes_p42_menopause_hormonal_changes.jpg\" loading=\"lazy\" alt=\"menopause hormonal changes\" style=\"max-height:64px;border-radius:6px\"></a>"},
+ ]},
+ {sec:"Disorders of the Menstrual Cycle  [table]", rows:[
+  {n:"Menorrhagia", g:"<span class='pill'>&gt;80 mL or &gt;7 days</span> Excessive or prolonged uterine bleeding at menstruation.", b:"<mark>More than 80 mL of blood loss, or lasting more than 7 days.</mark>", d:"Contrast with the normal parameter of ~80 mL over 2–5 days.", e:"<span class='star'>⭐</span>The volume and duration thresholds are the definition — know both.", img:""},
+  {n:"Amenorrhea — primary vs secondary", g:"<span class='pill'>Primary: no menarche by 16</span><span class='pill'>Secondary: 3+ missed cycles</span> <b>Primary</b> — no menarche by age 16. <b>Secondary</b> — failure of three or more consecutive periods in a woman who previously had a cycle. Common in athletes, eating disorders and during stress.", b:"<b>PRIMARY causes:</b> outflow obstruction (imperforate hymen); absent uterus (Müllerian agenesis 46XX, complete androgen insensitivity 46XY); <b>hypogonadotropic hypogonadism</b> — Kallmann syndrome, dysfunctional GnRH neuron development with <mark>anosmia</mark> (↓FSH, ↓LH, ↓estrogen); <b>hypergonadotropic hypogonadism</b> — gonadal dysgenesis such as Turner 46XO (↑FSH, ↑LH, ↓estrogen).", d:"<b>SECONDARY causes:</b> <mark>pregnancy is the most common cause</mark>; pituitary — hyperprolactinemia inhibits pulsatile GnRH → ↓FSH/LH, may come with galactorrhea and visual disturbance; hypothalamic causes. Lactating women are typically amenorrheic.", e:"<span class='star'>⭐</span><mark>The FIRST investigation in a sexually active woman with amenorrhea is ALWAYS a pregnancy test.</mark>", img:""},
+  {n:"Polymenorrhea and oligomenorrhea", g:"<span class='pill'>Poly: &lt;21 days</span><span class='pill'>Oligo: &gt;35 days</span> <b>Polymenorrhea</b> — uterine bleeding at intervals under 21 days. <b>Oligomenorrhea</b> — bleeding at intervals over 35 days.", b:"Oligomenorrhea is <b>commonly due to anovulation</b>: no ovulation → no corpus luteum → no progesterone.", d:"<mark>Prolonged unopposed estrogen → endometrial build-up → irregular, often excessive bleeding.</mark> Common in adolescents, perimenopause and PCOS.", e:"<span class='star'>⭐</span>Trace the chain from anovulation to unopposed estrogen — it is the physiology behind endometrial hyperplasia.", img:""},
+ ]},
+ {sec:"Establishment of Pregnancy: Fertilization & Implantation  [process / sequence]", rows:[
+  {n:"Physiological signs of ovulation", g:"<span class='pill'>LH</span><span class='pill'>Progesterone</span><span class='pill'>BBT</span> <mark>Serum and urinary LH rise and become detectable 24–36 hours before ovulation.</mark> Mid-luteal serum progesterone <b>6–25 ng/mL</b>. Basal body temperature rises ~0.5 °C in the luteal phase. Cervical mucus becomes watery and stretchy like egg white. Mittelschmerz — one-sided lower abdominal pain in ~20% of women. Pelvic ultrasound.", b:"Used to time conception and as the initial infertility work-up.", d:"<b>Highest probability of conception is with intercourse 1–2 days BEFORE ovulation.</b>", e:"<span class='star'>⭐</span>The LH kit detects the surge <b>before</b> ovulation, which is why it predicts rather than confirms.", img:""},
+  {n:"Fertilization — the sperm's obstacle course", g:"<span class='pill'>Capacitation</span><span class='pill'>ZP3</span><span class='pill'>Acrosin</span><span class='pill'>Hyaluronidase</span> <b>1. Capacitation</b> in the female tract — epididymal and seminal coating removed in the uterus, exposing hyaluronidase-active and ZP-binding proteins; sperm become <b>hyperactivated</b> (↑ intracellular Ca²⁺, whip-like tail thrashing). <b>2.</b> Hyaluronidase degrades hyaluronan in the expanded cumulus. <b>3.</b> Sperm penetrate the cumulus. <b>4.</b> Sperm bind <mark>ZP3, the primary sperm receptor</mark>. <b>5. Acrosome reaction</b> — ZP3 binding ↑ intracellular Ca²⁺ → exocytosis of acrosomal contents; <b>acrosin digests the zona</b>. <b>6.</b> Sperm crosses the perivitelline space and fuses with the oolemma.", b:"Zona pellucida is an acellular glycoprotein matrix (ZP1–ZP4) secreted by the oocyte. <b>Oocyte fertilizable lifespan 12–24 h; sperm fertilizable lifespan 48–72 h.</b> Fertilization occurs in the <mark>ampulla</mark>.", d:"<b>Attrition is extreme — only ~1–2 sperm per million in the ejaculate reach the fallopian tube.</b>", e:"<span class='star'>⭐</span>ZP3 is the receptor, acrosin is the enzyme — the two names most often asked.", img:""},
+  {n:"Cortical reaction and the polyspermy block", g:"<span class='pill'>Ca²⁺ wave</span><span class='pill'>Cortical granules</span> Sperm–oolemma fusion → <mark>large rise in intra-oocytic Ca²⁺</mark> → cortical granules fuse with the oolemma and exocytose into the perivitelline space.", b:"Cortical granule enzymes alter zona proteins so no further sperm can bind.", d:"<mark>This is the polyspermy block.</mark>", e:"<span class='star'>⭐</span>One calcium rise does three jobs: cortical reaction, polyspermy block, and resumption of meiosis.", img:""},
+  {n:"Oocyte activation to zygote", g:"<span class='pill'>Metaphase II arrest</span><span class='pill'>Pronuclei</span> <b>1.</b> Ovulation releases a secondary oocyte arrested in <mark>metaphase II</mark>. <b>2.</b> Entry of sperm DNA triggers completion of meiosis. <b>3.</b> Membranes form around oocyte and sperm chromatin → female and male pronuclei. <b>4.</b> Pronuclei move centrally and fuse — <mark>\"the moment of conception\"</mark> — producing the zygote. <b>5.</b> First cleavage completes ~30 hours after fertilization.", b:"Cleavage divides without growth, producing progressively smaller blastomeres.", d:"Fertilization is only complete at pronuclear fusion, not at sperm entry.", e:"<span class='star'>⭐</span>~30 hours to first cleavage is the number to hold.", img:""},
+  {n:"Preimplantation development — day 0 to day 7", g:"<span class='pill'>Blastomere</span><span class='pill'>Morula</span><span class='pill'>Blastocyst</span> <b>Day 0</b> fertilization in the ampulla. <b>Day 1</b> zygote. <b>Day 2</b> cleavage to the 4-cell embryo. <b>Day 3</b> compaction → <b>morula</b>, a solid ball of 12–16 cells. <b>Day 4</b> blastocyst with inner cell mass and trophoblast. <b>Day 6–7</b> <mark>blastocyst hatches from the zona pellucida</mark>.", b:"The blastocyst floats free in the uterus for ~3 days, nourished by endometrial gland secretions.", d:"Hatching from the zona marks the beginning of implantation.", e:"<span class='star'>⭐</span>Morula = compaction; blastocyst = cavitation and ICM/trophoblast split.", img:""},
+  {n:"Window of implantation & decidualization", g:"<span class='pill'>Progesterone</span> Under progesterone, fibroblast-like stromal cells become round, glycogen- and lipid-laden cells — <b>predecidualization</b>. This provides nourishment and structural support to an invading blastocyst.", b:"<mark>The \"window of implantation\" is the period when the endometrium is most receptive to the blastocyst.</mark>", d:"<mark>Once decidualization has been initiated, no further implantation events can occur</mark> — the window closes.", e:"<span class='star'>⭐</span>Estrogen builds the endometrium in the proliferative phase; progesterone makes it receptive in the secretory phase.", img:""},
+  {n:"Implantation — three stages", g:"<span class='pill'>Cytotrophoblast</span><span class='pill'>Syncytiotrophoblast</span><span class='pill'>Integrins</span> <b>1. APPOSITION</b> — inner cell mass lines up parallel with the luminal epithelium. <b>2. ADHESION</b> — complex interactions between trophoblast and endometrial <b>integrins</b>. <b>3. INVASION</b> — trophoblast differentiates into inner cytotrophoblast and outer syncytiotrophoblast; the syncytiotrophoblast invades the uterine wall and <mark>secretes hCG</mark>.", b:"Normal implantation is into the <b>superior posterior wall</b> of the uterine cavity.", d:"<b>Ectopic pregnancy</b> — 1.5% of US pregnancies. Risk factors: prior ectopic, tubal surgery, PID, smoking. Presents with first-trimester bleeding and abdominal pain. <mark>Serum hCG should double every 48 hours in a viable intrauterine pregnancy.</mark>", e:"<span class='star'>⭐</span>hCG appears the moment the syncytiotrophoblast forms — that is why it is the earliest pregnancy marker.", img:""},
+  {n:"Spiral artery remodeling", g:"<span class='pill'>Extravillous trophoblast</span><span class='pill'>VSMC apoptosis</span> Trophoblast invades the vessel wall → vascular smooth muscle apoptosis and ECM degeneration → <mark>conversion from low-flow, high-resistance vessels to high-flow, low-resistance vessels</mark> capable of meeting fetal demand.", b:"Establishes the uteroplacental circulation as the syncytiotrophoblast erodes maternal vessels.", d:"<b>Inadequate remodeling → preeclampsia</b>: trophoblasts fail to remodel the spiral arteries at myometrial depth → placental hypoperfusion → release of vasculogenic and antiangiogenic factors → <mark>systemic maternal endothelial dysfunction</mark>. Diagnosed by new BP &gt;140/90 on two occasions ≥4 h apart plus proteinuria &gt;300 mg/day after 20 weeks. <b>Delivery of the placenta is the only absolute cure.</b>", e:"<span class='star'>⭐</span>Physiology explains the pathology: shallow invasion → high-resistance vessels → hypoperfusion → endothelial disease.", img:""},
+ ]},
+ {sec:"Hormones of Pregnancy  [hormone table]", rows:[
+  {n:"Human chorionic gonadotropin (hCG)", g:"<span class='pill'>α + β heterodimer</span><span class='pill'>Syncytiotrophoblast</span><span class='pill'>Binds the LH receptor</span> Secreted by syncytiotrophoblast cells following implantation. <mark>Detectable in maternal serum 8–10 days post-fertilization.</mark> Rises exponentially, <mark>doubling every 48–72 hours</mark>, <b>peaks in the 9th–10th week</b>, then declines steadily and falls rapidly after week 12.", b:"<b>Rescues the corpus luteum:</b> hCG binds LH receptors and maintains theca-lutein androgen production, granulosa-lutein progesterone and estrogen production, and fetal Leydig cell testosterone production.", d:"<b>Low hCG</b> — inadequate implantation, non-viable or ectopic pregnancy. <b>High hCG</b> — multiple pregnancy, gestational trophoblastic disease. Qualitative testing diagnoses pregnancy; quantitative testing indexes fetal and placental health.", e:"<span class='star'>⭐</span><mark>hCG's β subunit is unique; its α subunit is shared with LH, FSH and TSH</mark> — that homology is why it cross-reacts at the LH receptor and why molar pregnancy causes hyperthyroidism.", img:"<a href=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p19_hcg_rescue_of_corpus_luteum.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p19_hcg_rescue_of_corpus_luteum.jpg\" loading=\"lazy\" alt=\"hcg rescue of corpus luteum\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p17_pregnancy_hormone_curves_hcg_progesterone_estrogens.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p17_pregnancy_hormone_curves_hcg_progesterone_estrogens.jpg\" loading=\"lazy\" alt=\"pregnancy hormone curves hcg progesterone estrogens\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Progesterone in pregnancy", g:"<span class='pill'>Corpus luteum → placenta</span> Initially from the corpus luteum, then the placenta. <mark>The luteal–placental shift occurs at ~week 7–9.</mark>", b:"Transforms the endometrium into receptive tissue; stimulates stromal secretions for embryo nutrition; <b>suppresses myometrial contractility</b>; inhibits ovulation by negative feedback; stimulates breast alveoli and lobules while inhibiting lactation.", d:"<mark>Progesterone is absolutely required to maintain pregnancy.</mark> Clinical evidence: oophorectomy before 6 weeks causes miscarriage but pregnancy survives oophorectomy after 10 weeks; serum progesterone &lt;10 ng/mL results in miscarriage ~80% of the time; women below 5 ng/mL do not typically conceive.", e:"<span class='star'>⭐</span>The 6-week/10-week oophorectomy experiment is the cleanest proof of the luteal–placental shift.", img:"<a href=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p17_pregnancy_hormone_curves_hcg_progesterone_estrogens.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p17_pregnancy_hormone_curves_hcg_progesterone_estrogens.jpg\" loading=\"lazy\" alt=\"pregnancy hormone curves hcg progesterone estrogens\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Estrogens in pregnancy — estriol dominates", g:"<span class='pill'>Estriol — pregnancy</span><span class='pill'>Estradiol — cycle</span><span class='pill'>Estrone — menopause</span> <b>Estriol</b> has low ER binding affinity and 1/100th the potency of estradiol but is the estrogen <mark>associated with pregnancy</mark>; it is produced by the placenta by aromatisation of fetal liver 16α-OH-DHEA-S. All three estrogens act through nuclear ER and are functional in pregnancy.", b:"<b>Uterus</b> — stimulates VEGF and angiogenesis, stimulates eNOS → NO → vasodilation, together enhancing uteroplacental blood flow. <b>Myometrium</b> — ↑ gap junction formation and ↑ progesterone receptor expression, preparing for labour. <b>Brain</b> — stimulates prolactin directly and by inhibiting dopamine (mammogenesis); negative feedback inhibiting LH and FSH so ovulation stops.", d:"Estriol production rises dramatically from ~8 weeks — evidence that the placenta has taken over.", e:"<span class='star'>⭐</span>Match estrogen to era: estradiol/cycle, estriol/pregnancy, estrone/menopause.", img:""},
+  {n:"The maternal–placental–fetal unit", g:"<span class='pill'>Maternal cholesterol</span><span class='pill'>Fetal DHEAS</span><span class='pill'>Placental aromatase</span> <mark>The placenta is an imperfect endocrine organ</mark> — it cannot synthesise steroids alone. <b>Mother</b> supplies cholesterol (the placenta cannot make it), which the placenta converts to pregnenolone and progesterone. <b>The placenta lacks 17α-hydroxylase and 17,20-lyase</b>, so it cannot make DHEA; the <b>fetal adrenal</b> supplies DHEAS, which the placenta aromatises to estrogens.", b:"Three organs, one pathway — hence the name.", d:"The fetal liver 16α-hydroxylates DHEAS, and the placenta aromatises the product to <b>estriol</b>.", e:"<span class='star'>⭐</span>Know which enzyme each compartment lacks — that is the whole logic of the unit.", img:"<a href=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p23_maternal_placental_fetal_unit_steroidogenesis.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/establishment_of_pregnancy_notes/establishment_of_pregnancy_notes_p23_maternal_placental_fetal_unit_steroidogenesis.jpg\" loading=\"lazy\" alt=\"maternal placental fetal unit steroidogenesis\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Placental CRH", g:"<span class='pill'>CRH</span><span class='pill'>Positive feedback with cortisol</span> Production increases <mark>exponentially in the third trimester</mark>, peaking in the final 6–8 weeks.", b:"Stimulates the fetal adrenal to produce <b>DHEAS</b> (precursor for placental estrogens) and <b>cortisol</b>.", d:"<mark>Identical to hypothalamic CRH EXCEPT that glucocorticoids stimulate its release — positive feedback, not negative.</mark>", e:"<span class='star'>⭐</span>That inverted feedback is the trick: hypothalamic CRH is inhibited by cortisol, placental CRH is stimulated by it. It functions as a placental clock for labour.", img:""},
+  {n:"Human placental lactogen (hPL)", g:"<span class='pill'>Syncytiotrophoblast</span><span class='pill'>Homologous to GH and prolactin</span> Detectable from gestational week 4–5; levels rise exponentially, <mark>reflecting placental mass</mark>. Binds both GH and prolactin receptors. Fetal levels remain ~300-fold lower than maternal.", b:"<b>Alters maternal glucose metabolism</b> — the main hormone driving insulin resistance in pregnancy.", d:"Its exponential rise is why gestational diabetes worsens as pregnancy progresses and the placenta enlarges.", e:"<span class='star'>⭐</span>hPL is the single hormone connecting placental growth to gestational diabetes.", img:""},
+ ]},
+ {sec:"Maternal Adaptations by System  [compare — pregnant vs non-pregnant]", rows:[
+  {n:"Hematologic", g:"<span class='pill'>↑ blood volume 40%</span><span class='pill'>↑ plasma 30–50%</span><span class='pill'>↑ RBC 20–30%</span> Total blood volume <mark>↑ ~40% by 34 weeks</mark>, from ↑ plasma volume and ↑ RBC mass. <b>Plasma volume rise outstrips RBC mass rise → hemodilution.</b>", b:"Manifests as <mark>physiological (dilutional) anemia</mark>.", d:"<b>Hb:</b> non-pregnant 12–15 g/dL → pregnant at term <mark>11–13 g/dL</mark>. <b>Hematocrit:</b> 36–45% → <mark>33–39%</mark>.", e:"<span class='star'>⭐</span>The anemia is dilutional, not deficient — the RBC mass actually rises.", img:""},
+  {n:"Cardiovascular", g:"<span class='pill'>↑ CO 30–50%</span><span class='pill'>↑ HR ~20%</span><span class='pill'>↓ TPR 40%</span><span class='pill'>MAP ↔</span> ↑ plasma volume → ↑ preload → ↑ stroke volume; ↑ heart rate by 10–15 bpm; <mark>massive 40% fall in total peripheral resistance</mark> from vasodilation and the high-flow low-resistance uteroplacental circuit.", b:"<b>Cardiac output ↑ 30–50%</b>, heart rate ↑ ~20%.", d:"<mark>MAP shows minimal change — CO and HR rise to balance the drop in TPR.</mark> Changes begin early, peak in the second trimester and stay constant until delivery.", e:"<span class='star'>⭐</span>The directional set is the exam item: ↑CO, ↑HR, ↓↓TPR, MAP unchanged.", img:"<a href=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p17_maternal_hemodynamics_co_hr_tpr_map.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p17_maternal_hemodynamics_co_hr_tpr_map.jpg\" loading=\"lazy\" alt=\"maternal hemodynamics co hr tpr map\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Renal", g:"<span class='pill'>↑ RBF 70–80%</span><span class='pill'>↑ GFR</span><span class='pill'>↑ RAAS</span> Increased plasma volume and decreased renal vascular resistance → <mark>↑ renal blood flow and ↑ GFR</mark>.", b:"↑ urine flow and volume; ↑ clearance of creatinine, urea, uric acid, drugs and nitrogen; ↑ excretion of glucose (<b>glycosuria</b>), protein (proteinuria) and bicarbonate; ↑ reabsorption of sodium and water.", d:"Also: ↑ renin–angiotensin–aldosterone activity, <b>↓ sensitivity to the pressor effects of angiotensin II</b>, ↓ osmoreceptor set-point causing <mark>hyponatremia</mark>, ↑ erythropoietin.", e:"<span class='star'>⭐</span>Glycosuria in pregnancy can be physiological — it reflects raised GFR, not necessarily diabetes.", img:""},
+  {n:"Respiratory", g:"<span class='pill'>↑ tidal volume ~40%</span><span class='pill'>↓ RV, ERV, FRC 20–25%</span><span class='pill'>Progesterone-driven</span> Progesterone relaxes thoracic ligaments → AP and transverse diameters ↑ 2–3 cm (\"<b>barrel chest</b>\"); the enlarging uterus shifts the diaphragm. Progesterone and estrogen act on the medullary respiratory centre to increase ventilation.", b:"<mark>↑ tidal volume ~40% → ↑ minute volume and ↑ alveolar ventilation ~40%.</mark> Mechanical changes ↓ residual volume, expiratory reserve volume and functional residual capacity by 20–25%. <b>Respiratory rate is unchanged or only slightly increased</b> — the rise in minute ventilation is driven by tidal volume.", d:"<b>PaO₂:</b> 80–100 → <mark>100–104 mmHg</mark>. <b>PaCO₂:</b> 35–45 → <mark>28–32 mmHg</mark>. <b>pH:</b> 7.35–7.45 → <mark>7.40–7.47</mark>. <b>HCO₃⁻:</b> 22–26 → <mark>18–21 mEq/L</mark> — compensatory renal excretion.", e:"<span class='star'>⭐</span><mark>Chronic compensated respiratory alkalosis is the normal state of pregnancy.</mark> The bicarbonate drop is the compensation, not a second disorder.", img:"<a href=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p22_maternal_blood_gases_respiratory_alkalosis.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p22_maternal_blood_gases_respiratory_alkalosis.jpg\" loading=\"lazy\" alt=\"maternal blood gases respiratory alkalosis\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Uterine blood flow", g:"<span class='pill'>Estrogen-mediated vasodilation</span> Uterine artery flow typically <b>doubles over the first and second trimesters</b> and can double or triple again in the third.", b:"~10 mL/min per 100 g fetal tissue, around <b>600 mL/min at term</b>.", d:"<mark>At term the uterus receives ~12% of cardiac output.</mark> Increased flow is primarily mediated by estrogens, which are potent uterine artery vasodilators.", e:"<span class='star'>⭐</span>12% of CO at term is the number worth memorising.", img:""},
+  {n:"Metabolic — anabolic then catabolic", g:"<span class='pill'>Anabolic wk 0–27</span><span class='pill'>Catabolic wk 28–40</span><span class='pill'>hPL, progesterone, cortisol, estrogen, prolactin</span> <b>ANABOLIC (~weeks 0–27):</b> ↑ maternal appetite, ↑ first-phase insulin response, ↑ glycogenesis, ↑ lipogenesis and ↓ lipolysis, ↑ maternal fat storage; limited fetal growth. <b>CATABOLIC (~weeks 28–40):</b> <mark>↓ insulin sensitivity = maternal insulin resistance</mark>, ↑ insulin secretion (hyperinsulinemia), ↓ glucose uptake by muscle and adipose, hyperglycemia, ↑ lipolysis with glycerol and FFA mobilisation, ↑ FFA oxidation for maternal energy, ↑ ketogenesis, enhanced nutrient transfer to the fetus; rapid fetal growth.", b:"Pregnancy hormones enhance maternal insulin secretion by a direct tropic effect on β cells, promote a hyperinsulin response to glucose, decrease peripheral insulin sensitivity by interfering with insulin receptor signalling, and stimulate lipolysis.", d:"<mark>Nutrient transfer priority: glucose &gt; ketones &gt; amino acids &gt; FFAs.</mark> Glucose crosses by facilitated diffusion through GLUT transporters down a concentration gradient; <b>insulin does not cross the placenta</b>.", e:"<span class='star'>⭐</span>Take-home: pregnancy hormones induce insulin resistance and shift the mother to fatty acids so glucose is spared for the fetus.", img:""},
+  {n:"Weight, temperature, GI and skin", g:"<span class='pill'>+12 kg</span><span class='pill'>+300–400 kcal/day</span> Total weight gain averages <mark>12 kg (~25 lb)</mark>, beginning after the first trimester at ~0.5 kg/week in the second and third; total maternal mass may rise ~20%.", b:"Additional calorific requirement ~70,000 kcal over the pregnancy, about <b>300–400 extra kcal/day</b>, nearly all in the second and third trimesters.", d:"<b>Excess calories</b> → maternal obesity and LGA babies (&gt;4000 g). <b>Inadequate calories</b> → SGA babies (&lt;2500 g). Other adaptations: GI displacement and ↓ motility, altered bile secretion, ↑ basal body temperature, hyperpigmentation and striae.", e:"<span class='star'>⭐</span>The \"abnormal normals\" list: ↑BMI, insulin resistance, ↑urine volume, hypervolemia, physiological anemia, ↑alveolar ventilation, mild chronic respiratory alkalosis.", img:""},
+  {n:"Gestational diabetes — the physiology", g:"<span class='pill'>hPL</span><span class='pill'>Pedersen hypothesis</span> <mark>Insufficient pancreatic function to overcome the normal insulin resistance of pregnancy</mark> → chronic hyperglycemia. Any degree of carbohydrate intolerance with onset or first recognition in pregnancy; incidence ~7%.", b:"<b>Pedersen hypothesis:</b> maternal hyperglycemia → fetal hyperglycemia → <mark>hyperplasia of fetal pancreatic β cells → fetal insulin hypersecretion → fetal fat deposition → macrosomia</mark>, and neonatal hypoglycemia after delivery.", d:"<b>Glucose crosses the placenta; maternal insulin does not.</b> Fetal blood glucose is 80% of the maternal value. Before 20 weeks the fetus makes no insulin and cannot avoid hyperglycemia. LGA = &gt;4.5 kg at term or &gt;90th percentile, occurring in 15–45% of diabetic pregnancies.", e:"<span class='star'>⭐</span>Risk factors: prior GDM, personal or family history of diabetes, pre-pregnancy BMI &gt;30, physical inactivity, PCOS, age &gt;25, ethnicity.", img:""},
+ ]},
+ {sec:"Fetal & Placental Gas Exchange  [compare]", rows:[
+  {n:"Placental gas exchange values", g:"<span class='pill'>Intervillous space</span><span class='pill'>Umbilical vein vs artery</span> Maternal blood from the spiral artery empties into the intervillous space and bathes the syncytiotrophoblast; O₂ crosses into fetal circulation and reaches the fetus via the <b>umbilical vein</b>; fetal blood returns via the <b>umbilical artery</b> and CO₂ passes to the intervillous space.", b:"<b>Uterine artery</b> PO₂ 100, PCO₂ 32, SO₂ 98%. <b>Intervillous space / uterine vein</b> PO₂ 40, PCO₂ 45. <b>Umbilical vein (to fetus)</b> <mark>PO₂ 30, PCO₂ 40, SO₂ 85%</mark>. <b>Umbilical artery (from fetus)</b> <mark>PO₂ 17, PCO₂ 55, SO₂ 45%</mark>.", d:"The umbilical <b>vein</b> is the oxygenated vessel and the umbilical <b>artery</b> the deoxygenated one — the reverse of the systemic convention.", e:"<span class='star'>⭐</span>Fetal PO₂ is strikingly low (30 mmHg in the umbilical vein) yet saturation is 85% — that is HbF's doing.", img:"<a href=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p23_placental_gas_exchange_values.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p23_placental_gas_exchange_values.jpg\" loading=\"lazy\" alt=\"placental gas exchange values\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Fetal hemoglobin", g:"<span class='pill'>HbF = 2α2γ</span><span class='pill'>HbA = 2α2β</span> HbF is composed of <b>2 alpha and 2 gamma</b> chains versus HbA's 2 alpha and 2 beta. Fetal Hb concentration reaches ~15 g/dL by mid-gestation versus 12 g/dL in the adult.", b:"<mark>HbF binds 2,3-BPG poorly</mark>, giving it a higher oxygen affinity and a <b>left-shifted</b> saturation curve.", d:"<b>P50:</b> HbA 26 mmHg vs <mark>HbF 18–20 mmHg</mark>. At any given PO₂, HbF binds more O₂ than HbA — favouring transfer of oxygen from maternal to fetal blood.", e:"<span class='star'>⭐</span>The mechanism is the poor 2,3-BPG binding — that is the answer to \"why is HbF left-shifted?\"", img:"<a href=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p24_fetal_hemoglobin_left_shift.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/maternal_physiology_notes/maternal_physiology_notes_p24_fetal_hemoglobin_left_shift.jpg\" loading=\"lazy\" alt=\"fetal hemoglobin left shift\" style=\"max-height:64px;border-radius:6px\"></a>"},
+ ]},
+ {sec:"Parturition  [process / sequence + feedback flow]", rows:[
+  {n:"The four phases of parturition", g:"<span class='pill'>Phase 1 Quiescence</span><span class='pill'>2 Activation</span><span class='pill'>3 Stimulation</span><span class='pill'>4 Involution</span> <b>Phase 1 Quiescence</b> — conception to initiation of parturition; uterine unresponsiveness; cervical softening; <b>progesterone and relaxin</b> predominate. <b>Phase 2 Activation</b> — to onset of labour; uterine preparedness; cervical ripening; <mark>change in the estrogen:progesterone ratio and ↑ expression of contractile factors</mark>. <b>Phase 3 Stimulation</b> — up to delivery of fetus and placenta; contraction; cervical effacement and dilation; <b>oxytocin (Ferguson reflex) and prostaglandins</b>. <b>Phase 4 Involution</b> — until fertility is restored; <b>oxytocin</b> and withdrawal of placental hormones.", b:"Each phase pairs a uterine state with a cervical state and a dominant hormone.", d:"<b>Phase 1 is ~95% of gestation (32+ weeks).</b>", e:"<span class='star'>⭐</span>Learn the table as a grid — phase, uterine activity, cervical activity, predominant hormone.", img:"<a href=\"mini2_physio_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p3_four_phases_of_parturition.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p3_four_phases_of_parturition.jpg\" loading=\"lazy\" alt=\"four phases of parturition\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Phase 1 — quiescence", g:"<span class='pill'>Progesterone</span><span class='pill'>Relaxin</span><span class='pill'>Nitric oxide</span> Progesterone-dominated functional quiescence: ↓ myometrial responsiveness to estrogen by ↓ ER expression; ↓ expression of contraction-associated proteins (Cx43, oxytocin receptor, PG synthesis enzymes and receptors); ↑ Ca²⁺ uptake into SR and ↓ Ca²⁺ entry; <mark>↑ K⁺ efflux hyperpolarising the cell</mark>.", b:"<b>Estrogen</b> ↑ size and number of myocytes allowing uterine expansion and ↑ progesterone receptor. <b>Relaxin</b> stimulates cervical softening and uterine relaxation. <b>Nitric oxide</b> promotes relaxation via guanylate cyclase.", d:"Softening = decreased cervical rigidity <b>without</b> loss of tensile strength.", e:"<span class='star'>⭐</span>Antiprogestins plus prostaglandins terminate pregnancy precisely by reversing this state.", img:""},
+  {n:"Phase 2 — activation and the fetal HPA clock", g:"<span class='pill'>Placental CRH</span><span class='pill'>Fetal ACTH</span><span class='pill'>Cortisol + DHEAS</span><span class='pill'>Estrogen</span> Final 6–8 weeks. <mark>Activation of the fetal hypothalamic–pituitary–adrenal axis: ↑ placental CRH → ↑ fetal ACTH → ↑ cortisol + ↑ DHEAS → ↑ estrogen.</mark>", b:"<b>↑ estrogen</b> then drives ↑ cervical EP2/EP4 and PGE2 → <b>cervical ripening</b>; and ↑ myometrial contraction-associated proteins → <b>Braxton Hicks contractions</b>.", d:"Ripening involves major change in cervical structure and composition — loss of integrity and tensile strength.", e:"<span class='star'>⭐</span>The fetus starts its own labour: placental CRH is the clock and the fetal adrenal is the trigger.", img:""},
+  {n:"Phase 2 → Phase 3 transition", g:"<span class='pill'>Functional progesterone withdrawal</span><span class='pill'>↑ ER</span><span class='pill'>↑ OTR, GJs, Ca²⁺ channels</span> <mark>Functional progesterone withdrawal (↓ PR) and ↑ ER → estrogen action &gt;&gt; progesterone action</mark> → ↑ PG synthesis, ↑ PG receptors, ↑ contraction-associated proteins, ↑ gap junctions, ↑ Ca²⁺ channels, ↑ oxytocin receptors → ↑ strength and frequency of contractions, ↑ oxytocin synthesis, cervical effacement and dilation, spontaneous rupture of membranes → expulsion of fetus and placenta.", b:"Three major factors induce labour: ↑ prostaglandins (especially PGF2α) from myometrium and fetal membranes, ↑ myometrial cell interconnectivity, and ↑ myometrial responsiveness to oxytocin and prostaglandins.", d:"<b>It is a functional, not an absolute, progesterone withdrawal</b> — receptor number falls rather than hormone level.", e:"<span class='star'>⭐</span>In humans progesterone does not fall before labour — the receptor does. That distinguishes human from animal parturition.", img:""},
+  {n:"Oxytocin and the Ferguson reflex", g:"<span class='pill'>Supraoptic & paraventricular nuclei</span><span class='pill'>Posterior pituitary</span><span class='pill'>Gq GPCR</span> <mark>POSITIVE FEEDBACK LOOP: 1. mechanical stretch of the cervix → 2. ↑ oxytocin release → 3. ↑ uterine contractions → more stretch.</mark> Sensory information travels to the paraventricular and supraoptic nuclei, stimulating posterior pituitary oxytocin release.", b:"Oxytocin receptor is a Gq GPCR → PLC → IP₃ and DAG → ↑ intracellular Ca²⁺, ↑ myosin light chain phosphorylation, ↑ prostaglandin production; it also opens voltage-gated Ca²⁺ channels.", d:"<mark>Oxytocin receptor number increases 200- to 300-fold during pregnancy, peaking in early labour, but circulating oxytocin does not rise until full cervical dilation.</mark> Sensitivity, not concentration, is what changes.", e:"<span class='star'>⭐</span><b>Oxytocin is the most potent endogenous uterotonic known.</b> Receptor antagonists inhibit preterm labour.", img:"<a href=\"mini2_physio_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p16_ferguson_reflex_positive_feedback.jpg\" target=\"_blank\"><img src=\"mini2_physio_images/parturition_and_transition_to_neonatal_life_notes/parturition_and_transition_to_neonatal_life_notes_p16_ferguson_reflex_positive_feedback.jpg\" loading=\"lazy\" alt=\"ferguson reflex positive feedback\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Prostaglandins in parturition", g:"<span class='pill'>PGF2α — FP</span><span class='pill'>PGE2 — EP1/EP3 contract, EP2/EP4 relax</span> PGE2 and PGF2α are made in endometrium, myometrium, fetal membranes, decidua and placenta at progressively increasing levels through pregnancy.", b:"<b>Myometrium:</b> PGF2α contracts via FP; PGE2 contracts via EP1 and EP3 but <mark>relaxes via EP2 and EP4</mark>; PGF2α promotes gap junction formation. <b>Cervix:</b> PGE2 stimulates ripening via EP2 and EP4.", d:"<b>COX inhibitors inhibit myometrial contractions and prolong pregnancy</b> — the basis of indomethacin tocolysis. Local cervical prostaglandin stimulates ripening — the basis of labour induction.", e:"<span class='star'>⭐</span>PGE2 does opposite things at different receptors — contract at EP1/EP3, relax at EP2/EP4. That is why it ripens the cervix while relaxing the lower segment.", img:""},
+  {n:"The three stages of labour", g:"<span class='pill'>Stage 1 dilation</span><span class='pill'>Stage 2 delivery</span><span class='pill'>Stage 3 placenta</span> <b>Stage 1:</b> sudden onset of regular painful contractions with progressive effacement and dilation — <mark>latent to 3 cm, then rapid active dilation from 4 to 10 cm</mark>. <b>Stage 2:</b> begins at full dilation, ends with delivery of the fetus. <b>Stage 3:</b> begins after fetal delivery, ends with placental separation and expulsion.", b:"Contractions begin one every 5–30 minutes lasting ~1 min, increasing to one per minute. <b>Effacement</b> = thinning, shortening and drawing up of the cervix into the lower uterine segment, expelling the mucus plug as the \"bloody show\".", d:"<mark>Relaxation between contractions is essential for fetal welfare — unremitting contractions compromise uteroplacental blood flow.</mark>", e:"<span class='star'>⭐</span>PGE2 acting on EP2/EP4 relaxes the lower uterine segment and cervix while the upper segment contracts.", img:""},
+  {n:"Phase 4 — involution and the puerperium", g:"<span class='pill'>Oxytocin</span><span class='pill'>Prolactin</span> Uterine vasoconstriction by oxytocin; restoration of uterus, cervix and vagina toward the non-pregnant state; lactation and return of menstrual cyclicity.", b:"Uterine involution begins immediately and is typically complete in <mark>6–8 weeks</mark>; <b>lochia</b> for 3–5 weeks; cervix remains slightly dilated ~1 week with tone returning at 12–16 weeks.", d:"<b>Postpartum hormones:</b> FSH and LH low for 2–3 weeks; estrogen and progesterone low until LH/FSH normalise; <mark>prolactin returns to non-pregnant levels within 1–2 weeks if not breastfeeding</mark>.", e:"<span class='star'>⭐</span>Pregnancy can physically occur once uterine involution is complete — the basis for postpartum contraception counselling.", img:""},
+ ]},
+ {sec:"Transition to Neonatal Life  [table]", rows:[
+  {n:"Neonatal jaundice — physiological", g:"<span class='pill'>UGT1A1 low</span><span class='pill'>Enterohepatic circulation</span> In utero, fetal bilirubin is cleared by the placenta and eliminated by the maternal liver. After birth the neonatal liver must take over, but <mark>UGT1A1 levels are low</mark> and alternative pathways pass unconjugated bilirubin into the gut. Intestinal flora that convert bilirubin to urobilinogen are also undeveloped, so an <b>enterohepatic circulation of unconjugated bilirubin</b> ensues.", b:"Most neonates develop mild unconjugated hyperbilirubinemia <mark>between days 2 and 5</mark>, peaking at 5–10 mg/dL and falling to adult levels within 2 weeks.", d:"70–90% of bilirubin is derived from heme degradation; normal circulating bilirubin is &lt;0.5 mg/dL. <b>Phototherapy is the mainstay of treatment</b> for unconjugated hyperbilirubinemia.", e:"<span class='star'>⭐</span>Two immaturities compound: low conjugating enzyme and absent gut flora.", img:""},
+  {n:"Neonatal thermoregulation", g:"<span class='pill'>Brown fat</span><span class='pill'>Non-shivering thermogenesis</span> Temperature stability is heat production and conservation balanced against heat loss. Heat production against cold occurs by voluntary muscle activity, shivering, and non-shivering thermogenesis — <mark>newborns rely mainly on non-shivering thermogenesis</mark>.", b:"This metabolic heat production depends on the quantity of <b>brown fat</b>, which is very limited in the preterm infant.", d:"Preterm infants also <b>lose heat faster</b>: high surface-area-to-mass ratio, reduced subcutaneous insulation, and water loss through immature skin.", e:"<span class='star'>⭐</span>Less production and more loss — which is why the preterm thermal environment must be tightly controlled (isolette).", img:""},
+  {n:"Amniotic fluid dynamics", g:"<span class='pill'>Fetal urine 75%</span><span class='pill'>Fetal swallowing</span><span class='pill'>Lung fluid</span> Amniotic fluid is an ultrafiltrate of fetal and maternal fluids in a dynamic state, with complete exchange of its water component several times per day. Electrolytes resemble maternal plasma but protein content is 5% of serum.", b:"<b>Early pregnancy:</b> water and solute come mainly from the maternal circulation and exchange freely across amnion, placenta, cord and non-keratinised fetal skin. <b>By mid-gestation:</b> skin keratinises, so exchange stops; the fetus actively swallows fluid and inhales a small amount, making the GI tract (and to a lesser extent lungs) the routes of removal.", d:"<mark>Fetal kidneys produce urine accounting for 75% of amniotic fluid volume in the second half of gestation</mark>; fetal lungs contribute fluid too.", e:"<span class='star'>⭐</span>Production and removal explain the pathology: renal agenesis → oligohydramnios; impaired swallowing (atresia, NTD) → polyhydramnios.", img:""},
+ ]},
+ {sec:"Female Repro Doc MASTER NOTES  [summary]", rows:[
+  {n:"PCOS — the hormonal cascade", g:"<span class='pill'>↑ LH : FSH ratio ≈ 3:1</span><span class='pill'>Insulin resistance</span> <b>1.</b> ↑ LH from an exaggerated response to GnRH. <b>2.</b> LH stimulates theca interna cells → ↑ androstenedione (hyperandrogenism). <b>3.</b> Peripheral adipose converts androgens → estriol and testosterone. <b>4.</b> <mark>↑ Estriol inhibits pituitary FSH</mark> → elevated LH/FSH ratio. <b>5.</b> LH/FSH imbalance inhibits follicle maturation → multiple unruptured follicles → ovarian cysts. <b>6.</b> → impaired ovulation and infertility.", b:"Labs: <mark>↑ LH, ↓ FSH, ↑ androgens, ↑ estrogen, ↓ progesterone</mark>.", d:"Clinically: hirsutism, acne, obesity and metabolic syndrome, clitoral enlargement, oligomenorrhea, infertility, insulin resistance, acanthosis nigricans. Ultrasound shows the <b>\"string of pearls\"</b> pattern.", e:"<span class='star'>⭐</span>Trace the loop from ↑LH to anovulation — this is the physiology the pathology and pharmacology tables both depend on.", img:""},
+  {n:"Gestational diabetes — hPL and the shunt to the fetus", g:"<span class='pill'>Human placental lactogen</span> <b>Early pregnancy:</b> ↑ insulin secretion, ↓ glucose levels, ↑ fat storage. <b>Late pregnancy (KEY):</b> <mark>hPL is the MAIN hormone causing insulin resistance</mark>; the pancreas increases insulin up to 50–100%; it worsens as pregnancy progresses and the placenta enlarges, releasing more hPL. If the response is inadequate, hyperglycemia develops.", b:"<b>Glucose is shunted to the fetus → continuous fetal glucose use.</b>", d:"Fetal consequences: <mark>macrosomia (most common)</mark>, shoulder dystocia with brachial plexus injury, prematurity; neonatal hypoglycemia, hypocalcemia, polycythemia, hyperbilirubinemia.", e:"<span class='star'>⭐</span>Same physiology as the Maternal Physiology deck, stated compactly — hPL rises with placental mass, so GDM worsens with gestation.", img:""},
+  {n:"Neonatal respiratory distress — surfactant physiology", g:"<span class='pill'>Lecithin (DPPC)</span><span class='pill'>SP-A, SP-D, SP-B, SP-C</span> Pulmonary immaturity → <mark>↓ surfactant → ↑ alveolar surface tension → alveolar collapse (atelectasis)</mark>. Surfactant rises after ~35 weeks.", b:"Components: phospholipids <b>lecithin (DPPC)</b> and phosphatidylglycerol; proteins hydrophilic <b>SP-A and SP-D</b>, hydrophobic <b>SP-B and SP-C</b>.", d:"<b>Unfavourable:</b> prematurity, infant of a diabetic mother (↑ insulin → ↓ surfactant), C-section before labour. <b>Protective:</b> antenatal corticosteroids → ↑ lung maturity; labour → ↑ surfactant production.", e:"<span class='star'>⭐</span>Fetal lung maturity tests: <mark>lecithin:sphingomyelin &gt; 2:1</mark>, lamellar bodies &gt; 50,000, foam stability index.", img:""},
+  {n:"Rh disease — the physiology of hydrops", g:"<span class='pill'>IgG anti-D</span><span class='pill'>Extravascular hemolysis</span> Rh-negative mother → IgG anti-D crosses the placenta → destroys Rh-positive fetal RBCs → <mark>extravascular hemolysis → severe anemia</mark>.", b:"<b>Two parallel arms:</b> hypoxic <b>cardiac</b> injury → high-output cardiac failure → ↑ hydrostatic pressure → peripheral edema and ascites; hypoxic <b>liver</b> injury → ↓ albumin → ↓ oncotic pressure → ascites. Also extramedullary hematopoiesis → hepatosplenomegaly.", d:"<b>Kernicterus:</b> unconjugated bilirubin crosses the immature blood–brain barrier and deposits in the basal ganglia. <b>ABO disease</b> is milder, can affect the first pregnancy, and shows spherocytes.", e:"<span class='star'>⭐</span>Both the hydrostatic and oncotic arms must be named — that is what the question is testing.", img:""},
+ ]},
+];
+
+const tbody=document.getElementById('tbody');
+const chipsEl=document.getElementById('chips');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}</span></span></td>`;
+  tbody.appendChild(secRow);
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td>
+      <td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// chips
+const chipAll=document.createElement('div');
+chipAll.className='chip active';chipAll.textContent='All systems';chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach((grp,gi)=>{
+  const c=document.createElement('div');
+  c.className='chip';c.dataset.sec=gi;
+  c.textContent=grp.sec.replace(/ \(.*?\)/,'').replace(' / ',' / ');
+  chipsEl.appendChild(c);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> concepts`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active');
+  activeSec=c.dataset.sec;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + chips). Measured live so fullscreen, resize, font load, and
+// chip-wrapping changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+.c-img{width:9%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var MINIS=[
+    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+      ['mini1.html','Overview'],
+      ['master_table.html','Master'],
+      ['pathology_table.html','Pathology'],
+      ['pathology_checklist.html','Path Checklist'],
+      ['physio_table.html','Physiology'],
+      ['drugs_table.html','Drugs'],
+      ['biochem_table.html','Biochem'],
+      ['embryo_anatomy_table.html','Embryo / Anatomy'],
+      ['pattern_recognition.html','Patterns'],
+      ['lecture_recall.html','Lecture Recall'],
+      ['physio_quiz.html','Physio Quiz'],
+      ['endocrine_path_quiz.html','Endo Path Quiz'],
+      ['male_path_quiz.html','Male Path Quiz'],
+      ['physio_ext1_quiz.html','Repro Physio Q'],
+      ['physio_ext2_quiz.html','Physio Bank 1'],
+      ['physio_ext3_quiz.html','Physio Bank 2'],
+      ['pharmq_quiz.html','Pharm Quiz'],
+      ['review_planner.html','Planner'],
+      ['gi_path_table.html','GI Path']
+    ]},
+    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+      ['mini2.html','Overview'],
+      ['mini2_pathology_table.html','Pathology'],
+      ['mini2_physio_table.html','Physiology'],
+      ['mini2_drugs_table.html','Drugs'],
+      ['mini2_study_guide.html','Resource Guide']
+    ]}
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
+  var sw=document.createElement('span'); sw.className='sk-minis';
+  MINIS.forEach(function(m){
+    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+    sw.appendChild(a);
+  });
+  nav.appendChild(sw);
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>
