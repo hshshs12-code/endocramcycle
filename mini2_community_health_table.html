@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Public Health, Ethics, Sexuality &amp; Lifespan Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:6px 11px;border:1px solid var(--line-strong);border-radius:99px;
+    background:var(--surface);color:var(--muted);cursor:pointer;user-select:none;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:14%}
+  col.c-gene{width:16%}
+  col.c-buzz{width:30%}
+  col.c-diff{width:21%}
+  col.c-exam{width:19%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+.c-img{width:11%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Mini 2 · Public Health · Ethics · Sexuality · Lifespan</p>
+  <h1>The definitions, the numbers,<br>and the distinctions that <em>will</em> be tested.</h1>
+  <p class="sub">Public health, reproductive ethics, sexuality and lifespan development on one scannable grid. Each section states the format it uses — <b>contraception table</b>, <b>ethics framework</b>, <b>concept / definition table</b>, <b>developmental milestone timeline</b>, or <b>screening / public health table</b>. Identity and sexuality terminology is quoted in the lecture's own wording rather than paraphrased. Teal = the term or threshold. Highlighted = the definition, efficacy figure or age cutoff you are expected to produce. The crimson rail is the single fact most likely to anchor a question stem.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search term, method, age, statistic…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Term / threshold</span>
+      <span><i class="sw b"></i>Definition / figure</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Term / Method / Concept</th>
+          <th>Definition, Mechanism &amp; Criteria</th>
+          <th>Efficacy, Findings &amp; Clinical Relevance</th>
+          <th>Contraindications / Commonly Confused With</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No topic matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Study reference compiled from the Mini 2 public health, ethics and lifespan lectures — Contraception &amp; Reproductive Ethics, Introduction to Sexuality, Gender Identity/Sexuality/Sexual Health, Sex Assigned at Birth &amp; Community Health, Prenatal &amp; Early Childhood Health in the Community, Adolescent Health in the Community, and Human Development Through Adulthood. Definitions of identity, gender and sexuality terms are reproduced in the lecture's own wording. The section tagged [summary] comes from the Summaries folder and intentionally overlaps the contraception section; the other summary files contain no content for this subject. Verify against your primary lecture material where anything differs — not a substitute for the notes.
+</footer>
+
+<script>
+const DATA = [
+ {
+  "sec": "Contraceptive Methods  [contraception table] · method / mechanism / efficacy / contraindications",
+  "rows": [
+   {
+    "n": "Comparing the methods — efficacy at a glance",
+    "g": "<span class='pill'>&gt; 99% LARC</span><span class='pill'>~91% hormonal</span><span class='pill'>~72% spermicide</span> The lecture presents efficacy two ways: <b>typical use effectiveness</b> (higher is better) and <b>pregnancy rate</b> (lower is better). Read both from the same chart and do not mix them up.",
+    "b": "<mark>Ranked by pregnancy rate, best to worst: implant 0.05% · vasectomy 0.15% · progestin IUD 0.2% · tubal ligation 0.5% · copper IUD 0.8% · patch 9% · vaginal ring 9% · diaphragm 12% · male condom 18% · sponge 12% nulliparous / 24% parous · natural family planning 24%.</mark>",
+    "d": "<mark>The LARCs (implant and both IUDs) and sterilization are &gt; 99% effective; everything user-dependent sits between 72% and 94%.</mark> <b>The gap between them is the difference between perfect use and typical use</b> — LARCs remove the user from the equation. <mark>Only condoms provide STI protection.</mark>",
+    "e": "<span class='star'>⭐</span>If a question asks for the MOST effective reversible method, the answer is the <b>implant (0.05%)</b> — more effective than sterilization. That inversion is deliberately counterintuitive.",
+    "img": "<a href=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p15_effectiveness_of_family_planning_methods.jpg\" target=\"_blank\"><img src=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p15_effectiveness_of_family_planning_methods.jpg\" loading=\"lazy\" alt=\"methods\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p16_contraceptive_advantages_disadvantages_1.jpg\" target=\"_blank\"><img src=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p16_contraceptive_advantages_disadvantages_1.jpg\" loading=\"lazy\" alt=\"contraceptive advantages disadvantages 1\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p17_contraceptive_advantages_disadvantages_2.jpg\" target=\"_blank\"><img src=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p17_contraceptive_advantages_disadvantages_2.jpg\" loading=\"lazy\" alt=\"contraceptive advantages disadvantages 2\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p18_contraceptive_advantages_disadvantages_3.jpg\" target=\"_blank\"><img src=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p18_contraceptive_advantages_disadvantages_3.jpg\" loading=\"lazy\" alt=\"contraceptive advantages disadvantages 3\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Combined oral contraceptives (COCs)",
+    "g": "<span class='pill'>Estrogen + progestin</span> Contain <b>estrogen and progestin</b>. They <mark>prevent ovulation, thicken cervical mucus, and alter the endometrial lining</mark>.",
+    "b": "<mark>Typical use effectiveness: ~91%.</mark> Pregnancy rate in the lecture's comparison table: <b>9%</b>.",
+    "d": "<b>Side effects:</b> nausea, breast tenderness, increased risk of thromboembolism. <mark>CONTRAINDICATIONS of estrogen-containing OCs: history of thromboembolic disorders (stroke, DVT), pregnancy, uncontrolled hypertension, smoking in women &gt; 35 years, liver tumors or active liver disease, certain cancers (breast, endometrial), and migraines with aura.</mark>",
+    "e": "<span class='star'>⭐</span>The estrogen contraindication list is the single most tested item in this lecture. <b>Smoking + age over 35</b> and <b>migraine with aura</b> are the two that appear most often.",
+    "img": ""
+   },
+   {
+    "n": "Progestin-only pills (POPs) — the 'mini-pill'",
+    "g": "<span class='pill'>Progestin only</span> <mark>Primarily work by thickening cervical mucus and thinning the endometrial lining</mark> — note they do not reliably suppress ovulation the way COCs do.",
+    "b": "<mark>Typical use effectiveness: ~91%.</mark>",
+    "d": "<b>Can cause irregular bleeding.</b> <mark>Contraindicated in active liver disease and breast cancer.</mark> Because there is no estrogen, POPs are the option when estrogen is contraindicated — including while breastfeeding.",
+    "e": "<span class='star'>⭐</span>POPs have a much shorter contraindication list than COCs precisely because they contain no estrogen.",
+    "img": ""
+   },
+   {
+    "n": "Injectable contraceptive (Depo-Provera)",
+    "g": "<span class='pill'>Progestin</span><span class='pill'>Every 3 months</span> <b>Depo-Provera</b> is an injectable form of <b>progestin</b> given <mark>every three months</mark>.",
+    "b": "<mark>Typical use effectiveness: ~94%</mark> — better than the pills, poorer than the LARCs.",
+    "d": "<mark>May cause weight gain, BONE DENSITY LOSS, and delayed return to fertility.</mark>",
+    "e": "<span class='star'>⭐</span>Bone density loss and delayed return of fertility are the two distinguishing adverse effects of the injectable.",
+    "img": ""
+   },
+   {
+    "n": "Transdermal patch",
+    "g": "<span class='pill'>Estrogen + progestin</span><span class='pill'>Weekly</span> A hormonal contraceptive applied to the skin that <b>releases estrogen and progestin to prevent ovulation</b>. <mark>The patch is changed weekly for 3 weeks, then left off for 1 week per cycle.</mark>",
+    "b": "<mark>Typical use effectiveness: ~91%.</mark> Pregnancy rate <b>9%</b>. <b>Advantages:</b> regular periods, lasts for 1 week.",
+    "d": "<b>Disadvantages:</b> possible skin irritation, spotting between periods, <mark>no STI protection</mark>. Carries the estrogen contraindications of the COC.",
+    "e": "<span class='star'>⭐</span>Contains estrogen — so it inherits the whole COC contraindication list.",
+    "img": ""
+   },
+   {
+    "n": "Vaginal ring (NuvaRing)",
+    "g": "<span class='pill'>Estrogen + progestin</span><span class='pill'>Monthly</span> A flexible hormonal device inserted into the vagina that <b>releases estrogen and progestin to prevent ovulation</b>. Its flexible material allows easy insertion and removal.",
+    "b": "<mark>Typical use effectiveness: ~91%.</mark> Pregnancy rate <b>9%</b>. <b>Advantages:</b> does not need to be custom-fitted, no spermicide required, lasts for 1 month.",
+    "d": "<b>Disadvantages:</b> increased vaginal discharge, spotting between periods, <mark>no STI protection</mark>. Estrogen-containing, so the COC contraindications apply.",
+    "e": "<span class='star'>⭐</span>Ring, patch and COC all sit at ~91% typical use and 9% pregnancy rate — the route differs, the efficacy does not.",
+    "img": ""
+   },
+   {
+    "n": "Subdermal implant (Nexplanon)",
+    "g": "<span class='pill'>Progestin</span><span class='pill'>Up to 3 years</span> A <b>small rod inserted under the skin</b> that releases progestin over several years. The insertion device is a sharp trocar and the implant is a soft Silastic tube.",
+    "b": "<mark>Typical use effectiveness: &gt; 99%. Pregnancy rate 0.05% — the LOWEST of any method in the lecture's table.</mark> <b>Advantages:</b> reversible, long-lasting up to 3 years, and <mark>can breastfeed</mark>.",
+    "d": "<b>Disadvantages:</b> <mark>can cause irregular bleeding</mark>, and <mark>no STI protection</mark>. Rarely, implants and IUDs cause uterine perforation or expulsion.",
+    "e": "<span class='star'>⭐</span><mark>0.05% is the best pregnancy rate in the table — better even than sterilization.</mark> That comparison is exactly the kind of thing a question turns on.",
+    "img": ""
+   },
+   {
+    "n": "Hormonal IUD (levonorgestrel, e.g. Mirena)",
+    "g": "<span class='pill'>Progestin</span><span class='pill'>3–6 years</span> An intrauterine device that <b>releases progestin</b>. <mark>Lasts 3–6 years</mark> (Mirena provides effective contraception for at least 5 years).",
+    "b": "<mark>Typical use effectiveness: &gt; 99%. Pregnancy rate 0.2% (progestin IUD).</mark> <b>Advantages:</b> reversible, long-lasting 3–7 years, and the <mark>progestin version may reduce cramps and heavy bleeding</mark>.",
+    "d": "<b>Disadvantages:</b> possible uterine injury, irregular bleeding, and <mark>no STI protection</mark>.",
+    "e": "<span class='star'>⭐</span>The progestin IUD <b>reduces</b> bleeding and cramping; the copper IUD <b>increases</b> them. That contrast is the reason to keep the two IUDs straight.",
+    "img": ""
+   },
+   {
+    "n": "Copper IUD",
+    "g": "<span class='pill'>Non-hormonal</span><span class='pill'>Up to 10 years</span> A <b>non-hormonal</b> intrauterine device that <mark>releases copper to create a spermicidal environment</mark>. <mark>Lasts up to 10 years.</mark>",
+    "b": "<mark>Typical use effectiveness: &gt; 99%. Pregnancy rate 0.8% (copper).</mark>",
+    "d": "<b>Disadvantages:</b> <mark>possible increased cramping and bleeding (copper)</mark>, possible uterine injury, no STI protection.",
+    "e": "<span class='star'>⭐</span>The copper IUD is both the <b>longest-acting</b> method (10 years) and the <b>most effective emergency contraceptive</b> — two separate high-yield facts about one device.",
+    "img": ""
+   },
+   {
+    "n": "Barrier methods — condoms, diaphragm, cervical cap",
+    "g": "<span class='pill'>Male condom ~85%</span><span class='pill'>Diaphragm 12%</span> Create a <b>physical barrier to sperm</b>, preventing sperm from reaching the egg. Includes male and female condoms, diaphragms and cervical caps.",
+    "b": "<mark>Typical use effectiveness varies — male condoms ~85%.</mark> Pregnancy rates: <b>male condom 18%, diaphragm 12%</b>. <mark>Condoms are the only method here that also protects against sexually transmitted infections.</mark>",
+    "d": "<b>Diaphragm:</b> must use spermicide; cannot be used with vaginal infection or bleeding; risk of bladder infection; no STI protection. <b>Male condom:</b> decreased sensation during intercourse. Barrier methods generally have few side effects but can cause <b>irritation or allergic reactions</b>.",
+    "e": "<span class='star'>⭐</span><mark>STI protection is the condom's unique selling point</mark> — every other method in this table is explicitly listed as offering none.",
+    "img": ""
+   },
+   {
+    "n": "Spermicides and the sponge",
+    "g": "<span class='pill'>Spermicide ~72%</span><span class='pill'>Sponge 12–24%</span> <b>Spermicides</b> are chemical agents that <mark>deactivate sperm</mark>, often used with barrier methods. The <b>sponge</b> can be inserted up to a day before intercourse and has no hormone effects.",
+    "b": "<mark>Spermicide typical use effectiveness: ~72% — the poorest of the listed methods.</mark> <b>Sponge pregnancy rate: 24% in parous women vs 12% in nulliparous women.</b>",
+    "d": "<b>Spermicides:</b> <mark>may cause irritation and increase the risk of urinary tract infections</mark>. <b>Sponge:</b> <mark>less effective after having children</mark>, unsafe to use during a period, may cause irritation, no STI protection.",
+    "e": "<span class='star'>⭐</span>The sponge is the one method whose efficacy depends on parity — 24% parous vs 12% nulliparous.",
+    "img": ""
+   },
+   {
+    "n": "Behavioral methods — withdrawal and natural family planning",
+    "g": "<span class='pill'>Rhythm method 24%</span> <b>Coitus interruptus (withdrawal)</b> — the male partner withdraws before ejaculation. <b>Natural family planning (rhythm method)</b> — timing intercourse to avoid fertile days.",
+    "b": "<b>Natural family planning pregnancy rate: 24%.</b> <b>Advantages:</b> very low cost, and can breastfeed.",
+    "d": "<mark>Not effective during fertile days or with irregular periods</mark>; requires regular monitoring and tracking; no STI protection.",
+    "e": "<span class='star'>⭐</span>Behavioral methods sit at the bottom of the efficacy table — useful as the contrast that makes the LARC numbers meaningful.",
+    "img": ""
+   },
+   {
+    "n": "Emergency contraception",
+    "g": "<span class='pill'>Copper IUD ≤ 5 days</span><span class='pill'>Plan B ≤ 120 hr</span><span class='pill'>Ella ≤ 120 hr</span> Used to prevent pregnancy for a short period after unprotected sex. Four options: <mark>copper IUD within 5 days</mark>; <mark>52-mg levonorgestrel-releasing IUD within 5 days</mark>; <mark>levonorgestrel (Plan B) orally once within 120 hours (5 days)</mark>; <mark>ulipristal (Ella) 30 mg orally once within 120 hours (5 days)</mark>.",
+    "b": "All four share the same <b>5-day / 120-hour</b> window.",
+    "d": "The IUD options have the advantage of <b>continuing as ongoing contraception</b> after the emergency indication.",
+    "e": "<span class='star'>⭐</span>Memorise the window as <mark>5 days = 120 hours</mark> for all four options, and know that an IUD is among them — a common blind spot.",
+    "img": ""
+   },
+   {
+    "n": "Permanent methods — vasectomy and tubal ligation",
+    "g": "<span class='pill'>Vasectomy 0.15%</span><span class='pill'>Tubal ligation 0.5%</span> <b>Vasectomy</b> — <mark>ligation of the paired ductus (vas) deferens</mark> to prevent transport of sperm from the testes to the urethra. <b>Tubal ligation</b> — <mark>ligation of the fallopian tubes</mark> to prevent eggs travelling from the ovary to the uterus.",
+    "b": "<mark>Pregnancy rate: vasectomy 0.15%, tubal ligation 0.5%.</mark> Both procedures can be reversed, with varying success: <mark>fertility after vasectomy reversal is highly variable (30%–80%)</mark>; after tubal ligation reversal, pregnancy rates are <mark>75–80% under age 35 but fall to 30–40% over age 40</mark>.",
+    "d": "<b>Disadvantages:</b> <mark>can permanently block fertility even after reversal surgery</mark>; no STI protection; surgical risks and <mark>possible regret, especially in younger patients or those without children</mark>.",
+    "e": "<span class='star'>⭐</span>Counsel these as permanent. The reversal figures exist to show that reversal is not a reliable plan, especially over 40.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Reproductive Rights, Abortion & Ethics  [ethics framework] · principle / meaning / application / conflict",
+  "rows": [
+   {
+    "n": "Sexual and reproductive health and rights (SRHR)",
+    "g": "<span class='pill'>SRHR</span><span class='pill'>WHO definition</span> <mark>Sexual and reproductive health is 'a state of physical, emotional, mental, and social well-being in relation to all aspects of sexuality and reproduction, not merely the absence of disease, dysfunction, or infirmity.'</mark> SRHR encompasses both the ability to exercise rights related to sexuality and reproduction and the ability to make informed decisions with full access to services.",
+    "b": "<b>Reproductive health:</b> access to information on the reproductive system and contraceptive methods, health care services related to pregnancy monitoring and childbirth, infertility treatment, and safe abortion services. <mark><b>Reproductive rights:</b> the right to privacy and informed consent and to make informed decisions on reproduction without stigma or discrimination.</mark>",
+    "d": "<mark>Sexual and reproductive health CANNOT be achieved without sexual and reproductive rights</mark> — the two are not separable. <b>At greatest risk of SRHR discrimination:</b> adolescents; people of diverse sexual orientations, gender identities and expression, and sex characteristics; and displaced people and refugees.",
+    "e": "<span class='star'>⭐</span>The definitional pairing — health requires rights — plus the three at-risk populations named by the lecture.",
+    "img": "<a href=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p4_srhr_framework.jpg\" target=\"_blank\"><img src=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p4_srhr_framework.jpg\" loading=\"lazy\" alt=\"srhr framework\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Reproductive autonomy vs reproductive justice",
+    "g": "<span class='pill'>Autonomy</span><span class='pill'>Justice</span> <mark>Reproductive autonomy is the right of the individual to decide and control contraception, pregnancy, and childbearing.</mark> <mark>Reproductive justice acknowledges the social, economic, and political influence on patients' ability to make healthy decisions about their bodies, sexuality, and reproduction.</mark>",
+    "b": "<b>Reproductive ethics</b> is the broad field covering all moral questions related to the medicalization of human reproduction — contraception, termination of pregnancy, and assisted reproductive technologies.",
+    "d": "<b>Commonly confused:</b> <mark>autonomy is about the individual's right to choose; justice is about whether the social conditions actually permit that choice to be exercised.</mark> A patient can have formal autonomy and still lack reproductive justice.",
+    "e": "<span class='star'>⭐</span>The distinction is the point — autonomy is a right, justice is about the real-world conditions that make the right meaningful.",
+    "img": ""
+   },
+   {
+    "n": "Safe abortion — methods and timing",
+    "g": "<span class='pill'>85–90% in T1</span><span class='pill'>D&amp;E after 15 wk</span> Two main methods terminate pregnancy: <b>medical and surgical</b>. The method chosen generally depends on the <b>gestational age</b> of the conceptus. <mark>Most abortions worldwide (85%–90%) are performed in the first trimester (up to 12 weeks), and only ONE method — surgical dilation and evacuation — is safe after 15 weeks.</mark>",
+    "b": "<b>Before an induced abortion:</b> confirm the pregnancy with a urine test, assess gestational age, and <mark>consider ultrasound for patients with symptoms or risk factors for ectopic pregnancy, a history of irregular cycles, or if the LMP was over 56 days ago or unknown</mark>.",
+    "d": "<b>Use shared decision-making</b> to choose the method. Educate on expected symptoms — heavier menstrual bleeding and cramping, GI symptoms (nausea, vomiting, diarrhoea), low-grade fever and chills. Offer referrals for psychosocial services, contraception counselling and STI screening.",
+    "e": "<span class='star'>⭐</span>85–90% in the first trimester, and D&amp;E as the only option after 15 weeks. Commonly performed for patient choice, potential harm to the pregnant individual, or fetal genetic/anatomical abnormalities.",
+    "img": "<a href=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p6_type_and_timing_of_abortion.jpg\" target=\"_blank\"><img src=\"mini2_community_images/contraception_and_reproductive_ethics/contraception_and_reproductive_ethics_p6_type_and_timing_of_abortion.jpg\" loading=\"lazy\" alt=\"type and timing of abortion\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Counseling a patient about abortion",
+    "g": "<span class='pill'>Non-judgmental</span><span class='pill'>Non-inflammatory language</span> Four guidelines: <b>1. Avoid making judgments</b> — objectivity matters in every conversation, but <mark>especially here, where respecting the patient's bodily autonomy is paramount</mark>. <b>2. Provide clear, accurate information</b> — educating patients empowers informed decisions.",
+    "b": "<b>3. Use non-inflammatory language</b> — <mark>avoid qualifiers like 'unplanned' or 'unwanted' when discussing the pregnancy</mark>. <b>4. Provide as many resources as possible</b>, and <b>create a safe space</b>.",
+    "d": "<b>Legal context:</b> access to safe abortion depends on local laws, which vary considerably. <mark>Following the Supreme Court's 2022 decision to overturn Roe v. Wade — which had federally protected the right to abortion — each state now regulates abortion independently.</mark> Health professionals should refer to their state boards for up-to-date information.",
+    "e": "<span class='star'>⭐</span>The word-choice rule is concrete and testable: do not attach 'unplanned' or 'unwanted' to the pregnancy.",
+    "img": ""
+   },
+   {
+    "n": "Conscientious objection",
+    "g": "<span class='pill'>Inform</span><span class='pill'>Refer</span><span class='pill'>Treat in emergency</span> A doctor with a conscientious objection has specific positive duties, not merely the right to decline.",
+    "b": "They should: <b>inform the patient of the objection</b>, preferably in advance; <mark>inform the patient of their right to see another doctor and ensure they have sufficient information to exercise that right</mark>; <mark>take whatever steps are necessary to ensure the patient's access to care is not impeded</mark>; continue to treat the patient with dignity and respect; and continue to provide other care if the patient wishes.",
+    "d": "They must also <mark>refrain from expressing personal beliefs in a way that may cause the patient distress</mark>, <mark>provide medically appropriate treatment in an EMERGENCY even if it conflicts with their personal beliefs and values</mark>, and inform their employer so they can practise in accordance with their beliefs without compromising patient care or burdening colleagues.",
+    "e": "<span class='star'>⭐</span><mark>The emergency exception is absolute</mark> — conscientious objection never permits withholding emergency treatment. That is the classic conflict this framework is tested on.",
+    "img": ""
+   },
+   {
+    "n": "Treatment of minors in reproductive health care",
+    "g": "<span class='pill'>Mature minor</span><span class='pill'>Judicial bypass</span> <mark>A 'mature minor' is still dependent on their parent(s) but appears able to make reasoned judgments and is deemed sufficiently mature to consent to medical treatment, including reproductive health services, without parental consent.</mark>",
+    "b": "<mark>Minors can typically consent to prenatal care, contraception, STI testing and STI treatment WITHOUT parental consent</mark>, and federal and many state laws protect the confidentiality of minors seeking such services. Physicians can still encourage minors to involve their parents.",
+    "d": "<b>Abortion is the exception and varies significantly by state, in two categories:</b> <mark>Parental CONSENT laws — the parent(s) must be informed and agree</mark>; <mark>Parental NOTIFICATION laws — parents must be notified a specified period before, but permission is not required</mark>. <mark>Judicial bypass allows a minor to seek permission from a judge instead.</mark>",
+    "e": "<span class='star'>⭐</span>Consent vs notification vs judicial bypass — three distinct mechanisms, routinely confused. Note that routine reproductive services and abortion are treated differently.",
+    "img": ""
+   },
+   {
+    "n": "Contraceptive counseling — the ethical approach",
+    "g": "<span class='pill'>Tailor to the patient</span> Effective counselling <b>avoids patient misunderstandings, overcomes biases and popular misinformation, and tailors the method to the individual patient</b>.",
+    "b": "Helpful approaches: explore the needs and characteristics of the individual so the method suits them in <mark>efficacy, safety, and ease of use</mark>; address the person's individual reproductive desires; discuss the various methods, their effectiveness and possible adverse effects; and screen for medical complications and other health concerns.",
+    "d": "<b>Encourage open communication</b> — actively listen while respecting the patient's values and choices. <mark>Ensure confidentiality</mark>, and <mark>ensure affordability and accessibility</mark>, alongside advocating for comprehensive sexual education and addressing societal barriers.",
+    "e": "<span class='star'>⭐</span>Family planning reduces unintended pregnancies, reduces STI spread, and by treating and preventing STIs <mark>helps reduce rates of infertility</mark> — that downstream chain is the public-health argument.",
+    "img": ""
+   },
+   {
+    "n": "Duty to warn and STI partner notification",
+    "g": "<span class='pill'>Duty to warn</span><span class='pill'>4 notification types</span> <mark>Duty to Warn is the ethical and legal obligation of healthcare providers to inform individuals if they are at significant risk of harm from a patient with a communicable disease</mark> — primarily used for serious diseases such as HIV, where failure to inform exposed individuals could result in significant harm.",
+    "b": "<b>Mandatory reporting:</b> providers are required to report certain STIs — <mark>HIV, gonorrhea, syphilis, chlamydia and chancroid</mark> — to state or local health departments so authorities can track and manage outbreaks.",
+    "d": "<b>Three notification methods:</b> <mark>PROVIDER-referral — providers or public health officials directly notify the partners, ensuring confidentiality</mark>; <mark>PATIENT-referral — the diagnosed individual notifies their own partners, with provider support</mark>; <mark>CONTRACT-referral — if the patient does not notify partners within a specified timeframe, the provider or official then does</mark>.",
+    "e": "<span class='star'>⭐</span>The three referral types and the five reportable STIs. Contract-referral is the hybrid and the one most often missed.",
+    "img": ""
+   },
+   {
+    "n": "Maternal–fetal conflicts",
+    "g": "<span class='pill'>Motivation vs obligation</span> Maternal-fetal conflicts arise <b>when the interests of a pregnant woman and her fetus are perceived to be in opposition</b>. In most cases the interests of a pregnant woman are aligned with those of her fetus.",
+    "b": "<mark>When they are NOT aligned, there is an ethical MOTIVATION to consider fetal interests, but an ethical OBLIGATION to respect the autonomy of the pregnant woman.</mark>",
+    "d": "<b>The asymmetry is the whole framework</b> — a motivation and an obligation are not the same weight, and the obligation runs to the pregnant woman.",
+    "e": "<span class='star'>⭐</span>Reproduce the motivation/obligation wording exactly. It resolves essentially every maternal-fetal conflict vignette.",
+    "img": ""
+   },
+   {
+    "n": "Sexual violence",
+    "g": "<span class='pill'>1 in 5 women</span><span class='pill'>1 in 71 men</span> <mark>Sexual violence refers to any sexual act or attempt to obtain a sexual act through force, coercion, or manipulation against a person's will.</mark> It encompasses rape, molestation, sexual harassment, and exploitation.",
+    "b": "<b>Key statistics:</b> <mark>approximately 1 in 5 women (20.4%) and 1 in 71 men (1.4%) in the US have experienced completed or attempted rape</mark>; nearly <b>1 in 3 women (30.9%) and 1 in 6 men (15.2%)</b> have experienced some form of contact sexual violence. <mark>Most female victims (79.6%) experienced their first rape before age 25; 42.2% before age 18. Most male victims (27.8%) experienced their first rape before age 10.</mark>",
+    "d": "<mark>Only 25–30% of sexual assaults are reported to police</mark>, with few arrests and fewer convictions. <mark>The majority of perpetrators are known to the victim</mark> — current or former intimate partners, family members, friends or acquaintances. Victims experience physical injuries, psychological trauma, and risk of STIs and unintended pregnancy.",
+    "e": "<span class='star'>⭐</span>Survivors are at increased risk of <b>chronic pain, gastrointestinal disorders, PTSD, depression and anxiety</b> — the long-term sequelae are as examinable as the acute care.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Human Sexual Response Cycle  [process / sequence]",
+  "rows": [
+   {
+    "n": "The four phases of the sexual response cycle",
+    "g": "<span class='pill'>Excitement</span><span class='pill'>Plateau</span><span class='pill'>Orgasm</span><span class='pill'>Resolution</span> The sexual response cycle describes a pattern of physiological changes in males and females during sexually stimulating activities. <mark>The four phases are EXCITEMENT, PLATEAU, ORGASM, and RESOLUTION.</mark> The traditional model devised by <b>Masters and Johnson</b> remains the model tested on USMLE.",
+    "b": "<mark>In males, these stages are sequential, and males experience a REFRACTORY PERIOD of variable duration (usually minutes to hours) after orgasm during which they are unable to orgasm again.</mark> <mark>In females, the progression might not be so linear; successive cycles can follow quickly and females can achieve multiple orgasms.</mark>",
+    "d": "Newer models have criticized certain inaccuracies in the Masters and Johnson cycle, but it is the one examined. Dysfunction can occur anywhere in the cycle, from problems with libido to inability to achieve orgasm.",
+    "e": "<span class='star'>⭐</span>Name the four phases in order, and state the male/female difference: refractory period vs multiple orgasms.",
+    "img": "<a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p6_sexual_response_cycle_male_and_female.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p6_sexual_response_cycle_male_and_female.jpg\" loading=\"lazy\" alt=\"sexual response cycle male and female\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Neural control — 'Point, Shoot, Score'",
+    "g": "<span class='pill'>Parasympathetic</span><span class='pill'>Sympathetic</span><span class='pill'>Somatic</span> <mark>Increased blood flow to the pelvic region during the sexual response cycle is controlled by the PARASYMPATHETIC nervous system.</mark> Sexual stimulation releases <b>acetylcholine</b> from parasympathetic cholinergic fibers → ACh acts on <mark>muscarinic M3 receptors</mark> on endothelial cells in the corpora cavernosa and penile arterioles → ↑ intracellular Ca²⁺ → stimulates <b>eNOS</b> → <b>NO synthesis increases</b>. NO is also released from the cavernous nerve.",
+    "b": "<mark>Mnemonic — 'Point, Shoot, Score': 'Point' (erection) = PARASYMPATHETIC; 'Shoot' (emission) = SYMPATHETIC; 'Score' (expulsion) = SOMATIC.</mark>",
+    "d": "<b>Reduction of Ca²⁺ in the smooth muscle of arteries leads to penile erection</b> (NO → cGMP → smooth muscle relaxation). An erection is a <b>reflex response</b> initiated by visual, olfactory and imaginative stimuli acting on supraspinal centers and physical stimuli on spinal centers.",
+    "e": "<span class='star'>⭐</span>Point-Shoot-Score is the highest-yield mnemonic in the deck. Note the apparent paradox: ACh raises endothelial Ca²⁺ to make NO, but NO then LOWERS smooth-muscle Ca²⁺ to relax the artery.",
+    "img": "<a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p8_parasympathetic_control_of_arousal.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p8_parasympathetic_control_of_arousal.jpg\" loading=\"lazy\" alt=\"control of arousal\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Erection — male and female physiology",
+    "g": "<span class='pill'>Corpora cavernosa</span><span class='pill'>Clitoris &amp; labia</span> <b>In males:</b> blood flows to the organ and engorges the spongy tissue lining the shaft — the <b>corpora cavernosa</b> (two paired, parallel bands on the dorsum of the penis) and the <b>corpus spongiosum</b>, which surrounds the penile urethra. <mark>The veins of the penis are compressed during engorgement, decreasing outflow and causing additional engorgement.</mark>",
+    "b": "<b>In females:</b> clitoral and labial changes have similar physiology. <mark>Nitric oxide and cGMP cause engorgement of the clitoris and labia minora, but clitoral enlargement is not as rigid as penile erection, possibly because of the ABSENCE of a compressible venous plexus layer.</mark>",
+    "d": "Engorgement of the labia minora significantly increases its diameter, leading to eversion and exposure of its inner surface. <b>NO and cGMP also relax the vaginal smooth muscle layer, leading to vaginal dilation and lengthening.</b>",
+    "e": "<span class='star'>⭐</span>The reason clitoral erection is less rigid — no compressible venous plexus to trap blood — is the kind of mechanistic contrast that gets asked.",
+    "img": "<a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p9_flaccid_vs_erect_penis.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p9_flaccid_vs_erect_penis.jpg\" loading=\"lazy\" alt=\"enis\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Emission, expulsion and semen",
+    "g": "<span class='pill'>Emission = sympathetic</span><span class='pill'>Expulsion = somatic</span> <b>Ejaculation is the forceful expulsion of semen out of the urethra</b> and consists of two sequential processes: <b>emission</b> and <b>expulsion</b>. <mark>Emission is controlled by the SYMPATHETIC nervous system via alpha-1 adrenergic receptors, stimulating contraction and forcing semen into the urethral bulb.</mark>",
+    "b": "<mark>Expulsion is a SOMATIC (spinal cord) reflex triggered by the presence of semen in the urethra</mark>, producing rhythmic contractions of the <b>ischiocavernosus and bulbospongiosus</b> striated muscles at the base of the penis. Combined with prostate contraction, this ejects semen. <mark>During ejaculation the neck of the urinary bladder is tightly shut to prevent mixture of semen and urine.</mark>",
+    "d": "<b>Semen composition:</b> sperm from the testes plus fluid from the <b>seminal vesicles, prostate (including PSA), and bulbourethral glands</b>. Contains <mark>fructose, citric acid, lipids (energy for sperm), proteolytic enzymes (which cause semen liquefaction), and lubricating mucus</mark>.",
+    "e": "<span class='star'>⭐</span>The bladder is <b>least</b> involved in producing semen — a stated exam answer. Prostate → liquefaction enzymes; seminal vesicles → fructose.",
+    "img": ""
+   },
+   {
+    "n": "Orgasm",
+    "g": "<span class='pill'>Not strictly linked to ejaculation</span> <b>Orgasm (sexual climax)</b> is a set of physiologic and psychologic responses occurring at about the same time as ejaculation <mark>but not strictly linked to it</mark>.",
+    "b": "Both sexes may have <b>tachycardia, tachypnea, diffuse muscle contractions (legs, pelvis, chest), and a euphoric sense of well-being</b>.",
+    "d": "<mark>Orgasm can occur without ejaculation (especially in females), or vice versa.</mark> <b>Clinical correlation:</b> the purported <b>Gräfenberg (G) spot</b> is a small area in the anterior vaginal wall described by Dr Ernest Gräfenberg in 1950, thought to be highly sensitive.",
+    "e": "<span class='star'>⭐</span>Orgasm and ejaculation are separable events — stated explicitly because it is counterintuitive.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Sexual Dysfunction  [concept / definition table]",
+  "rows": [
+   {
+    "n": "Sexual dysfunction — definition and categories",
+    "g": "<span class='pill'>Distress required</span><span class='pill'>6 months</span> <mark>Sexual dysfunction occurs when a person experiences a problem at any stage during the sexual response cycle that causes DISTRESS.</mark> The categories are <b>sexual desire/arousal, orgasmic dysfunction, ejaculatory dysfunction, pain disorders, and other specified sexual dysfunctions</b>.",
+    "b": "<b>Female sexual interest/arousal disorder and male hypoactive sexual desire disorder</b> involve the <mark>reduction or absence of at least THREE of the following for 6 MONTHS, leading to distress</mark>: sexual activity, erotic thoughts, initiation of sexual activity, sexual excitement or pleasure, response of arousal to internal or external stimuli, and genital or non-genital sensation.",
+    "d": "Couples may present with a <b>desire discrepancy</b>, in which one partner has less desire than the other. <mark>Distress is required for the diagnosis</mark> — a change alone is not a disorder.",
+    "e": "<span class='star'>⭐</span>Three of the listed features, for six months, <b>with distress</b>. All three elements are needed.",
+    "img": ""
+   },
+   {
+    "n": "Erectile dysfunction — causes by proportion",
+    "g": "<span class='pill'>Drug-induced 15%</span><span class='pill'>Psychogenic 10%</span><span class='pill'>Local 6%</span><span class='pill'>Hormonal 3%</span> ED is categorised by cause with the lecture giving explicit proportions.",
+    "b": "<mark>Drug-induced (15%)</mark> — antihypertensives, antidepressants, antipsychotics, antiandrogens, recreational drugs. <mark>Psychogenic (10%)</mark> — performance-related anxiety, traumatic past experiences, relationship problems, anxiety, depression, stress. <mark>Local penile/cavernous (6%)</mark> — Peyronie's disease, cavernous fibrosis, penile fracture. <mark>Hormonal (3%)</mark> — hypogonadism, hyperprolactinemia, hyper- and hypothyroidism, hyper- and hypocortisolism.",
+    "d": "<mark>If a patient can have erections while asleep (determined by home monitoring), it suggests a PSYCHOLOGICAL cause</mark> — anxiety, inexperience, or psychiatric illness. Patients for whom medical therapy fails may require surgical correction with a <b>penile implant</b>.",
+    "e": "<span class='star'>⭐</span>Nocturnal erections preserved ⇒ psychogenic — that single test splits the differential in half. The most common treatment for ED without a clear cause works by <mark>increasing cGMP to maintain an erection</mark> (PDE5 inhibitors).",
+    "img": "<a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p19_medications_causing_sexual_dysfunction.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p19_medications_causing_sexual_dysfunction.jpg\" loading=\"lazy\" alt=\"medications causing sexual dysfunction\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Female sexual pain and orgasmic disorders",
+    "g": "<span class='pill'>Dyspareunia</span><span class='pill'>Vulvodynia</span> Females should receive a <b>pelvic exam</b> evaluating for pelvic disorders such as <b>endometriosis, cysts, or chronic infections</b>.",
+    "b": "<mark>Painful sex in females is often due to local factors in the genitals, such as a dry vagina (e.g. due to a postmenopausal drop in estrogen). Vaginal atrophy may not be seen on examination. Both may respond to short-term estrogen therapy.</mark>",
+    "d": "<mark>Vulvodynia is a DIAGNOSIS OF EXCLUSION characterized by burning and pain.</mark> <b>Genito-pelvic pain/penetration disorder</b> is suggested by <mark>tensing of the muscles and pain exacerbated by touch on physical exam, with NO other physical exam findings</mark> — the absence of other findings is what distinguishes it from endometriosis (cyclical dyspareunia, dysmenorrhea and dyschezia) or lichen sclerosus (thin, fibrotic white plaques).",
+    "e": "<span class='star'>⭐</span>'No other exam findings' is the discriminator for genito-pelvic pain/penetration disorder. Turner syndrome causes hypogonadism from childhood and so cannot explain NEW-onset anorgasmia.",
+    "img": ""
+   },
+   {
+    "n": "Ejaculatory dysfunction",
+    "g": "<span class='pill'>Premature</span><span class='pill'>Delayed</span><span class='pill'>SSRIs</span> Patients may report <b>premature</b> or, more rarely, <b>delayed</b> ejaculation. Delayed ejaculation may cause prolonged sex, undesirable to some couples, and shares some causes with ED.",
+    "b": "<mark>Premature ejaculation is highly subjective</mark> but may be a source of stress to an individual or couple.",
+    "d": "<mark>It is often psychologic but is occasionally due to prostatitis or diabetes. Treatment with SSRIs may help correct the problem.</mark>",
+    "e": "<span class='star'>⭐</span>SSRIs delay orgasm — an adverse effect elsewhere, but the therapeutic mechanism here. That inversion is the teaching point.",
+    "img": ""
+   },
+   {
+    "n": "Medication- and substance-induced sexual dysfunction",
+    "g": "<span class='pill'>Bupropion is preferred</span> Many medications adversely affect sexual function.",
+    "b": "<mark>SSRIs and tricyclic agents decrease desire and the ability to achieve orgasm in both males and females. Importantly, BUPROPION does NOT have this effect, so it is preferred for patients with sexual dysfunction.</mark> <b>Antipsychotics</b> may increase prolactin, altering hormonal balance and decreasing desire.",
+    "d": "<b>By mechanism:</b> <mark>antipsychotics decrease dopamine → erectile dysfunction and inhibited ejaculation; antihistamines decrease histamine → vaginal dryness; anticholinergics decrease acetylcholine → vaginal dryness; antihypertensive β-blockers decrease norepinephrine → reduced libido and erectile dysfunction; androgens INCREASE libido</mark>. Antihypertensives implicated include diuretics, β-blockers, spironolactone and centrally acting agents.",
+    "e": "<span class='star'>⭐</span><mark>Bupropion is the answer whenever a stem needs an antidepressant that spares sexual function.</mark>",
+    "img": "<a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p19_medications_causing_sexual_dysfunction.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p19_medications_causing_sexual_dysfunction.jpg\" loading=\"lazy\" alt=\"medications causing sexual dysfunction\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Sexual Health & Sexual History  [concept / definition table]",
+  "rows": [
+   {
+    "n": "Sexual health — the WHO definition",
+    "g": "<span class='pill'>WHO 2006</span> <mark>The WHO defines sexual health as 'a state of physical, emotional, mental, and social well-being in relation to sexuality; [sexual health] is not merely the absence of disease, dysfunction or infirmity.'</mark> In 2006 the WHO also added <mark>'the possibility of having pleasurable and safe sexual experiences'</mark>.",
+    "b": "We should routinely discuss sexual health with patients, as appropriate, because it is an important part of quality of life.",
+    "d": "The 2006 addition matters: sexual health is framed positively, around <b>pleasure and safety</b>, not merely around the absence of disease.",
+    "e": "<span class='star'>⭐</span>Note the parallel construction with the SRHR definition — 'not merely the absence of disease' appears in both.",
+    "img": ""
+   },
+   {
+    "n": "Healthy vs unhealthy sex practices",
+    "g": "<span class='pill'>Consent</span><span class='pill'>High-risk behavior</span> <mark>Healthy sex practices can involve just about anything so long as participants feel safe; unhealthy sex practices generally involve engaging in HIGH-RISK behavior.</mark> Healthy practices include foreplay, penetration, biting, sexting and phone sex — <b>as long as they are consensual among all participants</b>.",
+    "b": "<b>Unhealthy/high-risk:</b> <mark>multiple sex partners at risk for STIs; CONDOMLESS SEX, which increases risk for STIs and unwanted pregnancy; unprotected mouth-to-genital contact; early sexual activity before the age of sexual consent</mark> (which varies by state or country, and is associated with reduced access to health care, reduced privacy, and unplanned or high-risk sexual experiences that increase the risk of exploitation).",
+    "d": "<mark>No specific identity (ethnicity, sexual orientation, gender) or behavior independently determines risk.</mark> Rather, it is <mark>the behavior in relation to stigma, access, and consent frameworks</mark> that influences risky behavior.",
+    "e": "<span class='star'>⭐</span>Condomless sex is the listed high-risk answer; sexting, foreplay and penetration are explicitly healthy when consensual. And identity never determines risk — behavior in context does.",
+    "img": ""
+   },
+   {
+    "n": "Condoms and sexual pleasure — counseling",
+    "g": "<span class='pill'>Joint discussion</span><span class='pill'>Enhances pleasure</span> A common misconception is that condoms diminish sexual pleasure.",
+    "b": "<mark>Using condoms is a decision for all parties involved, and a joint discussion about the use and benefits of condoms with a partner has been shown to ENHANCE the sexual experience.</mark> <mark>Feeling safe from unwanted pregnancy and STIs helps partners spend more mental energy on pleasure.</mark>",
+    "d": "<b>Correct use of condoms can enhance sexual pleasure</b> — vaginal condoms can increase sensation during penetrative sex, and changing thickness, size, shape or scent can help.",
+    "e": "<span class='star'>⭐</span>The counseling frame is sex-positive: condoms are presented as enabling pleasure by removing anxiety, not as a trade-off against it.",
+    "img": ""
+   },
+   {
+    "n": "The five Ps of sexual history taking",
+    "g": "<span class='pill'>Partners</span><span class='pill'>Practices</span><span class='pill'>Protection</span><span class='pill'>Past STIs</span><span class='pill'>Pregnancy</span> <mark>The CDC developed the 'five Ps' technique: PARTNERS, PRACTICES, PROTECTION from STIs, PAST HISTORY of STIs, and PREGNANCY plans.</mark>",
+    "b": "<b>Practices</b> — <mark>because each person's definition of 'sexual activity' can be different, clarify the patient's practices with them and remain nonjudgmental</mark>. <b>Protection</b> — tailor questions based on the answers; <mark>if you deem the patient's risk of STIs low at this point, you can end the history-taking here</mark>; if they may be at risk, continue for more detail. <b>Past STIs</b> — ever tested, when last tested, ever diagnosed, how treated, recurrences, and partner's STI history. <b>Pregnancy</b> — <mark>the one key question: 'do you plan on becoming pregnant in the next year?'</mark>",
+    "d": "<b>Plus:</b> once trust is built, ask 'what other things about your sexual health and sexual practices would you like to discuss?' <b>Why it matters:</b> patients may express concerns more freely if asked; the history may reveal a problem and provide essential information for the differential diagnosis.",
+    "e": "<span class='star'>⭐</span><mark>Diagnosing infertility is NOT a principal aim of routine sexual history-taking</mark> — that is a stated exam answer; it should be referred to a fertility specialist.",
+    "img": "<a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p34_five_ps_of_sexual_history.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p34_five_ps_of_sexual_history.jpg\" loading=\"lazy\" alt=\"of sexual history\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Terminology for sexual history taking",
+    "g": "<span class='pill'>Sexually active</span><span class='pill'>Relationship status</span> Language plays a main role in ensuring a non-stigmatizing approach.",
+    "b": "<mark>Say 'What is your relationship status?' — NOT 'Are you married?' or 'Do you have a girlfriend or boyfriend?'</mark> because <b>relationships can be non-monogamous and can include nonbinary partners</b>. <mark>Say 'Are you sexually active?' — NOT 'Do you have sex?' or 'Have you lost your virginity?'</mark> because <b>sexual activity is a broader term than sex, and virginity is a social concept that should not be promulgated by medical professionals</b>.",
+    "d": "<mark>Say 'Has your sexual life or performance changed?' — NOT 'Do you have any recent sexual problems?'</mark> because <b>people are less likely to admit problems, especially with sexuality; 'change' is a neutral term and does not imply the change is necessarily a problem for the patient</b>.",
+    "e": "<span class='star'>⭐</span><mark>The best-phrased question is 'Have you been bothered by any changes in your sex life recently?'</mark> — open-ended, neutral about direction, and centred on the patient's own distress.",
+    "img": "<a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p40_terminology_for_sexual_history_1.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p40_terminology_for_sexual_history_1.jpg\" loading=\"lazy\" alt=\"terminology for sexual history 1\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p41_terminology_for_sexual_history_2.jpg\" target=\"_blank\"><img src=\"mini2_community_images/introduction_to_sexuality_multi_page/introduction_to_sexuality_multi_page_p41_terminology_for_sexual_history_2.jpg\" loading=\"lazy\" alt=\"terminology for sexual history 2\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Confidentiality and creating a safe environment",
+    "g": "<span class='pill'>Soundproof</span><span class='pill'>Sex-positive</span> <b>Barriers to sexual history-taking:</b> <mark>the patient may feel embarrassed or uncomfortable being asked about sex, or may not trust that the interview is confidential.</mark>",
+    "b": "<b>To ensure confidentiality</b>, the office should be <mark>soundproof and not visible to others from the outside</mark>, and the patient should be assured that everything shared stays between the two of you.",
+    "d": "<b>Use a sex-positive approach</b> — teach safer sex; <mark>always educate the patient who unconsciously engages in unsafe practices, because evidence proves healthier behaviors develop when patients' knowledge increases</mark>. Use models and diagrams to improve comprehension. <mark>If something is out of your area of expertise, refer to another professional to avoid sharing misinformation.</mark> Use the same sexual terminology as the patient, but make sure you have the same understanding of these terms — echo their last words to elicit clarification.",
+    "e": "<span class='star'>⭐</span>Remind patients that <b>sexual activity is a natural part of life and sex practices that do not hurt anyone are normal</b>.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Gender Identity, Sexual Orientation & Inclusive Care  [concept / definition table]",
+  "rows": [
+   {
+    "n": "Sex assigned at birth vs gender",
+    "g": "<span class='pill'>Sex assigned at birth</span><span class='pill'>Gender</span><span class='pill'>Gender expression</span> <mark>The preferred term (2024) is 'sex assigned at birth' — commonly based on genitalia, chromosomes, and gonads; categories male, female, DSD or other (formerly Intersex).</mark> You will still see 'sex' or 'biological sex' in some of the medical literature, <b>but growing evidence continues to challenge this binary or categorical way of thinking</b>.",
+    "b": "<mark>Gender: a social identity — how you see yourself. It encompasses your sense of self as well as social norms and expectations</mark> (men, women, girls, boys, trans, non-binary, gender queer). <mark>Gender expression: how you present yourself to the outside world</mark> — typically through appearance, dress, and behavior.",
+    "d": "The community-medicine lecture states it as: <mark>'Gender refers to the socially constructed roles, behaviors, activities, and attributes that society has defined. Gender can change over time.'</mark> and <mark>'Sex refers to biological, anatomic, and physiological characteristics that primarily describe phenotype. This is typically determined by health care providers who look at a person's reproductive organs and genitalia at birth.'</mark>",
+    "e": "<span class='star'>⭐</span>Four separate axes — sex assigned at birth, gender identity, gender expression, and sexual orientation — and none predicts another.",
+    "img": "<a href=\"mini2_community_images/gender_identity_sexuality_and_sexual_health/gender_identity_sexuality_and_sexual_health_p7_gender_unicorn_identity_expression_sex_attraction.jpg\" target=\"_blank\"><img src=\"mini2_community_images/gender_identity_sexuality_and_sexual_health/gender_identity_sexuality_and_sexual_health_p7_gender_unicorn_identity_expression_sex_attraction.jpg\" loading=\"lazy\" alt=\"gender unicorn identity expression sex attraction\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Sexual orientation — identity, attraction, behavior",
+    "g": "<span class='pill'>Three constructs</span> <mark>Sexual orientation is composed of three different constructs: IDENTITY, ATTRACTION, and BEHAVIOR. All constructs of sexual orientation can change over time.</mark> <mark>Sexual orientation is an enduring personal pattern of romantic attraction or sexual attraction.</mark>",
+    "b": "<mark>As a physician the label is less important than the BEHAVIOR.</mark> Use patient-preferred language.",
+    "d": "<mark>Gender identity ≠ sexual orientation. Trans* people can be straight, bisexual, lesbian, gay, asexual, pansexual, queer, etc.</mark> For example, <b>a trans woman who is exclusively attracted to other women might identify as lesbian</b>.",
+    "e": "<span class='star'>⭐</span>Identity, attraction and behavior can diverge — which is exactly why the clinical question is about behavior, not label.",
+    "img": ""
+   },
+   {
+    "n": "Key terminology — the lecture's definitions",
+    "g": "<span class='pill'>Cisgender</span><span class='pill'>Transgender</span><span class='pill'>Non-binary</span> <mark>Sexual minority: a member of the LGBT community (Lesbian, Gay, Bisexual, Transgender)</mark> — gay, lesbian, queer, bisexual, pansexual, fluid, butch, femme, boi. <mark>Transgender and gender-nonconforming: collective community of individuals whose gender identities, expressions and/or lived experiences differ from those typically associated with the sex they were assigned at birth.</mark>",
+    "b": "<mark>Cisgender: Someone who's sex assigned at birth aligns with their current gender identity.</mark> <mark>Non-binary: (a movement to adopt language that is) non-categorical; not limited to only 2 options.</mark> <mark>Gender-diverse describes people whose gender identity falls outside traditional ideas of male or female (the binary).</mark>",
+    "d": "<mark>Queer, fluid, etc. — these terms can be used for gender OR sexual orientation (along with others) to communicate non-binary, non-categorical identity.</mark> <b>Transgender</b> is also defined as an <mark>encompassing term of many gender identities of those who do not identify or exclusively identify with their sex assigned at birth</mark>; other common terms include trans*, gender non-binary, gender queer, and gender fluid (not necessarily trans).",
+    "e": "<span class='star'>⭐</span>Learn these as the lecture words them. 'Queer' and 'fluid' can refer to either gender or orientation — a distinction routinely lost in paraphrase.",
+    "img": ""
+   },
+   {
+    "n": "Gender dysphoria",
+    "g": "<span class='pill'>Discomfort</span><span class='pill'>ICD-11 vs DSM-5</span> <mark>Gender dysphoria is the discomfort that occurs when gender identity differs from sex assigned at birth.</mark>",
+    "b": "It is <b>not</b> the same as being a member of the LGBTQIA+ community, nor is it simply the desire to undergo reassignment.",
+    "d": "<b>Current practice:</b> in contrast to DSM-5, the ICD-11 working group operated under different parameters — <mark>WHO has a human rights mission, and there is substantial evidence that the stigma associated with the intersection of transgender status and mental disorders contributes to precarious legal status, human rights violations, and barriers to appropriate health care</mark>. For gender-nonconforming people, certain sexual experiences can cause distress when they focus on anatomy the person does not identify with.",
+    "e": "<span class='star'>⭐</span>Define it precisely as discomfort arising from the mismatch — the stated correct answer, with the three distractors being community membership, desire for surgery, and use of sex toys.",
+    "img": ""
+   },
+   {
+    "n": "Inclusive language and respectful communication",
+    "g": "<span class='pill'>Person-centered</span><span class='pill'>Gender neutral</span> <mark>Inclusive language involves the intentional use of words and descriptors that welcome the diversity of all people and their identities. It avoids vocabulary that promotes stereotypes and stigma and/or reinforces dominant norms around gender and gender identity, race and ethnicity, age, ability and disability, sexual orientation, and socioeconomic status. Generally, person-centered and gender neutral.</mark>",
+    "b": "<b>Person-centered terminology</b> instead of labeling people by status or condition: <mark>'older people' not 'the elderly'; 'persons with low income' not 'the poor'; 'persons with diabetes' not 'diabetics'</mark>. <b>Sex-neutral terminology:</b> 'chairperson' not 'chairman'; 'parenting' not 'mothering'. <b>Avoid sex-specific pronouns:</b> write 'physicians and their staff' rather than 'the physician and his staff'.",
+    "d": "<b>Respectful, nonjudgmental communication:</b> use gender-neutral language (partner, they/them); <mark>ask about gender — don't assume</mark>; ask for pronouns and how people want to be addressed. <b>Non-verbal communication matters too:</b> what's in your clinic (magazines, artwork, brochures), what's on your forms (binary gender/sex boxes), who is represented on staff, and bathroom access and labeling.",
+    "e": "<span class='star'>⭐</span>The three concrete substitutions (elderly / poor / diabetics) are the easiest items to be tested on.",
+    "img": ""
+   },
+   {
+    "n": "Intersectionality",
+    "g": "<span class='pill'>Interconnected identities</span> <mark>Intersectionality is the idea that comprehensive identities are influenced and shaped by the interconnection of race, class, ethnicity, sexuality/sexual orientation, gender/gender identity, physical disability, national origin, religion, age, and other social or physical attributes.</mark>",
+    "b": "<mark>Gender is experienced differently among different segments of society and there are lots of gendered health inequities WITHIN groups.</mark>",
+    "d": "<b>Examples given:</b> HIV among MSM and women (Black–white comparison); heart disease in women of color; acculturative stress; <b>violence against trans women of color</b>.",
+    "e": "<span class='star'>⭐</span>The key move is 'within groups' — intersectionality explains why a single-axis analysis (gender alone, race alone) misses the actual distribution of risk.",
+    "img": ""
+   },
+   {
+    "n": "Health inequities and transgender health concerns",
+    "g": "<span class='pill'>Higher HIV/STD</span><span class='pill'>Less insurance</span> <mark>Transgender individuals have a high prevalence of HIV/STDs, victimization, mental health issues, and suicide, and are LESS likely to have health insurance than heterosexual or LGB individuals — and likely to have treatment denied.</mark>",
+    "b": "<b>Contributing factors:</b> limited access to care; discrimination, <mark>including by medical providers</mark>; higher rates of co-morbid mental illness; higher likelihood of being the target of violence and hate crimes; and impact of the <b>social determinants of health</b>.",
+    "d": "<b>Legislative context:</b> <mark>the vast majority of bills introduced in 2023 — over 220 — specifically targeted transgender people</mark>, seeking to limit access to school sports, restrooms and locker rooms, ban access to safe, effective, age-appropriate gender-affirming medical care, and remove inclusive books and references to LGBTQ+ identities from school curricula. <b>This is translating into real world violence.</b>",
+    "e": "<span class='star'>⭐</span>Discrimination by medical providers is named explicitly as a driver — the lecture's point is that clinicians are part of the problem to be addressed.",
+    "img": ""
+   },
+   {
+    "n": "Best practices in trans health",
+    "g": "<span class='pill'>Gender-affirming</span><span class='pill'>Welcoming environment</span> <mark>Gender-affirmation includes transgender-specific services like administering hormone therapy and writing letters to support surgery. But transgender patients also seek primary care services like birth control prescriptions, STD and cancer screenings, and mental health care</mark> from providers who specialize in LGBT populations.",
+    "b": "<mark>Unfortunately, primary and specialty care for transgender people isn't always available locally, so many patients have to travel to find an accommodating clinic.</mark>",
+    "d": "<b>Practices:</b> provide a welcoming environment (visual cues, forms, representation); stay up to date; <mark>be gender AFFIRMING</mark>; get training and offer trans-specific services; get connected to supportive services, a referral base and community resources; and <mark>use the patient's preferred language</mark>. Reference: <i>Guidelines for the Primary and Gender-Affirming Care of Transgender and Gender Nonbinary People</i>.",
+    "e": "<span class='star'>⭐</span>The point is that trans health is mostly ordinary primary care delivered without discrimination — not only hormones and surgical letters.",
+    "img": ""
+   },
+   {
+    "n": "Gender and health outcomes",
+    "g": "<span class='pill'>Social construct, real consequences</span> You will see a lot of claims that men are more likely to have X and women less likely to have Y. <mark>Some of this difference may be attributable to genetic differences, but most of these health differences are ALSO influenced by gender identity, gender norms, and a history of oppression and institutional discrimination.</mark>",
+    "b": "<mark>Although gender is a social construct, the consequences are 'real'. There are far-reaching health consequences based on bio-psycho-social factors — it's not just genetic differences.</mark> Examples: life expectancy, heart health, violence.",
+    "d": "<mark>Accounting for 1 in every 4 deaths, heart disease is the leading cause of death for women in the United States.</mark>",
+    "e": "<b>Clinical correlation:</b> <mark>clinicians counseling families of intersex children should NOT encourage unnecessary medical interventions, because sex is not binary and variations of biologic sex are not disorders.</mark>",
+    "img": "<span class='star'>⭐</span>'Social construct with real consequences' is the framing to reproduce — it avoids both biological determinism and dismissing the disparities as unreal."
+   }
+  ]
+ },
+ {
+  "sec": "Human Development Through Adulthood  [developmental milestone timeline]",
+  "rows": [
+   {
+    "n": "Erikson's psychosocial stages — the three adult stages",
+    "g": "<span class='pill'>12–18</span><span class='pill'>19–29</span><span class='pill'>30–64</span> <mark>Erikson's theory outlines 8 stages of psychosocial development from infancy to late adulthood. At each stage, individuals face a conflict between two opposing states that shapes personality.</mark>",
+    "b": "<mark>Adolescence (12–18 years) — IDENTITY vs CONFUSION — virtue: FIDELITY</mark> — experiment with and develop identity and roles. <mark>Early adulthood (19–29 years) — INTIMACY vs ISOLATION — virtue: LOVE</mark> — establish intimacy and relationships with others. <mark>Middle age (30–64 years) — GENERATIVITY vs STAGNATION — virtue: CARE</mark> — contribute to society and be part of a family.",
+    "d": "<b>Each stage depends on the one before.</b> <mark>Intimacy may be difficult if one has not established their sense of identity</mark> — the ability to reach the intimacy stage depends on having successfully resolved earlier issues. Note that intimacy is <b>not necessarily romantic</b> relationships.",
+    "e": "<span class='star'>⭐</span>Learn the age band, the conflict, AND the virtue for each stage — all three are examinable, and the virtues are the part most often skipped.",
+    "img": "<a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p6_eriksons_psychosocial_stages.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p6_eriksons_psychosocial_stages.jpg\" loading=\"lazy\" alt=\"stages\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Adolescence (12–18) — cognitive gains",
+    "g": "<span class='pill'>Attention</span><span class='pill'>Memory</span><span class='pill'>Processing speed</span><span class='pill'>Metacognition</span> <b>Begins at puberty and ends at early/emerging adulthood (~age 18).</b> Typical portrayals are negative (impulsivity, moodiness, unpredictability), <mark>however there are many positive aspects of adolescence — opportunity, identity development</mark>.",
+    "b": "<b>Five improvements in cognition:</b> <b>1. Attention</b> — selective and divided. <b>2. Memory</b> — short- and long-term. <b>3. Processing speed</b> — <mark>working quicker, levels off at age 15</mark>. <b>4. Organization</b> — using strategies to learn and remember more efficiently. <b>5. Metacognition</b> — monitoring your own cognition and planning ahead.",
+    "d": "<mark>Prevalence of depression during adolescence is 2× higher in assigned females than assigned males.</mark> Puberty timing affects psychosocial functioning: <mark>EARLY maturation in assigned females is associated with depression and antisocial behaviors; LATE maturation in assigned males with internalizing behaviors.</mark>",
+    "e": "<span class='star'>⭐</span>Processing speed levelling at 15 is a specific, testable age cutoff. So is the 2× depression ratio.",
+    "img": "<a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p7_the_growing_teen_brain.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p7_the_growing_teen_brain.jpg\" loading=\"lazy\" alt=\"the growing teen brain\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Adolescent decision-making and risk-taking",
+    "g": "<span class='pill'>Hot vs cool cognition</span><span class='pill'>DLPFC matures later</span> <mark>'Hot vs cool' cognition (Dahl, 2004) — emotional arousal impacts decision-making.</mark>",
+    "b": "<mark>The DORSOLATERAL PREFRONTAL CORTEX (impulse control) matures LATER than the remainder of the brain (Giedd, 2004)</mark>, so there are more noticeable difficulties with decision-making <b>under stress</b>, due to difficulty modulating emotion. Other factors: peer associations, and a mismatch between chronologic age and physical appearance. <b>Result: risk-taking behaviors.</b>",
+    "d": "<mark>Adolescents make decisions based on both SOCIAL (how others may perceive them) and EMOTIONAL (how rewarding the behavior may feel) reasons (Crone &amp; Dahl, 2012).</mark>",
+    "e": "<span class='star'>⭐</span>The DLPFC maturing last is the neuroanatomical answer to 'why do adolescents take risks?' — and the effect is worst under stress, not at baseline.",
+    "img": "<a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p9_five_features_of_emerging_adulthood.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p9_five_features_of_emerging_adulthood.jpg\" loading=\"lazy\" alt=\"five features of emerging adulthood\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Prodromal symptoms and early psychopathology",
+    "g": "<span class='pill'>Prodrome</span> <mark>Prodromal symptoms are early symptoms of severe psychopathology (e.g. schizophrenia) that can present in CHILDHOOD AND ADOLESCENCE.</mark>",
+    "b": "Three cited definitions: <b>Keith and Matthews (1991)</b> — 'a heterogeneous group of behaviors temporally related to the onset of psychosis'; <b>Loebel et al. (1992)</b> — the time interval from the onset of unusual behavioral symptoms to the onset of psychotic symptoms; <b>Beiser et al. (1993)</b> — the period from first noticeable symptoms to first prominent psychotic symptoms.",
+    "d": "All three definitions describe the same window: <b>the interval between first behavioral change and frank psychosis</b>.",
+    "e": "<span class='star'>⭐</span>Recognising that severe psychiatric illness has a detectable prodrome in adolescence is the clinical point — it is the window for early intervention.",
+    "img": ""
+   },
+   {
+    "n": "Emerging adulthood (18–30)",
+    "g": "<span class='pill'>Distinct life stage</span><span class='pill'>Executive function 22/24</span> <mark>Proposed as a DISTINCT life stage between adolescence and young adulthood. Caveat: mostly characterized in western cultures — not a 'universal' life stage across all cultures.</mark>",
+    "b": "<b>Cognition:</b> education vs experience in career development; <mark>executive functioning fully develops by age 22 in assigned females and 24 in assigned males</mark>. <b>Piaget's formal operational thought</b> — the ability to think abstractly. <mark>Dialectical thought (Basseches, 1984) — bringing together important aspects of two OPPOSING viewpoints, synthesizing them, and coming up with new ideas; considered one of the most advanced aspects of POSTFORMAL thinking.</mark>",
+    "d": "Dialectical thought emphasises <mark>adults' ability to TOLERATE AMBIGUITY, accept contradictions, or FIND new problems rather than solve problems</mark>. <b>Psychosocially:</b> Erikson's intimacy vs isolation; the goal is to establish relationships so as not to feel isolated. <mark>Establishing connections: the loneliness epidemic (Perez et al., 2022), with health disparities by race, gender and sexual minority status.</mark>",
+    "e": "<span class='star'>⭐</span>The two executive-function ages (22 female, 24 male) are precise and testable. Postformal/dialectical thought is defined by tolerating contradiction, not resolving it.",
+    "img": ""
+   },
+   {
+    "n": "Middle adulthood (40–65) — cognition",
+    "g": "<span class='pill'>Decline not before 60</span><span class='pill'>Fluid vs crystallized</span> <b>Limited research during this period of the lifespan.</b> Physical health and relationships impact identity. <mark>Cognitive change is marked by BOTH gains and declines — and decline does NOT begin before age 60.</mark>",
+    "b": "<b>Studies of middle adulthood (SLS, MIDUS) show:</b> <mark>processing speed, lung capacity and muscle mass decline; knowledge, experience and the ability to regulate emotions INCREASE</mark>. Continued cognitive focus and exercise can reduce the effects of cognitive decline. <mark>Fluid intelligence: processing speed, reasoning, spatial ability, remembering lists, reaction time.</mark>",
+    "d": "<mark>Social and emotional problem-solving strategies are STRONGER and more efficient than in younger adults (Blanchard-Fields, 2007)</mark>, and older individuals develop more efficient problem-solving strategies at work. <mark>Specific knowledge and experience (CRYSTALLIZED intelligence) can help older individuals compensate for declines in attention and processing speed (FLUID intelligence).</mark> <b>Tacit knowledge (Polanyi, 1954)</b> — knowledge based on life experience that cannot be captured with words alone; <b>older workers often have the greatest amount</b>.",
+    "e": "<span class='star'>⭐</span>'Decline does not begin before age 60' is the specific cutoff. Fluid declines, crystallized compensates — state both halves.",
+    "img": "<a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p9_five_features_of_emerging_adulthood.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p9_five_features_of_emerging_adulthood.jpg\" loading=\"lazy\" alt=\"five features of emerging adulthood\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Middle adulthood — psychosocial and locus of control",
+    "g": "<span class='pill'>Generativity</span><span class='pill'>Stagnation</span><span class='pill'>Internal vs external</span> <b>Erikson: Generativity vs Stagnation.</b> <mark>Generativity — energy and concern is for others: contribute to society and be part of a family; caring for children, parents, grandchildren, mentoring.</mark> <mark>Stagnation — lethargy and lack of motivation in both individual and communal affairs; little connection with others, may feel they are not leaving their mark in a meaningful way.</mark>",
+    "b": "<mark>If a person has not achieved their goals by middle age, the realization that there is more of life behind them than in front of them can result in a sense of EMPTINESS.</mark>",
+    "d": "<b>Locus of control:</b> <mark>EXTERNAL — believe they have little control over their life outcomes; INTERNAL — believe life outcomes depend on their own actions, and internal locus is associated with stronger performance on psychological tests.</mark> <b>'Midlife crisis' (Levinson)</b> — limited and flawed research; 'taking stock' of personal and professional life, re-evaluating goals and ambitions, with a sense of urgency. Usually prompted by a significant life change; can lead to professional change, infidelity, divorce, or increased alcohol/drug use, and thence to health concerns.",
+    "e": "<span class='star'>⭐</span>Note the lecture's hedge — midlife crisis research is described as 'limited and flawed', so it is a concept to know, not a reliable phenomenon.",
+    "img": ""
+   },
+   {
+    "n": "Physical development — early adulthood (18–39)",
+    "g": "<span class='pill'>Peak late 20s</span> <mark>Muscle mass and strength typically PEAK in the late 20s and early 30s</mark> — regular physical activity can maintain these levels longer. <mark>Bone density reaches its MAXIMUM in the late 20s</mark> — adequate calcium and vitamin D intake are crucial during this period. Cardiovascular and respiratory function is optimal, with peak lung capacity and heart efficiency.",
+    "b": "<mark>Fertility is at its highest in the early 20s for both men and women. Women experience a gradual decline starting in their late 20s and more sharply in their 30s.</mark> Menstrual cycles continue with regular ovulation.",
+    "d": "Everything peaks in this window — which is why it is the reference point against which middle adulthood is measured.",
+    "e": "<span class='star'>⭐</span>Peak bone density in the late 20s is the fact that drives lifelong osteoporosis prevention advice.",
+    "img": ""
+   },
+   {
+    "n": "Physical development — middle adulthood (40–64)",
+    "g": "<span class='pill'>Sarcopenia 1%/yr from 40</span><span class='pill'>Menopause 45–55</span> <mark>Sarcopenia — the age-related loss of muscle mass — begins around age 40, with a decline of about 1% PER YEAR.</mark> <mark>Bone density starts to decrease, particularly in women after menopause, increasing the risk of osteoporosis.</mark> Degeneration of cartilage and connective tissue leads to joint stiffness and osteoarthritis.",
+    "b": "<b>Cardiovascular and metabolic:</b> blood vessels become stiffer → increased blood pressure; risk of heart disease and stroke rises; <mark>basal metabolic rate slows, leading to easier weight gain if caloric intake is not adjusted</mark>.",
+    "d": "<b>Reproductive:</b> <mark>menopause typically occurs between ages 45 and 55</mark>, marking the end of menstrual cycles and fertility — hot flashes, mood swings, changes in sexual function. <mark>Men experience a gradual decline in testosterone</mark> → changes in libido and energy. <b>Skin and hair:</b> wrinkles, age spots, loss of elasticity; hair thinning and graying.",
+    "e": "<span class='star'>⭐</span>Sarcopenia at ~1% per year from age 40 is the number. Note menopause is given here as 45–55, slightly wider than the 48–55 range in the gynecology lecture.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "The Wellness Visit & Adult Preventive Screening  [screening / public health table]",
+  "rows": [
+   {
+    "n": "Components of a wellness visit",
+    "g": "<span class='pill'>Annual physical</span><span class='pill'>USPSTF</span> <mark>A wellness visit (annual physical or preventive health visit) is a routine check-up designed to assess and maintain overall health and well-being.</mark> The provider reviews medical history, performs a physical examination, and checks vital signs.",
+    "b": "<b>Components, applicable to both:</b> comprehensive review of personal and family medical history, lifestyle, medications and allergies; <b>vital signs</b> — blood pressure, heart rate, respiratory rate, temperature, height, weight, <mark>BMI and waist circumference</mark>; head-to-toe physical exam; counseling on safe sex practices; review and update immunizations (influenza, tetanus, COVID-19); and screening for mental health issues including depression.",
+    "d": "<b>Men:</b> risk factors for <mark>prostate and testicular cancer</mark>; testicular and prostate examination. <b>Women:</b> <mark>menstrual and reproductive health, risk factors for breast and gynecological cancers</mark>; breast examination; <mark>HPV vaccine</mark> based on age and risk factors.",
+    "e": "<span class='star'>⭐</span><mark>COVID-19 vaccination has been added to the vaccination schedule</mark> — an explicitly flagged update.",
+    "img": "<a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p21_components_of_a_wellness_visit_1.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p21_components_of_a_wellness_visit_1.jpg\" loading=\"lazy\" alt=\"components of a wellness visit 1\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p22_components_of_a_wellness_visit_2.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p22_components_of_a_wellness_visit_2.jpg\" loading=\"lazy\" alt=\"components of a wellness visit 2\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "USPSTF cancer screening — the updated ages",
+    "g": "<span class='pill'>Colorectal 45</span><span class='pill'>Mammogram 40</span><span class='pill'>Prostate 55–69</span> <mark>The U.S. Preventive Services Task Force (USPSTF) makes evidence-based recommendations about preventive services such as screenings, behavioral counseling, and preventive medications</mark> — a reputable source. All guidelines are subject to change as new research emerges.",
+    "b": "<mark>Recent updates: start COLORECTAL cancer screening at age 45 instead of 50, due to rising rates in younger populations. BREAST cancer screening shifted to earlier screening mammograms from 40 years old.</mark>",
+    "d": "<mark>PROSTATE cancer: routine screening is NOT universally recommended. Instead, men aged 55 to 69 should engage in SHARED DECISION-MAKING with their health care provider.</mark> The updates aim to <b>balance the benefits of early detection against the potential risks of overdiagnosis and overtreatment</b>, emphasizing tailored screening for different populations.",
+    "e": "<span class='star'>⭐</span>Three numbers: colorectal 45, mammography 40, prostate 55–69 with shared decision-making. The prostate answer is 'shared decision-making', not an age to start.",
+    "img": ""
+   },
+   {
+    "n": "Screening by age group — 15–24 years",
+    "g": "<span class='pill'>Accidents</span><span class='pill'>Homicide</span><span class='pill'>Suicide</span> <b>Leading causes of age-specific mortality: accident, homicide, suicide.</b> Screening is targeted at those causes.",
+    "b": "<b>Interventions:</b> counseling on <mark>routine seat belt use and bicycle/motorcycle/ATV helmets</mark>; counseling on diet and exercise; <mark>discuss dangers of alcohol use while driving, swimming, boating</mark>; assess and update vaccination status (<b>tetanus, diphtheria, hepatitis B, MMR, rubella, varicella, meningitis, HPV</b>).",
+    "d": "<mark>Ask about gun use and/or gun possession; assess for substance abuse history including alcohol; screen for domestic violence; screen for depression and/or suicidal/homicidal ideation</mark>; HIV testing; continue annual influenza vaccination.",
+    "e": "<span class='star'>⭐</span>For this age band the leading killers are injury and violence, so the screening is behavioral and environmental rather than disease-based.",
+    "img": "<a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p25_screening_by_age_15_24.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p25_screening_by_age_15_24.jpg\" loading=\"lazy\" alt=\"screening by age 15 24\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Screening by age group — 25–44 and 45–64 years",
+    "g": "<span class='pill'>Malignancy</span><span class='pill'>Heart disease</span> <b>25–44 leading causes:</b> <mark>1. Accident, 2. Malignancy, 3. Heart disease, 4. Suicide.</mark> <b>45–64 leading causes:</b> <mark>1. Malignancy, 2. Heart disease, 3. Accident, 4. Diabetes mellitus, 5. Cerebrovascular disease, 6. Chronic lower respiratory disease.</mark>",
+    "b": "<b>25–44 — as above plus:</b> <mark>readdress smoking status and encourage cessation at every visit</mark>; obtain a detailed family history of malignancies and begin an early screening/prevention program if at significantly increased risk; <mark>assess all cardiac risk factors (including screening for diabetes and hyperlipidemia) and consider primary prevention with aspirin for patients at &gt; 3% 5-year risk of a vascular event, and statin therapy for higher risk</mark>.",
+    "d": "<b>45–64 — additionally:</b> <mark>consider prostate cancer screening with annual PSA and digital rectal examination at age 50 (or possibly earlier in African Americans or patients with family history)</mark>; <mark>begin colorectal cancer screening at age 45 or 50 with fecal occult blood testing, flexible sigmoidoscopy, or colonoscopy</mark>; reassess and update vaccination status at age 50 and <mark>vaccinate all smokers against Streptococcus pneumoniae at age 50</mark>; consider screening for coronary disease in higher-risk patients.",
+    "e": "<span class='star'>⭐</span>Notice the shift in the mortality ranking: accident is #1 at 25–44 but drops to #3 by 45–64, where malignancy takes over. The screening follows the ranking.",
+    "img": "<a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p27_screening_by_age_25_44.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p27_screening_by_age_25_44.jpg\" loading=\"lazy\" alt=\"screening by age 25 44\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p28_screening_by_age_45_64.jpg\" target=\"_blank\"><img src=\"mini2_community_images/human_development_through_adulthood_multi_page/human_development_through_adulthood_multi_page_p28_screening_by_age_45_64.jpg\" loading=\"lazy\" alt=\"screening by age 45 64\" style=\"max-height:64px;border-radius:6px\"></a>"
+   }
+  ]
+ },
+ {
+  "sec": "Adolescent Health in the Community  [developmental milestone timeline]",
+  "rows": [
+   {
+    "n": "Defining adolescence and puberty",
+    "g": "<span class='pill'>Cognitive</span><span class='pill'>Biological</span><span class='pill'>Social</span> <mark>Adolescence is a phase of maturation and represents the transition period of psychological and physical maturation between childhood and adulthood.</mark> Three domains: <mark>COGNITIVE — improvement in abstract thinking, in knowledge and in logical reasoning; BIOLOGICAL — onset of puberty and the termination of physical growth with changes in the sex organs; SOCIAL — period of preparation for culturally adequate adult social roles.</mark>",
+    "b": "<mark>Puberty is a physiological phase lasting 2 to 5 years during which the genital organs mature.</mark>",
+    "d": "<b>Demographics:</b> <mark>one in five individuals in the world today is an adolescent (around 1.2 billion) — the largest number of adolescents in the history of mankind.</mark>",
+    "e": "<span class='star'>⭐</span>Adolescence is the broad transition; puberty is the 2–5 year physiological phase within it. Do not use the terms interchangeably.",
+    "img": ""
+   },
+   {
+    "n": "The four phases of adolescence",
+    "g": "<span class='pill'>10–13</span><span class='pill'>14–17</span><span class='pill'>17–21</span><span class='pill'>18–25</span> Adolescence and young adulthood can be divided into four psychosocial developmental phases: <mark>1. EARLY adolescence — approximate ages 10 to 13 years, or middle school years. 2. MIDDLE adolescence — approximate ages 14 to 17, or high school years. 3. LATE adolescence — approximate ages 17 to 21, or college or employment. 4. Young or 'EMERGING' adults — approximate ages 18 to 25.</mark>",
+    "b": "<b>EARLY:</b> <mark>concrete thinking, egocentrism, and impulsiveness</mark>, but with signs of progress in reasoning and considering others' perspectives; still struggle with delayed gratification and long-term planning. A noticeable shift towards independence from parents — reduced interest in parental activities, emotional separation, mood swings. <b>MIDDLE:</b> <mark>capacity to think and plan more abstractly develops, but adolescents may REGRESS to less concrete thinking when faced with very challenging situations</mark>; conflicts with parents become more prevalent and time shifts to peers — <b>the powerful role of the peer group</b>.",
+    "d": "<b>LATE:</b> <mark>ability to think abstractly and plan for the future (career decisions) is more developed; adolescents can make independent decisions while weighing costs and benefits more thoroughly</mark>; a time of reduced restlessness and increased integration, having become a separate entity from the family and better appreciating its importance.",
+    "e": "<span class='star'>⭐</span>The age bands overlap deliberately (late adolescence 17–21 and emerging adults 18–25). Middle adolescence regressing under stress is the clinically useful detail.",
+    "img": "<a href=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p8_four_phases_of_adolescence.jpg\" target=\"_blank\"><img src=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p8_four_phases_of_adolescence.jpg\" loading=\"lazy\" alt=\"of adolescence\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Tanner staging (Sexual Maturity Rating)",
+    "g": "<span class='pill'>SMR</span><span class='pill'>Secondary sex characteristics</span> <mark>Tanner Staging, also known as Sexual Maturity Rating (SMR), is an objective classification system that providers use to document and track the development and sequence of secondary sex characteristics of children during puberty.</mark>",
+    "b": "It is used in the adolescent well visit to <b>assess physical and sexual development</b> alongside height, weight and BMI percentiles.",
+    "d": "Because it is a <b>sequence</b>, staging tells you whether development is progressing normally, not merely where it currently sits.",
+    "e": "<span class='star'>⭐</span>Tanner staging is the objective anchor for 'is this puberty normal?' — and is explicitly part of the adolescent wellness visit.",
+    "img": "<a href=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p13_tanner_staging_1.jpg\" target=\"_blank\"><img src=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p13_tanner_staging_1.jpg\" loading=\"lazy\" alt=\"tanner staging 1\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p14_tanner_staging_2.jpg\" target=\"_blank\"><img src=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p14_tanner_staging_2.jpg\" loading=\"lazy\" alt=\"tanner staging 2\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Adolescent mortality and key health concerns",
+    "g": "<span class='pill'>2.6 million deaths/yr</span><span class='pill'>97% LMIC</span> <mark>There are around 2.6 million deaths among the 10–24-year age group worldwide every year. 97% occur in low- and middle-income countries.</mark> <mark>In 2013, an estimated 4.96 million people aged 10–24 were living with HIV. AIDS is the second most common cause of death among adolescents globally, and the LEADING cause of death among adolescents (10–19) in Africa.</mark>",
+    "b": "<b>Sexual and reproductive health concerns:</b> teenage pregnancy; health problems during pregnancy and childbirth including unsafe abortion; <b>sexually transmitted infections including HIV</b>; harmful traditional practices such as female genital mutilation.",
+    "d": "<b>Other key issues:</b> injuries from accidents and intentional violence; mental health problems; substance use problems; endemic diseases; under- and over-nutrition.",
+    "e": "<span class='star'>⭐</span>The 97% figure locates adolescent mortality overwhelmingly in low- and middle-income countries — the global-health framing this lecture is built on.",
+    "img": ""
+   },
+   {
+    "n": "The HEADSSS screening tool",
+    "g": "<span class='pill'>H-E-A-D-S-S-S</span> <mark>HEeADSSS is an acronym for a comprehensive psychosocial assessment tool identifying risk and protective factors, and assists health professionals to formulate a plan in partnership with the young person.</mark>",
+    "b": "<mark>H — Home · E — Education · A — Activities · D — Drugs and alcohol · S — Suicidality · S — Safety · S — Sexuality.</mark>",
+    "d": "<mark>Performing a psychosocial screen in adolescent populations is a critical component of the adolescent consultation because it can help identify risky behaviors that increase risk of morbidity and mortality in this population.</mark> <b>Adolescents need three things for good health:</b> a safe and supportive environment, information and skills, and health and counselling services.",
+    "e": "<span class='star'>⭐</span>Reproduce all seven letters. The tool exists because the leading causes of adolescent death are behavioral, so the psychosocial screen IS the medical screen.",
+    "img": "<a href=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p22_headsss_screening_tool.jpg\" target=\"_blank\"><img src=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p22_headsss_screening_tool.jpg\" loading=\"lazy\" alt=\"headsss screening tool\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Adolescent mental health and suicide",
+    "g": "<span class='pill'>10–20% prevalence</span><span class='pill'>50% begin before 14</span> <mark>Worldwide, an estimated 10%–20% of adolescents experience mental health conditions, yet most times it remains UNDERDIAGNOSED and UNDERTREATED.</mark> <mark>Nearly 50% of adult psychiatric disorders begin before the age of 14 years.</mark> Depressive disorders become more prevalent, and behavioral disturbances such as suicidality, eating disorders and substance abuse begin to emerge in these years.",
+    "b": "<mark>Between 2000 and 2018, the suicide rate among youth ages 10 to 24 rose from 6.8 per 100,000 to 10.7 per 100,000. Suicide is the SECOND leading cause of death for people ages 10 to 14 in 2021 in the USA. Youth and young adults ages 10–24 account for 15% of all suicides.</mark>",
+    "d": "<b>Contributing factors:</b> <mark>social media and technology</mark> (social comparison, cyberbullying); <b>academic pressure</b>; <b>bullying</b>, in person and online; and <b>peer pressure</b>. <b>Disorders prevalent in adolescents:</b> mood disorders, anxiety disorders and OCD, psychosis, eating disorders, deliberate self harm, personality disorder, conduct disorder, substance misuse disorders.",
+    "e": "<span class='star'>⭐</span>'Nearly 50% of adult psychiatric disorders begin before age 14' is the single most quotable statistic — it is the whole argument for adolescent mental health screening.",
+    "img": ""
+   },
+   {
+    "n": "Legal aspects of adolescent care — consent",
+    "g": "<span class='pill'>Age of majority 18</span><span class='pill'>Emancipated minor</span> Health care professionals must have a clear framework for care, which <b>varies from region to region and even between states in the US</b>, with some federal confidentiality laws governing all states. <mark>For young adults older than 18 the legal guidelines are the same as for adults; for those under 18 (in most states) different guidelines apply.</mark>",
+    "b": "<mark>Minor status is defined by age under 18 years; 18 years is the 'age of majority', the age at which adolescents are legally considered to be adults.</mark>",
+    "d": "<mark>Emancipation refers to the legal process by which minors can attain legal adulthood BEFORE reaching the age of majority and gain autonomy and control over their own lives. Emancipation may be obtained in a number of ways including MARRIAGE, LIVING SEPARATELY FROM PARENTS, or MILITARY SERVICE.</mark>",
+    "e": "<span class='star'>⭐</span>The three routes to emancipation (marriage, living separately, military service) are the concrete testable list.",
+    "img": "<a href=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p30_who_gives_consent.jpg\" target=\"_blank\"><img src=\"mini2_community_images/adolescent_health_in_the_community/adolescent_health_in_the_community_p30_who_gives_consent.jpg\" loading=\"lazy\" alt=\"who gives consent\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Confidentiality and HIPAA in adolescent care",
+    "g": "<span class='pill'>Discuss limits at first visit</span><span class='pill'>3 HIPAA exceptions</span> <mark>Confidentiality is 'the privileged and private nature of information provided during the health care transaction'.</mark> <mark>It is important that clinicians discuss the parameters of confidentiality at the FIRST visit with an adolescent patient and state any circumstances in which confidentiality may be broken.</mark>",
+    "b": "<mark>Under the HIPAA Privacy Rule, adolescents who are legal adults (18 and older) and minors who are emancipated can exercise the same rights as other individuals</mark>: access to their medical records, the ability to obtain copies and request corrections, and the right to authorize disclosure of protected health information.",
+    "d": "<mark>As it applies to minors, HIPAA generally allows a parent to have access to medical records for children under 18, with THREE EXCEPTIONS: when a minor obtains care at the direction of a court; when a parent AGREES that clinician and minor may have a confidential relationship; and when a minor has CONSENTED for the care and parental consent is not required by state or other applicable law.</mark>",
+    "e": "<span class='star'>⭐</span>The three HIPAA exceptions are the examinable list. Also: confidentiality and its limits must be discussed, and contact information given to BOTH the adolescent and the parent.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Prenatal & Early Childhood Health in the Community  [screening / public health table]",
+  "rows": [
+   {
+    "n": "Maternal mortality ratio — definition and global figures",
+    "g": "<span class='pill'>Per 100,000 live births</span><span class='pill'>Within 42 days</span> <mark>The maternal mortality ratio (MMR) is the number of maternal deaths during a given time period per 100,000 LIVE BIRTHS during the same time period.</mark> <mark>WHO defines a maternal death as 'the death of a woman while pregnant or within 42 DAYS of termination of pregnancy, irrespective of the duration and the site of the pregnancy, from any cause related to or aggravated by the pregnancy or its management, but NOT from accidental or incidental causes'.</mark>",
+    "b": "<mark>The global MMR in 2020 was estimated at 223 maternal deaths per 100,000 live births, down from 227 in 2015 and 339 in 2000 — a reduction of one third (34.3%) over the 20-year period.</mark>",
+    "d": "<b>Goals:</b> <mark>MDG Target 5A — reduce the MMR by three-quarters between 1990 and 2015</mark>; <mark>SDG target 3.1 — reduce global MMR to less than 70 maternal deaths per 100,000 live births by 2030</mark>. <b>MDG Target 4A</b> — reduce the under-five mortality rate by two-thirds between 1990 and 2015.",
+    "e": "<span class='star'>⭐</span>Note the denominator is LIVE BIRTHS and the window is 42 days — both are frequently altered in distractors. SDG target &lt; 70 by 2030.",
+    "img": "<a href=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p4_sdg_target_maternal_mortality.jpg\" target=\"_blank\"><img src=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p4_sdg_target_maternal_mortality.jpg\" loading=\"lazy\" alt=\"sdg target maternal mortality\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Causes of maternal death — global vs US",
+    "g": "<span class='pill'>75% from 5 causes</span><span class='pill'>52% after birth</span> <mark>Globally the following account for 75% of maternal deaths (WHO): severe bleeding (mostly after childbirth); infections (usually after childbirth); high blood pressure during pregnancy (pre-eclampsia and eclampsia); complications from delivery; and unsafe abortion.</mark>",
+    "b": "<mark>Main causes of pregnancy-related deaths in the US: MENTAL HEALTH, hemorrhage, cardiac, infection, thrombotic embolism, cardiomyopathy, and hypertensive disorders of pregnancy.</mark>",
+    "d": "<mark>Approximately 52% — half — of all maternal deaths happen AFTER the day of birth.</mark> US maternal mortality varies markedly by race/Hispanic origin and rises with maternal age.",
+    "e": "<span class='star'>⭐</span><mark>Mental health leads the US list while severe bleeding leads globally</mark> — that contrast between a high-income and a global profile is the point of the slide, and the 52%-after-birth figure is why postpartum follow-up matters.",
+    "img": "<a href=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p8_us_maternal_mortality_by_race.jpg\" target=\"_blank\"><img src=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p8_us_maternal_mortality_by_race.jpg\" loading=\"lazy\" alt=\"us maternal mortality by race\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p9_us_maternal_mortality_by_age.jpg\" target=\"_blank\"><img src=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p9_us_maternal_mortality_by_age.jpg\" loading=\"lazy\" alt=\"us maternal mortality by age\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Preconception and prenatal care in the community",
+    "g": "<span class='pill'>Folic acid 400 µg</span><span class='pill'>150 min exercise</span> <b>Pre-pregnancy:</b> <mark>develop a plan for their reproductive life; increase daily folic acid intake to at least 400 micrograms; make sure immunizations are up to date; control diabetes, hypertension, asthma, depression and other medical conditions; avoid smoking, drinking alcohol, and using drugs; avoid toxic substances at work and consider medications/supplements; attain a healthy weight; learn about family health history.</mark>",
+    "b": "<b>During pregnancy:</b> regular checks; healthy weight; stop alcohol, smoking or drugs and <b>avoid second-hand smoke</b>; folic acid and iron; <b>flu shot</b>; <mark>150 minutes of moderate aerobic exercise weekly</mark>; <mark>wash fruits and vegetables and cook foods properly — toxoplasmosis, listeria</mark>; avoid mercury (swordfish, shark); avoid insecticides and solvents; <mark>avoid cats and rodents</mark>.",
+    "d": "<b>Impact of maternal health on outcomes:</b> diet and exercise affect fetal health and development; avoid chemicals, infections and heavy metals; control existing blood pressure and diabetes; <mark>tobacco and alcohol increase the risk of SIDS</mark>; <mark>alcohol causes Fetal Alcohol Syndrome — at low levels</mark>; folic acid prevents neural tube defects.",
+    "e": "<span class='star'>⭐</span>'Fetal Alcohol Syndrome — low levels' is the deliberate emphasis: there is no established safe threshold.",
+    "img": ""
+   },
+   {
+    "n": "Neonatal, infant and under-5 mortality — definitions",
+    "g": "<span class='pill'>0–27 days</span><span class='pill'>&lt; 1 year</span><span class='pill'>&lt; 5 years</span> <mark>The NEONATAL mortality rate refers to the number of deaths of infants aged 0–27 DAYS per 1,000 live births.</mark> <mark>INFANT mortality rate refers to the number of deaths under age 1 YEAR per 1,000 live births.</mark> <mark>The UNDER-FIVE mortality rate refers to the probability a newborn would die before reaching exactly 5 years of age, expressed per 1,000 live births.</mark>",
+    "b": "<mark>The first 28 days of life — the neonatal period — is the most vulnerable time.</mark> Global neonatal mortality rate was <mark>18 deaths per 1,000 live births in 2021</mark>; the probability of dying after the first month and before age 1 was <mark>11 per 1,000</mark>; and after age 1 and before age 5, <mark>10 per 1,000</mark>. <b>Globally 2.3 million children died in the first month of life.</b>",
+    "d": "<mark>The global under-5 mortality rate fell to 37 deaths per 1000 live births in 2020, but children in sub-Saharan Africa continued to have the highest rates at 74 per 1000 — 14 TIMES higher than the risk for children in Europe and North America.</mark>",
+    "e": "<span class='star'>⭐</span>All three rates use a denominator of <b>1,000 live births</b> (unlike MMR's 100,000). The 0–27 day boundary for neonatal is the detail most often missed.",
+    "img": "<a href=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p17_us_trends_neonatal_and_infant_mortality.jpg\" target=\"_blank\"><img src=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p17_us_trends_neonatal_and_infant_mortality.jpg\" loading=\"lazy\" alt=\"us trends neonatal and infant mortality\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Causes of infant and child death",
+    "g": "<span class='pill'>Preterm</span><span class='pill'>Asphyxia</span><span class='pill'>Infection</span><span class='pill'>Birth defects</span> <mark>Globally, common causes of NEONATAL death: preterm birth; childbirth-related complications (birth asphyxia or lack of breathing at birth); infections; and birth defects.</mark>",
+    "b": "<mark>Leading causes of INFANT death in the US: birth defects; preterm/low birth weight; sudden infant death syndrome; injuries; maternal pregnancy complications.</mark> <mark>US children aged 1–4 years: accidents (unintentional injuries); congenital malformations, deformations and chromosomal abnormalities; assault (homicide).</mark>",
+    "d": "<mark>Globally, most common causes of infant and childhood deaths: pneumonia, diarrhoea, birth defects, malaria — with MALNUTRITION as the underlying contributing factor.</mark> The leading causes of death in children under 5 (preterm birth complications, birth asphyxia/trauma, pneumonia, diarrhoea and malaria) <b>can all be prevented or treated</b>.",
+    "e": "<span class='star'>⭐</span>Malnutrition as the underlying contributor is the key public-health insight — it multiplies the lethality of otherwise treatable infections.",
+    "img": "<a href=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p21_leading_causes_of_infant_death_us.jpg\" target=\"_blank\"><img src=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p21_leading_causes_of_infant_death_us.jpg\" loading=\"lazy\" alt=\"leading causes of infant death us\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Essential newborn care and early childhood health",
+    "g": "<span class='pill'>Skin-to-skin</span><span class='pill'>Exclusive breastfeeding</span><span class='pill'>BCG, Hep B, vit K</span> <mark>Essential newborn care: thermal protection (promoting skin-to-skin contact between mother and infant); hygienic umbilical cord and skin care; early and EXCLUSIVE breastfeeding; assessment for signs of serious health problems or need of additional care (low-birth-weight, sick, or HIV-infected mother); and preventive treatment — immunization BCG and Hepatitis B, vitamin K and ocular prophylaxis.</mark>",
+    "b": "<mark>Key principles and components of early childhood health: nutrition; sanitation; immunizations and disease prevention; early stimulation; preventing ACEs.</mark>",
+    "d": "<b>Vaccine impact</b> is demonstrated by comparing disease incidence in the pre-vaccine era with vaccine coverage and disease incidence in 2017 as reported by the CDC.",
+    "e": "<span class='star'>⭐</span>The five components of essential newborn care are a list to reproduce; note vitamin K and ocular prophylaxis are grouped under 'preventive treatment' with the vaccines.",
+    "img": "<a href=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p32_vaccine_impact_pre_vaccine_vs_2017.jpg\" target=\"_blank\"><img src=\"mini2_community_images/prenatal_and_early_childhood_health_in_the_community/prenatal_and_early_childhood_health_in_the_community_p32_vaccine_impact_pre_vaccine_vs_2017.jpg\" loading=\"lazy\" alt=\"vaccine vs 2017\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Adverse childhood experiences (ACEs)",
+    "g": "<span class='pill'>Toxic stress</span><span class='pill'>CDC Resource for Action</span> <mark>ACEs are traumatic events that occur in childhood: violence, abuse or neglect; witnessing violence at home or in the community; a family member attempting or completing suicide; substance abuse in the household; mental health conditions in the household; housing instability or parental separation; and experiencing discrimination.</mark>",
+    "b": "<mark>Toxic stress (extended or prolonged stress) from ACEs can negatively affect children's brain development, immune systems, and stress-response systems. These changes can affect children's attention, decision-making, and learning.</mark> <mark>ACEs can have lasting, negative effects on health and wellbeing in childhood and on life opportunities such as education and job potential, well into adulthood.</mark>",
+    "d": "<b>Preventing ACEs (CDC Resource for Action):</b> <mark>strengthen economic support to families; promote social norms that protect against violence and adversity (public education, legislation on corporal punishment, bystander approaches, men and boys as allies); ensure a strong start (home visiting, quality child care, preschool enrichment, family engagement); teach skills (parenting, safe dating, healthy relationships); connect youth to caring adults (mentoring, afterschool programs); and intervene to lessen harms.</mark>",
+    "e": "<span class='star'>⭐</span>'Toxic stress' is the mechanism linking a social exposure to biological change — brain development, immune system, stress response. That mechanism is what makes ACEs a medical topic.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Sex Assigned at Birth & Community Health  [screening / public health table]",
+  "rows": [
+   {
+    "n": "Why women's health matters — epidemiology",
+    "g": "<span class='pill'>Life expectancy 81</span><span class='pill'>Asian 86.2 vs Black 77.4</span> <mark>Over the past 30 years women have been living longer — in 1984 a woman's life expectancy was 78.1; today women on average live to 81.</mark> <mark>However, the life expectancy of American women ranks far below Asian and European women, whose life expectancies range from 87 to 90 years.</mark>",
+    "b": "<mark>Life expectancy by race/ethnicity: Asian 86.2 years · Hispanic 84.6 · White 81.2 · Black 77.4.</mark> The increase shows variability influenced by the social determinants of health — <mark>life expectancy has DECLINED among low-educated women in recent decades: between 1990 and 2000, life expectancy at age 25 declined by nearly one year among White women with 0–12 years of education while it INCREASED by one year among those with at least 13 years.</mark>",
+    "d": "<b>Why it matters:</b> <mark>women make up the majority of the US population and nearly 50% of the workforce; are responsible for 85% of consumer spending and make over 85% of health care decisions; control 60% of personal wealth; are more likely to be caregivers; and have longer life expectancy compared to men.</mark>",
+    "e": "<span class='star'>⭐</span><mark>Heart disease is the leading cause of death for women in the United States — 1 in 5 female deaths is caused by CVD.</mark> The education gradient is the striking finding: life expectancy moving in OPPOSITE directions within the same racial group depending on education.",
+    "img": "<a href=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p18_female_life_expectancy_by_race.jpg\" target=\"_blank\"><img src=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p18_female_life_expectancy_by_race.jpg\" loading=\"lazy\" alt=\"female life expectancy by race\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p19_leading_causes_of_death_among_women.jpg\" target=\"_blank\"><img src=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p19_leading_causes_of_death_among_women.jpg\" loading=\"lazy\" alt=\"leading causes of death among women\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Menstrual health in the community",
+    "g": "<span class='pill'>3–8 days</span><span class='pill'>21–35 days</span><span class='pill'>10–60 mL</span> <mark>Normal menstrual bleeding: DURATION 3–8 days · CYCLE LENGTH 21 to 35 days · PAIN that doesn't interrupt daily life · BLOOD LOSS 10 to 60 mLs</mark>, with other symptoms such as fatigue, headache and changes in mood.",
+    "b": "<mark>Menstrual disorders involve abnormalities in one or more of: PAIN, BLEEDING, or CYCLE/MENSTRUATION LENGTH.</mark> They can disrupt daily life and affect the ability to become pregnant. A menstrual health history covers cycle characteristics, menstrual history, menstrual symptoms, pregnancy history, gynecological history and sexual history.",
+    "d": "<mark>Common menstrual health disorders with prevalence: FIBROIDS (uterine leiomyomas) up to 70% · POLYCYSTIC OVARIAN SYNDROME 5–15% · ENDOMETRIOSIS 10%</mark>, plus cancers of the reproductive system (cervical, ovarian, endometrial).",
+    "e": "<span class='star'>⭐</span>Note this lecture's normal blood loss figure is <mark>10–60 mL</mark>, whereas the gynecology lecture gives 35 mL normal with &gt; 80 mL abnormal — know both framings.",
+    "img": ""
+   },
+   {
+    "n": "Cervical cancer — global burden and prevention",
+    "g": "<span class='pill'>3rd most common</span><span class='pill'>&gt; 95% HPV</span><span class='pill'>1 in 10 unscreened</span> <mark>Cervical cancer is the THIRD most common malignancy in women worldwide, and remains a leading cause of cancer-related death for women in developing countries.</mark> <mark>&gt; 95% of cervical cancer cases are caused by persistent genital high-risk HPV infection.</mark>",
+    "b": "<mark>HPV is the most common viral infection of the reproductive tract — most sexually active women and men will be infected at some point in their lives. More than 90% of infected populations eventually CLEAR the infection.</mark>",
+    "d": "<mark>1 in 10 women aged 21–65 have not been screened in the past 5 years.</mark> The <b>World Health Assembly in 2020</b> recommended a comprehensive approach to cervical cancer prevention and control with <b>interventions across the life course</b>.",
+    "e": "<span class='star'>⭐</span>The &gt;95% HPV attribution plus &gt;90% spontaneous clearance is the pair that justifies both vaccination and screening rather than treating every infection.",
+    "img": "<a href=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p29_cervical_cancer_screening.jpg\" target=\"_blank\"><img src=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p29_cervical_cancer_screening.jpg\" loading=\"lazy\" alt=\"cervical cancer screening\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Breast cancer — risk and screening",
+    "g": "<span class='pill'>Most diagnosed cancer</span><span class='pill'>BRCA 5×</span><span class='pill'>Mammogram q2y 50–74</span> <mark>As of 2020, breast cancer has become the most diagnosed cancer globally (with the exception of skin cancers).</mark> Incidence is increasing globally, with US cases expected to reach <mark>364,000 by 2040</mark>. <mark>Developed countries have the highest incidence, but mortality rates are highest in socio-economically low areas, reflecting a lack of access to early screening and timely treatment.</mark>",
+    "b": "<mark>BRCA1 and BRCA2 stand for breast cancer susceptibility gene 1 and 2. Most breast and ovarian cancers occur in women over 50, but women with harmful BRCA1/BRCA2 mutations often develop them BEFORE age 50. A woman who has inherited a harmful mutation is about FIVE TIMES more likely to develop breast cancer.</mark>",
+    "d": "<mark>Relative risk &gt; 4.0 factors: being female; age 65+; inherited genetic mutations such as BRCA1/BRCA2; two or more first-degree relatives with breast cancer diagnosed at an early age; personal history of breast cancer.</mark> <b>USPSTF:</b> <mark>women 50 to 74 at average risk should get a mammogram every two years; women 40 to 49 should talk to their provider about when to start and how often</mark>, weighing benefits and risks.",
+    "e": "<span class='star'>⭐</span>The two strongest non-genetic risk factors are simply <b>being female</b> and <b>being 65 or older</b> — both sit in the RR &gt; 4.0 tier.",
+    "img": "<a href=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p33_brca1_brca2_lifetime_risk.jpg\" target=\"_blank\"><img src=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p33_brca1_brca2_lifetime_risk.jpg\" loading=\"lazy\" alt=\"brca1 brca2 lifetime risk\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p34_relative_risk_factors_for_breast_cancer.jpg\" target=\"_blank\"><img src=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p34_relative_risk_factors_for_breast_cancer.jpg\" loading=\"lazy\" alt=\"relative risk factors for breast cancer\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Cardiovascular disease in women and after menopause",
+    "g": "<span class='pill'>1 in 5 deaths</span><span class='pill'>Estrogen decline</span> <mark>Heart disease is the leading cause of death for women in the United States; 1 in 5 female deaths in the US is caused by CVD.</mark> <b>270 million women were diagnosed with CVD in 2019 and 8.9 million died as a result.</b> <mark>In Europe 55% of all female deaths are caused by cardiovascular disease.</mark>",
+    "b": "<mark>Coronary heart disease increases with age in both men and women but shows a more prominent increase in women older than 50.</mark> Age-adjusted CVD mortality has declined continuously over four decades, <mark>but to a LESSER extent in women compared to men</mark>.",
+    "d": "<b>Why risk rises after menopause:</b> <mark>estrogen has protective effects on the cardiovascular system — it helps maintain healthy blood vessels by promoting DILATION and reducing INFLAMMATION. Menopause is marked by a significant decline in estrogen leading to changes in blood vessel function and an increased risk of atherosclerosis.</mark>",
+    "e": "<span class='star'>⭐</span>CVD is the leading cause of death in women, yet is culturally coded as a male disease — that mismatch is the lecture's point and a likely question.",
+    "img": ""
+   },
+   {
+    "n": "Gender-based violence",
+    "g": "<span class='pill'>35% worldwide</span><span class='pill'>38% of murders</span> <mark>Gender based violence (GBV) refers to harmful actions that are directed at individuals based on their gender, particularly women and girls, and often rooted in unequal power dynamics between genders.</mark>",
+    "b": "<b>Forms:</b> <mark>PHYSICAL violence — intimate partner violence, physical assault, female genital mutilation (FGM); SEXUAL violence; PSYCHOLOGICAL or EMOTIONAL violence; ECONOMIC abuse.</mark>",
+    "d": "<mark>35% of women worldwide have experienced either physical and/or sexual intimate partner violence or non-partner sexual violence. Globally, 7% of women have been sexually assaulted by someone other than a partner. Globally, as many as 38% of murders of women are committed by an intimate partner.</mark>",
+    "e": "<span class='star'>⭐</span>Economic abuse is a named form of GBV — easily forgotten because it is non-physical, and therefore a good distractor.",
+    "img": ""
+   },
+   {
+    "n": "Why men's health matters",
+    "g": "<span class='pill'>6 years shorter</span><span class='pill'>Half as many visits</span> <mark>Men are more likely to die from chronic and serious diseases like CVD, cancer and poor mental health; men make HALF as many preventative health visits compared to women; men are more likely to be uninsured; and the life expectancy of men in the US is nearly SIX YEARS shorter than that of women.</mark> <mark>Life expectancy at birth in the USA 2021: women 79.1 years, men 73.2 years.</mark>",
+    "b": "<mark>What makes men different — BIOLOGICAL SEX: testicular cancer, prostate cancer, erectile dysfunction. GENDER-RELATED BEHAVIORS: occupational risks, accidents and injuries, violence, avoiding doctors, smoking and alcohol.</mark> The overlap is testosterone — <b>nature vs nurture</b>.",
+    "d": "<mark>Heart disease is the leading cause of death for men in the United States. Men tend to develop heart disease 10 YEARS EARLIER than women on average, and throughout life were about twice as likely as women to have a heart attack. Gender differences in traditional risk factors — smoking, obesity, hypertension, high total and low HDL cholesterol — explain only 40% of the variation in the gender ratios of CHD mortality.</mark>",
+    "e": "<span class='star'>⭐</span>That traditional risk factors explain <b>only 40%</b> of the sex difference in coronary mortality is the lecture's argument that behavior and gender norms carry the rest.",
+    "img": "<a href=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p43_leading_causes_of_death_among_men.jpg\" target=\"_blank\"><img src=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p43_leading_causes_of_death_among_men.jpg\" loading=\"lazy\" alt=\"leading causes of death among men\" style=\"max-height:64px;border-radius:6px\"></a><a href=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p44_biological_sex_vs_gender_related_behaviors.jpg\" target=\"_blank\"><img src=\"mini2_community_images/sex_assigned_at_birth_and_community_health/sex_assigned_at_birth_and_community_health_p44_biological_sex_vs_gender_related_behaviors.jpg\" loading=\"lazy\" alt=\"biological sex vs gender related behaviors\" style=\"max-height:64px;border-radius:6px\"></a>"
+   },
+   {
+    "n": "Men's mental health and health-seeking behavior",
+    "g": "<span class='pill'>Suicide 3× rate</span><span class='pill'>60% no routine care</span> <mark>Women attempt suicide far more frequently than men — yet suicide rates for men are approximately THREE TIMES those for age-matched women. Fewer men than women are treated for depression-related disorders.</mark> <mark>Mental distress may be exhibited more indirectly by men — through alcohol and substance misuse and addiction, anger and aggression towards self and others, and risk-taking in general.</mark>",
+    "b": "<b>Risk factors:</b> <mark>employment and occupational issues — unemployment has a greater impact on the mental health of men than women</mark>; <mark>family issues and divorce — divorce and romantic breakup are strong risk factors for mental illness and suicide</mark>.",
+    "d": "<mark>Sociocultural constructions of masculinities: dominant social norms and cultural stereotypes influence health-related practices. The perception of help-seeking as WEAKNESS by some men can cause them to avoid mental health services or lead to long delays between problem recognition and help-seeking.</mark> <mark>Negative coping styles: misuse of alcohol and drugs to numb distress; concealing and ignoring negative emotions; engaging in risky behaviors; valuing self-reliance and autonomy over professional care.</mark> <mark>60% of men do not see a doctor routinely.</mark>",
+    "e": "<span class='star'>⭐</span>The suicide paradox — women attempt more, men die more — is the central statistic, and the explanation offered is method plus under-treatment of male depression.",
+    "img": ""
+   },
+   {
+    "n": "Men's health conditions in the community",
+    "g": "<span class='pill'>Testicular Ca 15–35</span><span class='pill'>BPH transition zone</span><span class='pill'>ED predicts CVD</span> <b>Testicular torsion:</b> <mark>abrupt onset of severe testicular or scrotal pain, scrotal swelling, absent cremasteric reflex — urologist for manipulation/surgery.</mark> <b>Inguinal hernia:</b> <mark>lifetime prevalence of groin hernias is 27–43% in males and 3–6% in females.</mark> <b>Testicular cancer:</b> <mark>nodule or painless swelling of testes; 95% are germ cell tumors; the most common solid tumor in men 15–35 years; good prognosis — testicular self-exams.</mark>",
+    "b": "<b>Benign prostatic hyperplasia:</b> <mark>a HISTOLOGIC diagnosis — proliferation of glandular epithelial tissue, smooth muscle, and connective tissue within the prostatic TRANSITION ZONE; ubiquitous in the aging male.</mark> Lower urinary tract symptoms (frequency, urgency, nocturia, hesitancy, intermittence); <mark>size of prostate on DRE does NOT relate to symptom severity</mark>; urinary obstruction; <mark>NOT a risk factor for prostate cancer</mark>. Treatment: lifestyle modification, <mark>alpha-1 receptor blockers ('...osin' — terazosin, doxazosin, tamsulosin)</mark>, surgical.",
+    "d": "<b>Prostate cancer:</b> one of the most common cancers worldwide; risk increases with age; early diagnosis is asymptomatic via screening — <b>elevated PSA, abnormal DRE</b>; <mark>symptomatic disease is often already metastatic</mark>. <b>Erectile dysfunction:</b> <mark>affects &gt; 30% of men aged 40–70; many men visit a health care professional for the FIRST time with ED as their primary complaint; vasculogenic ED can be a PREDICTOR of future CVD and can occur three to five years before a major heart attack.</mark>",
+    "e": "<span class='star'>⭐</span><mark>ED as an early warning of cardiovascular disease</mark> is the highest-yield link here — it turns a sexual complaint into a cardiac risk assessment opportunity.",
+    "img": ""
+   },
+   {
+    "n": "Men's health promotion — closing the gap",
+    "g": "<span class='pill'>Right setting, right approach</span> <b>Differences in health outcomes are driven substantially by exposure and behavior.</b> <mark>At every age level males are more likely than females to be involved in a fatal unintentional injury.</mark>",
+    "b": "<b>Occupational:</b> <mark>in 2014 women made up 8% of fatal workplace injuries even though they were responsible for 43% of the hours worked</mark>; in 2018 females made up 47% of the workforce, but some dangerous jobs remain predominantly male (construction, logging, commercial fishing) and <mark>men accounted for &gt; 60% of all injuries and illness</mark>. <b>Substance use:</b> <mark>men consume more alcohol with more alcohol-related deaths; globally 1 in 3 men vs 1 in 16 women smoke daily, though women are often exposed to second-hand smoke; men are more likely to use almost all types of illicit drugs</mark>. <b>Driving:</b> men drive more miles, with the rate difference greatest between ages 20–29.",
+    "d": "<b>Approaches to men's health promotion:</b> <mark>listen to and engage men in setting up programs; men-focused spaces and environments (right setting, right approach); partner with workplaces and community establishments; reduce stigma and improve access.</mark> <b>Health promotion targets:</b> screening and advocacy, cancer, road safety, occupational health, regular checks, assistance with quitting smoking, and men in medicine.",
+    "e": "<span class='star'>⭐</span>The 8%-of-deaths-for-43%-of-hours statistic is the cleanest demonstration that the excess male injury burden is about job type, not biology.",
+    "img": ""
+   }
+  ]
+ },
+ {
+  "sec": "Pharmacology of the Female Reproductive System (2)  [summary]",
+  "rows": [
+   {
+    "n": "Hormonal contraception — mechanism by component",
+    "g": "<span class='pill'>Estrogen suppresses FSH</span><span class='pill'>Progestin suppresses LH</span> <b>Combined (ethinyl estradiol + progestin):</b> <mark>ESTROGEN suppresses FSH; PROGESTIN suppresses LH. Negative feedback from estrogen/progestin causes ↓ GnRH, ↓ FSH, ↓ LH → NO LH surge, no ovulation.</mark>",
+    "b": "<b>Progestin only:</b> <mark>thickens cervical mucus to deny sperm entry — but the mucus changes do NOT persist beyond 24 hours, so the pill must be taken at the same time daily</mark>; thins the endometrium to prevent implantation; and <mark>DOES NOT reliably inhibit ovulation</mark>.",
+    "d": "<b>Routes — combined:</b> transdermal patch, intravaginal contraceptive ring. <b>Progestin only:</b> mini pills, IM/SubQ injection, IUD, subdermal implant. <mark>Medroxyprogesterone has a very long half-life of 40–50 days.</mark>",
+    "e": "<span class='star'>⭐</span>The 24-hour mucus window is why POP timing is strict and COC timing is forgiving — a mechanism that directly explains a counselling point.",
+    "img": ""
+   },
+   {
+    "n": "Monophasic vs triphasic pills",
+    "g": "<span class='pill'>Monophasic</span><span class='pill'>Triphasic</span> <mark>MONOPHASIC — same estrogen and progestin dose daily; simple, stable hormone levels; strong, consistent negative feedback on GnRH to suppress ovulation.</mark> <mark>TRIPHASIC — mimics the natural cycle; estrogen is constant while progestin gradually increases; reduces side effects and mimics physiologic hormonal changes; suppresses ovulation via negative feedback.</mark>",
+    "b": "<mark>Monophasic is used for: new users of OCPs; patients with migraines (fewer hormonal fluctuations); patients with menstrual-related mood disorders or acne.</mark>",
+    "d": "<mark>Triphasic is used for: women experiencing breakthrough bleeding on monophasic pills; patients who want a natural cycle.</mark>",
+    "e": "<span class='star'>⭐</span>Pick monophasic for stability (migraine, mood, acne) and triphasic to rescue breakthrough bleeding. That indication split is the tested distinction.",
+    "img": ""
+   },
+   {
+    "n": "Combined vs progestin-only — adverse effects and when to choose which",
+    "g": "<span class='pill'>VTE</span><span class='pill'>Estrogen C/I</span> <b>Combined adverse effects:</b> <mark>venous thromboembolism (especially in women 35+ who smoke)</mark>; increased risk of hormone-dependent cancers; <mark>decreases lactation (contraindicated in breastfeeding patients)</mark>; acne and hirsutism; more severe migraine headaches; nausea; edema.",
+    "b": "<b>Progestin-only adverse effects:</b> breakthrough bleeding; <mark>amenorrhea with extended use</mark>; <mark>prolonged ovulation suppression after injection</mark>; acne; mood changes; weight gain.",
+    "d": "<mark>Choose PROGESTIN ONLY when estrogen is contraindicated (cancer, etc.), and for breastfeeding patients, smokers, and migraines with aura.</mark> <b>Combined is used for:</b> menorrhagia, dysmenorrhea, PCOS, endometriosis, hirsutism, acne.",
+    "e": "<span class='star'>⭐</span>The four progestin-only indications (estrogen contraindicated, breastfeeding, smokers, migraine with aura) map exactly onto the COC contraindication list.",
+    "img": ""
+   },
+   {
+    "n": "Emergency contraception — pharmacology",
+    "g": "<span class='pill'>Levonorgestrel</span><span class='pill'>Ulipristal</span><span class='pill'>Mifepristone</span> <b>Levonorgestrel (Plan B) — progestin:</b> <mark>negative feedback inhibits the LH surge; prevents follicular rupture and stops fertilization; prevents/delays ovulation. Most effective within 72 hours of unprotected sex.</mark>",
+    "b": "<b>Ulipristal — selective progesterone modulator:</b> <mark>competitive inhibitor of progestins, preventing binding to progesterone receptors; inhibits/delays ovulation and alters the endometrium to prevent implantation.</mark>",
+    "d": "<b>Mifepristone:</b> <mark>antagonizes the progesterone receptor to prevent pregnancy; used in combination with misoprostol for early pregnancy termination; NOT approved by the FDA for contraception.</mark>",
+    "e": "<span class='star'>⭐</span>All three act on the progesterone axis but at different points — levonorgestrel blocks the LH surge, ulipristal blocks the receptor, mifepristone antagonises it to terminate.",
+    "img": ""
+   },
+   {
+    "n": "Estrogens and progestins — indications and contraindications",
+    "g": "<span class='pill'>Estrogen C/I</span><span class='pill'>Progestin uses</span> <b>Estrogens (estradiol, ethinyl estradiol, mestranol):</b> hormone replacement in hypogonadism and ovarian failure; <mark>monitor timing, dosage and bone maturation to prevent premature epiphyseal closure — may cause stunted growth</mark>. Used for reduction of postmenopausal symptoms (hot flashes, vaginal atrophy).",
+    "b": "<b>Estrogen adverse effects:</b> <mark>cancer — endometrial hyperplasia may cause carcinoma, and progestin removes/reduces this risk</mark>; postmenopausal uterine bleeding; migraine headaches; cholestasis and gallbladder disease; hypertension; thromboembolism; nausea; breast tenderness; peripheral edema.",
+    "d": "<mark>Estrogen contraindications: high-risk estrogen-dependent neoplasms (breast and endometrial cancer); thromboembolic disorders; heavy smokers (especially those 35+); liver disease.</mark> <b>Progestins</b> (progesterone, medroxyprogesterone, norethindrone, levonorgestrel, norgestimate, drospirenone) are used for prevention of endometrial hyperplasia, contraception, amenorrhea, abnormal uterine bleeding and endometriosis; adverse effects include amenorrhea, depression, weight gain and breakthrough bleeding.",
+    "e": "<span class='star'>⭐</span><mark>Progestin opposing estrogen is what protects the endometrium</mark> — the single reason unopposed estrogen is never given to a woman with a uterus.",
+    "img": ""
+   }
+  ]
+ }
+];
+
+const tbody=document.getElementById('tbody');
+const chipsEl=document.getElementById('chips');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}</span></span></td>`;
+  tbody.appendChild(secRow);
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td><td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// chips
+const chipAll=document.createElement('div');
+chipAll.className='chip active';chipAll.textContent='All systems';chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach((grp,gi)=>{
+  const c=document.createElement('div');
+  c.className='chip';c.dataset.sec=gi;
+  c.textContent=grp.sec.replace(/ \(.*?\)/,'').replace(' / ',' / ');
+  chipsEl.appendChild(c);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> pathologies`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active');
+  activeSec=c.dataset.sec;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + chips). Measured live so fullscreen, resize, font load, and
+// chip-wrapping changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var MINIS=[
+    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+      ['mini1.html','Overview'],
+      ['master_table.html','Master'],
+      ['pathology_table.html','Pathology'],
+      ['pathology_checklist.html','Path Checklist'],
+      ['physio_table.html','Physiology'],
+      ['drugs_table.html','Drugs'],
+      ['biochem_table.html','Biochem'],
+      ['embryo_anatomy_table.html','Embryo / Anatomy'],
+      ['pattern_recognition.html','Patterns'],
+      ['lecture_recall.html','Lecture Recall'],
+      ['physio_quiz.html','Physio Quiz'],
+      ['endocrine_path_quiz.html','Endo Path Quiz'],
+      ['male_path_quiz.html','Male Path Quiz'],
+      ['physio_ext1_quiz.html','Repro Physio Q'],
+      ['physio_ext2_quiz.html','Physio Bank 1'],
+      ['physio_ext3_quiz.html','Physio Bank 2'],
+      ['pharmq_quiz.html','Pharm Quiz'],
+      ['review_planner.html','Planner'],
+      ['gi_path_table.html','GI Path']
+    ]},
+    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+      ['mini2.html','Overview'],
+      ['mini2_pathology_table.html','Pathology'],
+      ['mini2_physio_table.html','Physiology'],
+      ['mini2_drugs_table.html','Drugs'],
+      ['mini2_foundations_table.html','Foundations'],
+      ['mini2_clinical_obgyn_table.html','Clinical OB/GYN'],
+      ['mini2_community_health_table.html','Public Health'],
+      ['mini2_study_guide.html','Resource Guide']
+    ]}
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
+  var sw=document.createElement('span'); sw.className='sk-minis';
+  MINIS.forEach(function(m){
+    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+    sw.appendChild(a);
+  });
+  nav.appendChild(sw);
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>
