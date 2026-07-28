@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini 2 Pharmacology — Drugs of the Female Reproductive System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:6px 11px;border:1px solid var(--line-strong);border-radius:99px;
+    background:var(--surface);color:var(--muted);cursor:pointer;user-select:none;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1500px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:13%}
+  col.c-gene{width:20%}
+  col.c-buzz{width:21%}
+  col.c-diff{width:21%}
+  col.c-exam{width:17%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+.c-img{width:8%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Mini 2 · Pharmacology · Rapid Reference</p>
+  <h1>The mechanisms, the lines of therapy,<br>and what is <em>unsafe</em> in pregnancy.</h1>
+  <p class="sub">Every drug from the Mini 2 pharmacology lectures on one scannable grid — female reproductive pharmacology, gynecological &amp; obstetrical conditions, and reproductive neoplasms, plus the treatment slides inside the clinical and pathology lectures. One section per lecture. Teal = class or target. Highlighted = the key mechanism or adverse-effect buzzword. The crimson rail is the single fact most likely to anchor a question stem. Pregnancy safety is called out explicitly in Adverse / Caution.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search drug, class, mechanism, indication…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Class / target</span>
+      <span><i class="sw b"></i>Key MOA / adverse</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+</div><!-- /.stickytop -->
+
+<div class="wrap">
+  <div class="tablecard">
+    <table>
+      <colgroup>
+        <col class="c-name"><col class="c-gene"><col class="c-buzz"><col class="c-diff"><col class="c-exam"><col class="c-img">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Drug / Class</th>
+          <th>Mechanism (MOA)</th>
+          <th>Clinical Use &amp; Line</th>
+          <th>Adverse / Caution</th>
+          <th class="exam-h">⭐ Will Be Tested</th>
+          <th class="img-h">Image</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="noresults" id="noresults">No drug matches that search.</div>
+  </div>
+</div>
+
+<footer>
+  <hr>
+  Study reference compiled from the Mini 2 lecture PDFs (pharmacology, gynecology, obstetrics, pediatrics) plus the summary handouts. Sections tagged [summary] come from the Summaries folder and intentionally overlap the lecture sections. Where a lecture slide deliberately leaves a cell blank (the chemotherapy antidote tables), that is stated rather than guessed. Verify against your primary lecture material where anything differs — not a substitute for the notes.
+</footer>
+
+<script>
+const DATA = [
+ {sec:"Pharmacology of the Female Reproductive System", rows:[
+  {n:"Estrogens — estradiol, ethinyl estradiol, mestranol", g:"<span class='pill'>Estrogen receptor agonist</span> Lipophilic, well absorbed through GI tract, skin and mucous membranes. <mark>Oral estradiol is rapidly destroyed by first-pass metabolism</mark>, so modified estrogens with lower first-pass metabolism are used orally: <b>ethinyl estradiol</b> (in most oral contraceptives) and <b>mestranol</b>.", b:"<b>Post-menopausal hormone therapy</b> for hot flashes and vaginal atrophy; <b>contraception</b> (with progestin); hormone replacement in <b>hypogonadism</b> (start 11–13 y, monitor bone maturation to prevent premature epiphyseal closure) and <b>ovarian failure</b>. Intact uterus → estrogen <b>plus progestin</b>; after hysterectomy → unopposed estrogen. Urogenital symptoms only → <b>vaginal</b> rather than systemic estrogen.", d:"Endometrial hyperplasia → carcinoma (a progestin removes/reduces this risk); breast tissue proliferation and breast cancer (progestin does <b>not</b> protect); postmenopausal uterine bleeding; migraine; cholestasis and gallbladder disease; hypertension; <mark>thromboembolism</mark>; nausea, breast tenderness, peripheral edema. <b>Contraindicated:</b> estrogen-dependent neoplasms (endometrial, breast), history of thromboembolic disorder, heavy smokers (especially &gt;35 y), liver disease. <b>Pregnancy:</b> not indicated — estrogens are contraindicated in pregnancy.", e:"<span class='star'>⭐</span>Routes: oral (ethinyl estradiol, mestranol), transdermal, vaginal cream/ring; <b>parenteral 17β-estradiol avoids first-pass metabolism</b>. Conjugated equine estrogens (mostly estrone sulfate) from pregnant mare urine are the usual oral menopausal preparation.", img:""},
+  {n:"Progestins — progesterone, medroxyprogesterone, norethindrone, levonorgestrel, norgestimate, drospirenone", g:"<span class='pill'>Progesterone receptor agonist</span> Progesterone is the main endogenous progestin; <mark>oral progesterone is ineffective because of first-pass metabolism</mark>, so synthetic progestins are modified for oral bioavailability.", b:"Prevention of endometrial hyperplasia; contraception; amenorrhea from hormonal deficiency/imbalance; abnormal uterine bleeding from hormonal imbalance; endometriosis.", d:"Amenorrhea (some women find this beneficial), irregular/breakthrough bleeding and spotting, depression, weight gain. Androgenic progestins (norethindrone, levonorgestrel) cause <b>acne and hirsutism</b>.", e:"<span class='star'>⭐</span>Distinguishing properties: <b>medroxyprogesterone</b> t½ 40–50 days IM/SubQ — one injection = 3 months of contraception; <b>norgestimate</b> is less androgenic and <b>drospirenone</b> is antiandrogenic, so both suit PCOS; drospirenone is derived from spironolactone and <mark>may raise serum potassium</mark>.", img:""},
+  {n:"Combined hormonal contraceptives (estrogen + progestin)", g:"<span class='pill'>Ethinyl estradiol + progestin</span> <mark>Inhibit ovulation by suppressing hypothalamic GnRH</mark>, which suppresses pituitary LH and FSH. Estrogen suppresses FSH and stabilises the endometrium (prevents breakthrough bleeding); progestin suppresses LH, thickens cervical mucus and makes the endometrium unfavourable for implantation.", b:"Contraception, plus dysmenorrhea, PCOS, menorrhagia, endometriosis, acne and hirsutism. Formulations: combined oral pill, <b>transdermal patch</b> (ethinyl estradiol + norelgestromin, 21 days), <b>vaginal ring</b> (ethinyl estradiol + etonogestrel, 21 days). Monophasic = constant dose (simplest, good for new users and menstrual-related mood symptoms); triphasic = rising progestin mimicking the cycle (for breakthrough bleeding on monophasic).", d:"<mark>Venous thromboembolism, especially in women over 35 who smoke</mark> (estrogen-related; reduced by lowering the estrogen dose); nausea, edema, more severe migraine; acne and hirsutism from androgenic progestin; <b>decreased lactation — not for breastfeeding patients</b>. <b>Pregnancy:</b> contraindicated. Avoid with migraine with aura, thromboembolic history, smokers over 35.", e:"<span class='star'>⭐</span>28-day packs: first 21 pills active, last 7 inert — withdrawal bleeding occurs in the inert week and can be skipped by starting the next pack immediately.", img:""},
+  {n:"Progestin-only contraceptives", g:"<span class='pill'>Progestin</span> <mark>Thickens cervical mucus</mark> and makes the endometrium less favourable for implantation. <b>Do not reliably inhibit ovulation.</b>", b:"First choice <b>when estrogen is contraindicated</b> — breastfeeding, smokers, migraine with aura. Forms: mini-pill, medroxyprogesterone injection every 3 months, levonorgestrel IUD (up to 6 years), etonogestrel subdermal implant over the triceps (up to 3 years).", d:"Irregular/breakthrough bleeding (the common reason for discontinuation), amenorrhea after extended use, <b>prolonged ovulation suppression after injectable medroxyprogesterone is stopped</b>, acne with androgenic progestins, mood changes, weight gain.", e:"<span class='star'>⭐</span>Oral mucus changes <mark>do not persist beyond 24 hours</mark> — the pill must be taken at the same time every day. Safe in breastfeeding, unlike combined pills.", img:""},
+  {n:"Levonorgestrel (Plan B) — emergency contraception", g:"<span class='pill'>Progestin</span><span class='pill'>Over the counter ≥18 y</span> <mark>Inhibits the LH surge</mark> by negative feedback on the hypothalamus and pituitary, preventing follicular rupture. Prevents or delays ovulation so the egg is not released.", b:"Emergency contraception after unprotected intercourse or barrier failure. <b>Most effective within 72 hours.</b>", d:"Less likely to work if ovulation has already occurred. <b>Does not end an existing pregnancy and will not harm a developing embryo.</b>", e:"<span class='star'>⭐</span>Works through hypothalamic–pituitary–ovarian axis suppression — not by preventing implantation of an established pregnancy.", img:""},
+  {n:"Ulipristal", g:"<span class='pill'>Selective progesterone receptor modulator</span> <mark>Prevents progestins from binding the progesterone receptor</mark>; may inhibit or delay ovulation and alter the endometrium to prevent implantation.", b:"Emergency contraception — <b>oral 30 mg once within 120 hours (5 days)</b> of unprotected sex.", d:"As a progesterone-receptor blocker it is not a contraceptive for ongoing use. <b>Pregnancy:</b> not for use in an established pregnancy.", e:"<span class='star'>⭐</span>Contrast with levonorgestrel: ulipristal blocks the progesterone receptor, levonorgestrel supplies progestin negative feedback.", img:""},
+  {n:"Mifepristone", g:"<span class='pill'>Progesterone receptor antagonist</span> <mark>Antagonises the progesterone receptor</mark>, inducing detachment of the blastocyst.", b:"Early pregnancy termination <b>combined with misoprostol</b> to expel uterine contents. <b>Not FDA-approved for postcoital contraception</b> although it can prevent pregnancy.", d:"With misoprostol: nausea, diarrhea, fever, excessive uterine bleeding, uterine rupture, incomplete abortion. <b>Pregnancy:</b> used to terminate pregnancy — absolutely contraindicated if pregnancy is to continue.", e:"<span class='star'>⭐</span>Mifepristone + misoprostol is the classic medical-abortion pairing: antiprogestin detaches, prostaglandin expels.", img:""},
+  {n:"Clomiphene", g:"<span class='pill'>Estrogen receptor antagonist</span> <mark>Antagonist at the estrogen receptor</mark> in the hypothalamus and anterior pituitary — blocks estradiol negative feedback, so gonadotropin and estrogen secretion rise and follicles develop.", b:"<b>First-line ovulation induction</b> for ovulatory dysfunction in women who wish to become pregnant, notably PCOS. Taken as a pill for five days early in the cycle.", d:"Hot flashes, mood swings, bloating, and a <mark>small risk of multiple pregnancy</mark>.", e:"<span class='star'>⭐</span>\"Tricks the body into thinking estrogen is low.\" Compare with letrozole, which lowers estrogen for real by blocking aromatase.", img:""},
+  {n:"Letrozole", g:"<span class='pill'>Aromatase inhibitor</span> <mark>Inhibits aromatase</mark>, blocking conversion of androgens to estrogens. Less estrogen means less negative feedback, so LH and FSH rise and follicle development and ovulation increase.", b:"Infertility in anovulatory women with PCOS — the alternative when clomiphene fails or is contraindicated. Also <b>breast cancer in postmenopausal women</b> (the primary use of aromatase inhibitors).", d:"Class effects of aromatase inhibition: hot flashes, osteoporosis and fractures, arthralgia. <b>Pregnancy:</b> used pre-conception for ovulation induction, not during pregnancy.", e:"<span class='star'>⭐</span>The exam stem is \"increases follicle development and ovulation by inhibiting aromatase\" → letrozole, not clomiphene.", img:""},
+  {n:"Leuprolide", g:"<span class='pill'>GnRH receptor agonist</span> <mark>Continuous administration downregulates pituitary GnRH receptors</mark>, suppressing LH and FSH and therefore gonadal steroid production. <b>Pulsatile</b> administration instead mimics the normal axis and stimulates it.", b:"Endometriosis, leiomyomas, and hormone-sensitive cancers; ovarian suppression in breast cancer; prostate cancer in men.", d:"Initial transient LH rise causing a <mark>\"flare\"</mark>; then menopausal effects — hot flashes, sweats, reduced bone density.", e:"<span class='star'>⭐</span>Continuous vs pulsatile is the classic distinction: continuous = chemical castration, pulsatile = stimulation.", img:""},
+  {n:"Gonadotropins — luteinizing hormone (LH), follicle stimulating hormone (FSH), hMG, hCG", g:"<span class='pill'>LH / FSH receptor agonists</span> <mark>Human chorionic gonadotropin (hCG) is LH-like</mark> and is obtained from the urine of pregnant women; <b>Human menopausal gonadotropins (hMG)</b> are purified from the urine of postmenopausal women and contains both LH and FSH. Recombinant LH and FSH are available but expensive.", b:"Ovulation induction in anovulatory women with <b>hypogonadotropic hypogonadism</b> from hypothalamic or pituitary dysfunction; also for women with PCOS <b>who do not respond to clomiphene</b> (second line after clomiphene).", d:"Ovarian hyperstimulation and multiple pregnancy are the risks of gonadotropin ovulation induction.", e:"<span class='star'>⭐</span>Know the source of each preparation — pregnant urine (hCG, LH-like) vs postmenopausal urine (hMG, LH + FSH).", img:""},
+ ]},
+ {sec:"Pharmacology of Gynecological & Obstetrical Conditions", rows:[
+  {n:"Spironolactone", g:"<span class='pill'>Aldosterone receptor antagonist</span><span class='pill'>Androgen receptor antagonist</span> Three actions combine to reduce hirsutism: aldosterone receptor antagonist, <mark>competitive inhibitor of androgen binding to the androgen receptor</mark>, and inhibitor of 5α-reductase.", b:"<b>PCOS — hirsutism and acne.</b>", d:"Potassium-sparing diuretic, so it <mark>may raise plasma potassium</mark>. <b>Pregnancy: the antiandrogen effect could interfere with development of the external genitalia of a male fetus</b> — a pregnancy-relevant caution the lecture states explicitly.", e:"<span class='star'>⭐</span>Beware hyperkalemia, and beware pregnancy — feminisation of a male fetus.", img:""},
+  {n:"Finasteride", g:"<span class='pill'>5α-reductase inhibitor</span> <mark>Inhibits 5α-reductase, reducing DHT.</mark>", b:"PCOS — hirsutism.", d:"<b>Pregnancy:</b> antiandrogen — same fetal-virilisation concern as other androgen blockers in a male fetus.", e:"<span class='star'>⭐</span>Spironolactone blocks the receptor AND 5α-reductase; finasteride blocks 5α-reductase only.", img:""},
+  {n:"Metformin", g:"<span class='pill'>Biguanide</span> <mark>Decreases hepatic gluconeogenesis</mark>, decreases intestinal glucose absorption and improves insulin sensitivity. First-choice drug for type 2 diabetes.", b:"PCOS — to help <b>restore cyclical ovulation</b>, lower hyperandrogenism and aid weight loss.", d:"<mark>Potentially fatal lactic acidosis in patients with renal disease</mark> (rare but important).", e:"<span class='star'>⭐</span>In PCOS metformin is the insulin-sensitising arm; clomiphene/letrozole are the ovulation-induction arm.", img:""},
+  {n:"Anastrozole", g:"<span class='pill'>Aromatase inhibitor</span> Competitive inhibitor of aromatase, preventing conversion of androgens to estrogens. <mark>Large amounts of estrogen are produced locally within endometriotic tissue</mark> — \"extra-ovarian\" production that GnRH agonists cannot suppress, but aromatase inhibitors can.", b:"<b>Endometriosis</b> (targets extra-ovarian estrogen production); breast cancer in postmenopausal women.", d:"Osteoporosis, fractures and arthralgia.", e:"<span class='star'>⭐</span>The reason to add an aromatase inhibitor to a GnRH agonist in endometriosis: GnRH agonists only stop <b>ovarian</b> estrogen.", img:"<a href=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p22_estrogen_sources_tamoxifen_ai_lhrh_moa.jpg\" target=\"_blank\"><img src=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p22_estrogen_sources_tamoxifen_ai_lhrh_moa.jpg\" loading=\"lazy\" alt=\"Estrogen sources with sites of action of LHRH analogues, aromatase inhibitors and tamoxifen\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"GnRH agonists — goserelin, leuprolide, nafarelin", g:"<span class='pill'>GnRH receptor agonist</span> <mark>Continuous administration downregulates pituitary GnRH receptors</mark> → suppressed LH and FSH → inhibition of ovarian estrogen production → endometrial tissue regresses. Takes <b>7 to 14 days</b>, with an initial surge first.", b:"<b>Endometriosis</b> — ovarian suppression when hormonal contraceptives are insufficient.", d:"Reduced bone density, hot flashes and sweats — <mark>essentially a medical menopause</mark>. <b>Mitigation:</b> bisphosphonates and raloxifene prevent bone loss; low-dose estrogen/progestin \"add-back\" therapy reduces adverse effects.", e:"<span class='star'>⭐</span>Know the add-back concept — it is how you keep a patient on a GnRH agonist without losing bone.", img:""},
+  {n:"Combined hormonal contraceptives — endometriosis", g:"<span class='pill'>Estrogen + progestin</span> <mark>Decidualisation and atrophy</mark> of endometrial and ectopic endometrial tissue, mostly due to the progesterone component. Use the lowest effective estrogen dose.", b:"<b>Initial (first-line) treatment for patients with minimal or mild endometriosis symptoms.</b> Oral, patch or vaginal ring.", d:"Nausea, bloating, headache, breakthrough bleeding. <b>Contraindicated:</b> history of thromboembolism, smokers over 35.", e:"<span class='star'>⭐</span>First line in mild disease; escalate to GnRH agonists and aromatase inhibitors if inadequate.", img:""},
+  {n:"Progestin-only therapy — endometriosis", g:"<span class='pill'>Progestin</span> Induce <mark>decidualisation</mark> of endometrial and ectopic endometrial tissue.", b:"Endometriosis. Given as the mini-pill, medroxyprogesterone injection IM/SubQ, or an IUD.", d:"Breakthrough bleeding, weight gain, fluid retention, mood swings, acne and hirsutism.", e:"<span class='star'>⭐</span>Progestins produce the high-progesterone/low-estrogen environment that starves ectopic endometrium.", img:""},
+  {n:"Menopausal hormone therapy — 17β-estradiol, conjugated estrogens, estradiol + norethindrone", g:"<span class='pill'>Estrogen ± progestin</span> Replaces the estrogen lost through follicle depletion. <mark>Hormonal therapy is the most effective treatment for all menopausal symptoms</mark> — vasomotor symptoms, vaginal atrophy and dryness.", b:"<b>Systemic therapy is required for vasomotor symptoms.</b> <b>Low-dose vaginal estrogen-only is preferred when only urogenital symptoms are present.</b> Oral preparations are usually conjugated equine estrogens; parenteral routes can use 17β-estradiol because first-pass metabolism is avoided.", d:"<mark>Systemic estrogen must always be combined with a progestin in a woman with an intact uterus</mark> to reduce endometrial cancer risk; after hysterectomy give estrogen alone and avoid progestin side effects.", e:"<span class='star'>⭐</span>Uterus present → add a progestin. Uterus absent → estrogen alone. Urogenital-only symptoms → vaginal, not systemic.", img:""},
+  {n:"Mifepristone + misoprostol — medical termination", g:"<span class='pill'>Progesterone receptor antagonist</span><span class='pill'>PGE1 analogue</span> <b>Mifepristone</b> antagonises the progesterone receptor and <mark>induces detachment of the blastocyst</mark>; <b>misoprostol</b> (PGE1) then contracts the uterus and expels the contents.", b:"<b>Early termination in the first trimester (&lt; 49 days).</b> Methotrexate is the alternative to mifepristone.", d:"Nausea, diarrhea, fever, excessive uterine bleeding, uterine rupture, incomplete abortion.", e:"<span class='star'>⭐</span>Two-drug logic: block progesterone to detach, then prostaglandin to expel.", img:""},
+  {n:"Methotrexate — medical termination", g:"<span class='pill'>Dihydrofolate reductase inhibitor</span> <mark>Inhibitor of dihydrofolate reductase</mark>; exerts a feticidal action on the blastocyst. Co-administered with misoprostol to expel the uterine contents.", b:"Early first-trimester termination as an alternative to mifepristone; also the medical treatment of ectopic pregnancy.", d:"<b>Pregnancy: methotrexate is a potent teratogen and abortifacient</b> — it is used precisely for its feticidal action and must never be given in a pregnancy intended to continue.", e:"<span class='star'>⭐</span>Same drug, two roles in this unit: medical abortion and ectopic pregnancy.", img:""},
+  {n:"Antenatal corticosteroids — betamethasone, dexamethasone", g:"<span class='pill'>Glucocorticoid</span> <mark>Enhance fetal lung maturation</mark>, reducing neonatal morbidity and mortality associated with preterm labour.", b:"Given on hospitalisation for preterm labour diagnosed at <b>less than 34 weeks of gestation</b>, alongside tocolysis.", d:"Given to the mother to act on the fetus; the benefit is time-dependent, which is the rationale for buying 48 hours with a tocolytic.", e:"<span class='star'>⭐</span>Tocolytics exist to buy the 48 hours that antenatal steroids need to work — that pairing is the exam point.", img:""},
+  {n:"Terbutaline", g:"<span class='pill'>β2-adrenergic agonist</span> <mark>Relaxation of myometrium by binding β2-receptors.</mark>", b:"<b>Tocolysis</b> — delay delivery for up to 48 hours so antenatal glucocorticoids can reach maximum fetal effect.", d:"Tachycardia, tremors, hypotension, hyperglycemia. <b>Contraindicated in pregnant women with cardiac disease, poorly controlled hypertension and/or diabetes.</b>", e:"<span class='star'>⭐</span>β2 agonist adverse effects are simply β2 physiology — tachycardia, tremor, hyperglycemia.", img:""},
+  {n:"Nifedipine", g:"<span class='pill'>Calcium channel blocker</span> <mark>Relaxation of myometrium by decreasing intracellular calcium.</mark>", b:"<b>Tocolysis.</b> Also used to treat hypertension in pregnancy.", d:"Nausea, flushing, headache, dizziness, palpitations.", e:"<span class='star'>⭐</span>The tocolytic with the mildest maternal profile of the three — contrast terbutaline's cardiac effects and indomethacin's fetal risk.", img:""},
+  {n:"Indomethacin", g:"<span class='pill'>NSAID — COX inhibitor</span> <mark>Relaxation of myometrium by decreasing prostaglandin synthesis via inhibition of cyclooxygenase.</mark>", b:"<b>Tocolysis.</b> Also used in polyhydramnios: reduces fetal urine production, increases fluid absorption into the lungs and movement across the membranes.", d:"Mother: nausea, vomiting, gastritis. <b>Fetus: <mark>premature closure of the ductus arteriosus</mark></b> — the pregnancy-specific hazard that limits its use.", e:"<span class='star'>⭐</span>Premature closure of the ductus arteriosus is the single most tested fact about indomethacin in pregnancy.", img:""},
+  {n:"Dinoprostone (PGE2)", g:"<span class='pill'>Prostaglandin E2 analogue</span> Synthetic PGE2 analogue for <mark>cervical ripening</mark>, given as a gel or vaginal insert.", b:"<b>Preinduction cervical ripening</b> when there is an indication for induction but an unfavourable cervix.", d:"<mark>Uterine tachysystole</mark> (&gt; 5 contractions in 10 minutes), which may be associated with fetal heart rate abnormalities.", e:"<span class='star'>⭐</span>PGE1 analogues (misoprostol) have equivalent or superior efficacy to PGE2 analogues for ripening and induction.", img:""},
+  {n:"Misoprostol (PGE1)", g:"<span class='pill'>Prostaglandin E1 analogue</span> Synthetic PGE1; <mark>ripens the cervix and induces uterine contractions</mark>. Administered orally or vaginally.", b:"Cervical ripening and induction of labour; expulsion of uterine contents in medical termination; and <b>postpartum hemorrhage from uterine atony</b>.", d:"Uterine tachysystole with fetal heart rate changes; chills, fevers and shivering. <b>Pregnancy: a uterotonic and abortifacient — contraindicated in a pregnancy intended to continue.</b>", e:"<span class='star'>⭐</span>One drug across three settings in this unit: termination, induction, and postpartum hemorrhage.", img:""},
+  {n:"Oxytocin", g:"<span class='pill'>G-protein coupled oxytocin receptor</span> <mark>Stimulates uterine contractions via GPCRs, raising intracellular calcium in uterine myofibrils</mark>, and increases local prostaglandin production. <b>Contracts the upper segment and relaxes the lower segment</b> to facilitate delivery.", b:"<b>Antepartum:</b> induction of labour at near term with a medical indication; stimulation or reinforcement of labour; adjunct in incomplete abortion. <b>Postpartum:</b> uterine contraction in the third stage to control bleeding — <b>first-line for postpartum hemorrhage</b>.", d:"<mark>Water intoxication, which can be severe with seizures if infused for more than 24 hours</mark> — oxytocin is structurally similar to vasopressin and acts on ADH receptors. Also uterine rupture, nausea and vomiting.", e:"<span class='star'>⭐</span>Polypeptide — must be given IV by continuous-infusion pump. The ADH cross-reactivity explaining water intoxication is high-yield.", img:"<a href=\"mini2_drug_images/pharmacology_of_gynecological_obstetrical_conditions/pharmacology_of_gynecological_obstetrical_conditions_p31_parturition_prostaglandins_oxytocin.jpg\" target=\"_blank\"><img src=\"mini2_drug_images/pharmacology_of_gynecological_obstetrical_conditions/pharmacology_of_gynecological_obstetrical_conditions_p31_parturition_prostaglandins_oxytocin.jpg\" loading=\"lazy\" alt=\"Phases of parturition with prostaglandin and oxytocin actions on myometrium and cervix\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Ergonovine", g:"<span class='pill'>Ergot alkaloid</span> <mark>Produces sustained contractions of uterine smooth muscle.</mark>", b:"<b>Postpartum hemorrhage</b> from uterine atony.", d:"<mark>Must not be used for induction of labour</mark> — it contracts the whole uterus, which could compromise the baby's blood supply, and contraction of the lower segment prevents delivery; these effects could kill the baby. <b>Contraindicated in hypertensive patients.</b>", e:"<span class='star'>⭐</span>Oxytocin contracts the upper segment and relaxes the lower; ergonovine contracts the whole uterus — that is why one induces and the other never does.", img:""},
+  {n:"Metoclopramide, domperidone", g:"<span class='pill'>Dopamine receptor antagonist</span> <mark>Increase milk production by increasing prolactin secretion</mark> (dopamine normally inhibits prolactin).", b:"Galactagogues to augment maternal milk production. <b>Routine use is not recommended</b> — limited efficacy data and potential adverse effects.", d:"The lecture cautions against routine use rather than listing specific toxicities.", e:"<span class='star'>⭐</span>Dopamine antagonist → prolactin up → more milk. Dopamine agonist → prolactin down → less milk.", img:""},
+  {n:"Bromocriptine, cabergoline", g:"<span class='pill'>Dopamine receptor agonist</span> <mark>Suppress milk production by inhibiting prolactin secretion.</mark>", b:"Used when suppression of lactation is desired.", d:"The mirror image of the galactagogues — do not give to a mother who wishes to breastfeed.", e:"<span class='star'>⭐</span>Pair these with metoclopramide/domperidone as the two directions of dopamine–prolactin control.", img:""},
+  {n:"Estrogen-containing contraceptives in lactation", g:"<span class='pill'>Estrogen</span> <mark>Estrogens suppress lactation</mark> and are associated with venous thromboembolism.", b:"<b>Combined hormonal contraceptives are not recommended immediately postpartum.</b> <b>Progestin-only preparations — progestin-only pills, levonorgestrel IUD, depot medroxyprogesterone — do not appear to affect milk volume or composition and can be started immediately postpartum.</b>", d:"Postpartum VTE risk plus lactation suppression is the reason for the restriction.", e:"<span class='star'>⭐</span>The postpartum contraception question always resolves to: progestin-only now, combined later.", img:""},
+ ]},
+ {sec:"Pharmacology of Reproductive System Neoplasms", rows:[
+  {n:"Tamoxifen", g:"<span class='pill'>SERM</span><span class='pill'>CYP2D6 / CYP3A4</span> <mark>Competitive inhibitor of estrogen binding to the estrogen receptor</mark>, antagonising estrogen-induced proliferation of breast cancer. Oral. 4-hydroxytamoxifen is the more potent metabolite. <b>Estrogen agonist in non-breast tissue</b> — endometrium, coagulation system and bone.", b:"<b>ER-positive metastatic breast cancer</b>; <b>adjuvant therapy after tumour removal</b> to prevent recurrence and extend survival — preferred in <b>premenopausal</b> women (anastrozole preferred post-menopause); reduces incidence in women at high risk.", d:"<mark>Increased risk of endometrial cancer (2–3 fold), particularly post-menopausal</mark>; increased thromboembolic events, rising with age; hot flashes, vaginal atrophy, vaginal bleeding, menstrual irregularities; retinal deposits and cataracts (rare). <b>Pregnancy:</b> antiestrogen used in cancer therapy — not for use in pregnancy.", e:"<span class='star'>⭐</span>Antagonist effects are therapeutic, agonist effects are adverse. Treatment is limited to under 5 years because of endometrial cancer risk.", img:"<a href=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p13_tamoxifen_endometrial_growth.jpg\" target=\"_blank\"><img src=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p13_tamoxifen_endometrial_growth.jpg\" loading=\"lazy\" alt=\"Tamoxifen stimulates endometrial growth — the basis of its endometrial cancer risk\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Fulvestrant", g:"<span class='pill'>SERD</span> Steroidal antiestrogen that binds the estrogen receptor, blocks estrogen binding, and <mark>alters receptor structure so it is targeted for proteasomal degradation</mark>, abolishing ER-mediated transcription. A <b>pure antagonist in all tissues</b> with no partial agonist activity.", b:"<b>Second line</b> — metastatic breast cancer in post-menopausal women with hormone-receptor-positive disease <b>not responsive to tamoxifen</b>.", d:"Nausea, hot flashes and arthralgia.", e:"<span class='star'>⭐</span>SERM vs SERD: tamoxifen blocks the receptor, fulvestrant destroys it.", img:""},
+  {n:"Anastrozole", g:"<span class='pill'>Aromatase (CYP19A1) inhibitor</span> <mark>Binds competitively and selectively to the heme of CYP19</mark>, blocking conversion of androgens to estrogens. In post-menopausal women this conversion occurs in fat, liver, muscle, brain and breast; pre-menopausally estrogen comes mainly from the ovary.", b:"<b>First-line treatment of locally advanced or metastatic breast cancer</b> in post-menopausal women; adjuvant treatment of early hormone-receptor-positive disease; advanced cancer progressing on tamoxifen.", d:"Hot flashes, body aches, vaginal dryness; osteoporosis and fractures. <b>Not effective in pre-menopausal women</b> — lowering peripheral estrogen raises gonadotropins, which drives the intact ovary to make <i>more</i> estrogen.", e:"<span class='star'>⭐</span>\"Why not in premenopausal women?\" is a stated lecture question — the answer is the intact hypothalamic–pituitary–ovarian axis overriding the block.", img:"<a href=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p22_estrogen_sources_tamoxifen_ai_lhrh_moa.jpg\" target=\"_blank\"><img src=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p22_estrogen_sources_tamoxifen_ai_lhrh_moa.jpg\" loading=\"lazy\" alt=\"Pre- vs post-menopausal estrogen sources and where LHRH analogues, aromatase inhibitors and tamoxifen act\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Leuprolide — oncology", g:"<span class='pill'>GnRH agonist</span> <mark>Continuous administration downregulates pituitary GnRH receptors</mark>, suppressing FSH and LH; falling LH lowers testosterone (or estrogen).", b:"<b>Prostate cancer</b> — high-risk disease with radiation or after surgery, and with chemotherapy for metastatic disease. Ovarian suppression in breast cancer.", d:"<mark>Initial transient LH rise and testosterone surge causing a \"flare\"</mark> — tumour growth, bone pain, spinal cord compression, obstructive bladder symptoms. Also gynecomastia and impotence. <b>Combination with flutamide prevents flare.</b>", e:"<span class='star'>⭐</span>The flare and its prevention by an androgen receptor blocker is the classic ADT question.", img:""},
+  {n:"Degarelix, relugolix (relogolix)", g:"<span class='pill'>GnRH receptor antagonist</span> <mark>Direct competitive inhibition of the GnRH receptor</mark>, blocking downstream signalling and decreasing LH, FSH and testosterone immediately.", b:"<b>Androgen deprivation therapy</b>, with outcomes comparable to a GnRH agonist plus an androgen receptor antagonist.", d:"<mark>No testosterone surge</mark> — no flare. Lower rates of cardiovascular morbidity and mortality than agonists. Class effects: hot flashes, body aches, vaginal dryness.", e:"<span class='star'>⭐</span>Antagonist = immediate suppression, no flare, less cardiovascular impact. That contrast with leuprolide is the point of the slide.", img:""},
+  {n:"Flutamide", g:"<span class='pill'>Androgen receptor antagonist</span> <mark>Binds the androgen receptor and competitively inhibits testosterone and DHT binding</mark>, preventing receptor translocation to the nucleus and transcription of androgen-responsive genes.", b:"Prostate cancer — <b>combined with leuprolide</b> (or a GnRH antagonist) to prevent flare.", d:"Gynecomastia and impotence. <mark>Testosterone levels stay normal or rise</mark> because production is not blocked, only receptor action — men retain some potency and libido.", e:"<span class='star'>⭐</span>Flutamide alone does not lower testosterone; it raises LH by removing feedback. That is why it is never used alone.", img:""},
+  {n:"Megestrol (megesterol), medroxyprogesterone — oncology", g:"<span class='pill'>Progestins</span> <mark>Progestins oppose estrogen.</mark>", b:"Advanced breast cancer and endometrial cancer.", d:"Weight gain and increased blood pressure.", e:"<span class='star'>⭐</span>The progestin option in the endocrine-therapy table — easy to overlook next to the SERMs and aromatase inhibitors.", img:""},
+  {n:"Prednisone", g:"<span class='pill'>Glucocorticoid</span> Glucocorticoid listed among the endocrine drugs for reproductive neoplasms, used in prostate cancer regimens.", b:"Prostate cancer — endocrine drug table.", d:"The deck lists prednisone in the prostate endocrine table without detailing adverse effects.", e:"<span class='star'>⭐</span>Named on the drug list, so know it belongs to the endocrine group for prostate cancer.", img:""},
+  {n:"Trastuzumab", g:"<span class='pill'>Anti-HER2 monoclonal antibody</span> <mark>Monoclonal antibody targeting the extracellular domain of HER2</mark>, blocking the proliferative signal transduction pathway initiated by HER2 receptor binding.", b:"<b>HER2-positive breast cancer</b>, which tends to be more aggressive and more likely to recur.", d:"<mark>Cardiotoxicity — 2–7% develop clinical signs of heart failure</mark>, monitored with routine echocardiography; infusion reactions; fever, infections, cough, headache, insomnia, rash. <b>Caution with combined anthracycline therapy</b> (additive cardiotoxicity). <b>Pregnancy:</b> monoclonal antibody chemotherapy — avoid.", e:"<span class='star'>⭐</span>\"HER-TUmor gets trasTUzumab\" is the lecture's own mnemonic. Cardiotoxicity plus the anthracycline caution is the tested pair.", img:""},
+  {n:"Bevacizumab", g:"<span class='pill'>Anti-VEGF monoclonal antibody</span> <mark>Monoclonal antibody targeting VEGF</mark>, inhibiting its binding to the receptor and so inhibiting angiogenesis.", b:"Any large tumour; used in <b>platinum-resistant epithelial ovarian cancer</b>.", d:"<mark>Bleeding, and surgical and wound-healing complications.</mark>", e:"<span class='star'>⭐</span>The VEGF antibody in ovarian cancer — distinguish from trastuzumab (HER2) in breast cancer.", img:""},
+  {n:"Antimetabolites — methotrexate, 5-fluorouracil (5-flurouracil), 6-mercaptopurine", g:"<span class='pill'>Antimetabolite</span><span class='pill'>Cell-cycle specific: S phase</span> <b>Methotrexate</b> inhibits dihydrofolate reductase; <b>5-fluorouracil</b> inhibits thymidylate synthase; <b>6-mercaptopurine</b> metabolites inhibit multiple areas.", b:"Reviewed here in the context of reproductive system neoplasms; methotrexate also treats ectopic pregnancy and gestational trophoblastic disease.", d:"<mark>The lecture slide leaves the \"Major Adverse Effect\" and \"Antidote =\" cells blank for you to fill in.</mark> <b>Pregnancy: methotrexate is a known teratogen and abortifacient.</b>", e:"<span class='star'>⭐</span>The blanks are deliberate — the standard pairing to write in is leucovorin (folinic acid) rescue for methotrexate.", img:"<a href=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms/pharmacology_of_reproductive_system_neoplasms_p21_chemo_cell_cycle_targets.jpg\" target=\"_blank\"><img src=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms/pharmacology_of_reproductive_system_neoplasms_p21_chemo_cell_cycle_targets.jpg\" loading=\"lazy\" alt=\"Cell-cycle targets of the cancer chemotherapy drug classes\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"Alkylating agents — cyclophosphamide, busulfan, carmustine, cisplatin", g:"<span class='pill'>Alkylating agent</span><span class='pill'>Cell-cycle nonspecific</span> <mark>Multiple DNA strand cross-linking</mark> for cyclophosphamide, busulfan and carmustine; cisplatin causes multi- or single-strand DNA cross-linking.", b:"Reviewed for reproductive system neoplasms; cyclophosphamide appears in breast cancer regimens and platinum agents in ovarian and cervical cancer.", d:"<mark>The slide leaves \"Major Toxicity\" blank, with \"Antidote =\" prompts against cyclophosphamide and cisplatin.</mark> The deck's own MCQ asks which drug reduces cisplatin renal toxicity, offering amifostine, mesna, folic acid and dexrazoxane. <b>Pregnancy:</b> alkylating agents are teratogenic.", e:"<span class='star'>⭐</span>Fill the blanks in: mesna for cyclophosphamide (haemorrhagic cystitis), amifostine for cisplatin (nephrotoxicity).", img:""},
+  {n:"Cytotoxic antibiotics — doxorubicin, dactinomycin, bleomycin", g:"<span class='pill'>Cytotoxic antibiotic</span> <b>Doxorubicin</b> inhibits topoisomerase II; <b>dactinomycin</b> intercalates double-stranded DNA; <b>bleomycin</b> <mark>chelates iron causing free radicals</mark>.", b:"Reviewed for reproductive system neoplasms; doxorubicin appears in breast cancer regimens.", d:"<mark>The slide leaves the adverse effect column blank with an \"Antidote =\" prompt against doxorubicin.</mark> Doxorubicin's cardiotoxicity is why trastuzumab carries an anthracycline caution.", e:"<span class='star'>⭐</span>Fill in: dexrazoxane for doxorubicin cardiotoxicity; bleomycin's free-radical mechanism points to pulmonary fibrosis.", img:""},
+  {n:"Natural products — topotecan, etoposide, vincristine/vinblastine, paclitaxel/docetaxel", g:"<span class='pill'>Topoisomerase inhibitors</span><span class='pill'>Microtubule agents</span> <b>Topotecan</b> inhibits topoisomerase I; <b>etoposide</b> inhibits topoisomerase II; <b>vincristine and vinblastine</b> inhibit microtubule <mark>formation (polymerization)</mark>; <b>paclitaxel and docetaxel</b> inhibit microtubule <mark>breakdown (depolymerization)</mark>.", b:"Reviewed for reproductive system neoplasms; taxanes appear in breast and ovarian cancer regimens.", d:"The deck's own MCQ asks for the adverse effect of drugs targeting cells in mitosis, offering hearing loss, heart failure, pulmonary fibrosis and <b>nerve damage</b>. <b>Pregnancy:</b> cytotoxic — avoid.", e:"<span class='star'>⭐</span>The vinca/taxane distinction is the classic one-liner: vincas block assembly, taxanes block disassembly.", img:""},
+ ]},
+ {sec:"Pharmacology of Reproductive System Neoplasms — Enhancement Session", rows:[
+  {n:"Hormone-receptor status and treatment choice", g:"<span class='pill'>ER / PR</span><span class='pill'>HER2</span> ER-positive and/or PR-positive breast cancers are <mark>\"fuelled\" by hormones</mark>; HER2-positive tumours are driven by growth factors binding HER2. Tumours with none of these receptors are <b>triple negative</b>.", b:"Receptor status determines whether endocrine therapy, HER2-targeted therapy, or cytotoxic chemotherapy leads treatment.", d:"Triple-negative disease lacks the obvious drug targets, which is why chemotherapy carries the load.", e:"<span class='star'>⭐</span>Establish receptor status first — every subsequent drug choice in this deck follows from it.", img:""},
+  {n:"Premenopausal vs postmenopausal endocrine strategy", g:"<span class='pill'>SERM — premenopausal</span><span class='pill'>Aromatase inhibitor — postmenopausal</span> <mark>Before menopause the ovaries are the main source of estrogen</mark>, so SERMs are used to block the receptor. <mark>After menopause most estrogen comes from peripheral conversion of androgens by aromatase</mark>, so aromatase inhibitors reduce production.", b:"Determines whether tamoxifen or anastrozole leads. LHRH analogues can be added to suppress ovarian output in premenopausal patients.", d:"Aromatase inhibitors fail in premenopausal women because the intact axis raises gonadotropins and drives more ovarian estrogen.", e:"<span class='star'>⭐</span>Menopausal status is the single fact that decides SERM vs aromatase inhibitor.", img:"<a href=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p22_estrogen_sources_tamoxifen_ai_lhrh_moa.jpg\" target=\"_blank\"><img src=\"mini2_drug_images/pharmacology_of_reproductive_system_neoplasms_2/pharmacology_of_reproductive_system_neoplasms_2_p22_estrogen_sources_tamoxifen_ai_lhrh_moa.jpg\" loading=\"lazy\" alt=\"Pre- vs post-menopausal estrogen production and drug targets\" style=\"max-height:64px;border-radius:6px\"></a>"},
+  {n:"LHRH analogues — agonist vs antagonist", g:"<span class='pill'>LHRH = GnRH</span> <b>Agonists (leuprolide, goserelin)</b> initially stimulate an LH and FSH surge — a <mark>\"flare\"</mark> — then desensitise pituitary receptors, suppressing LH/FSH and sex hormones. <b>Antagonists (degarelix, relugolix)</b> immediately block the receptor with <mark>no flare</mark> and rapid suppression.", b:"Androgen deprivation in prostate cancer; ovarian suppression in breast cancer.", d:"The flare from agonists can transiently worsen metastatic disease, which is why an androgen receptor antagonist is co-administered.", e:"<span class='star'>⭐</span>This slide exists purely to teach agonist-flare vs antagonist-no-flare — expect it as a stem.", img:""},
+ ]},
+ {sec:"Breast Disorders — treatment", rows:[
+  {n:"Endocrine therapy — tamoxifen and aromatase inhibitors", g:"<span class='pill'>SERM</span><span class='pill'>Aromatase inhibitors: anastrozole, letrozole, exemestane</span> Aromatase converts testosterone to estrone, an estradiol precursor. <mark>Blocking aromatase stops estradiol production</mark> so it cannot bind estrogen receptors and stimulate cancer growth.", b:"<b>Adjuvant therapy after surgery</b> to decrease local and systemic recurrence. <mark>Aromatase inhibitors (anastrozole, letrozole, exemestane) are used for postmenopausal women only</mark> — they are not useful premenopausally because the ovaries continue to make estrogen.", d:"ER-positive tumours are generally responsive to hormone therapy and carry a better prognosis.", e:"<span class='star'>⭐</span>The lecture's own knowledge check: \"What hormonal treatment is used for postmenopausal but not premenopausal women?\" → aromatase inhibitors.", img:""},
+  {n:"Trastuzumab — breast", g:"<span class='pill'>HER2 monoclonal antibody</span> <mark>Blocks the proliferative signal transduction pathway initiated by HER2 receptor binding.</mark>", b:"HER2-positive breast cancer.", d:"Fever, infections, cough, headache, insomnia, rash; more seriously <mark>cardiotoxicity with 2–7% developing clinical heart failure</mark>, monitored by routine echocardiography during treatment.", e:"<span class='star'>⭐</span>Lecture mnemonic: HER-TUmor gets trasTUzumab.", img:""},
+  {n:"Cytotoxic chemotherapy — cyclophosphamide, doxorubicin, docetaxel", g:"<span class='pill'>Alkylating agent</span><span class='pill'>Anthracycline</span><span class='pill'>Taxane</span> The standard combination named by the lecture for breast cancer.", b:"Adjuvant therapy early in treatment to <b>decrease the risk of metastasis</b>; given to most women with at least stage 1 invasive breast cancer; also for advanced and metastatic disease. <mark>Particularly valuable for hormone-receptor-negative and triple-negative cancer</mark>.", d:"Anthracycline cardiotoxicity is the reason for caution when combined with trastuzumab.", e:"<span class='star'>⭐</span>Remember the trio by name — it is the lecture's answer for triple-negative disease where endocrine and HER2 targets are absent.", img:""},
+ ]},
+ {sec:"Introduction to Gynecology 1 — treatment", rows:[
+  {n:"Methotrexate — ectopic pregnancy", g:"<span class='pill'>Dihydrofolate reductase inhibitor</span> Medical management of ectopic pregnancy.", b:"<b>Medical option</b> in a stable patient; decision rests on β-hCG level, symptoms and haemodynamic stability. Expectant \"watch and wait\" if asymptomatic and hCG &lt; 1500; surgery (salpingostomy vs salpingectomy) if unstable.", d:"<mark>Contraindicated if hCG &gt; 5000, or a yolk sac or fetal pole/cardiac activity is present.</mark>", e:"<span class='star'>⭐</span>Know the three numeric gates: hCG &lt; 1500 expectant, &gt; 5000 no methotrexate, cardiac activity no methotrexate.", img:""},
+  {n:"Ceftriaxone + doxycycline ± metronidazole", g:"<span class='pill'>N. gonorrhoeae</span><span class='pill'>Chlamydia</span><span class='pill'>Anaerobes</span> Empiric cover for the organisms causing pelvic inflammatory disease.", b:"<b>PID</b> — treat on clinical suspicion because \"the clinical diagnosis of PID is imprecise\".", d:"Under-treatment risks the long-term complications: infertility, chronic pelvic pain and ectopic pregnancy. <b>Doxycycline is contraindicated in pregnancy</b> (tooth discolouration and inhibited bone growth).", e:"<span class='star'>⭐</span>Treat empirically rather than wait for confirmation — that is the lecture's explicit instruction.", img:""},
+  {n:"Anti-D immunoglobulin — molar pregnancy and miscarriage", g:"<span class='pill'>Rh immune globulin</span> Prevents maternal sensitisation to fetal Rh-positive red cells.", b:"Given as part of the management of <b>partial mole</b> alongside D&C, serial hCG and birth control during follow-up.", d:"Required in Rh-negative women after any event that risks fetomaternal haemorrhage.", e:"<span class='star'>⭐</span>Anti-D appears in the molar pregnancy management list — easy to miss among the obstetric indications.", img:""},
+  {n:"Misoprostol — incomplete/complete miscarriage", g:"<span class='pill'>PGE1 analogue</span> Uterotonic used for medical management of miscarriage.", b:"<b>Complete miscarriage:</b> if bleeding, misoprostol may be needed. Inevitable, incomplete and missed miscarriage are managed by suction D&C or medical management; septic miscarriage needs <b>antibiotics</b> plus D&C.", d:"As a uterotonic and abortifacient it is contraindicated in a pregnancy intended to continue.", e:"<span class='star'>⭐</span>Match the miscarriage type to its management — the table is a classic exam grid.", img:""},
+ ]},
+ {sec:"Introduction to Gynecology 2 — abnormal uterine bleeding", rows:[
+  {n:"Medical therapy for AUB — iron, tranexamic acid, NSAIDs", g:"<span class='pill'>Antifibrinolytic</span><span class='pill'>COX inhibitor</span> Tranexamic acid is antifibrinolytic; NSAIDs reduce prostaglandin-mediated bleeding; iron replaces losses.", b:"<b>Medical therapy for abnormal uterine bleeding</b>, chosen according to cause.", d:"<mark>In AUB caused by coagulopathy, do NOT administer NSAIDs or GnRH agonists.</mark>", e:"<span class='star'>⭐</span>That single contraindication line is the highest-yield sentence on the management slide.", img:""},
+  {n:"Hormonal therapy for AUB — progestin, IV estrogen, combined OCPs, GnRH agonist, LNG-IUS", g:"<span class='pill'>Progestin</span><span class='pill'>Estrogen</span><span class='pill'>GnRH agonist</span> Hormonal control of the endometrium; the <b>levonorgestrel intrauterine system (LNG-IUS)</b> is listed separately as a device option.", b:"Medical management of AUB before surgical options (D&C, endometrial ablation, myomectomy, hysterectomy, uterine artery embolisation). <b>Hysterectomy especially for endometrial hyperplasia with atypia and malignancy.</b>", d:"Anticoagulants — warfarin, heparin and low molecular weight heparin — are themselves a cause of AUB by impairing clot formation.", e:"<span class='star'>⭐</span>Know the escalation ladder from medical to surgical, and that coagulopathy changes the medical choices.", img:""},
+  {n:"Spironolactone and clomiphene — PCOS in the AUB lecture", g:"<span class='pill'>Androgen receptor antagonist</span><span class='pill'>Estrogen receptor antagonist</span> Spironolactone <mark>competes for the androgen receptor, decreases androgen production and blocks aldosterone</mark>.", b:"PCOS management: health counselling and weight loss; <b>clomiphene citrate if pregnancy is desired</b>; OCPs or cyclic progestogen otherwise; spironolactone for androgenic features.", d:"<mark>Beware hyperkalemia</mark> with spironolactone.", e:"<span class='star'>⭐</span>The lecture's own emphasis: \"beware of hyperkalemia\".", img:""},
+ ]},
+ {sec:"Clinical Approach to Infertility", rows:[
+  {n:"Stepwise ovulation induction in PCOS", g:"<span class='pill'>Clomiphene citrate</span><span class='pill'>Letrozole</span> A stepwise approach tailored to symptoms and reproductive goals.", b:"<b>1. Lifestyle modification</b> — weight loss to improve insulin sensitivity and regulate cycles. <b>2. Ovulation induction — first-line for anovulatory infertility in PCOS: clomiphene citrate</b> as initial treatment. <mark>If clomiphene is ineffective or contraindicated, letrozole (an aromatase inhibitor) may be considered.</mark>", d:"Diagnosis rests on the Rotterdam criteria — two of oligo/anovulation, hyperandrogenism, polycystic ovaries.", e:"<span class='star'>⭐</span>Explicit first-line/second-line ordering: lifestyle → clomiphene → letrozole.", img:""},
+ ]},
+ {sec:"Introduction to Obstetrics 2 — obstetric management", rows:[
+  {n:"Magnesium sulfate", g:"<span class='pill'>IV magnesium</span> <mark>Given IV for prevention and treatment of eclamptic seizures.</mark>", b:"<b>Preeclampsia and eclampsia</b> — seizure prophylaxis and treatment, alongside delivery as the only definitive treatment.", d:"<mark>Magnesium toxicity: hyporeflexia and bradypnea</mark> — monitor levels carefully. <b>Treatment of magnesium toxicity: stop the magnesium and give calcium gluconate.</b>", e:"<span class='star'>⭐</span>Loss of deep tendon reflexes is the first sign of toxicity; calcium gluconate is the antidote.", img:""},
+  {n:"Antihypertensives in pregnancy — labetalol, hydralazine, nifedipine", g:"<span class='pill'>β-blocker</span><span class='pill'>Vasodilator</span><span class='pill'>Calcium channel blocker</span> Blood pressure control in hypertensive disorders of pregnancy.", b:"<b>Monitor and treat hypertension in preeclampsia without severe features</b>, managed conservatively with bed rest and salt restriction. In chronic essential hypertension treat to goal with alpha-methyldopa, a beta blocker or a calcium channel blocker.", d:"<mark>NO ACE inhibitors in pregnancy</mark> — the lecture states this explicitly and in capitals. ACE inhibitors cause renal failure, oligohydramnios and hypocalvaria in the fetus.", e:"<span class='star'>⭐</span>The three safe agents are labetalol, hydralazine and nifedipine; methyldopa for chronic hypertension. Never an ACE inhibitor.", img:""},
+  {n:"Insulin, metformin, glyburide — gestational diabetes", g:"<span class='pill'>Insulin</span><span class='pill'>Biguanide</span><span class='pill'>Sulfonylurea</span> Glycaemic control when diet fails.", b:"<b>First line is diet and exercise.</b> <mark>If diet is insufficient, administer insulin</mark>; oral hypoglycaemics may be used — <b>metformin and glyburide are currently approved during pregnancy</b>. Medication is started if fasting glucose &gt; 95 mg/dL or postprandial &gt; 120–140 mg/dL.", d:"<b>Pregnancy: insulin is preferred because it does not cross the placenta.</b> Metformin and glyburide are the approved oral options but carry less safety evidence.", e:"<span class='star'>⭐</span>The lecture's own review question answers \"most appropriate initial treatment\" as diet modification and exercise, not a drug.", img:""},
+  {n:"Propylthiouracil, propranolol, dexamethasone — thyroid storm in pregnancy", g:"<span class='pill'>Thionamide</span><span class='pill'>β-blocker</span><span class='pill'>Glucocorticoid</span> Supportive therapy with IV fluids, cooling blankets and glucose, plus these three drugs.", b:"<b>Thyroid storm in pregnancy</b> — a life-threatening exacerbation of thyrotoxicosis precipitated by stress, labour, infection, preeclampsia or caesarean section.", d:"<b>Pregnancy: propylthiouracil is the thionamide of choice in pregnancy</b> (methimazole causes aplasia cutis congenita).", e:"<span class='star'>⭐</span>Occurs in 1% of pregnant patients with hyperthyroidism — know the three-drug regimen.", img:""},
+  {n:"Ampicillin + erythromycin — PPROM", g:"<span class='pill'>Aminopenicillin</span><span class='pill'>Macrolide</span> Antibiotic prophylaxis once preterm premature rupture of membranes is confirmed.", b:"<b>PPROM confirmed → give antibiotics: ampicillin + erythromycin</b>; <mark>clindamycin if the patient is allergic to ampicillin</mark>. Given alongside antenatal corticosteroids and a tocolytic if there is no contraindication.", d:"Tocolysis is withheld if there are signs of infection — uterine tenderness or declining fetal status.", e:"<span class='star'>⭐</span>Know the substitution for penicillin allergy, and that infection contraindicates tocolysis.", img:""},
+ ]},
+ {sec:"Nutrition in Pregnancy, Lactation and Childhood", rows:[
+  {n:"Folic acid", g:"<span class='pill'>Vitamin B9</span> Supports fetal development and <mark>reduces the risk of neural tube defects such as spina bifida</mark>.", b:"<b>Preconception and pregnancy supplementation.</b> Listed with iron, calcium and omega-3 fatty acids as the key nutrients of pregnancy.", d:"Deficiency, not excess, is the concern — folate antagonists (trimethoprim, methotrexate) cause neural tube defects.", e:"<span class='star'>⭐</span>The single most important preventive supplement in this unit.", img:""},
+  {n:"Insulin, metformin, glipizide — GDM", g:"<span class='pill'>Insulin</span><span class='pill'>Biguanide</span><span class='pill'>Sulfonylurea</span> Pharmacologic management when lifestyle measures fail.", b:"<b>Initial treatment of GDM is diet modification and exercise</b> (1800–2500 kcal/day; 40% carbohydrate, 40% fat, 20% protein). <mark>Insulin is used most often</mark>, with oral agents like metformin or glipizide becoming more common <b>but with less evidence of safety</b>.", d:"<b>Pregnancy:</b> insulin is the safest choice; oral agents have weaker safety data.", e:"<span class='star'>⭐</span>Review question answer: the most appropriate initial treatment is diet modification and exercise.", img:""},
+ ]},
+ {sec:"Pathology of Diseases of Infancy and Childhood", rows:[
+  {n:"Exogenous surfactant", g:"<span class='pill'>Surfactant replacement</span> Replaces the deficient surfactant that causes neonatal respiratory distress syndrome. Surfactant production accelerates after 35 weeks; composition is dipalmitoyl phosphatidylcholine (lecithin), phosphatidylglycerol, hydrophilic SP-A and SP-D and hydrophobic SP-B and SP-C.", b:"<mark>Prophylactic administration at birth to extremely premature infants (gestational age &lt; 28 weeks).</mark>", d:"Given with the other prevention strategies: delaying labour until lung maturity, and antenatal steroids in the mother.", e:"<span class='star'>⭐</span>Fetal lung maturity tests that decide timing: <b>lecithin:sphingomyelin &gt; 2:1</b>, lamellar body count &gt; 50,000/µL, foam stability index.", img:""},
+  {n:"Antenatal steroids — fetal lung maturity", g:"<span class='pill'>Glucocorticoid</span> <mark>Induce maturation of the lung in the at-risk fetus by administration to the mother.</mark>", b:"Prevention of neonatal respiratory distress syndrome in threatened preterm delivery.", d:"Works with, not instead of, delaying labour and prophylactic surfactant.", e:"<span class='star'>⭐</span>Three prevention strategies for NRDS: delay labour, antenatal steroids, exogenous surfactant.", img:""},
+  {n:"Anti-D immune globulin (RhoGAM)", g:"<span class='pill'>Rh immune globulin</span> <mark>Protects the mother from sensitisation to fetal Rh-positive cells</mark> that may enter her circulation during the last trimester.", b:"<b>Rh-negative mothers receive anti-D globulin during the 28th week of pregnancy and within 72 hours of delivery.</b>", d:"Prevention only — it does not treat established haemolytic disease.", e:"<span class='star'>⭐</span>The two timings — 28 weeks and within 72 hours of delivery — are the examinable detail.", img:""},
+ ]},
+ {sec:"Female Reproductive Physiology — menopause therapy", rows:[
+  {n:"Menopausal treatment options", g:"<span class='pill'>Estrogen therapy (ET)</span><span class='pill'>Estrogen + progestin (EPT)</span><span class='pill'>Bisphosphonates</span> Treat the symptom or treat the cause: <mark>vaginal estrogen for dryness and pain, systemic estrogen for hot flashes, bisphosphonates for bone loss</mark>; continuous GnRH agonist to inhibit pituitary and ovarian stimulation; aromatase inhibiting drugs; dietary modification.", b:"Menopausal symptom control and prevention of endometrial hyperplasia.", d:"<mark>In women with an intact uterus, estrogen therapy with a progestin (EPT) is recommended to prevent endometrial hyperplasia and carcinoma.</mark> Estrogens raise thromboembolism risk, and that risk increases further with other thrombotic risk factors such as smoking.", e:"<span class='star'>⭐</span>Same principle as the pharmacology lectures, stated from the physiology side: unopposed estrogen is the danger.", img:""},
+ ]},
+ {sec:"Contraception and Reproductive Ethics", rows:[
+  {n:"Contraceptive methods — effectiveness ladder", g:"<span class='pill'>Typical-use effectiveness</span> Typical use reflects real-life inconsistent use; perfect use reflects exact adherence. <mark>&gt;99% — implants, hormonal IUDs, copper IUD</mark>; ~94% injectables; ~91% combined pills, progestin-only pills, patch, ring; ~85% male condoms.", b:"<b>Combined oral contraceptives</b> prevent ovulation, thicken cervical mucus and alter the endometrium. <b>Progestin-only pills</b> work primarily by thickening mucus and thinning the endometrium. <b>Depo-Provera</b> is injectable progestin every 3 months. <b>Implants</b> release progestin over several years; <b>hormonal IUDs</b> last 3–6 years; <b>copper IUD</b> lasts up to 10 years.", d:"<mark>COCs: nausea, breast tenderness, increased thromboembolism.</mark> <b>Contraindicated:</b> thromboembolic disorders (stroke, DVT), <b>pregnancy</b>, uncontrolled hypertension, smoking in women over 35, liver tumours or active liver disease, breast or endometrial cancer, migraine with aura. <b>POPs:</b> irregular bleeding; contraindicated in active liver disease and breast cancer. <b>Injectables:</b> weight gain, bone density loss, delayed return to fertility. <b>Implants and IUDs:</b> irregular bleeding, rarely uterine perforation or expulsion. <b>Spermicides:</b> irritation and increased UTI risk.", e:"<span class='star'>⭐</span>Only barrier methods protect against STIs — every hormonal and intrauterine method carries \"no STI protection\" in the lecture's own table.", img:""},
+  {n:"Copper IUD", g:"<span class='pill'>Non-hormonal — copper</span> <mark>Releases copper to create a spermicidal environment.</mark>", b:"Ongoing contraception lasting up to 10 years (&gt;99% effective), and <b>emergency contraception when inserted within 5 days of unprotected sex</b>.", d:"Possible increased cramping and bleeding; rare uterine injury. No STI protection.", e:"<span class='star'>⭐</span>The most effective form of emergency contraception, and the only non-hormonal long-acting option.", img:""},
+  {n:"Emergency contraception — the four options", g:"<span class='pill'>Levonorgestrel</span><span class='pill'>Ulipristal</span><span class='pill'>Copper IUD</span><span class='pill'>LNG-IUD</span> Methods used after unprotected sex: <mark>copper IUD within 5 days</mark>; <mark>52-mg levonorgestrel-releasing IUD within 5 days</mark>; <b>levonorgestrel (Plan B) orally once within 120 hours</b>; <b>ulipristal (Ella) 30 mg orally once within 120 hours</b>.", b:"Emergency contraception after unprotected intercourse or contraceptive failure.", d:"None terminates an established pregnancy.", e:"<span class='star'>⭐</span>Four options, two timeframes — both IUDs and both oral agents work up to 5 days / 120 hours.", img:""},
+  {n:"Permanent methods — tubal ligation and vasectomy", g:"<span class='pill'>Surgical sterilisation</span> <b>Tubal ligation</b> ligates the fallopian tubes so eggs cannot travel from ovary to uterus; <b>vasectomy</b> ligates the ductus (vas) deferens to stop sperm transport from the testes to the urethra.", b:"Permanent contraception. Pregnancy rate 0.5% for tubal ligation, 0.15% for vasectomy.", d:"<mark>Can permanently block fertility even after attempted reversal.</mark> No STI protection.", e:"<span class='star'>⭐</span>Know which structure is ligated in each procedure.", img:""},
+  {n:"Medical vs surgical abortion", g:"<span class='pill'>Gestational-age dependent</span> Two methods terminate pregnancy — medical and surgical — and the choice depends on gestational age of the conceptus.", b:"<mark>85–90% of abortions worldwide are performed in the first trimester (up to 12 weeks)</mark>, and <b>only surgical dilation and evacuation is safe after 15 weeks</b>.", d:"Before an induced abortion: confirm the pregnancy with a urine test, assess gestational age, and consider ultrasound if there are symptoms or risk factors for ectopic pregnancy, irregular cycles, or an LMP over 56 days ago or unknown.", e:"<span class='star'>⭐</span>The 15-week cutoff for method choice is the concrete examinable fact on this slide.", img:""},
+ ]},
+ {sec:"Pharmacology of the Female Reproductive System (2)  [summary]", rows:[
+  {n:"Estrogens — estradiol, ethinyl estradiol, mestranol", g:"<span class='pill'>Estrogen</span> Handout summary: hormone replacement in hypogonadism and ovarian failure; <mark>monitor timing, dosage and bone maturation to prevent premature epiphyseal closure</mark>; may cause stunted growth.", b:"Reduction of postmenopausal symptoms — hot flashes and vaginal atrophy.", d:"Cancer (endometrial hyperplasia may progress to carcinoma; a progestin removes/reduces the risk), postmenopausal uterine bleeding, migraine, cholestasis and gallbladder disease, hypertension, thromboembolism, nausea, breast tenderness, peripheral edema (fluid retention). <b>C/I:</b> high risk of estrogen-dependent neoplasms (breast, endometrial), thromboembolic disorders, heavy smokers 35+, liver disease.", e:"<span class='star'>⭐</span>Routes: oral (ethinyl estradiol, mestranol), transdermal, vaginal, parenteral 17β-estradiol (avoids first pass).", img:""},
+  {n:"Progestins", g:"<span class='pill'>Progestin</span> Handout summary of the progestin group.", b:"Prevention of endometrial hyperplasia, contraception, amenorrhea, abnormal uterine bleeding, endometriosis.", d:"Amenorrhea, depression, weight gain, breakthrough bleeding (irregular bleeding/spotting).", e:"<span class='star'>⭐</span>Same indication list as the lecture — good for rapid recall.", img:""},
+  {n:"Hormonal contraception — combined vs progestin-only", g:"<span class='pill'>Estrogen suppresses FSH</span><span class='pill'>Progestin suppresses LH</span> <mark>Negative feedback lowers GnRH, FSH and LH → no LH surge → no ovulation.</mark> Progestin-only: thickens cervical mucus to deny sperm entry, thins the endometrium to prevent implantation, and <b>does NOT reliably inhibit ovulation</b>; mucus changes do not persist beyond 24 hours so the pill must be taken at the same time daily.", b:"<b>Combined used for:</b> menorrhagia, dysmenorrhea, PCOS, endometriosis, hirsutism, acne. <b>Progestin-only used when estrogen is contraindicated:</b> breastfeeding, smokers, migraine with aura. Monophasic suits new users and patients with migraine.", d:"<b>Combined:</b> venous thromboembolism (especially 35+ who smoke), increased hormone-dependent cancers, <mark>decreased lactation — C/I in breastfeeding</mark>, acne and hirsutism, more severe migraine, nausea, edema. <b>Progestin-only:</b> breakthrough bleeding, amenorrhea with extended use, prolonged ovulation suppression after injection, acne, mood changes, weight gain.", e:"<span class='star'>⭐</span>Medroxyprogesterone has a very long half life of 40–50 days — noted in the handout margin.", img:""},
+  {n:"Emergency contraception and ovulation induction", g:"<span class='pill'>Levonorgestrel</span><span class='pill'>Ulipristal</span><span class='pill'>Mifepristone</span><span class='pill'>Clomiphene</span><span class='pill'>Letrozole</span><span class='pill'>Leuprolide</span> <b>Levonorgestrel/Plan B:</b> negative feedback inhibits the LH surge, preventing follicular rupture. <b>Ulipristal:</b> competitive inhibitor of progestins at the progesterone receptor. <b>Mifepristone:</b> antagonises the progesterone receptor. <b>Clomiphene:</b> blocks estrogen receptors in the brain so the body thinks estrogen is low. <b>Letrozole:</b> inhibits aromatase. <b>Leuprolide:</b> downregulates pituitary GnRH receptors.", b:"Plan B most effective within 72 hours; clomiphene for ovulatory dysfunction, infertility and PCOS; letrozole for the same plus breast cancer in postmenopausal women; gonadotropins for anovulatory women with hypogonadotropic hypogonadism.", d:"Clomiphene: hot flashes, mood swings, bloating, small risk of multiple pregnancy. Leuprolide: initial transient LH rise causing a flare of symptoms.", e:"<span class='star'>⭐</span><mark>Pulsatile leuprolide via pump mimics the normal axis; continuous depot injection produces chemical castration.</mark>", img:""},
+ ]},
+ {sec:"Pharmacology of Reproductive System Neoplasms (2)  [summary]", rows:[
+  {n:"Tamoxifen — SERM", g:"<span class='pill'>SERM</span> Competitive inhibitor of estrogen; antagonises estrogen-induced proliferation of human breast cancer.", b:"ER-positive metastatic breast cancer; adjuvant therapy after ER-positive tumour removal. <b>Preferred for premenopausal women.</b>", d:"<mark>Estrogen agonist properties in non-breast tissues</mark> — increases risk of endometrial cancer (especially post-menopausal) and thromboembolic events (rising with age); hot flashes, atrophy of the vaginal lining, vaginal bleeding, menstrual irregularities, retinal deposits and cataracts.", e:"<span class='star'>⭐</span>Handout states the premenopausal preference explicitly — pair it with anastrozole's postmenopausal preference.", img:""},
+  {n:"Fulvestrant — SERD", g:"<span class='pill'>SERD</span> Binds the estrogen receptor to prevent estrogen binding, <mark>targets the receptor for proteasomal degradation by altering its structure</mark>, and abolishes ER-mediated transcription. A steroidal antiestrogen.", b:"HR-positive metastatic breast cancer; <b>patients NOT responsive to tamoxifen</b>.", d:"Nausea, hot flashes, arthralgia.", e:"<span class='star'>⭐</span>The handout's mechanism wording — \"targets receptor for proteasomal degradation\" — is the distinguishing phrase.", img:""},
+  {n:"Anastrozole — aromatase inhibitor", g:"<span class='pill'>Aromatase (CYP19A) inhibitor</span> Competitive and selective binding to the heme of aromatase (CYP19); androgens → estrogens is blocked.", b:"Breast cancer; <b>preferred for post-menopausal women</b>.", d:"<mark>NOT effective in premenopausal women</mark> — increases GnRH production and cannot inhibit ovarian estrogen production.", e:"<span class='star'>⭐</span>Handout gives the mechanistic reason for the premenopausal failure in one line.", img:""},
+  {n:"Leuprolide, flutamide and the GnRH antagonists", g:"<span class='pill'>GnRH agonist</span><span class='pill'>AR antagonist</span><span class='pill'>GnRH antagonist</span> <b>Leuprolide:</b> continuous administration downregulates pituitary GnRH receptors, suppressing LH and FSH and lowering testosterone — the handout notes this <mark>causes desensitisation</mark>. <b>Flutamide:</b> binds the androgen receptor, competitively inhibiting testosterone and DHT, preventing nuclear translocation. <b>Degarelix/relugolix:</b> direct competitive GnRH receptor inhibition with immediate and prolonged suppression.", b:"Prostate cancer — leuprolide with radiation or after surgery, or with chemotherapy; <b>flutamide combined with leuprolide to prevent flare symptoms</b>; GnRH antagonists for androgen deprivation therapy.", d:"Leuprolide: initial transient LH rise, testosterone surge inducing cancer growth and a flare — bone pain, spinal cord compression, obstructive bladder symptoms; gynecomastia and impotence. <mark>GnRH antagonists: no microsurges and lower rates of cardiovascular morbidity and mortality.</mark>", e:"<span class='star'>⭐</span>The handout's contrast is stark: agonist causes a flare, antagonist does not.", img:""},
+ ]},
+ {sec:"Female Repro Doc MASTER NOTES  [summary]", rows:[
+  {n:"Antimicrobials for the STIs", g:"<span class='pill'>Acyclovir / valacyclovir</span><span class='pill'>Metronidazole</span><span class='pill'>Azithromycin / doxycycline</span><span class='pill'>Ceftriaxone</span><span class='pill'>Penicillin</span><span class='pill'>Fluconazole</span> <b>HSV:</b> acyclovir/valacyclovir. <b>HPV:</b> removal by cryotherapy; prevention with the <mark>HPV vaccine</mark>. <b>Trichomonas:</b> metronidazole. <b>Chlamydia:</b> azithromycin or doxycycline. <b>LGV:</b> doxycycline. <b>Gonorrhoea:</b> ceftriaxone. <b>Syphilis:</b> penicillin. <b>Candida:</b> azoles (fluconazole).", b:"Organism-directed therapy for the sexually transmitted infections of this unit.", d:"<b>Bacterial vaginosis: treat both partners</b> with metronidazole or clindamycin. <b>Pregnancy:</b> doxycycline is contraindicated (fetal teeth and bone); penicillin is the drug of choice for syphilis in pregnancy.", e:"<span class='star'>⭐</span>One organism, one drug — this is the highest-density recall list in the unit.", img:""},
+  {n:"Ceftriaxone + doxycycline ± metronidazole — PID", g:"<span class='pill'>N. gonorrhoeae</span><span class='pill'>Chlamydia</span> Empiric combination covering the two principal PID organisms plus anaerobes.", b:"Pelvic inflammatory disease.", d:"Also the therapy behind Fitz-Hugh–Curtis syndrome, the perihepatitis complication of PID.", e:"<span class='star'>⭐</span>Same regimen as the Introduction to Gynecology 1 lecture — reinforced across two sources.", img:""},
+  {n:"Obstetric drug list from the master notes", g:"<span class='pill'>Methotrexate</span><span class='pill'>Magnesium sulfate</span><span class='pill'>Aspirin</span><span class='pill'>RhoGAM</span><span class='pill'>Indomethacin</span><span class='pill'>Insulin</span> <b>Ectopic pregnancy:</b> methotrexate or surgery. <b>Hydatidiform mole:</b> D&C ± methotrexate with β-hCG monitoring. <b>Choriocarcinoma:</b> methotrexate. <b>Preeclampsia:</b> antihypertensives and <mark>IV magnesium sulfate</mark>, definitive treatment is delivery, <b>prophylaxis is aspirin</b>. <b>Polyhydramnios:</b> indomethacin. <b>GDM:</b> first-line diet and exercise, then insulin (preferred) ± metformin/glipizide/glyburide.", b:"The management lines running through the pathology master notes.", d:"<b>Placenta accreta:</b> conservative option leaves the placenta in situ with methotrexate. <b>Rh disease:</b> anti-D (RhoGAM) at 28 weeks and within 72 hours postpartum.", e:"<span class='star'>⭐</span>Aspirin prophylaxis for preeclampsia is easy to miss beside magnesium sulfate.", img:""},
+  {n:"Gynaecological management from the master notes", g:"<span class='pill'>OCPs</span><span class='pill'>Androgen blockers</span><span class='pill'>Clomiphene</span><span class='pill'>GnRH</span><span class='pill'>Tamoxifen</span> <b>PCOS:</b> treatment is supportive not curative — lifestyle modification, oral contraceptives for irregular menses, androgen blockers for hirsutism, <mark>SERM (clomiphene) to induce ovulation</mark>. <b>Leiomyoma:</b> asymptomatic fibroids need no treatment; symptomatic cases get hormonal therapy (OCPs, progestin, GnRH) or procedures (uterine artery embolisation, myomectomy, hysterectomy).", b:"Choose uterus-sparing options such as myomectomy if future pregnancy is desired.", d:"<b>Tamoxifen use is listed as a risk factor for endometrial carcinoma</b> in the master notes — the drug appears as a cause, not only a treatment. <b>Postpartum hemorrhage:</b> uterine massage, oxytocin, then surgical ligation of uterine or internal iliac arteries.", e:"<span class='star'>⭐</span>Fertility goals drive the choice — that is the master notes' stated principle for fibroids.", img:""},
+ ]},
+];
+
+const tbody=document.getElementById('tbody');
+const chipsEl=document.getElementById('chips');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.getElementById('noresults');
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  const secRow=document.createElement('tr');
+  secRow.className='sec';
+  secRow.dataset.sec=gi;
+  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}</span></span></td>`;
+  tbody.appendChild(secRow);
+  grp.rows.forEach(r=>{
+    total++;
+    const tr=document.createElement('tr');
+    tr.className='row';
+    tr.dataset.sec=gi;
+    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
+    tr.dataset.txt=txt;
+    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
+    tr.innerHTML=`<td class="name">${r.n}</td>
+      <td class="gene">${gene}</td>
+      <td class="buzz">${r.b}</td>
+      <td class="diff">${r.d}</td>
+      <td class="exam">${r.e}</td>
+      <td class="img">${r.img||''}</td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+// chips
+const chipAll=document.createElement('div');
+chipAll.className='chip active';chipAll.textContent='All systems';chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach((grp,gi)=>{
+  const c=document.createElement('div');
+  c.className='chip';c.dataset.sec=gi;
+  c.textContent=grp.sec.replace(/ \(.*?\)/,'').replace(' / ',' / ');
+  chipsEl.appendChild(c);
+});
+
+let activeSec='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  // first pass: data rows
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && qOk;
+    tr.style.display = show?'':'none';
+    if(show) visible++;
+  });
+  // second pass: hide empty section headers
+  document.querySelectorAll('tr.sec').forEach(sr=>{
+    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    let any=false;
+    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+    sr.style.display = (secOk && any)?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> drugs`;
+  noresults.style.display = visible===0?'block':'none';
+}
+
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active');
+  activeSec=c.dataset.sec;
+  apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + chips). Measured live so fullscreen, resize, font load, and
+// chip-wrapping changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+.c-img{width:8%}
+.img-h{background:#3a3f45}
+td.img{text-align:center}
+td.img a{display:inline-block;margin:1px}
+td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  // ---------- shared top nav ----------
+  var MINIS=[
+    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+      ['mini1.html','Overview'],
+      ['master_table.html','Master'],
+      ['pathology_table.html','Pathology'],
+      ['pathology_checklist.html','Path Checklist'],
+      ['physio_table.html','Physiology'],
+      ['drugs_table.html','Drugs'],
+      ['biochem_table.html','Biochem'],
+      ['embryo_anatomy_table.html','Embryo / Anatomy'],
+      ['pattern_recognition.html','Patterns'],
+      ['lecture_recall.html','Lecture Recall'],
+      ['physio_quiz.html','Physio Quiz'],
+      ['endocrine_path_quiz.html','Endo Path Quiz'],
+      ['male_path_quiz.html','Male Path Quiz'],
+      ['physio_ext1_quiz.html','Repro Physio Q'],
+      ['physio_ext2_quiz.html','Physio Bank 1'],
+      ['physio_ext3_quiz.html','Physio Bank 2'],
+      ['pharmq_quiz.html','Pharm Quiz'],
+      ['review_planner.html','Planner'],
+      ['gi_path_table.html','GI Path']
+    ]},
+    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+      ['mini2.html','Overview'],
+      ['mini2_pathology_table.html','Pathology'],
+      ['mini2_drugs_table.html','Drugs'],
+      ['mini2_study_guide.html','Resource Guide']
+    ]}
+  ];
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
+  var sw=document.createElement('span'); sw.className='sk-minis';
+  MINIS.forEach(function(m){
+    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+    sw.appendChild(a);
+  });
+  nav.appendChild(sw);
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  // ---------- image lightbox (enlarge instead of opening a new tab) ----------
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  // ---------- responsive tables ----------
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+</body>
+</html>
