@@ -105,6 +105,9 @@
 
   tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
   tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row.jump td{animation:jumpflash 2.6s ease-out}
+  tbody tr.row.jump td.name{box-shadow:inset 3px 0 0 var(--exam-strong)}
+  @keyframes jumpflash{0%,32%{background:#fbe9c8}100%{background:transparent}}
   tbody tr.row:hover td.exam{background:#fbe2e1}
 
   td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
@@ -713,6 +716,9 @@ const DATA = [
 ];
 
 const tbody=document.getElementById('tbody');
+const _usedIds={};
+function slugify(s){ return (s||'').replace(/<[^>]+>/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+function uniqueSlug(n){ let base=slugify(n)||'row'; let id=base,i=2; while(_usedIds[id]){ id=base+'-'+i; i++; } _usedIds[id]=1; return id; }
 const chipsEl=document.getElementById('chips');
 const qEl=document.getElementById('q');
 const countEl=document.getElementById('count');
@@ -730,6 +736,7 @@ DATA.forEach((grp,gi)=>{
     const tr=document.createElement('tr');
     tr.className='row';
     tr.dataset.sec=gi;
+    tr.id=uniqueSlug(r.n);
     const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
     tr.dataset.txt=txt;
     const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
@@ -786,6 +793,26 @@ chipsEl.addEventListener('click',e=>{
 });
 qEl.addEventListener('input',apply);
 apply();
+
+// Jump to a specific pathology row via #hash (e.g. from the Mini 2 Pathology Checklist)
+function jumpToHash(){
+  const h=decodeURIComponent((location.hash||'').slice(1));
+  if(!h) return;
+  const el=document.getElementById(h);
+  if(!el) return;
+  // clear any active filter so the target is guaranteed visible
+  if(activeSec!=='all'||qEl.value){ activeSec='all'; qEl.value='';
+    document.querySelectorAll('#chips .chip').forEach(c=>c.classList.toggle('active',c.dataset.sec==='all'));
+    apply(); }
+  setTimeout(()=>{
+    const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thead-top'))||90)+18;
+    const y=el.getBoundingClientRect().top+window.pageYOffset-off;
+    window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+    el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump');
+  },60);
+}
+jumpToHash();
+window.addEventListener('hashchange',jumpToHash);
 
 // Anchor the sticky column header flush beneath the full sticky block
 // (search + chips). Measured live so fullscreen, resize, font load, and
@@ -885,6 +912,7 @@ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
     {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
       ['mini2.html','Overview'],
       ['mini2_pathology_table.html','Pathology'],
+      ['mini2_pathology_checklist.html','Path Checklist'],
       ['mini2_physio_table.html','Physiology'],
       ['mini2_drugs_table.html','Drugs'],
       ['mini2_foundations_table.html','Foundations'],
