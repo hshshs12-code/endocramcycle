@@ -28,3 +28,12 @@ slides/._*
 
 # ===== local pre-edit backups (never publish) =====
 *.pre-*-backup.html
+
+# local planning notes (not part of the site)
+TODO-*.md
+
+# ===== quiz extraction scratch — MUST NEVER be published =====
+# The path-quiz pages ship their questions AES-encrypted; committing the
+# plaintext extraction alongside them would defeat that entirely.
+_pathq_work/
+NOTES-*.md
