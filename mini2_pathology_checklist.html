@@ -96,6 +96,11 @@
   <p class="sub">Every pathology from the Mini 2 pathology table, deduplicated to one entry per entity and grouped by organ system. Tick them off as you master them — progress is saved in this browser. Use the source filter to drill into one lecture or several at once, and the ↗ arrow to jump straight to that pathology in the table.</p>
 </header>
 
+<div class="tabbar" role="tablist">
+  <button class="tabbtn active" id="tab-check" role="tab">Checklist</button>
+  <button class="tabbtn" id="tab-quiz" role="tab">Practice questions <span class="tabn" id="qtabn">0</span></button>
+</div>
+
 <div class="bar">
   <div class="bar-in">
     <div class="track"><i id="progBar"></i></div>
@@ -110,6 +115,7 @@
   </div>
 </div>
 
+<div id="pane-check">
 <div class="wrap" id="wrap">
 <section class="cat" data-g="Sexually Transmitted Infections"><h2 class="cathead">Sexually Transmitted Infections <span class="catn">14</span></h2><ul class="plist"><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="1"><span class="pnum">1</span><span class="pname">HSV-1 / HSV-2 (Herpes Simplex Virus)</span></label><a class="pjump" href="mini2_pathology_table.html#hsv-1-hsv-2-herpes-simplex-virus" title="Open “HSV-1 / HSV-2 (Herpes Simplex Virus)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="2"><span class="pnum">2</span><span class="pname">HPV (Human Papillomavirus)</span></label><a class="pjump" href="mini2_pathology_table.html#hpv-human-papillomavirus" title="Open “HPV (Human Papillomavirus)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="3"><span class="pnum">3</span><span class="pname">Trichomonas vaginalis</span></label><a class="pjump" href="mini2_pathology_table.html#trichomonas-vaginalis" title="Open “Trichomonas vaginalis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Female Reproductive Pathology"><label><input type="checkbox" data-id="4"><span class="pnum">4</span><span class="pname">Trichomoniasis</span></label><a class="pjump" href="mini2_pathology_table.html#trichomoniasis" title="Open “Trichomoniasis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="5"><span class="pnum">5</span><span class="pname">Chlamydia trachomatis</span></label><a class="pjump" href="mini2_pathology_table.html#chlamydia-trachomatis" title="Open “Chlamydia trachomatis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Female Repro Doc MASTER NOTES"><label><input type="checkbox" data-id="6"><span class="pnum">6</span><span class="pname">Chlamydial cervicitis</span></label><a class="pjump" href="mini2_pathology_table.html#chlamydial-cervicitis" title="Open “Chlamydial cervicitis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="7"><span class="pnum">7</span><span class="pname">Lymphogranuloma venereum (LGV)</span></label><a class="pjump" href="mini2_pathology_table.html#lymphogranuloma-venereum-lgv" title="Open “Lymphogranuloma venereum (LGV)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="8"><span class="pnum">8</span><span class="pname">Neisseria gonorrhoeae</span></label><a class="pjump" href="mini2_pathology_table.html#neisseria-gonorrhoeae" title="Open “Neisseria gonorrhoeae” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="9"><span class="pnum">9</span><span class="pname">Treponema pallidum (Syphilis)</span></label><a class="pjump" href="mini2_pathology_table.html#treponema-pallidum-syphilis" title="Open “Treponema pallidum (Syphilis)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Sexually Transmitted Infections"><label><input type="checkbox" data-id="10"><span class="pnum">10</span><span class="pname">Candida albicans</span></label><a class="pjump" href="mini2_pathology_table.html#candida-albicans" title="Open “Candida albicans” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Vagina"><label><input type="checkbox" data-id="11"><span class="pnum">11</span><span class="pname">Vaginal candidiasis</span></label><a class="pjump" href="mini2_pathology_table.html#vaginal-candidiasis" title="Open “Vaginal candidiasis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Female Reproductive Pathology|Female Repro Doc MASTER NOTES|Sexually Transmitted Infections|Vagina"><label><input type="checkbox" data-id="12"><span class="pnum">12</span><span class="pname">Bacterial vaginosis</span></label><a class="pjump" href="mini2_pathology_table.html#bacterial-vaginosis" title="Open “Bacterial vaginosis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Female Reproductive Pathology|Vulva"><label><input type="checkbox" data-id="13"><span class="pnum">13</span><span class="pname">Condyloma acuminatum</span></label><a class="pjump" href="mini2_pathology_table.html#condyloma-acuminatum" title="Open “Condyloma acuminatum” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Female Repro Doc MASTER NOTES"><label><input type="checkbox" data-id="14"><span class="pnum">14</span><span class="pname">Koilocytic atypia &amp; HPV lesions</span></label><a class="pjump" href="mini2_pathology_table.html#koilocytic-atypia-hpv-lesions" title="Open “Koilocytic atypia &amp; HPV lesions” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li></ul></section>
 <section class="cat" data-g="Vulva &amp; Vagina"><h2 class="cathead">Vulva &amp; Vagina <span class="catn">9</span></h2><ul class="plist"><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Female Reproductive Pathology|Vulva"><label><input type="checkbox" data-id="15"><span class="pnum">15</span><span class="pname">Bartholin cyst / abscess</span></label><a class="pjump" href="mini2_pathology_table.html#bartholin-cyst-abscess" title="Open “Bartholin cyst / abscess” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Female Reproductive Pathology|Vulva"><label><input type="checkbox" data-id="16"><span class="pnum">16</span><span class="pname">Lichen sclerosus</span></label><a class="pjump" href="mini2_pathology_table.html#lichen-sclerosus" title="Open “Lichen sclerosus” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Female Reproductive Pathology|Vulva"><label><input type="checkbox" data-id="17"><span class="pnum">17</span><span class="pname">Squamous cell hyperplasia (vulva)</span></label><a class="pjump" href="mini2_pathology_table.html#squamous-cell-hyperplasia-vulva" title="Open “Squamous cell hyperplasia (vulva)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Vulva"><label><input type="checkbox" data-id="18"><span class="pnum">18</span><span class="pname">Extramammary Paget disease (vulva)</span></label><a class="pjump" href="mini2_pathology_table.html#extramammary-paget-disease-vulva" title="Open “Extramammary Paget disease (vulva)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Vulva"><label><input type="checkbox" data-id="19"><span class="pnum">19</span><span class="pname">VIN &amp; vulvar carcinoma — basaloid/warty (HPV-related)</span></label><a class="pjump" href="mini2_pathology_table.html#vin-vulvar-carcinoma-basaloid-warty-hpv-related" title="Open “VIN &amp; vulvar carcinoma — basaloid/warty (HPV-related)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Vulva"><label><input type="checkbox" data-id="20"><span class="pnum">20</span><span class="pname">Vulvar keratinizing squamous cell carcinoma (non-HPV)</span></label><a class="pjump" href="mini2_pathology_table.html#vulvar-keratinizing-squamous-cell-carcinoma-non-hpv" title="Open “Vulvar keratinizing squamous cell carcinoma (non-HPV)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Vagina"><label><input type="checkbox" data-id="21"><span class="pnum">21</span><span class="pname">Vaginal adenosis</span></label><a class="pjump" href="mini2_pathology_table.html#vaginal-adenosis" title="Open “Vaginal adenosis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Vagina"><label><input type="checkbox" data-id="22"><span class="pnum">22</span><span class="pname">Clear cell adenocarcinoma (vagina)</span></label><a class="pjump" href="mini2_pathology_table.html#clear-cell-adenocarcinoma-vagina" title="Open “Clear cell adenocarcinoma (vagina)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Diseases of the Vulva, Vagina and Cervix|Vagina"><label><input type="checkbox" data-id="23"><span class="pnum">23</span><span class="pname">Embryonal rhabdomyosarcoma (sarcoma botryoides)</span></label><a class="pjump" href="mini2_pathology_table.html#embryonal-rhabdomyosarcoma-sarcoma-botryoides" title="Open “Embryonal rhabdomyosarcoma (sarcoma botryoides)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li></ul></section>
@@ -124,6 +130,20 @@
 <section class="cat" data-g="Infancy, Neonatal &amp; Childhood"><h2 class="cathead">Infancy, Neonatal &amp; Childhood <span class="catn">34</span></h2><ul class="plist"><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal"><label><input type="checkbox" data-id="152"><span class="pnum">152</span><span class="pname">Malformation</span></label><a class="pjump" href="mini2_pathology_table.html#malformation" title="Open “Malformation” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal"><label><input type="checkbox" data-id="153"><span class="pnum">153</span><span class="pname">Disruption</span></label><a class="pjump" href="mini2_pathology_table.html#disruption" title="Open “Disruption” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal"><label><input type="checkbox" data-id="154"><span class="pnum">154</span><span class="pname">Deformation</span></label><a class="pjump" href="mini2_pathology_table.html#deformation" title="Open “Deformation” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal"><label><input type="checkbox" data-id="155"><span class="pnum">155</span><span class="pname">Sequence — Potter (oligohydramnios) sequence</span></label><a class="pjump" href="mini2_pathology_table.html#sequence-potter-oligohydramnios-sequence" title="Open “Sequence — Potter (oligohydramnios) sequence” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal"><label><input type="checkbox" data-id="156"><span class="pnum">156</span><span class="pname">Agenesis, aplasia, atresia, hypoplasia</span></label><a class="pjump" href="mini2_pathology_table.html#agenesis-aplasia-atresia-hypoplasia" title="Open “Agenesis, aplasia, atresia, hypoplasia” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Teratogenesis"><label><input type="checkbox" data-id="157"><span class="pnum">157</span><span class="pname">Teratogenesis — medications</span></label><a class="pjump" href="mini2_pathology_table.html#teratogenesis-medications" title="Open “Teratogenesis — medications” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Teratogenesis"><label><input type="checkbox" data-id="158"><span class="pnum">158</span><span class="pname">Teratogenesis — substance use</span></label><a class="pjump" href="mini2_pathology_table.html#teratogenesis-substance-use" title="Open “Teratogenesis — substance use” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Teratogenesis"><label><input type="checkbox" data-id="159"><span class="pnum">159</span><span class="pname">Teratogenesis — maternal conditions &amp; other</span></label><a class="pjump" href="mini2_pathology_table.html#teratogenesis-maternal-conditions-other" title="Open “Teratogenesis — maternal conditions &amp; other” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="160"><span class="pnum">160</span><span class="pname">Neural tube defects — overview</span></label><a class="pjump" href="mini2_pathology_table.html#neural-tube-defects-overview" title="Open “Neural tube defects — overview” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="161"><span class="pnum">161</span><span class="pname">Anencephaly</span></label><a class="pjump" href="mini2_pathology_table.html#anencephaly" title="Open “Anencephaly” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="162"><span class="pnum">162</span><span class="pname">Spina bifida</span></label><a class="pjump" href="mini2_pathology_table.html#spina-bifida" title="Open “Spina bifida” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="163"><span class="pnum">163</span><span class="pname">Meningocele</span></label><a class="pjump" href="mini2_pathology_table.html#meningocele" title="Open “Meningocele” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="164"><span class="pnum">164</span><span class="pname">Myelomeningocele</span></label><a class="pjump" href="mini2_pathology_table.html#myelomeningocele" title="Open “Myelomeningocele” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="165"><span class="pnum">165</span><span class="pname">Myeloschisis</span></label><a class="pjump" href="mini2_pathology_table.html#myeloschisis" title="Open “Myeloschisis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="166"><span class="pnum">166</span><span class="pname">Rachischisis</span></label><a class="pjump" href="mini2_pathology_table.html#rachischisis" title="Open “Rachischisis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="167"><span class="pnum">167</span><span class="pname">Encephalocele</span></label><a class="pjump" href="mini2_pathology_table.html#encephalocele" title="Open “Encephalocele” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="168"><span class="pnum">168</span><span class="pname">Fetal alcohol syndrome</span></label><a class="pjump" href="mini2_pathology_table.html#fetal-alcohol-syndrome" title="Open “Fetal alcohol syndrome” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="169"><span class="pnum">169</span><span class="pname">Prematurity</span></label><a class="pjump" href="mini2_pathology_table.html#prematurity" title="Open “Prematurity” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1"><label><input type="checkbox" data-id="170"><span class="pnum">170</span><span class="pname">Fetal growth restriction (FGR/IUGR)</span></label><a class="pjump" href="mini2_pathology_table.html#fetal-growth-restriction-fgr-iugr" title="Open “Fetal growth restriction (FGR/IUGR)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="171"><span class="pnum">171</span><span class="pname">Small for gestational age (SGA)</span></label><a class="pjump" href="mini2_pathology_table.html#small-for-gestational-age-sga" title="Open “Small for gestational age (SGA)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="172"><span class="pnum">172</span><span class="pname">Large for gestational age (LGA) &amp; macrosomia</span></label><a class="pjump" href="mini2_pathology_table.html#large-for-gestational-age-lga-macrosomia" title="Open “Large for gestational age (LGA) &amp; macrosomia” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="173"><span class="pnum">173</span><span class="pname">Neonatal respiratory distress syndrome (RDS)</span></label><a class="pjump" href="mini2_pathology_table.html#neonatal-respiratory-distress-syndrome-rds" title="Open “Neonatal respiratory distress syndrome (RDS)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="174"><span class="pnum">174</span><span class="pname">Retinopathy of prematurity</span></label><a class="pjump" href="mini2_pathology_table.html#retinopathy-of-prematurity" title="Open “Retinopathy of prematurity” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 1|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="175"><span class="pnum">175</span><span class="pname">Bronchopulmonary dysplasia (BPD)</span></label><a class="pjump" href="mini2_pathology_table.html#bronchopulmonary-dysplasia-bpd" title="Open “Bronchopulmonary dysplasia (BPD)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="176"><span class="pnum">176</span><span class="pname">Necrotizing enterocolitis (NEC)</span></label><a class="pjump" href="mini2_pathology_table.html#necrotizing-enterocolitis-nec" title="Open “Necrotizing enterocolitis (NEC)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="177"><span class="pnum">177</span><span class="pname">Fetal hydrops</span></label><a class="pjump" href="mini2_pathology_table.html#fetal-hydrops" title="Open “Fetal hydrops” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="178"><span class="pnum">178</span><span class="pname">Rh haemolytic disease of the newborn</span></label><a class="pjump" href="mini2_pathology_table.html#rh-hemolytic-disease-of-the-newborn" title="Open “Rh haemolytic disease of the newborn” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="179"><span class="pnum">179</span><span class="pname">ABO haemolytic disease of the newborn</span></label><a class="pjump" href="mini2_pathology_table.html#abo-hemolytic-disease-of-the-newborn" title="Open “ABO haemolytic disease of the newborn” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="180"><span class="pnum">180</span><span class="pname">Kernicterus</span></label><a class="pjump" href="mini2_pathology_table.html#kernicterus" title="Open “Kernicterus” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="181"><span class="pnum">181</span><span class="pname">Cystic fibrosis</span></label><a class="pjump" href="mini2_pathology_table.html#cystic-fibrosis-molecular-mechanism" title="Open “Cystic fibrosis” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2"><label><input type="checkbox" data-id="182"><span class="pnum">182</span><span class="pname">Meconium ileus</span></label><a class="pjump" href="mini2_pathology_table.html#meconium-ileus" title="Open “Meconium ileus” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="183"><span class="pnum">183</span><span class="pname">Primary ciliary dyskinesia (vs cystic fibrosis)</span></label><a class="pjump" href="mini2_pathology_table.html#primary-ciliary-dyskinesia-vs-cystic-fibrosis" title="Open “Primary ciliary dyskinesia (vs cystic fibrosis)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="184"><span class="pnum">184</span><span class="pname">Kartagener syndrome</span></label><a class="pjump" href="mini2_pathology_table.html#kartagener-syndrome" title="Open “Kartagener syndrome” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li><li class="prow" data-lec="Pathology of Diseases of Infancy and Childhood 2|Infant / Neonatal — Prematurity to Childhood"><label><input type="checkbox" data-id="185"><span class="pnum">185</span><span class="pname">Sudden infant death syndrome (SIDS)</span></label><a class="pjump" href="mini2_pathology_table.html#sudden-infant-death-syndrome-sids" title="Open “Sudden infant death syndrome (SIDS)” in the Mini 2 Pathology table" aria-label="Open in Pathology table">↗</a></li></ul></section>
 </div>
 <p class="noneleft" id="noneleft">No pathologies from the selected sources.</p>
+</div><!-- /#pane-check -->
+
+<div id="pane-quiz" hidden>
+  <div class="qwrap">
+    <div class="qbar">
+      <div class="track"><i id="qprogbar"></i></div>
+      <span class="count" id="qproglab"></span>
+      <button class="btn" id="qreset">↺ Reset answers</button>
+    </div>
+    <div class="qbar" style="margin-top:-6px"><span class="shown" id="qscope"></span></div>
+    <div id="qgallery" class="qgrid"></div>
+    <div id="qstage" class="qstage" hidden></div>
+  </div>
+</div>
 
 <footer>
   <hr>
@@ -207,6 +227,245 @@ document.getElementById('resetBtn').onclick=()=>{
   upd();
 };
 applyFilter();
+</script>
+
+<!-- ===== PRACTICE QUESTIONS ===== -->
+<style>
+  .tabbar{max-width:1000px;margin:18px auto 0;padding:0 24px;display:flex;gap:6px;border-bottom:1px solid var(--line-strong)}
+  .tabbtn{appearance:none;border:1px solid var(--line-strong);border-bottom:none;background:transparent;
+    font:inherit;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;padding:9px 18px;
+    border-radius:9px 9px 0 0;position:relative;top:1px}
+  .tabbtn:hover{color:var(--ink)}
+  .tabbtn.active{background:var(--surface);color:var(--ink);box-shadow:0 -1px 0 var(--surface) inset}
+  .tabn{display:inline-block;margin-left:6px;background:var(--exam-bg);color:var(--exam-ink);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;vertical-align:1px}
+  @media(max-width:600px){.tabbar{padding:0 14px}.tabbtn{padding:9px 12px;font-size:12px}}
+
+  .qwrap{max-width:1000px;margin:22px auto 60px;padding:0 24px}
+  .qbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .qbar .track{flex:1;min-width:130px}
+  .qgrid{display:grid;gap:11px;grid-template-columns:repeat(auto-fill,minmax(268px,1fr))}
+  .qcard{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 14px;
+    cursor:pointer;text-align:left;font:inherit;color:var(--ink);display:flex;flex-direction:column;gap:5px;
+    transition:border-color .12s,box-shadow .12s}
+  .qcard:hover{border-color:var(--line-strong);box-shadow:0 3px 12px rgba(28,32,36,.07)}
+  .qcard[disabled]{opacity:.5;cursor:default}
+  .qcard .qc-g{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted)}
+  .qcard .qc-n{font-size:14px;font-weight:600;line-height:1.25}
+  .qcard .qc-s{display:flex;align-items:center;gap:7px;margin-top:3px}
+  .qc-dots{display:flex;gap:3px}
+  .qc-dot{width:9px;height:9px;border-radius:50%;background:#e3ded3}
+  .qc-dot.ok{background:var(--gene-ink)}
+  .qc-dot.no{background:#e0a3a9}
+  .qc-lab{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+
+  .qstage{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:20px 22px}
+  .qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  .qhead h2{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0;flex:1 1 200px;line-height:1.2}
+  .qkind{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    background:var(--gene-bg);color:var(--gene-ink);padding:3px 8px;border-radius:20px}
+  .qkind.rec{background:#efece3;color:var(--muted)}
+  .qcounter{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+  .qstem{font-size:15px;line-height:1.6;margin:14px 0 4px}
+  .qstem b{font-weight:700}
+  .qimg{margin:12px 0 2px;text-align:center}
+  .qimg img{max-width:100%;max-height:340px;border-radius:9px;border:1px solid var(--line-strong);
+    background:#fff;cursor:zoom-in}
+  .qimg figcaption{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:5px}
+  .qopts{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+  .qopt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line-strong);background:var(--surface);
+    border-radius:9px;padding:10px 12px;cursor:pointer;font:inherit;font-size:14px;text-align:left;width:100%;
+    line-height:1.45;transition:border-color .1s,background .1s}
+  .qopt:hover:not([disabled]){border-color:var(--ink);background:#faf8f2}
+  .qopt[disabled]{cursor:default}
+  .qopt .ltr{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--muted);flex:0 0 auto}
+  .qopt.correct{border-color:var(--gene-ink);background:var(--gene-bg)}
+  .qopt.correct .ltr{color:var(--gene-ink)}
+  .qopt.wrong{border-color:var(--exam-ink);background:var(--exam-bg)}
+  .qopt.wrong .ltr{color:var(--exam-ink)}
+  .qexp{margin-top:14px;border-left:4px solid var(--gene-ink);background:var(--gene-bg);
+    border-radius:0 9px 9px 0;padding:12px 14px;font-size:13.5px;line-height:1.55}
+  .qexp.miss{border-left-color:var(--sec-bar);background:var(--exam-bg)}
+  .qexp .qe-h{font-weight:700;margin-bottom:4px}
+  .qexp mark{background:#ffeaa7;color:#5c4400;padding:0 3px;border-radius:3px;font-weight:600}
+  .qnav{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+  .qdone{text-align:center;padding:14px 0 4px}
+  .qdone .qd-s{font-family:'Fraunces',serif;font-size:38px;font-weight:600;color:var(--gene-ink);line-height:1}
+  .qdone .qd-t{color:var(--muted);font-size:13px;margin-top:6px}
+  .qempty{color:var(--muted);font-size:13.5px;padding:26px 2px;text-align:center}
+</style>
+
+<script src="mini2_pathology_quiz_data.js"></script>
+<script>
+/* ===== Practice questions =====
+   QBANK (mini2_pathology_quiz_data.js) maps entity name -> array of questions:
+     {t:"v"|"r", img:"url", cap:"caption", q:"stem", o:[5 options], a:index, e:"explanation"}
+   Works with a partial bank: topics without questions are shown as pending. */
+(function(){
+"use strict";
+var KEY="mini2PathQuiz_v1";
+var BANK = window.QBANK || {};
+var res = {};                                   // "entity||idx" -> true/false
+try{ res = JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ res={}; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(res)); }catch(e){} }
+
+function el(t,a,k){ var e=document.createElement(t); a=a||{};
+  for(var x in a){ if(x==="class")e.className=a[x]; else if(x==="html")e.innerHTML=a[x];
+    else if(x==="text")e.textContent=a[x]; else e.setAttribute(x,a[x]); }
+  (k||[]).forEach(function(c){ e.appendChild(c); }); return e; }
+
+function boot(){
+  var tabC=document.getElementById("tab-check"), tabQ=document.getElementById("tab-quiz");
+  var paneC=document.getElementById("pane-check"), paneQ=document.getElementById("pane-quiz");
+  var gal=document.getElementById("qgallery"), stage=document.getElementById("qstage");
+  var bar=document.getElementById("qprogbar"), lab=document.getElementById("qproglab");
+  var scope=document.getElementById("qscope");
+  if(!tabQ) return;
+
+  /* topic list comes from the checklist rows, so the source filter applies here too */
+  function topics(){
+    return [].slice.call(document.querySelectorAll(".prow")).filter(function(r){ return !r.hidden; })
+      .map(function(r){
+        return { name:r.querySelector(".pname").textContent,
+                 group:r.closest(".cat").querySelector(".cathead").firstChild.textContent.trim(),
+                 href:r.querySelector(".pjump").getAttribute("href") };
+      });
+  }
+  function qs(name){ return BANK[name]||[]; }
+  function scored(name){
+    var a=qs(name), ok=0, ans=0;
+    a.forEach(function(_,i){ var v=res[name+"||"+i];
+      if(v!==undefined){ ans++; if(v)ok++; } });
+    return {n:a.length, ok:ok, ans:ans};
+  }
+
+  function progress(){
+    var t=topics(), tot=0, ok=0, ans=0;
+    t.forEach(function(x){ var s=scored(x.name); tot+=s.n; ok+=s.ok; ans+=s.ans; });
+    bar.style.width = tot ? (ans/tot*100)+"%" : "0%";
+    lab.innerHTML = tot ? "<b>"+ok+"</b> correct of <b>"+ans+"</b> answered · "+tot+" questions"
+                        : "no questions for this selection yet";
+    var written=t.filter(function(x){ return qs(x.name).length; }).length;
+    scope.textContent = written+" of "+t.length+" topics have questions";
+  }
+
+  function drawGallery(){
+    stage.hidden=true; stage.innerHTML=""; gal.hidden=false; gal.innerHTML="";
+    var t=topics();
+    if(!t.length){ gal.appendChild(el("div",{class:"qempty",text:"No topics match the current source filter."})); progress(); return; }
+    t.forEach(function(x){
+      var s=scored(x.name);
+      var dots=el("div",{class:"qc-dots"});
+      for(var i=0;i<(s.n||7);i++){
+        var v=res[x.name+"||"+i];
+        dots.appendChild(el("span",{class:"qc-dot"+(v===true?" ok":v===false?" no":"")}));
+      }
+      var card=el("button",{class:"qcard"},[
+        el("div",{class:"qc-g",text:x.group}),
+        el("div",{class:"qc-n",text:x.name}),
+        el("div",{class:"qc-s"},[dots, el("span",{class:"qc-lab",
+          text: s.n? (s.ans+" / "+s.n+" answered"+(s.ans?" · "+s.ok+" right":"")) : "questions coming"})])
+      ]);
+      if(!s.n) card.setAttribute("disabled","");
+      else card.addEventListener("click",function(){ run(x); });
+      gal.appendChild(card);
+    });
+    progress();
+  }
+
+  function run(topic){
+    var list=qs(topic.name), i=0;
+    gal.hidden=true; stage.hidden=false;
+    function draw(){
+      stage.innerHTML="";
+      if(i>=list.length){
+        var ok=0; list.forEach(function(_,k){ if(res[topic.name+"||"+k])ok++; });
+        stage.appendChild(el("div",{class:"qdone"},[
+          el("div",{class:"qd-s",text:ok+" / "+list.length}),
+          el("div",{class:"qd-t",text:"correct on "+topic.name})]));
+        var again=el("button",{class:"btn",text:"↺ Retry this topic"});
+        again.addEventListener("click",function(){
+          list.forEach(function(_,k){ delete res[topic.name+"||"+k]; }); save(); i=0; draw(); });
+        var back=el("button",{class:"btn",text:"← All topics"});
+        back.addEventListener("click",drawGallery);
+        var open=el("a",{class:"btn",href:topic.href,text:"↗ Open in the table"});
+        stage.appendChild(el("div",{class:"qnav"},[again,back,open]));
+        progress(); return;
+      }
+      var q=list[i];
+      var head=el("div",{class:"qhead"},[
+        el("h2",{text:topic.name}),
+        el("span",{class:"qkind"+(q.t==="r"?" rec":""),text:q.t==="r"?"recall":"clinical vignette"}),
+        el("span",{class:"qcounter",text:(i+1)+" / "+list.length})]);
+      stage.appendChild(head);
+      if(q.img){
+        var im=el("img",{src:q.img,alt:q.cap||topic.name,loading:"lazy"});
+        im.addEventListener("click",function(){ window.open(q.img,"_blank"); });
+        var fig=el("figure",{class:"qimg"},[im]);
+        if(q.cap) fig.appendChild(el("figcaption",{text:q.cap}));
+        stage.appendChild(fig);
+      }
+      stage.appendChild(el("div",{class:"qstem",html:q.q}));
+      var ul=el("ul",{class:"qopts"}), btns=[];
+      q.o.forEach(function(opt,k){
+        var b=el("button",{class:"qopt"},[
+          el("span",{class:"ltr",text:"ABCDE"[k]}), el("span",{html:opt})]);
+        b.addEventListener("click",function(){ pick(k); });
+        btns.push(b); ul.appendChild(el("li",{},[b]));
+      });
+      stage.appendChild(ul);
+      var navHost=el("div",{class:"qnav"}); stage.appendChild(navHost);
+      /* always offer a way out, even before the question is answered */
+      var bk0=el("button",{class:"btn",text:"← All topics"});
+      bk0.addEventListener("click",drawGallery);
+      navHost.appendChild(bk0);
+
+      function pick(k){
+        btns.forEach(function(b,j){
+          b.setAttribute("disabled","");
+          if(j===q.a) b.classList.add("correct");
+          else if(j===k) b.classList.add("wrong");
+        });
+        var right = k===q.a;
+        res[topic.name+"||"+i]=right; save();
+        stage.insertBefore(el("div",{class:"qexp"+(right?"":" miss")},[
+          el("div",{class:"qe-h",text: right? "Correct — "+"ABCDE"[q.a] : "Not quite — the answer is "+"ABCDE"[q.a]}),
+          el("div",{html:q.e})]), navHost);
+        navHost.innerHTML="";
+        var nx=el("button",{class:"btn",text: i+1<list.length? "Next question →":"See result →"});
+        nx.addEventListener("click",function(){ i++; draw(); });
+        var bk=el("button",{class:"btn",text:"← All topics"});
+        bk.addEventListener("click",drawGallery);
+        navHost.appendChild(nx); navHost.appendChild(bk);
+        progress();
+      }
+    }
+    draw();
+    window.scrollTo({top:0,behavior:"instant"});
+  }
+
+  function show(q){
+    tabQ.classList.toggle("active",q); tabC.classList.toggle("active",!q);
+    paneQ.hidden=!q; paneC.hidden=q;
+    if(q) drawGallery();
+  }
+  tabC.addEventListener("click",function(){ show(false); });
+  tabQ.addEventListener("click",function(){ show(true); });
+  document.getElementById("qreset").addEventListener("click",function(){
+    if(!confirm("Clear all practice-question results?")) return;
+    res={}; save(); drawGallery();
+  });
+  /* keep the quiz in sync when the source filter changes */
+  var mo=new MutationObserver(function(){ if(!paneQ.hidden && !stage.hidden===false) drawGallery(); });
+  document.querySelectorAll(".prow").forEach(function(r){ mo.observe(r,{attributes:true,attributeFilter:["hidden"]}); });
+
+  var n=0; for(var k in BANK) n+=BANK[k].length;
+  var badge=document.getElementById("qtabn"); if(badge) badge.textContent=n;
+  progress();
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
 </script>
 
 <!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
