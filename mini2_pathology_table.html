@@ -72,6 +72,31 @@
   .sw.b{background:var(--buzz-hl)}
   .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
 
+  /* ---------- view selector + merged view ---------- */
+  .viewsel{display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .viewsel label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted)}
+  .viewsel select{font:inherit;font-size:13.5px;padding:9px 30px 9px 11px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);color:var(--ink);cursor:pointer;-webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236c7077' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center}
+  .viewsel select:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  /* source lectures on a merged row */
+  .srcs{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+  .srcpill{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.02em;line-height:1.35;
+    padding:2px 7px;border:1px solid var(--line-strong);border-radius:99px;color:var(--muted);background:var(--paper)}
+  .srcpill.t-summary{border-style:dashed}
+  .srcpill.t-master-notes{border-style:dotted}
+  .dupn{display:inline-block;margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    padding:2px 7px;border-radius:99px;background:var(--exam-bg);color:var(--exam-strong);
+    border:1px solid var(--exam-strong);vertical-align:middle;white-space:nowrap}
+  /* differing content from different lectures, kept side by side */
+  .vstack{display:flex;flex-direction:column;gap:9px}
+  .vitem{padding-left:9px;border-left:2px solid var(--line-strong)}
+  .vsrc{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+  @media (max-width:760px){ .viewsel{flex:1 1 100%} .viewsel select{width:100%} }
+
   .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
   .chip{
     font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
@@ -211,6 +236,14 @@ td.img .cslide img{width:100%;height:100%;max-height:none;object-fit:contain;
     <div class="search">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       <input id="q" type="search" placeholder="Search pathology, gene, organism, finding…" autocomplete="off">
+    </div>
+    <div class="viewsel">
+      <label for="viewmode">View</label>
+      <select id="viewmode">
+        <option value="lecture">By lecture — as taught</option>
+        <option value="merged">Merged — one row per term</option>
+        <option value="dupes">Only terms in 2+ lectures</option>
+      </select>
     </div>
     <div class="count" id="count"></div>
     <div class="legend">
@@ -743,97 +776,252 @@ const DATA = [
 ];
 
 const tbody=document.getElementById('tbody');
-const _usedIds={};
-function slugify(s){ return (s||'').replace(/<[^>]+>/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
-function uniqueSlug(n){ let base=slugify(n)||'row'; let id=base,i=2; while(_usedIds[id]){ id=base+'-'+i; i++; } _usedIds[id]=1; return id; }
 const chipsEl=document.getElementById('chips');
 const qEl=document.getElementById('q');
 const countEl=document.getElementById('count');
 const noresults=document.getElementById('noresults');
+const modeEl=document.getElementById('viewmode');
 
-let total=0;
-DATA.forEach((grp,gi)=>{
-  const secRow=document.createElement('tr');
-  secRow.className='sec';
-  secRow.dataset.sec=gi;
-  secRow.innerHTML=`<td colspan="6"><span class="sec-label">${grp.sec}<span class="sec-n">· ${grp.rows.length}</span></span></td>`;
-  tbody.appendChild(secRow);
-  grp.rows.forEach(r=>{
-    total++;
-    const tr=document.createElement('tr');
-    tr.className='row';
-    tr.dataset.sec=gi;
-    tr.id=uniqueSlug(r.n);
-    const txt=(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).replace(/<[^>]+>/g,'').toLowerCase();
-    tr.dataset.txt=txt;
-    const gene = r.g==="—" ? `<span class="none">—</span>` : r.g;
-    tr.innerHTML=`<td class="name">${r.n}</td>
-      <td class="gene">${gene}</td>
-      <td class="buzz">${r.b}</td>
-      <td class="diff">${r.d}</td>
-      <td class="exam">${r.e}</td>
-      <td class="img">${r.img||''}</td>`;
-    tbody.appendChild(tr);
+/* ---------- helpers ---------- */
+function stripTags(s){ return String(s==null?'':s).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(); }
+function slugify(s){ return stripTags(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+/* merge key: ignore case, punctuation and any trailing parenthetical/qualifier so that
+   "Fibroadenoma" and "Fibroadenoma " collapse, but distinct entities never do */
+function mergeKey(s){ return stripTags(s).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+function shortSec(s){ return String(s).replace(/\s*\[(summary|master notes)\]\s*$/i,'').trim(); }
+function secTag(s){
+  var m=String(s).match(/\[(summary|master notes)\]\s*$/i);
+  return m ? m[1].toLowerCase() : '';
+}
+
+/* ---------- merge duplicate terms across lectures ---------- */
+function buildMerged(){
+  var by={}, order=[];
+  DATA.forEach(function(g,gi){
+    g.rows.forEach(function(r){
+      var k=mergeKey(r.n);
+      if(!by[k]){ by[k]={key:k,rows:[],secs:[],gis:[]}; order.push(k); }
+      by[k].rows.push({r:r,sec:g.sec,gi:gi});
+      if(by[k].gis.indexOf(gi)<0){ by[k].gis.push(gi); by[k].secs.push(g.sec); }
+    });
   });
-});
+  return order.map(function(k){
+    var m=by[k];
+    /* display name: the longest variant carries the most qualification */
+    var name=m.rows.map(function(x){return x.r.n;})
+                   .sort(function(a,b){return stripTags(b).length-stripTags(a).length;})[0];
+    function field(f){
+      var seen={}, out=[];
+      m.rows.forEach(function(x){
+        var v=x.r[f]; if(v==null) return;
+        var t=stripTags(v);
+        if(!t || t==='—') return;
+        var kk=t.toLowerCase();
+        if(seen[kk]){ if(seen[kk].secs.indexOf(x.sec)<0) seen[kk].secs.push(x.sec); return; }
+        seen[kk]={html:v,secs:[x.sec]}; out.push(seen[kk]);
+      });
+      return out;
+    }
+    return {key:k,name:name,secs:m.secs,gis:m.gis,n:m.rows.length,
+            slugs:m.rows.map(function(x){return slugify(x.r.n);}),
+            g:field('g'),b:field('b'),d:field('d'),e:field('e'),
+            imgs:m.rows.map(function(x){return x.r.img;}).filter(Boolean)};
+  }).sort(function(a,b){ return stripTags(a.name).toLowerCase()
+                          .localeCompare(stripTags(b.name).toLowerCase()); });
+}
 
-// chips
-const chipAll=document.createElement('div');
-chipAll.className='chip active';chipAll.textContent='All systems';chipAll.dataset.sec='all';
-chipsEl.appendChild(chipAll);
-DATA.forEach((grp,gi)=>{
-  const c=document.createElement('div');
-  c.className='chip';c.dataset.sec=gi;
-  c.textContent=grp.sec.replace(/ \(.*?\)/,'').replace(' / ',' / ');
-  chipsEl.appendChild(c);
-});
+/* Merge every source row's carousel into one, de-duplicated by slide href. */
+function mergeCarousels(list){
+  if(!list.length) return '';
+  if(list.length===1) return list[0];
+  var host=document.createElement('div'), seen={}, slides=[];
+  list.forEach(function(html){
+    host.innerHTML=html;
+    [].forEach.call(host.querySelectorAll('.cslide'),function(a){
+      var h=a.getAttribute('href'); if(!h||seen[h]) return; seen[h]=1;
+      slides.push(a.cloneNode(true));
+    });
+  });
+  if(!slides.length) return list[0];
+  slides.forEach(function(a,i){
+    a.classList.toggle('is-on', i===0);
+    a.style.display = i===0 ? 'flex' : 'none';
+    var im=a.querySelector('img');
+    if(im){
+      if(i===0){ if(!im.getAttribute('src')&&im.dataset.src){ im.setAttribute('src',im.dataset.src); }
+                 im.setAttribute('loading','lazy'); }
+      else if(im.getAttribute('src')){ im.dataset.src=im.getAttribute('src'); im.removeAttribute('src'); }
+    }
+  });
+  var first=slides[0];
+  var cap=(first.dataset.srcLabel||'');
+  var wrap=document.createElement('div');
+  wrap.className='carousel'; wrap.dataset.i='0'; wrap.dataset.n=String(slides.length);
+  var frame=document.createElement('div'); frame.className='cframe';
+  slides.forEach(function(a){ frame.appendChild(a); });
+  var bar=document.createElement('div'); bar.className='cbar';
+  bar.innerHTML='<button type="button" class="cbtn cprev" aria-label="Previous slide">&#8249;</button>'+
+    '<button type="button" class="cbtn cnext" aria-label="Next slide">&#8250;</button>'+
+    '<span class="ccap"><span class="csrc"></span><span class="cpg"></span></span>';
+  bar.querySelector('.csrc').textContent=cap;
+  bar.querySelector('.cpg').textContent='p.'+(first.dataset.page||'')+' · 1 / '+slides.length;
+  wrap.appendChild(frame); wrap.appendChild(bar);
+  return wrap.outerHTML;
+}
 
-let activeSec='all';
+function variantsHTML(list,cls){
+  if(!list.length) return '<span class="none">—</span>';
+  if(list.length===1) return list[0].html;
+  return '<div class="vstack">'+list.map(function(v){
+    return '<div class="vitem"><span class="vsrc">'+v.secs.map(shortSec).join(' · ')+'</span>'+v.html+'</div>';
+  }).join('')+'</div>';
+}
+
+/* The ids the lecture view generates, keyed by merge key, so the merged view can
+   honour the checklist's deep links (…#fibroadenoma-2) without forcing a view switch. */
+var LECT_ID=(function(){
+  var used={}, map={};
+  function uid(n){ var b=slugify(n)||'row',id=b,i=2; while(used[id]){ id=b+'-'+i; i++; } used[id]=1; return id; }
+  DATA.forEach(function(g){ g.rows.forEach(function(r){
+    var k=mergeKey(r.n); (map[k]=map[k]||[]).push(uid(r.n)); }); });
+  return map;
+})();
+
+/* ---------- render ---------- */
+var MERGED=null, total=0, activeSec='all', mode='lecture';
+const ALIAS={};   /* old row id -> id that exists in the current view */
+
+function render(){
+  var frag=document.createDocumentFragment();
+  var used={};
+  function uid(n){ var b=slugify(n)||'row',id=b,i=2; while(used[id]){ id=b+'-'+i; i++; } used[id]=1; return id; }
+  tbody.innerHTML='';
+  for(var k in ALIAS) delete ALIAS[k];
+
+  if(mode==='lecture'){
+    total=0;
+    DATA.forEach(function(grp,gi){
+      var secRow=document.createElement('tr');
+      secRow.className='sec'; secRow.dataset.sec=gi;
+      secRow.innerHTML='<td colspan="6"><span class="sec-label">'+grp.sec+
+        '<span class="sec-n">· '+grp.rows.length+'</span></span></td>';
+      frag.appendChild(secRow);
+      grp.rows.forEach(function(r){
+        total++;
+        var tr=document.createElement('tr');
+        tr.className='row'; tr.dataset.sec=gi; tr.dataset.secs=String(gi);
+        tr.id=uid(r.n);
+        tr.dataset.txt=stripTags(r.n+' '+r.g+' '+r.b+' '+r.d+' '+r.e).toLowerCase();
+        tr.innerHTML='<td class="name">'+r.n+'</td>'+
+          '<td class="gene">'+(r.g==='—'?'<span class="none">—</span>':r.g)+'</td>'+
+          '<td class="buzz">'+r.b+'</td><td class="diff">'+r.d+'</td>'+
+          '<td class="exam">'+r.e+'</td><td class="img">'+(r.img||'')+'</td>';
+        frag.appendChild(tr);
+      });
+    });
+  } else {
+    if(!MERGED) MERGED=buildMerged();
+    var list = mode==='dupes' ? MERGED.filter(function(m){return m.gis.length>1;}) : MERGED;
+    total=list.length;
+    list.forEach(function(m){
+      var tr=document.createElement('tr');
+      tr.className='row'; tr.dataset.secs=m.gis.join(',');
+      tr.dataset.sec=m.gis[0];
+      tr.id=uid(m.name);
+      m.slugs.concat(LECT_ID[m.key]||[]).forEach(function(s){
+        if(s&&s!==tr.id) ALIAS[s]=tr.id; });
+      tr.dataset.txt=stripTags(m.name+' '+m.secs.join(' ')+' '+
+        [m.g,m.b,m.d,m.e].map(function(l){return l.map(function(v){return v.html;}).join(' ');}).join(' ')
+      ).toLowerCase();
+      var pills=m.secs.map(function(s){
+        var t=secTag(s);
+        return '<span class="srcpill'+(t?' t-'+t.replace(/\s+/g,'-'):'')+'">'+shortSec(s)+'</span>';
+      }).join('');
+      tr.innerHTML='<td class="name">'+m.name+
+          (m.gis.length>1?'<span class="dupn">'+m.gis.length+' lectures</span>':'')+
+          '<div class="srcs">'+pills+'</div></td>'+
+        '<td class="gene">'+variantsHTML(m.g)+'</td>'+
+        '<td class="buzz">'+variantsHTML(m.b)+'</td>'+
+        '<td class="diff">'+variantsHTML(m.d)+'</td>'+
+        '<td class="exam">'+variantsHTML(m.e)+'</td>'+
+        '<td class="img">'+mergeCarousels(m.imgs)+'</td>';
+      frag.appendChild(tr);
+    });
+  }
+  tbody.appendChild(frag);
+  apply();
+}
+
 function apply(){
-  const q=qEl.value.trim().toLowerCase();
-  let visible=0;
-  // first pass: data rows
-  document.querySelectorAll('tr.row').forEach(tr=>{
-    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
-    const qOk = !q || tr.dataset.txt.includes(q);
-    const show = secOk && qOk;
+  var q=qEl.value.trim().toLowerCase(), visible=0;
+  [].forEach.call(document.querySelectorAll('tr.row'),function(tr){
+    var secOk = activeSec==='all' ||
+      (tr.dataset.secs||'').split(',').indexOf(activeSec)>=0;
+    var qOk = !q || tr.dataset.txt.indexOf(q)>=0;
+    var show = secOk && qOk;
     tr.style.display = show?'':'none';
     if(show) visible++;
   });
-  // second pass: hide empty section headers
-  document.querySelectorAll('tr.sec').forEach(sr=>{
-    const secOk = activeSec==='all' || sr.dataset.sec===activeSec;
-    let any=false;
-    document.querySelectorAll(`tr.row[data-sec="${sr.dataset.sec}"]`).forEach(tr=>{if(tr.style.display!=='none')any=true;});
+  [].forEach.call(document.querySelectorAll('tr.sec'),function(sr){
+    var secOk = activeSec==='all' || sr.dataset.sec===activeSec;
+    var any=false;
+    [].forEach.call(document.querySelectorAll('tr.row[data-sec="'+sr.dataset.sec+'"]'),
+      function(tr){ if(tr.style.display!=='none') any=true; });
     sr.style.display = (secOk && any)?'':'none';
   });
-  countEl.innerHTML = q||activeSec!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> pathologies`;
+  var noun = mode==='lecture' ? 'pathologies' : (mode==='dupes' ? 'shared terms' : 'unique terms');
+  countEl.innerHTML = (q||activeSec!=='all')
+      ? '<b>'+visible+'</b> / '+total+' shown'
+      : '<b>'+total+'</b> '+noun;
   noresults.style.display = visible===0?'block':'none';
 }
 
-chipsEl.addEventListener('click',e=>{
-  const c=e.target.closest('.chip'); if(!c)return;
-  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-  c.classList.add('active');
-  activeSec=c.dataset.sec;
-  apply();
+/* ---------- chips ---------- */
+var chipAll=document.createElement('div');
+chipAll.className='chip active'; chipAll.textContent='All systems'; chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach(function(grp,gi){
+  var c=document.createElement('div');
+  c.className='chip'; c.dataset.sec=String(gi);
+  c.textContent=grp.sec.replace(/ \(.*?\)/,'');
+  chipsEl.appendChild(c);
+});
+chipsEl.addEventListener('click',function(e){
+  var c=e.target.closest('.chip'); if(!c) return;
+  [].forEach.call(document.querySelectorAll('.chip'),function(x){x.classList.remove('active');});
+  c.classList.add('active'); activeSec=c.dataset.sec; apply();
 });
 qEl.addEventListener('input',apply);
-apply();
 
-// Jump to a specific pathology row via #hash (e.g. from the Mini 2 Pathology Checklist)
+modeEl.addEventListener('change',function(){
+  mode=modeEl.value;
+  try{ localStorage.setItem('mini2PathView',mode); }catch(e){}
+  render();
+  window.scrollTo({top:0,behavior:'instant'});
+});
+try{
+  var saved=localStorage.getItem('mini2PathView');
+  if(saved && ['lecture','merged','dupes'].indexOf(saved)>=0){ mode=saved; modeEl.value=saved; }
+}catch(e){}
+render();
+
+/* ---------- hash jump (checklist deep links) ---------- */
 function jumpToHash(){
-  const h=decodeURIComponent((location.hash||'').slice(1));
+  var h=decodeURIComponent((location.hash||'').slice(1));
   if(!h) return;
-  const el=document.getElementById(h);
-  if(!el) return;
-  // clear any active filter so the target is guaranteed visible
+  var el=document.getElementById(h) || (ALIAS[h] && document.getElementById(ALIAS[h]));
+  if(!el){                       /* the term may only exist in the other view */
+    if(mode!=='lecture'){ mode='lecture'; modeEl.value='lecture'; render();
+                          el=document.getElementById(h); }
+    if(!el) return;
+  }
   if(activeSec!=='all'||qEl.value){ activeSec='all'; qEl.value='';
-    document.querySelectorAll('#chips .chip').forEach(c=>c.classList.toggle('active',c.dataset.sec==='all'));
+    [].forEach.call(document.querySelectorAll('#chips .chip'),function(c){
+      c.classList.toggle('active',c.dataset.sec==='all'); });
     apply(); }
-  setTimeout(()=>{
-    const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thead-top'))||90)+18;
-    const y=el.getBoundingClientRect().top+window.pageYOffset-off;
+  setTimeout(function(){
+    var off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thead-top'))||90)+18;
+    var y=el.getBoundingClientRect().top+window.pageYOffset-off;
     window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
     el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump');
   },60);
