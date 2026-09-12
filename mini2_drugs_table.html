@@ -435,7 +435,10 @@ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
     display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
     font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
   .sitenav::-webkit-scrollbar{height:0}
-  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:12px;flex:0 0 auto;opacity:.92}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:8px;flex:0 0 auto;opacity:.55;text-decoration:none;padding:6px 4px;border-radius:7px}
+  .sitenav .sk-brand:hover{opacity:1;background:transparent}
+  .sitenav .sk-brand-on{opacity:1}
+  .sitenav .sk-gap{flex:0 0 auto;width:14px}
   .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
     padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
   .sitenav a:hover{background:#31363c;color:#fff}
@@ -445,7 +448,7 @@ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
   .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
   .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
   .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
-  @media(max-width:600px){ .sitenav .sk-brand{display:none} }
+  @media(max-width:600px){ .sitenav .sk-brand{font-size:10px;letter-spacing:.1em;margin-right:4px} .sitenav .sk-gap{width:8px} }
 
   /* image lightbox */
   .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
@@ -490,65 +493,81 @@ td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var
 <script id="sitekit-js">
 (function(){
   // ---------- shared top nav ----------
-  var MINIS=[
-    {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
-      ['mini1.html','Overview'],
-      ['master_table.html','Master'],
-      ['pathology_table.html','Pathology'],
-      ['pathology_checklist.html','Path Checklist'],
-      ['physio_table.html','Physiology'],
-      ['drugs_table.html','Drugs'],
-      ['biochem_table.html','Biochem'],
-      ['embryo_anatomy_table.html','Embryo / Anatomy'],
-      ['pattern_recognition.html','Patterns'],
-      ['lecture_recall.html','Lecture Recall'],
-      ['physio_quiz.html','Physio Quiz'],
-      ['endocrine_path_quiz.html','Endo Path Quiz'],
-      ['male_path_quiz.html','Male Path Quiz'],
-      ['physio_ext1_quiz.html','Repro Physio Q'],
-      ['physio_ext2_quiz.html','Physio Bank 1'],
-      ['physio_ext3_quiz.html','Physio Bank 2'],
-      ['pharmq_quiz.html','Pharm Quiz'],
-      ['review_planner.html','Planner'],
-      ['gi_path_table.html','GI Path']
+  var COURSES=[
+    {id:'enre', brand:'ENRE', home:'index.html', minis:[
+      {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+        ['mini1.html','Overview'],
+        ['master_table.html','Master'],
+        ['pathology_table.html','Pathology'],
+        ['pathology_checklist.html','Path Checklist'],
+        ['physio_table.html','Physiology'],
+        ['drugs_table.html','Drugs'],
+        ['biochem_table.html','Biochem'],
+        ['embryo_anatomy_table.html','Embryo / Anatomy'],
+        ['pattern_recognition.html','Patterns'],
+        ['lecture_recall.html','Lecture Recall'],
+        ['physio_quiz.html','Physio Quiz'],
+        ['endocrine_path_quiz.html','Endo Path Quiz'],
+        ['male_path_quiz.html','Male Path Quiz'],
+        ['physio_ext1_quiz.html','Repro Physio Q'],
+        ['physio_ext2_quiz.html','Physio Bank 1'],
+        ['physio_ext3_quiz.html','Physio Bank 2'],
+        ['pharmq_quiz.html','Pharm Quiz'],
+        ['review_planner.html','Planner'],
+        ['gi_path_table.html','GI Path']
+      ]},
+      {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+        ['mini2.html','Overview'],
+        ['mini2_pathology_table.html','Pathology'],
+        ['mini2_pathology_checklist.html','Path Checklist'],
+        ['mini2_physio_table.html','Physiology'],
+        ['mini2_drugs_table.html','Drugs'],
+        ['mini2_foundations_table.html','Foundations'],
+        ['mini2_clinical_obgyn_table.html','Clinical OB/GYN'],
+        ['mini2_community_health_table.html','Public Health'],
+        ['mini2_review_hub.html','Review Hub'],
+        ['mini2_path_quiz_infancy.html','Infancy Path Quiz'],
+        ['mini2_path_quiz_female.html','Female Path Quiz'],
+        ['mini2_path_quiz_breast.html','Breast Path Quiz'],
+        ['mini2_physio_quizzes.html','Physio Quizzes'],
+        ['mini2_study_guide.html','Resource Guide']
+      ]}
     ]},
-    {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
-      ['mini2.html','Overview'],
-      ['mini2_pathology_table.html','Pathology'],
-      ['mini2_pathology_checklist.html','Path Checklist'],
-      ['mini2_physio_table.html','Physiology'],
-      ['mini2_drugs_table.html','Drugs'],
-      ['mini2_foundations_table.html','Foundations'],
-      ['mini2_clinical_obgyn_table.html','Clinical OB/GYN'],
-      ['mini2_community_health_table.html','Public Health'],
-      ['mini2_review_hub.html','Review Hub'],
-      ['mini2_path_quiz_infancy.html','Infancy Path Quiz'],
-      ['mini2_path_quiz_female.html','Female Path Quiz'],
-      ['mini2_path_quiz_breast.html','Breast Path Quiz'],
-      ['mini2_physio_quizzes.html','Physio Quizzes'],
-      ['mini2_study_guide.html','Resource Guide']
-    ]},
-    {id:'nupy', label:'Neuro', home:'nupy_neuroanatomy_table.html', pages:[
-      ['nupy_neuroanatomy_table.html','Neuroanatomy'],
-      ['nupy_neuroanatomy_doc.html','Neuroanatomy Doc']
+    {id:'nupy', brand:'NUPY', home:'nupy.html', minis:[
+      {id:'nupy1', label:'Mini 1', home:'nupy_mini1.html', pages:[
+        ['nupy_mini1.html','Overview'],
+        ['nupy_neuroanatomy_table.html','Neuroanatomy'],
+        ['nupy_neuroanatomy_doc.html','Neuroanatomy Doc'],
+        ['nupy_neuroanatomy_checklist.html','Neuro Checklist']
+      ]},
+      {id:'nupy2', label:'Mini 2', home:'nupy_mini2.html', pages:[
+        ['nupy_mini2.html','Overview']
+      ]}
     ]}
   ];
+  var MINIS=[]; COURSES.forEach(function(c){ c.minis.forEach(function(m){ m.course=c; MINIS.push(m); }); });
   var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
   if(here==='') here='index.html';
-  var mini=null;
+  var mini=null, course=null;
   MINIS.forEach(function(m){
     if(m.home.toLowerCase()===here) mini=m;
     m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
   });
+  COURSES.forEach(function(c){ if(c.home.toLowerCase()===here) course=c; });
+  if(mini) course=mini.course;
+  if(!course) course=COURSES[0];
   var nav=document.createElement('nav'); nav.className='sitenav';
-  var brand=document.createElement('a'); brand.className='sk-brand'; brand.href='index.html'; brand.textContent='ENRE'; nav.appendChild(brand);
-  var sw=document.createElement('span'); sw.className='sk-minis';
-  MINIS.forEach(function(m){
-    var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
-    a.className='sk-mini'+(mini===m?' sk-mini-on':'');
-    sw.appendChild(a);
+  COURSES.forEach(function(c,ci){
+    var brand=document.createElement('a'); brand.className='sk-brand'+(c===course?' sk-brand-on':''); brand.href=c.home; brand.textContent=c.brand; nav.appendChild(brand);
+    var sw=document.createElement('span'); sw.className='sk-minis';
+    c.minis.forEach(function(m){
+      var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+      a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+      sw.appendChild(a);
+    });
+    nav.appendChild(sw);
+    if(ci<COURSES.length-1){ var gap=document.createElement('span'); gap.className='sk-gap'; nav.appendChild(gap); }
   });
-  nav.appendChild(sw);
   if(mini && mini.pages.length){
     var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
     mini.pages.forEach(function(p){
