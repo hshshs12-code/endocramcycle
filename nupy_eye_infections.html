@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUPY Eye Infections — Conjunctivitis, Keratitis, Endophthalmitis, Uveitis &amp; Styes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --surface:#ffffff;
+    --ink:#1c2024;
+    --muted:#6c7077;
+    --line:#e3ded3;
+    --line-strong:#cdc6b6;
+    /* genetics = teal */
+    --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    /* buzzwords = amber highlight */
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
+    /* exam rail = crimson */
+    --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
+    --sec-bar:#9a1f2e;
+    --thead-top:70px; /* set dynamically to the controls-bar height */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:30px 28px 0;max-width:1500px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);
+    line-height:1.02;margin:0;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--exam-strong)}
+  .sub{color:var(--muted);max-width:62ch;margin:12px 0 0;font-size:14.5px}
+
+  /* ---------- legend / controls ---------- */
+  .stickytop{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line-strong);margin-top:22px;
+  }
+  .controls{
+    padding:16px 28px 0;
+  }
+  .controls-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+  .search{position:relative;flex:1 1 280px;min-width:240px;max-width:420px}
+  .search input{
+    width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);
+    border-radius:9px;background:var(--surface);font:inherit;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--exam-strong);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--exam-strong)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .sw.g{background:var(--gene-bg);border:1px solid var(--gene-ink)}
+  .sw.b{background:var(--buzz-hl)}
+  .sw.e{background:var(--exam-bg);border:1px solid var(--exam-strong)}
+
+  .chips{padding:12px 28px 14px;max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    padding:6px 11px;border:1px solid var(--line-strong);border-radius:99px;
+    background:var(--surface);color:var(--muted);cursor:pointer;user-select:none;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .wrap{max-width:1840px;margin:18px auto 60px;padding:0 28px}
+  .tablecard{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:var(--thead-top);z-index:20;background:#23272c;color:#f4f2ec;
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 14px;border-bottom:2px solid #11141700;
+  }
+  thead th.exam-h{background:var(--exam-strong)}
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  tbody tr:last-child td:first-child{border-bottom-left-radius:13px}
+  tbody tr:last-child td:last-child{border-bottom-right-radius:13px}
+  /* column widths */
+  col.c-name{width:12.18%}
+  col.c-gene{width:13.92%}
+  col.c-buzz{width:26.1%}
+  col.c-diff{width:18.27%}
+  col.c-exam{width:16.53%}
+
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr.row:hover td{background:#faf8f2}
+  tbody tr.row.jump td{animation:jumpflash 2.6s ease-out}
+  tbody tr.row.jump td.name{box-shadow:inset 3px 0 0 var(--exam-strong)}
+  @keyframes jumpflash{0%,32%{background:#fbe9c8}100%{background:transparent}}
+  tbody tr.row:hover td.exam{background:#fbe2e1}
+
+  td.name{font-weight:600;font-size:13.6px;letter-spacing:-.005em}
+  td.name .alt{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-style:italic}
+
+  td.gene{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  td.gene .none{font-style:italic}
+  .pill{
+    display:inline-block;background:var(--gene-bg);color:var(--gene-ink);
+    padding:1px 7px;border-radius:5px;font-weight:600;font-size:11.5px;
+    margin:0 2px 2px 0;white-space:nowrap;
+  }
+  .inh{display:inline-block;color:var(--gene-ink);font-weight:600;font-size:11px;letter-spacing:.03em}
+
+  mark{background:var(--buzz-hl);color:var(--buzz-ink);padding:0 3px;border-radius:3px;font-weight:600}
+  td.buzz, td.diff{color:#33373d}
+  td.diff b{color:var(--ink)}
+
+  td.exam{
+    background:var(--exam-bg);color:var(--exam-ink);
+    border-left:1px solid #f3cfd0;font-weight:500;
+  }
+  td.exam .star{color:var(--exam-strong);font-weight:700;margin-right:3px}
+  td.exam b{color:var(--exam-strong);font-weight:700}
+
+  /* section header rows */
+  tr.sec td{
+    background:#eceadf;border-bottom:1px solid var(--line-strong);
+    border-top:1px solid var(--line-strong);
+    padding:9px 14px;
+  }
+  tr.sec .sec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink);font-weight:600;
+    border-left:4px solid var(--sec-bar);padding-left:10px;display:inline-block;
+  }
+  tr.sec .sec-n{color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em}
+
+  .noresults{display:none;text-align:center;padding:46px;color:var(--muted);font-style:italic}
+
+  footer{max-width:1500px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
+  footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
+
+  @media (max-width:880px){
+    thead th{top:0;position:static}
+    .stickytop{position:static}
+  }
+  col.c-img{width:13%}
+  thead th.img-h{background:#3a3f45}
+  td.img{text-align:center}
+  td.img a{display:inline-block;margin:1px}
+  td.img img{max-height:64px;max-width:100%;border-radius:6px;border:1px solid var(--line-strong);background:#fff;vertical-align:middle;cursor:zoom-in}
+
+/* --- audit addendum: 36 sections would otherwise wrap the chip rail to ~400px
+       and swallow the viewport. One scrollable line instead. .chips is a sibling
+       of .wrap, so this overflow never becomes the sticky thead's scroll container. --- */
+.chips{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.chips>.chip{flex:0 0 auto}
+.chips::-webkit-scrollbar{height:6px}
+.chips::-webkit-scrollbar-thumb{background:rgba(0,0,0,.22);border-radius:3px}
+
+/* --- full-slide captures: one-at-a-time carousel, fixed frame height --- */
+@media(min-width:1200px){ table{table-layout:fixed} }
+table.mobreflow td,table td{overflow-wrap:anywhere}
+td.img{text-align:left;vertical-align:top}
+.carousel{width:100%;max-width:210px}
+.cframe{position:relative;width:100%;height:132px;border:1px solid var(--line-strong);
+        border-radius:6px;background:#fff;overflow:hidden}
+td.img .cslide{display:none;position:absolute;inset:0;margin:0;
+               align-items:center;justify-content:center}
+td.img .cslide.is-on{display:flex}
+td.img .cslide img{width:100%;height:100%;max-height:none;object-fit:contain;
+                   display:block;cursor:zoom-in;border:0;border-radius:0;background:#fff;
+                   /* keep alt text from rendering as sprawling text before load */
+                   font-size:0;color:transparent}
+.cbar{display:flex;align-items:center;gap:4px;padding-top:3px}
+.cbtn{flex:0 0 auto;width:18px;height:18px;line-height:1;padding:0;cursor:pointer;
+      border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);
+      color:var(--ink,#23272c);font-size:12px;font-family:inherit}
+.cbtn:hover{background:var(--line,#e8e2d4)}
+.ccap{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+.csrc{font-family:var(--mono,ui-monospace,SFMono-Regular,Menlo,monospace);font-size:9px;
+      letter-spacing:.02em;color:var(--muted,#6c7077);text-transform:uppercase;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpg{font-family:var(--mono,ui-monospace,SFMono-Regular,Menlo,monospace);font-size:10px;
+     color:var(--muted,#6c7077)}
+@media(max-width:880px){ .carousel{max-width:100%} .cframe{height:200px} }
+/* ===== neuroanatomy build: one table per format block, thumbnail grid ===== */
+.secblock{margin:0 0 26px}
+.sechead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:14px 4px 8px}
+.sechead .sec-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink);font-weight:600;border-left:4px solid var(--sec-bar);padding-left:10px}
+.sechead .sec-n{color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em}
+.secnote{color:var(--muted);font-size:12.5px;max-width:110ch;margin:0 4px 12px 18px}
+.fmt{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--exam-strong);background:var(--exam-bg);border:1px solid #f3cfd0;border-radius:99px;padding:3px 10px;margin:0 4px 8px 18px}
+.tablecard{margin-bottom:14px}
+@media(min-width:881px){ table{table-layout:fixed} }   /* the template only fixed ≥1200px; 7-column tables overflowed the page between 881 and 1200 */
+thead th.exam-h{background:var(--exam-strong)}
+td.cell{color:#33373d;overflow-wrap:anywhere} td.cell b{color:var(--ink)}   /* long tokens (e.g. 'cervicothoracic') must break inside fixed-width columns */
+td.exam{background:var(--exam-bg);color:var(--exam-ink);border-left:1px solid #f3cfd0;font-weight:500}
+td.exam b{color:var(--exam-strong)}
+/* image column: wrapping grid of ~200px landscape thumbnails, grouped by source */
+col.c-img{width:28%}
+/* long structure names ("Lateral corticospinal tract", "Lobes, insula & Brodmann areas") overflowed the 12% name column:
+   let the teal pill wrap inside its cell and give the column a little more room */
+col.c-name{width:15%}
+td.name .pill,td.cell .pill{white-space:normal;line-height:1.45;padding-top:3px;padding-bottom:3px;max-width:100%;box-sizing:border-box}
+td.img{text-align:left;vertical-align:top;padding:10px 12px}
+.igrp{margin-bottom:8px}
+.ilab{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.igrid{display:flex;flex-wrap:wrap;gap:6px}
+td.img a.ith{display:inline-flex;flex-direction:column;align-items:center;width:200px;max-width:100%;margin:0;text-decoration:none}
+td.img a.ith img{width:200px;max-width:100%;height:auto;max-height:none;border:1px solid var(--line-strong);border-radius:6px;background:#fff;
+  display:block;cursor:zoom-in;aspect-ratio:16/9;object-fit:contain;font-size:0;color:transparent}
+.ipg{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px}
+.npill{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-left:6px}
+@media(max-width:880px){ td.img a.ith,td.img a.ith img{width:100%} col.c-img{width:auto} }
+/* ===== cranial-nerve build: image strip under the row, wide thumbs for the level map, nerve chips ===== */
+tr.irow td.img{padding:4px 14px 16px;border-top:0;background:#fbfaf7}
+tr.irow td.img .ilab{font-size:9.5px}
+.tablecard.wide td.img a.ith,.tablecard.wide td.img a.ith img{width:330px}
+tr.row.hasbelow td{border-bottom:0}
+.cnchips{padding-top:0;margin-top:-6px}
+.cnchips .chip{font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;min-width:44px;text-align:center}
+.cnchips .chip.active{background:var(--sec-bar,#0c5247);border-color:var(--sec-bar,#0c5247);color:#fff}
+.cnlab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);align-self:center;margin-right:4px}
+td.name .cns{display:block;margin-top:5px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.05em;color:var(--muted)}
+@media(max-width:880px){ .tablecard.wide td.img a.ith,.tablecard.wide td.img a.ith img{width:100%} }
+
+.gen{background:#fff3d6;color:#5c3d00;border-bottom:1px dotted #b7791f;padding:0 2px;border-radius:2px}
+.gen::before{content:"✎ ";font-size:10px;color:#b7791f}
+td.exam .gen{background:#fff3d6}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">NUPY · Eye Infections · Fusion Workshop (no slides)</p>
+  <h1>Pink eye to blindness —<br>every <em>eye infection</em> on one page.</h1>
+  <p class="sub">The Eye Infections fusion session has no slides, so this page is built from the <b>NUPY HY DOC SN 2026</b> notes (pp.44, 59–68) plus the session's objectives from the Canvas PDF. Red-eye triage, every conjunctivitis by organism, keratitis, endophthalmitis / uveitis / retinitis, the eyelid lesions, a cheat sheet for the eight named organisms, and the pearls. <b>Provenance is marked on every row:</b> plain text is transcribed from the notes; <span class="gen">amber ✎ text</span> was <b>researched and generated by Claude to fill what the notes leave out</b> (mostly treatments, diagnostics and organism microbiology) — verify it against Sherris &amp; Ryan before relying on it. The Source column says which notes page each row comes from and whether it was filled in. Every notes row shows the notes page it was taken from; tap any to enlarge.</p>
+</header>
+
+<div class="stickytop">
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search organism, serotype, sign, treatment…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+    <div class="legend">
+      <span><i class="sw g"></i>Nucleus / tract / nerve / transmitter</span>
+      <span><i class="sw b"></i>Decussation / key buzzword</span>
+      <span><i class="sw e"></i>Will be tested</span>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+</div><!-- /.stickytop -->
+
+<div class="wrap" id="host"></div>
+
+<footer>
+  <hr>
+  Eye Infections reference compiled from the NUPY HY DOC SN 2026 notes (Summaries folder) and the Fusion Session: Workshop — Eye Infections Canvas PDF (Dr Sean Reid; required reading Sherris &amp; Ryan 8e). Content marked ✎ is generated, not from the notes. Runs entirely in the browser.
+</footer>
+
+<script>
+const DATA = [{"sec":"Red Eye — What the Notes Cover & How to Triage It","chip":"Red eye","note":"The session's learning objectives (workshop PDF — there are no slides) and the notes' red-eye entries side by side, so the infectious causes can be told apart from the non-infectious ones at the bedside.","blocks":[{"fmt":"SESSION SCOPE","cols":["Item","What it says","Organisms named","Links the session wants you to make","Source"],"rows":[{"n":"<span class='pill'>Workshop: Eye Infections — learning objectives</span>","c":["Recognise <span class='pill'>conjunctivitis</span>, <span class='pill'>keratitis</span>, <span class='pill'>endophthalmitis</span>, <span class='pill'>uveitis</span> and <span class='pill'>styes</span> from signs and symptoms; understand pathogenesis, epidemiology and the appropriate diagnostic tests. Outcomes range from mild pink eye to blindness; the eye infection may be a secondary infection of an organism that lives elsewhere.","Adenovirus · Chlamydia trachomatis · Neisseria gonorrhoeae · Herpes simplex virus · Candida albicans · Cytomegalovirus · Staphylococci · Pseudomonas. Required reading: Sherris &amp; Ryan 8e ch. 9, 39, 30, 14, 46, 14, 24, 35.","Eye infections ↔ <span class='pill'>sexually transmitted disease</span> (gonococcus, chlamydia D–K, HSV-2), ↔ <span class='pill'>respiratory tract infection</span> (adenovirus, pneumococcus, H. influenzae), ↔ <span class='pill'>latency</span> (HSV-1 in the trigeminal ganglion, CMV), ↔ <span class='pill'>immunocompromise</span> (CMV retinitis, Candida endophthalmitis).","Workshop PDF p.2"],"img":"<div class=\"igrp\"><div class=\"ilab\">Workshop: Eye Infections (Canvas PDF)</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/fusion_session_workshop_eye_infections_session_pdf/fusion_session_workshop_eye_infections_session_pdf_p2.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/fusion_session_workshop_eye_infections_session_pdf/fusion_session_workshop_eye_infections_session_pdf_p2.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"Workshop: Eye Infections (Canvas PDF) p.2\"><span class=\"ipg\">p.2</span></a></div></div>","np":1,"cn":[]}],"below":0,"wide":0},{"fmt":"RED-EYE DIFFERENTIAL","cols":["Condition","Pain · vision · photophobia","Discharge / look","Key sign","Cause · what to do","Source"],"rows":[{"n":"<span class='pill'>Conjunctivitis (pink eye)</span>","c":["Irritation / itching rather than pain; <mark>vision preserved</mark>; little photophobia.","Red eye (conjunctival hyperaemia), tearing, chemosis, discharge: <span class='pill'>purulent</span> = bacterial (lids stuck in the morning), <span class='pill'>watery + URI</span> = viral, <span class='pill'>itchy + bilateral</span> = allergic.","Conjunctivitis = red eye + discharge.","Viral most common overall; bacterial, allergic, parasitic. Some forms highly contagious; severe untreated infection can damage the eye and rarely cause vision loss.","HY notes p.44"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p44.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p44.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.44\"><span class=\"ipg\">p.44</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Keratitis</span>","c":["Pain, tearing, foreign-body sensation, <mark>photophobia</mark>; vision blurred.","Red eye; corneal ulcer / infiltrate.","HSV: <mark>dendritic ulcer</mark> — avoid topical steroids.","Risk factor: contact-lens use. HSV, Pseudomonas / staphylococci (lens wearers).","HY notes p.62"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.62\"><span class=\"ipg\">p.62</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Uveitis (iritis / iridocyclitis)</span>","c":["Intra-ocular pain, <mark>severe photophobia</mark>, blurry vision.","Red eye with <span class='pill'>ciliary flush</span> (limbal injection), <mark>miosis</mark>; no purulent discharge.","Ciliary flush; keratic precipitates = <span class='pill'>white dots on the internal surface of the cornea</span>.","Infective cause most commonly HSV (may accompany keratitis); also autoimmune (HLA-B27, sarcoid, IBD)<span class='gen'> — the autoimmune list is added; the notes only name HSV.</span>","HY notes p.62, 68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.62\"><span class=\"ipg\">p.62</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'>Episcleritis</span>","c":["Irritation, watering, <mark>usually not painful</mark>; vision not affected.","Sudden-onset red eye, localised or diffuse, superficial.","Superficial vessels blanch<span class='gen'> with topical phenylephrine (added).</span>","Associated with autoimmune disease (sarcoid, arthritis, IBD); most resolve spontaneously.","HY notes p.61<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.61\"><span class=\"ipg\">p.61</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Scleritis</span>","c":["Severe, <mark>deep boring pain</mark> worse with eye movement and at night, may radiate to the face; photophobia; can threaten vision.","Deep red / purplish scleral discolouration.","Pain with eye movement — the extraocular muscles insert into the sclera.","Autoimmune (rheumatoid arthritis, GPA)<span class='gen'> — associations added</span>; needs systemic anti-inflammatory treatment.","HY notes p.61<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.61\"><span class=\"ipg\">p.61</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Subconjunctival haemorrhage</span>","c":["No pain, no photophobia, vision normal.","Bright red patch under the conjunctiva ('a popped vessel').","Sharp-edged blood, otherwise quiet eye.","Valsalva, coughing, sneezing, trauma; resolves on its own.","HY notes p.61"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.61\"><span class=\"ipg\">p.61</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Acute angle-closure glaucoma (the red eye that is NOT an infection)</span>","c":["Severe eye pain, blurred vision, <mark>halos around lights</mark>, nausea / vomiting.","Red eye with a <mark>mid-dilated, fixed pupil</mark>, hazy cornea.","Rapid rise in IOP from blocked aqueous drainage; risk: female, >60, hyperopia, Asian ancestry.","Emergency — lower IOP; definitive = laser peripheral iridotomy.","HY notes p.62"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.62\"><span class=\"ipg\">p.62</span></a></div></div>","np":1,"cn":[]}],"below":0,"wide":0}]},{"sec":"Conjunctivitis — by Organism","chip":"Conjunctivitis","note":"Every conjunctivitis in the notes, one row each: organism facts, how it spreads, timing and the clinical picture, diagnosis, treatment. Amber ✎ text is generated to fill what the notes leave out (mostly treatment).","blocks":[{"fmt":"VIRAL CONJUNCTIVITIS","cols":["Entity","Organism","Spread & epidemiology","Clinical picture","Diagnosis","Treatment","⭐ Will Be Tested","Source"],"rows":[{"n":"<span class='pill'>Acute viral conjunctivitis — adenovirus</span>","c":["<span class='pill'>Adenovirus</span>: naked <mark>dsDNA</mark>, lytic virus; <span class='pill'>fibres</span> used for attachment. Serotypes <mark>3, 4, 7</mark> → pharyngoconjunctival fever; serotypes <mark>8, 19</mark> → epidemic keratoconjunctivitis (highly contagious, may be haemorrhagic).","Most common microbial cause of conjunctivitis. Spread from respiratory secretions, fingers, <span class='pill'>swimming pools</span>; incubation 5–15 days. May require <mark>2-week isolation</mark>.","Irritation and itching, tearing, chemosis, vascular congestion, fever, <span class='pill'>preauricular lymphadenopathy</span>; usually not painful; vision preserved. <span class='pill'>Pharyngoconjunctivitis</span> = conjunctivitis + sore throat (3, 4, 7). <span class='pill'>Epidemic keratoconjunctivitis</span> = conjunctivitis with corneal involvement (8, 19)<span class='gen'> — subepithelial corneal infiltrates can blur vision for weeks.</span>","Clinical; real-time <span class='pill'>PCR</span> if needed.","<span class='gen'>Self-limited (1–3 weeks); cold compresses, artificial tears; no antibiotics, no steroids (except EKC infiltrates under ophthalmology). Strict hand hygiene; stay away from school / work while weeping.</span>","<mark>Watery discharge + URI + preauricular node = adenovirus</mark>; serotypes 3/4/7 pharyngitis vs 8/19 epidemic.","HY notes p.63<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.63\"><span class=\"ipg\">p.63</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Acute haemorrhagic conjunctivitis</span>","c":["<span class='pill'>Coxsackie A24</span> and <span class='pill'>Enterovirus 70</span> — picornaviruses: naked, <mark>positive-sense ssRNA</mark>.","Extremely contagious, causes <mark>epidemics</mark>; very short incubation (<mark>24 hours</mark>).","Multiple conjunctival haemorrhages, hyperaemia, mild follicular hyperplasia, <mark>severe pain</mark>, photophobia.","<span class='gen'>Clinical during an outbreak; RT-PCR of conjunctival swab if needed.</span>","<span class='gen'>Self-limited in about a week; supportive care and hygiene to stop spread.</span>","Only conjunctivitis in the notes that is <mark>severely painful</mark>; 24-h incubation.","HY notes p.64<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.64\"><span class=\"ipg\">p.64</span></a></div></div>","np":1,"cn":[]}],"below":0,"wide":0},{"fmt":"BACTERIAL CONJUNCTIVITIS","cols":["Entity","Organism","Spread & epidemiology","Clinical picture","Diagnosis","Treatment","⭐ Will Be Tested","Source"],"rows":[{"n":"<span class='pill'>Acute bacterial conjunctivitis — adults</span>","c":["<span class='pill'>Staphylococcus aureus</span>, <span class='pill'>S. epidermidis</span>, <span class='pill'>Streptococcus pneumoniae</span>, <span class='pill'>Haemophilus influenzae</span><span class='gen'> (pneumococcus and H. influenzae especially in children, often with otitis media).</span>","Less common than viral. Direct contact<span class='gen'>, contaminated fingers / towels / make-up; H. influenzae and pneumococcus from the respiratory tract.</span>","Purulent (thick) discharge, <mark>lids stuck together in the morning</mark>; usually unilateral at first, vision preserved.","<span class='gen'>Clinical; Gram stain and culture of discharge for severe, neonatal or unresponsive cases.</span>","<span class='gen'>Topical antibiotic drops / ointment (erythromycin, polymyxin-trimethoprim, or a fluoroquinolone); most cases also resolve untreated in 1–2 weeks.</span>","Purulent discharge = bacterial; think of the four organisms.","HY notes p.64<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.64\"><span class=\"ipg\">p.64</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Gonococcal neonatal conjunctivitis (ophthalmia neonatorum)</span>","c":["<span class='pill'>Neisseria gonorrhoeae</span>: Gram-negative <mark>coffee-bean diplococci</mark>, oxidase positive, non-encapsulated, facultative intracellular.","Acquired at <span class='pill'>vaginal delivery</span> from an infected mother (STD link). Begins <mark>2–5 days</mark> after birth.","<mark>Hyperacute, hyperpurulent</mark>: copious yellow-green discharge that <mark>re-accumulates within seconds</mark> of wiping.","<span class='pill'>Gram stain</span> of the discharge — rapid diagnosis<span class='gen'> (Gram-negative intracellular diplococci); culture on Thayer-Martin / NAAT to confirm.</span>","<mark>IM ceftriaxone</mark> (treat at once)<span class='gen'> — single dose; plus saline irrigation; treat mother and partner; also evaluate / treat for chlamydia. Prevention: erythromycin eye ointment at birth (does prevent gonococcal, not chlamydial, ophthalmia).</span>","Untreated → severe corneal ulceration, perforation, <mark>profound vision loss</mark> — the emergency neonatal conjunctivitis.","HY notes p.65<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Chlamydial neonatal conjunctivitis</span>","c":["<span class='pill'>Chlamydia trachomatis D–K</span><span class='gen'> — obligate intracellular; elementary body (infectious) / reticulate body (replicating); no peptidoglycan, so β-lactams fail.</span>","<mark>Most common cause of neonatal conjunctivitis</mark>; acquired during birth; appears <mark>5–10 days</mark> after birth (may be later).","Conjunctival hyperaemia, eyelid oedema, marked <span class='pill'>mucopurulent</span> discharge. Associated disease: <mark>chlamydial pneumonia</mark><span class='gen'> (staccato cough, afebrile, 1–3 months old).</span>","<span class='pill'>Antigen detection</span>, conjunctival scrapings<span class='gen'> (Giemsa: intracytoplasmic inclusions; NAAT).</span> <mark>Not prevented by silver nitrate or erythromycin drops</mark>.","<span class='gen'>Oral erythromycin 14 days (systemic — also treats / prevents the pneumonia); azithromycin alternative; treat the mother.</span>","Timing: gonorrhoea <mark>2–5 d</mark> vs chlamydia <mark>5–10 d</mark>; prophylactic drops do not stop chlamydia.","HY notes p.66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Trachoma</span>","c":["<span class='pill'>C. trachomatis serotypes A, B, Ba, C</span>.","<mark>Major cause of blindness</mark> in developing Asia and Africa; often begins in infancy; chronic recurrent infection. Transmission <span class='pill'>eye → hand → eye</span> and by <span class='pill'>flies</span>. Prevention: washing the face once daily.","Primarily the <mark>upper</mark> palpebral conjunctiva: prominent <span class='pill'>white follicles</span>. Pathogenesis of blindness: repeated infection → conjunctival scarring → <span class='pill'>entropion</span> (lid turns in) → lashes scrape the cornea (<span class='gen'>trichiasis</span>) → progressive corneal damage → blindness.","<span class='gen'>Clinical (WHO grading of follicles / scarring / trichiasis / opacity); NAAT or Giemsa of scrapings.</span>","<span class='gen'>WHO 'SAFE': Surgery for trichiasis, Antibiotics (mass oral azithromycin), Facial cleanliness, Environmental improvement.</span>","A–C = trachoma, upper lid, blindness; D–K = inclusion conjunctivitis / STD, lower lid, vision spared.","HY notes p.65<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>TRIC — adult inclusion conjunctivitis</span>","c":["<span class='pill'>C. trachomatis serotypes D–K</span>.","<mark>Sexually transmitted</mark>: autoinoculation from a genital infection, oral sex; also swimming pools and hot tubs.","Primarily the <mark>lower</mark> palpebral conjunctiva; follicular, chronic mucopurulent conjunctivitis<span class='gen'> that fails topical antibiotics</span>. <mark>Visual loss is uncommon</mark>.","<span class='gen'>NAAT of conjunctival swab (and of genital sites); Giemsa inclusions.</span>","<span class='gen'>Oral azithromycin single dose or doxycycline 7 days; treat sexual partners; screen for other STDs.</span>","Chronic follicular conjunctivitis in a sexually active adult = chlamydia D–K.","HY notes p.66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":1,"cn":[]}],"below":0,"wide":0},{"fmt":"COMPARE — NEONATAL CONJUNCTIVITIS BY DAY OF LIFE","cols":["Cause","Onset","Picture","Prevented by drops?","Treatment","Source"],"rows":[{"n":"<span class='pill'>Chemical (silver nitrate)</span>","c":["<span class='gen'>Day 1 (first 24 h)</span>","<span class='gen'>Mild watery redness, self-limited.</span>","<span class='gen'>It is the drops.</span>","<span class='gen'>None.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]},{"n":"<span class='pill'>Neisseria gonorrhoeae</span>","c":["<mark>2–5 days</mark>","Hyperacute, hyperpurulent, discharge re-accumulates in seconds; corneal perforation if untreated.","<span class='gen'>Yes — erythromycin ointment at birth</span>","IM ceftriaxone.","HY notes p.65, 66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'>Chlamydia trachomatis D–K</span>","c":["<mark>5–10 days</mark>","Mucopurulent, lid oedema; associated pneumonia.","No — neither silver nitrate nor erythromycin drops.","<span class='gen'>Oral erythromycin 14 days.</span>","HY notes p.66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Herpes simplex (HSV-2)</span>","c":["<span class='gen'>1–2 weeks</span>","<span class='gen'>Vesicles on lids, dendritic keratitis; part of neonatal HSV — may disseminate.</span>","<span class='gen'>No.</span>","<span class='gen'>IV aciclovir.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a></div></div>","np":1,"cn":[]}],"below":0,"wide":0},{"fmt":"ALLERGIC (non-infectious, for contrast)","cols":["Entity","Cause","Clinical picture","Treatment","Source"],"rows":[{"n":"<span class='pill'>Allergic conjunctivitis</span>","c":["Type I hypersensitivity<span class='gen'> (IgE, mast cells) to pollen, dander, dust.</span>","<mark>Intense itching</mark>, watery discharge, <mark>usually bilateral</mark>; chemosis<span class='gen'>, cobblestone papillae under the upper lid in vernal disease.</span>","<span class='gen'>Antihistamine / mast-cell-stabiliser drops (olopatadine), cold compresses, allergen avoidance.</span>","HY notes p.44<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p44.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p44.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.44\"><span class=\"ipg\">p.44</span></a></div></div>","np":1,"cn":[]}],"below":0,"wide":0}]},{"sec":"Keratitis — Corneal Infection","chip":"Keratitis","note":"The two keratitides in the notes (HSV, contact-lens / Pseudomonas) plus the classic extras that are not in the notes and are marked as generated.","blocks":[{"fmt":"KERATITIS TABLE","cols":["Entity","Organism · pathogenesis","Who gets it · risk factors","Clinical picture","Diagnosis","Treatment","⭐ Will Be Tested","Source"],"rows":[{"n":"<span class='pill'>Herpes simplex keratitis</span>","c":["<span class='pill'>HSV-1</span> in adults — <mark>reactivation from latency in the trigeminal ganglion</mark> (V1); <span class='pill'>HSV-2</span> in neonates — acquired from the mother's vaginal secretions<span class='gen'> (enveloped dsDNA virus; latency is why it recurs and is 'not self-limited').</span>","Trauma, contact lenses, contaminated eye drops. <mark>Most common cause of keratitis in adults who do not wear contact lenses</mark>; <mark>second only to trauma as a cause of acquired blindness in the U.S.</mark>","Eye pain, excessive blinking, visual blurring<span class='gen'>, photophobia, reduced corneal sensation</span>. Characteristic finding: <mark>dendritic ulcers</mark> — diagnostic when present but present only in a minority. Not self-limited; recurs; can progress to blindness.","<span class='gen'>Fluorescein staining shows the branching dendrite with terminal bulbs; PCR of swab / Tzanck (multinucleated giant cells) if needed.</span>","<mark>Avoid topical steroids</mark> (they let the epithelial ulcer spread)<span class='gen'> — topical ganciclovir gel or trifluridine, or oral aciclovir / valaciclovir; steroids only for stromal (immune) keratitis under specialist care.</span>","Dendritic ulcer + never steroids; latency in the trigeminal ganglion.","HY notes p.67<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Contact-lens (bacterial) keratitis</span>","c":["<span class='pill'>Pseudomonas aeruginosa</span> and <span class='pill'>staphylococci</span><span class='gen'> (Pseudomonas: Gram-negative rod, oxidase +, proteases and exotoxin A rapidly liquefy stroma).</span> Pathogenesis: corneal epithelial disruption → corneal ulceration.","Contact-lens wear is the <mark>most common risk factor for microbial keratitis in the U.S.</mark> — wearing lenses <mark>overnight</mark>, contaminated lenses / cases / solution.","Pain, tearing, conjunctivitis<span class='gen'>; white stromal infiltrate that can perforate within 24–48 h with Pseudomonas; hypopyon.</span>","<span class='gen'>Corneal scraping for Gram stain and culture before drops; Pseudomonas grows green pigment (pyocyanin), grape-like odour.</span>","<span class='gen'>Urgent: fortified topical antibiotics (fluoroquinolone e.g. ciprofloxacin / moxifloxacin, or tobramycin + cefazolin) every hour; stop lens wear.</span>","Overnight lenses + rapidly progressive ulcer = <mark>Pseudomonas</mark>.","HY notes p.67<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'><span class='gen'>Acanthamoeba keratitis</span></span>","c":["<span class='gen'>Free-living amoeba (cysts and trophozoites) in tap / well water and soil.</span>","<span class='gen'>Contact-lens wearers who rinse lenses in tap water or swim / hot-tub in lenses.</span>","<span class='gen'>Severe pain out of proportion to signs, ring-shaped stromal infiltrate, radial keratoneuritis; chronic and easily mistaken for HSV.</span>","<span class='gen'>Corneal scraping — calcofluor white / Giemsa shows cysts; culture on non-nutrient agar with E. coli; PCR.</span>","<span class='gen'>Prolonged topical biguanides (PHMB or chlorhexidine) ± propamidine, months; keratoplasty if scarred.</span>","<span class='gen'>Contact lens + tap water + pain out of proportion = Acanthamoeba.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]},{"n":"<span class='pill'><span class='gen'>Fungal keratitis</span></span>","c":["<span class='gen'>Filamentous fungi (Fusarium, Aspergillus) after plant / vegetable trauma in the tropics; Candida in a previously diseased eye or after steroid use.</span>","<span class='gen'>Agricultural injury, topical steroids, contact lenses (Fusarium outbreak with a lens solution).</span>","<span class='gen'>Indolent course; feathery-edged grey infiltrate with satellite lesions, hypopyon.</span>","<span class='gen'>Scraping — KOH / calcofluor stain shows hyphae; Sabouraud culture.</span>","<span class='gen'>Topical natamycin (filamentous) or amphotericin (Candida); oral voriconazole for deep disease.</span>","<span class='gen'>Plant trauma + feathery infiltrate with satellites = fungus.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]},{"n":"<span class='pill'><span class='gen'>Herpes zoster ophthalmicus</span></span>","c":["<span class='gen'>Varicella-zoster virus reactivating in the V1 (ophthalmic) division of the trigeminal ganglion.</span>","<span class='gen'>Older or immunocompromised adults.</span>","<span class='gen'>Painful dermatomal vesicles on the forehead / upper lid; Hutchinson sign (vesicles on the tip of the nose = nasociliary involvement) predicts eye disease: pseudodendrites, uveitis, retinitis.</span>","<span class='gen'>Clinical; PCR of vesicle fluid.</span>","<span class='gen'>Oral valaciclovir / aciclovir within 72 h; steroids for uveitis under specialist care; the Shingrix vaccine prevents it.</span>","<span class='gen'>Nose-tip vesicle (Hutchinson) = look at the eye.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]}],"below":0,"wide":0}]},{"sec":"Endophthalmitis · Uveitis · Retinitis","chip":"Inside the eye","note":"Infection of the anterior chamber and vitreous (endophthalmitis), the uveal tract (uveitis) and the retina (CMV retinitis — in the objectives but not in the notes, so that row is generated).","blocks":[{"fmt":"INTRA-OCULAR INFECTION","cols":["Entity","Organism","Route · risk factors","Clinical picture","Diagnosis","Treatment","⭐ Will Be Tested","Source"],"rows":[{"n":"<span class='pill'>Bacterial endophthalmitis</span>","c":["<span class='pill'>Coagulase-negative staphylococci</span> (S. epidermidis), <span class='pill'>S. aureus</span>, <span class='pill'>streptococci</span><span class='gen'> — skin / conjunctival flora introduced at surgery; Bacillus cereus after penetrating trauma.</span>","Infection of the <mark>anterior chamber or vitreous</mark>; <mark>most common after cataract surgery</mark>; also trauma and severe corneal infection (spread from keratitis).<span class='gen'> Endogenous cases come from bacteraemia (endocarditis, liver abscess — Klebsiella).</span>","Pain, redness, <mark>loss of vision</mark><span class='gen'>, hypopyon, lid swelling, vitreous haze — usually within a week of surgery.</span>","<span class='gen'>Emergency: vitreous / aqueous tap for Gram stain and culture (before antibiotics); B-scan ultrasound.</span>","<span class='gen'>Intravitreal vancomycin + ceftazidime immediately; vitrectomy if vision is light-perception only.</span>","Painful red eye with vision loss days after <mark>cataract surgery</mark> = endophthalmitis (coag-neg staph).","HY notes p.68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Fungal (Candida) endophthalmitis</span>","c":["<span class='pill'>Candida albicans</span><span class='gen'> — yeast with pseudohyphae; germ-tube positive; part of normal flora.</span>","<span class='gen'>Endogenous: candidaemia seeds the choroid / retina — IV drug use, central lines / TPN, prolonged antibiotics, neutropenia, ICU; exogenous after surgery.</span>","<mark>'Fluff ball'</mark> in the vitreous humour<span class='gen'> — creamy white chorioretinal lesions that bud into the vitreous ('string of pearls'); painless floaters and blurring at first.</span>","<span class='gen'>Dilated fundoscopy in every candidaemic patient; blood cultures; vitreous tap for culture / PCR.</span>","Treat by <mark>removing the vitreous</mark> (vitrectomy) and <mark>instilling drugs</mark><span class='gen'> (intravitreal amphotericin B or voriconazole) plus systemic fluconazole / voriconazole for weeks.</span>","Fluff balls in the vitreous of an IV-drug user / line patient = Candida.","HY notes p.68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Infectious uveitis (iritis / iridocyclitis)</span>","c":["<mark>Herpes simplex virus</mark> is the most common infective cause; may occur with keratitis<span class='gen'> — also VZV, CMV (immunocompromised), syphilis, TB, toxoplasma (posterior).</span>","<span class='gen'>Reactivation of latent HSV; look for concurrent dendritic keratitis or a history of it.</span>","Pain, redness, <mark>severe photophobia</mark>, blurry vision, <mark>miosis</mark>; <span class='pill'>ciliary flush</span>. Characteristic finding: <mark>white dots on the internal surface of the cornea</mark> (keratic precipitates)<span class='gen'>; cells and flare in the anterior chamber on slit lamp; raised IOP with HSV.</span>","<span class='gen'>Slit-lamp examination; aqueous PCR for HSV / VZV / CMV if atypical; syphilis and TB serology for recurrent uveitis.</span>","<span class='gen'>Oral aciclovir / valaciclovir plus topical steroid and a cycloplegic (steroid is acceptable here because the corneal epithelium is intact — contrast with epithelial HSV keratitis).</span>","Photophobia + miosis + ciliary flush = uveitis; HSV is the infective cause the notes name.","HY notes p.62, 68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.62\"><span class=\"ipg\">p.62</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'><span class='gen'>CMV retinitis</span></span>","c":["<span class='gen'>Cytomegalovirus (HHV-5): enveloped dsDNA herpesvirus, latent in monocytes / myeloid cells; 'owl's-eye' intranuclear inclusions.</span>","<span class='gen'>Reactivation in the severely immunocompromised — AIDS with CD4 < 50, transplant recipients; congenital CMV causes chorioretinitis in the newborn.</span>","<span class='gen'>Painless, progressive: floaters, blurred vision, field loss; fundus shows haemorrhagic necrotising retinitis along vessels — 'pizza pie' / 'cottage cheese and ketchup'; untreated → retinal detachment and blindness.</span>","<span class='gen'>Clinical fundoscopy in a CD4 < 50 patient; CMV PCR of blood or aqueous / vitreous.</span>","<span class='gen'>Oral valganciclovir (or IV ganciclovir); foscarnet / cidofovir if resistant; intravitreal ganciclovir for sight-threatening lesions; start ART (watch for immune-recovery uveitis).</span>","<span class='gen'>CD4 < 50 + painless vision loss + haemorrhagic retinitis = CMV; treat with (val)ganciclovir.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]}],"below":0,"wide":0}]},{"sec":"Eyelid & Adnexa — Styes, Chalazion, Blepharitis (+ cellulitis)","chip":"Eyelid","note":"The lid lesions from the notes (which gland, acute vs chronic, painful vs painless) and the orbital infections that are usually examined next to them.","blocks":[{"fmt":"EYELID TABLE","cols":["Entity","Gland / tissue","Cause","Clinical picture","Treatment","⭐ Will Be Tested","Source"],"rows":[{"n":"<span class='pill'>Hordeolum (stye)</span>","c":["<mark>Zeis</mark> sebaceous glands at the lid margin (eyelash follicle)<span class='gen'> — external stye; an internal stye is an acutely infected meibomian gland.</span>","Acute <mark>purulent</mark> inflammation<span class='gen'> — Staphylococcus aureus.</span>","Small, acute, <mark>painful</mark>, self-limiting (up to a week); red tender lump at the lash line.","Warm compresses; incision and curettage or topical antibiotics.","Painful + acute + lash margin = stye (Zeis).","HY notes p.60<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.60\"><span class=\"ipg\">p.60</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Chalazion</span>","c":["<mark>Meibomian</mark> glands in the inner tarsus (palpebral conjunctiva).","Chronic obstruction and rupture of a meibomian gland with lipid accumulation → <span class='gen'>lipogranulomatous</span> inflammation; not primarily infectious.","Large, chronic, <mark>painless</mark> lump; disappears in 1–2 years without treatment.","Incision and curettage; oral and topical antibiotics<span class='gen'> (mainly if secondarily infected); warm compresses first.</span>","Painless + chronic + deep in the lid = chalazion (meibomian).","HY notes p.60<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.60\"><span class=\"ipg\">p.60</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Blepharitis</span>","c":["Lid margin — lash follicles and meibomian glands.","Chronic inflammation associated with <span class='pill'>seborrhoeic dermatitis</span>, <span class='pill'>staphylococcal infection</span> and <span class='pill'>Demodex</span> mite infestation.","Gritty / burning sensation, tearing, itching, red swollen lids, dry eyes, crusting / flaking, <mark>matted lashes in the morning</mark>. Complications: corneal epithelial erosions, rarely corneal perforation.","Lid hygiene and warm compresses; antibiotics<span class='gen'> (topical erythromycin / bacitracin; oral doxycycline for meibomian disease; tea-tree oil for Demodex)</span>; artificial tears / lubricating ointment.","Chronic crusty lids = blepharitis (staph + seborrhoea + Demodex).","HY notes p.59<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p59.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p59.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.59\"><span class=\"ipg\">p.59</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'><span class='gen'>Dacryocystitis</span></span>","c":["<span class='gen'>Lacrimal sac, below the medial canthus.</span>","<span class='gen'>Obstruction of the nasolacrimal duct → S. aureus, S. epidermidis, streptococci, H. influenzae in infants.</span>","<span class='gen'>Painful red swelling at the medial canthus; pus expressed from the punctum on pressure; tearing.</span>","<span class='gen'>Warm compresses; oral / IV antibiotics; dacryocystorhinostomy for recurrent cases.</span>","<span class='gen'>Medial canthal abscess with tearing = dacryocystitis.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]},{"n":"<span class='pill'><span class='gen'>Preseptal (periorbital) cellulitis</span></span>","c":["<span class='gen'>Skin and soft tissue anterior to the orbital septum.</span>","<span class='gen'>Spread from a stye, insect bite, skin break or sinusitis; S. aureus, streptococci.</span>","<span class='gen'>Lid swelling and erythema but normal eye movement, no pain on movement, no proptosis, vision normal.</span>","<span class='gen'>Oral antibiotics (amoxicillin-clavulanate, clindamycin); CT only if orbital signs appear.</span>","<span class='gen'>Swollen lid + full painless movement = preseptal.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]},{"n":"<span class='pill'><span class='gen'>Orbital cellulitis</span></span>","c":["<span class='gen'>Tissues behind the septum — the orbit itself.</span>","<span class='gen'>Usually from ethmoid sinusitis through the thin lamina papyracea; S. aureus, S. pneumoniae, other streptococci, H. influenzae, anaerobes; mucormycosis in diabetics.</span>","<span class='gen'>Lid swelling PLUS proptosis, painful / limited eye movement (ophthalmoplegia), chemosis, fever, reduced vision; complications: cavernous sinus thrombosis, abscess, blindness.</span>","<span class='gen'>Contrast CT of orbits and sinuses; IV antibiotics (vancomycin + ceftriaxone / ampicillin-sulbactam); drainage of abscess or sinus.</span>","<span class='gen'>Proptosis + pain on eye movement = orbital cellulitis — an emergency; ethmoid sinus is the source.</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]}],"below":0,"wide":0}]},{"sec":"The Eight Organisms — Cheat Sheet","chip":"Organisms","note":"One row per organism named in the objectives: microbiology, the eye disease(s) it causes, how it reaches the eye (the STD / respiratory / latency / immunocompromise links), diagnosis and treatment. Notes content is plain; everything else is generated.","blocks":[{"fmt":"ORGANISM TABLE","cols":["Organism","Microbiology","Eye disease(s)","How it reaches the eye · link","Diagnosis","Treatment","Source"],"rows":[{"n":"<span class='pill'>Adenovirus</span>","c":["Naked dsDNA, lytic; fibres for attachment; serotypes 3, 4, 7 (pharyngitis) and 8, 19 (epidemic keratoconjunctivitis)<span class='gen'>; icosahedral, >50 serotypes, stable in pools / on surfaces.</span>","Acute viral conjunctivitis, pharyngoconjunctival fever, epidemic keratoconjunctivitis (may be haemorrhagic).","Respiratory secretions, fingers, swimming pools — the <mark>respiratory tract</mark> link; 5–15 day incubation; 2-week isolation.","Real-time PCR if needed<span class='gen'>; clinical in outbreaks.</span>","<span class='gen'>Supportive only; hygiene / isolation.</span>","HY notes p.63<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.63\"><span class=\"ipg\">p.63</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Chlamydia trachomatis</span>","c":["Serotypes <mark>A, B, Ba, C</mark> → trachoma; <mark>D–K</mark> → inclusion conjunctivitis, neonatal conjunctivitis, genital infection<span class='gen'>; L1–L3 → LGV. Obligate intracellular; elementary / reticulate bodies; Giemsa-positive cytoplasmic inclusions; no peptidoglycan.</span>","Trachoma (upper lid, blindness), adult inclusion conjunctivitis (lower lid), neonatal conjunctivitis (most common) + pneumonia.","<mark>STD</mark> link (D–K: autoinoculation, oral sex, birth canal); trachoma by eye-hand-eye and flies.","Antigen detection, conjunctival scrapings<span class='gen'>, NAAT.</span>","<span class='gen'>Azithromycin or doxycycline (adults); oral erythromycin 14 d (neonates); SAFE strategy for trachoma.</span>","HY notes p.65, 66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'>Neisseria gonorrhoeae</span>","c":["Gram-negative coffee-bean diplococci, oxidase +, non-encapsulated, facultative intracellular<span class='gen'>; pili and Opa proteins for attachment, antigenic variation; grows on Thayer-Martin.</span>","Gonococcal ophthalmia neonatorum (2–5 d); <span class='gen'>hyperacute purulent conjunctivitis in adults by autoinoculation from genital infection — one of the few bacteria that penetrates intact corneal epithelium.</span>","<mark>STD</mark> link — vaginal delivery from an infected mother.","Gram stain of discharge (rapid)<span class='gen'>; culture / NAAT.</span>","IM ceftriaxone<span class='gen'>; prophylactic erythromycin ointment at birth.</span>","HY notes p.65<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Herpes simplex virus</span>","c":["HSV-1 (adults, latent in the <mark>trigeminal ganglion</mark>); HSV-2 (neonates, from maternal vaginal secretions)<span class='gen'>; enveloped dsDNA; Cowdry A intranuclear inclusions, multinucleated giant cells.</span>","Keratitis with <mark>dendritic ulcers</mark>; uveitis (most common infective cause); <span class='gen'>blepharoconjunctivitis; neonatal disseminated disease.</span>","<mark>Latency</mark> link — reactivation triggered by trauma, lenses, contaminated drops; <mark>STD</mark> link for HSV-2 in the newborn.","<span class='gen'>Fluorescein-stained dendrite; PCR / Tzanck.</span>","Avoid topical steroids<span class='gen'>; topical ganciclovir / trifluridine or oral aciclovir; IV aciclovir for neonates.</span>","HY notes p.67, 68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'>Candida albicans</span>","c":["<span class='gen'>Dimorphic yeast (budding yeast and pseudohyphae); germ tube at 37 °C; normal flora of skin, gut, vagina.</span>","Fungal endophthalmitis — <mark>'fluff ball' in the vitreous</mark><span class='gen'>; also keratitis in a diseased / steroid-treated eye.</span>","<mark>Immunocompromise</mark> / candidaemia link<span class='gen'>: IV drug use, central lines, TPN, broad-spectrum antibiotics, neutropenia.</span>","<span class='gen'>Fundoscopy in candidaemia; blood and vitreous cultures; KOH / Gram stain of scrapings.</span>","Vitrectomy + intravitreal drugs<span class='gen'> (amphotericin / voriconazole) + systemic azole.</span>","HY notes p.68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Cytomegalovirus</span>","c":["<span class='gen'>HHV-5, enveloped dsDNA herpesvirus; latent in myeloid cells; owl's-eye intranuclear inclusions; the largest herpesvirus.</span>","<span class='gen'>CMV retinitis (AIDS, CD4 < 50; transplant); congenital chorioretinitis.</span>","<span class='gen'>Immunocompromise and latency links — reactivation when cell-mediated immunity collapses.</span>","<span class='gen'>Fundoscopy; CMV PCR of blood / vitreous.</span>","<span class='gen'>Valganciclovir / ganciclovir; foscarnet or cidofovir if resistant; restore immunity (ART).</span>","<span class='gen'>entirely generated — not in the notes</span>"],"img":"","np":0,"cn":[]},{"n":"<span class='pill'>Staphylococci</span>","c":["S. aureus and S. epidermidis (coagulase-negative)<span class='gen'>; Gram-positive clusters, catalase +; aureus coagulase + and β-haemolytic.</span>","Bacterial conjunctivitis (adults), blepharitis, hordeolum, contact-lens keratitis, post-operative endophthalmitis (coag-neg staph most common)<span class='gen'>, dacryocystitis, preseptal / orbital cellulitis.</span>","<span class='gen'>Skin and nasal flora — direct inoculation, surgery, lenses; secondary to lid disease.</span>","<span class='gen'>Gram stain and culture of discharge / scrapings / vitreous.</span>","<span class='gen'>Topical antibiotics for surface disease; intravitreal vancomycin for endophthalmitis; lid hygiene for blepharitis.</span>","HY notes p.59, 60, 64, 67, 68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p59.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p59.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.59\"><span class=\"ipg\">p.59</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.60\"><span class=\"ipg\">p.60</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.64\"><span class=\"ipg\">p.64</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":5,"cn":[]},{"n":"<span class='pill'>Pseudomonas aeruginosa</span>","c":["<span class='gen'>Gram-negative rod, oxidase +, non-fermenter, blue-green pyocyanin, grape-like odour; proteases, elastase, exotoxin A; loves water and lens cases.</span>","Contact-lens keratitis — rapidly destructive corneal ulcer<span class='gen'>; also endophthalmitis after trauma / surgery and in contaminated eye drops.</span>","<span class='gen'>Environmental / water link — overnight and contaminated contact lenses.</span>","<span class='gen'>Corneal scraping: Gram-negative rods; culture on cetrimide agar.</span>","<span class='gen'>Fortified topical fluoroquinolone or tobramycin hourly; stop lenses; never patch a Pseudomonas ulcer.</span>","HY notes p.67<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a></div></div>","np":1,"cn":[]}],"below":0,"wide":0}]},{"sec":"Diagnostics & Treatment Pearls","chip":"Pearls","note":"The testable one-liners collected in one place.","blocks":[{"fmt":"PEARLS","cols":["Pearl","Detail","Source"],"rows":[{"n":"<span class='pill'>Discharge tells the cause</span>","c":["Purulent / thick + lids stuck = <mark>bacterial</mark>; watery + URI symptoms = <mark>viral</mark>; itching + bilateral = <mark>allergic</mark>.","HY notes p.44"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p44.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p44.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.44\"><span class=\"ipg\">p.44</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Neonatal clock</span>","c":["Gonorrhoea <mark>2–5 days</mark> (hyperpurulent, Gram stain, IM ceftriaxone) · Chlamydia <mark>5–10 days</mark> (mucopurulent, antigen detection, not prevented by drops, <span class='gen'>oral erythromycin</span>) · <span class='gen'>chemical day 1 · HSV 1–2 weeks</span>.","HY notes p.65, 66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'>Serotype map — chlamydia</span>","c":["<mark>A, B, Ba, C</mark> trachoma (upper lid, blindness, flies, face-washing) · <mark>D–K</mark> inclusion conjunctivitis + neonatal (lower lid, STD, vision spared)<span class='gen'> · L1–L3 LGV.</span>","HY notes p.65, 66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'>Serotype map — adenovirus</span>","c":["<mark>3, 4, 7</mark> pharyngoconjunctival fever · <mark>8, 19</mark> epidemic keratoconjunctivitis (highly contagious, haemorrhagic, 2-week isolation).","HY notes p.63"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.63\"><span class=\"ipg\">p.63</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>The painful ones</span>","c":["Haemorrhagic conjunctivitis (Coxsackie A24 / EV70), keratitis, uveitis, scleritis, angle-closure glaucoma are <mark>painful</mark>; adenoviral conjunctivitis, episcleritis, subconjunctival haemorrhage and chalazion are not.","HY notes p.61, 62, 63, 64"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p61.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.61\"><span class=\"ipg\">p.61</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.62\"><span class=\"ipg\">p.62</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.63\"><span class=\"ipg\">p.63</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p64.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.64\"><span class=\"ipg\">p.64</span></a></div></div>","np":4,"cn":[]},{"n":"<span class='pill'>Steroid rule</span>","c":["<mark>Never</mark> topical steroids for epithelial HSV keratitis (dendritic ulcer)<span class='gen'>; steroids are used, with antivirals, for HSV stromal keratitis and uveitis under an ophthalmologist.</span>","HY notes p.62, 67<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p62.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.62\"><span class=\"ipg\">p.62</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a></div></div>","np":2,"cn":[]},{"n":"<span class='pill'>Latency → recurrence</span>","c":["HSV-1 hides in the trigeminal ganglion and reactivates with trauma, lenses or contaminated drops — HSV keratitis is <mark>not self-limited</mark> and is the #2 cause of acquired blindness in the U.S. after trauma.","HY notes p.67"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Contact lenses</span>","c":["Most common risk factor for microbial keratitis in the U.S.: <mark>Pseudomonas</mark> and staphylococci; overnight wear and contaminated lenses<span class='gen'>; tap water → Acanthamoeba.</span>","HY notes p.67<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p67.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.67\"><span class=\"ipg\">p.67</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Post-op eye</span>","c":["Pain + redness + vision loss after cataract surgery = <mark>endophthalmitis</mark> (coag-neg staph, S. aureus, streptococci)<span class='gen'> — intravitreal antibiotics within the hour.</span>","HY notes p.68<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p68.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.68\"><span class=\"ipg\">p.68</span></a></div></div>","np":1,"cn":[]},{"n":"<span class='pill'>Rapid tests</span>","c":["Gonococcus: <mark>Gram stain</mark> of discharge · adenovirus: <mark>real-time PCR</mark> · chlamydia: <mark>antigen detection</mark> / scrapings<span class='gen'> (NAAT) · HSV: fluorescein dendrite, PCR · fungi: KOH / calcofluor · Acanthamoeba: calcofluor, non-nutrient agar.</span>","HY notes p.63, 65, 66<br><span class='gen'>gaps filled by research</span>"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p63.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.63\"><span class=\"ipg\">p.63</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p65.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.65\"><span class=\"ipg\">p.65</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p66.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.66\"><span class=\"ipg\">p.66</span></a></div></div>","np":3,"cn":[]},{"n":"<span class='pill'>Which lid gland</span>","c":["<mark>Zeis</mark> = hordeolum (acute, painful, lash margin) · <mark>Meibomian</mark> = chalazion (chronic, painless, tarsus) · lid margin + staph + seborrhoea + Demodex = blepharitis.","HY notes p.59, 60"],"img":"<div class=\"igrp\"><div class=\"ilab\">NUPY HY DOC SN 2026.pdf [notes]</div><div class=\"igrid\"><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p59.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p59.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.59\"><span class=\"ipg\">p.59</span></a><a class=\"ith\" href=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" target=\"_blank\"><img src=\"nupy_neuroanat_slides/nupy_hy_doc_sn_2026/nupy_hy_doc_sn_2026_p60.jpg\" loading=\"lazy\" decoding=\"async\" alt=\"NUPY HY DOC SN 2026.pdf [notes] p.60\"><span class=\"ipg\">p.60</span></a></div></div>","np":2,"cn":[]}],"below":0,"wide":0}]}];
+
+
+const host=document.getElementById('host');
+const _usedIds={};
+function slugify(s){ return (s||'').replace(/<[^>]+>/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+function uniqueSlug(n){ let base=slugify(n)||'row'; let id=base,i=2; while(_usedIds[id]){ id=base+'-'+i; i++; } _usedIds[id]=1; return id; }
+const chipsEl=document.getElementById('chips');
+const qEl=document.getElementById('q');
+const countEl=document.getElementById('count');
+const noresults=document.createElement('div'); noresults.className='noresults'; noresults.textContent='Nothing matches that search.';
+
+let total=0;
+DATA.forEach((grp,gi)=>{
+  let nrows=0; grp.blocks.forEach(b=>nrows+=b.rows.length);
+  const sec=document.createElement('div'); sec.className='secblock'; sec.dataset.sec=gi;
+  let h=`<div class="sechead"><span class="sec-label">${grp.sec}</span><span class="sec-n">· ${nrows} rows</span></div>`;
+  if(grp.note) h+=`<div class="secnote">${grp.note}</div>`;
+  grp.blocks.forEach(b=>{
+    const below=!!b.below, nc=b.cols.length+(below?0:1);
+    h+=`<div class="fmt">${b.fmt}</div><div class="tablecard${b.wide?' wide':''}${below?' below':''}" data-sec="${gi}"><table><colgroup><col class="c-name">`;
+    for(let k=1;k<b.cols.length;k++) h+=`<col>`;
+    h+=(below?``:`<col class="c-img">`)+`</colgroup><thead><tr>`;
+    b.cols.forEach((c,k)=>{ const star=/^⭐/.test(c); h+=`<th${star?' class="exam-h"':''}>${c}</th>`; });
+    h+=(below?``:`<th class="img-h">Image</th>`)+`</tr></thead><tbody>`;
+    b.rows.forEach(r=>{
+      total++;
+      const id=uniqueSlug(r.n);
+      const txt=(r.n+' '+r.c.join(' ')).replace(/<[^>]+>/g,'').toLowerCase().replace(/"/g,'&quot;');
+      const cns=(r.cn||[]).join(' ');
+      h+=`<tr class="row${below?' hasbelow':''}" id="${id}" data-sec="${gi}" data-cn="${cns}" data-txt="${txt}"><td class="name">${r.n}<span class="npill">${r.np}p</span>${cns?`<span class="cns">CN ${(r.cn||[]).join(' · ')}</span>`:''}</td>`;
+      r.c.forEach((cell,k)=>{ const isExam=/^⭐/.test(b.cols[k+1]||''); h+=`<td class="${isExam?'exam':'cell'}">${cell||'<span class="none">—</span>'}</td>`; });
+      h+=below?`</tr><tr class="irow" data-sec="${gi}"><td class="img" colspan="${nc}">${r.img||''}</td></tr>`:`<td class="img">${r.img||''}</td></tr>`;
+    });
+    h+=`</tbody></table></div>`;
+  });
+  sec.innerHTML=h; host.appendChild(sec);
+});
+host.appendChild(noresults);
+
+
+// chips
+const chipAll=document.createElement('div');
+chipAll.className='chip active';chipAll.textContent='All sections';chipAll.dataset.sec='all';
+chipsEl.appendChild(chipAll);
+DATA.forEach((grp,gi)=>{
+  const c=document.createElement('div');
+  c.className='chip';c.dataset.sec=gi;
+  c.textContent=grp.chip||grp.sec.replace(/ — .*$/,'');
+  chipsEl.appendChild(c);
+});
+
+let activeSec='all', activeCN='all';
+function apply(){
+  const q=qEl.value.trim().toLowerCase();
+  let visible=0;
+  document.querySelectorAll('tr.row').forEach(tr=>{
+    const secOk = activeSec==='all' || tr.dataset.sec===activeSec;
+    const cnOk = activeCN==='all' || (' '+tr.dataset.cn+' ').includes(' '+activeCN+' ');
+    const qOk = !q || tr.dataset.txt.includes(q);
+    const show = secOk && cnOk && qOk;
+    tr.style.display = show?'':'none';
+    const ir=tr.nextElementSibling; if(ir&&ir.classList.contains('irow')) ir.style.display=show?'':'none';
+    if(show) visible++;
+  });
+  // hide empty blocks and sections
+  document.querySelectorAll('.tablecard').forEach(tc=>{
+    let any=false; tc.querySelectorAll('tr.row').forEach(tr=>{ if(tr.style.display!=='none') any=true; });
+    tc.style.display=any?'':'none';
+    const f=tc.previousElementSibling; if(f&&f.classList.contains('fmt')) f.style.display=any?'':'none';
+  });
+  document.querySelectorAll('.secblock').forEach(sb=>{
+    let any=false; sb.querySelectorAll('tr.row').forEach(tr=>{ if(tr.style.display!=='none') any=true; });
+    sb.style.display=any?'':'none';
+  });
+  countEl.innerHTML = q||activeSec!=='all'||activeCN!=='all' ? `<b>${visible}</b> / ${total} shown` : `<b>${total}</b> rows`;
+  noresults.style.display = visible===0?'block':'none';
+}
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active'); activeSec=c.dataset.sec; apply();
+});
+qEl.addEventListener('input',apply);
+apply();
+
+function jumpToHash(){
+  const h=decodeURIComponent((location.hash||'').slice(1));
+  if(!h) return;
+  const el=document.getElementById(h);
+  if(!el) return;
+  if(activeSec!=='all'||activeCN!=='all'||qEl.value){ activeSec='all'; activeCN='all'; qEl.value='';
+    document.querySelectorAll('#chips .chip').forEach(c=>c.classList.toggle('active',c.dataset.sec==='all'));
+    document.querySelectorAll('#cnchips .chip').forEach(c=>c.classList.toggle('active',c.dataset.cn==='all'));
+    apply(); }
+  setTimeout(()=>{
+    const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thead-top'))||90)+18;
+    const y=el.getBoundingClientRect().top+window.pageYOffset-off;
+    window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+    el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump');
+  },60);
+}
+jumpToHash();
+window.addEventListener('hashchange',jumpToHash);
+
+// Anchor the sticky column header flush beneath the full sticky block
+// (search + chips). Measured live so fullscreen, resize, font load, and
+// chip-wrapping changes can never leave a gap or overlap.
+const stickyTop=document.querySelector('.stickytop');
+function syncHeaderOffset(){
+  const h=Math.round(stickyTop.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--thead-top', h+'px');
+}
+function syncSoon(){ syncHeaderOffset(); requestAnimationFrame(syncHeaderOffset); }
+syncSoon();
+setTimeout(syncHeaderOffset, 300);
+['resize','orientationchange','fullscreenchange','webkitfullscreenchange'].forEach(ev=>
+  window.addEventListener(ev, syncSoon));
+if(window.ResizeObserver){ new ResizeObserver(syncHeaderOffset).observe(stickyTop); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(syncSoon); }
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:8px;flex:0 0 auto;opacity:.55;text-decoration:none;padding:6px 4px;border-radius:7px}
+  .sitenav .sk-brand:hover{opacity:1;background:transparent}
+  .sitenav .sk-brand-on{opacity:1}
+  .sitenav .sk-gap{flex:0 0 auto;width:14px}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{font-size:10px;letter-spacing:.1em;margin-right:4px} .sitenav .sk-gap{width:8px} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  var COURSES=[
+    {id:'enre', brand:'ENRE', home:'index.html', minis:[
+      {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+        ['mini1.html','Overview'],
+        ['master_table.html','Master'],
+        ['pathology_table.html','Pathology'],
+        ['pathology_checklist.html','Path Checklist'],
+        ['physio_table.html','Physiology'],
+        ['drugs_table.html','Drugs'],
+        ['biochem_table.html','Biochem'],
+        ['embryo_anatomy_table.html','Embryo / Anatomy'],
+        ['pattern_recognition.html','Patterns'],
+        ['lecture_recall.html','Lecture Recall'],
+        ['physio_quiz.html','Physio Quiz'],
+        ['endocrine_path_quiz.html','Endo Path Quiz'],
+        ['male_path_quiz.html','Male Path Quiz'],
+        ['physio_ext1_quiz.html','Repro Physio Q'],
+        ['physio_ext2_quiz.html','Physio Bank 1'],
+        ['physio_ext3_quiz.html','Physio Bank 2'],
+        ['pharmq_quiz.html','Pharm Quiz'],
+        ['review_planner.html','Planner'],
+        ['gi_path_table.html','GI Path']
+      ]},
+      {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+        ['mini2.html','Overview'],
+        ['mini2_pathology_table.html','Pathology'],
+        ['mini2_pathology_checklist.html','Path Checklist'],
+        ['mini2_physio_table.html','Physiology'],
+        ['mini2_drugs_table.html','Drugs'],
+        ['mini2_foundations_table.html','Foundations'],
+        ['mini2_clinical_obgyn_table.html','Clinical OB/GYN'],
+        ['mini2_community_health_table.html','Public Health'],
+        ['mini2_review_hub.html','Review Hub'],
+        ['mini2_path_quiz_infancy.html','Infancy Path Quiz'],
+        ['mini2_path_quiz_female.html','Female Path Quiz'],
+        ['mini2_path_quiz_breast.html','Breast Path Quiz'],
+        ['mini2_physio_quizzes.html','Physio Quizzes'],
+        ['mini2_study_guide.html','Resource Guide']
+      ]}
+    ]},
+    {id:'nupy', brand:'NUPY', home:'nupy.html', minis:[
+      {id:'nupy1', label:'Mini 1', home:'nupy_mini1.html', pages:[
+        ['nupy_mini1.html','Overview'],
+        ['nupy_neuroanatomy_table.html','Neuroanatomy'],
+        ['nupy_neuroanatomy_doc.html','Neuroanatomy Doc'],
+        ['nupy_headneck_doc.html','Head & Neck Doc'],
+        ['nupy_cranial_nerves.html','Cranial Nerves'],
+        ['nupy_recall_decks.html','Recall Decks'],
+        ['nupy_eye_infections.html','Eye Infections'],
+        ['nupy_neuroanatomy_checklist.html','Neuro Checklist']
+      ]},
+      {id:'nupy2', label:'Mini 2', home:'nupy_mini2.html', pages:[
+        ['nupy_mini2.html','Overview']
+      ]}
+    ]}
+  ];
+  var MINIS=[]; COURSES.forEach(function(c){ c.minis.forEach(function(m){ m.course=c; MINIS.push(m); }); });
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null, course=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  COURSES.forEach(function(c){ if(c.home.toLowerCase()===here) course=c; });
+  if(mini) course=mini.course;
+  if(!course) course=COURSES[0];
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  COURSES.forEach(function(c,ci){
+    var brand=document.createElement('a'); brand.className='sk-brand'+(c===course?' sk-brand-on':''); brand.href=c.home; brand.textContent=c.brand; nav.appendChild(brand);
+    var sw=document.createElement('span'); sw.className='sk-minis';
+    c.minis.forEach(function(m){
+      var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+      a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+      sw.appendChild(a);
+    });
+    nav.appendChild(sw);
+    if(ci<COURSES.length-1){ var gap=document.createElement('span'); gap.className='sk-gap'; nav.appendChild(gap); }
+  });
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+
+
+</body>
+</html>
