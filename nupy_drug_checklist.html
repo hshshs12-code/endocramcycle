@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<title>Drug Checklist — NUPY Mini 1</title>
+<style>
+:root{--paper:#f4f2ec;--surface:#fff;--ink:#1c2024;--muted:#6c7077;--line:#e3ded3;--line-strong:#cdc6b6;--gene-bg:#d8efe9;--gene-ink:#0c5247;--exam-bg:#fdeceb;--exam-ink:#9a1f2e;--exam-strong:#7a1422;--warn-bg:#fdf3d7;--warn-ink:#8a6100}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+header.top{max-width:1040px;margin:0 auto;padding:30px 20px 0}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4.5vw,42px);line-height:1.05;margin:0}h1 em{font-style:italic;color:var(--exam-strong)}
+.sub{color:var(--muted);max-width:75ch;margin:12px 0 0;font-size:15px}
+.saved{display:inline-block;margin-top:10px;font:500 11.5px 'IBM Plex Mono',monospace;background:var(--warn-bg);color:var(--warn-ink);border-radius:7px;padding:4px 9px}
+.bar{position:sticky;top:0;z-index:20;background:rgba(244,242,236,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line-strong);margin-top:18px}
+.bar-in{max-width:1040px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.track{flex:1 1 160px;height:10px;background:#e7e2d6;border-radius:6px;overflow:hidden;display:flex;min-width:120px}
+.track i{display:block;height:100%;transition:width .25s}.track .g{background:var(--gene-ink)}.track .w{background:#e0a800}
+.count{font-family:'IBM Plex Mono',monospace;font-size:12px}.count b{color:var(--gene-ink)}.count .w{color:var(--warn-ink);font-weight:600}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 11px;cursor:pointer}
+.btn:hover{border-color:var(--ink)}.btn.on{background:var(--gene-bg);border-color:var(--gene-ink);color:var(--gene-ink)}.btn.danger{color:var(--exam-ink)}.btn.big{font-size:14px;padding:10px 16px}
+.btn.primary{background:var(--exam-strong);border-color:var(--exam-strong);color:#fff}
+.q{font:inherit;font-size:13px;border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;background:var(--surface);color:var(--ink);width:180px;max-width:100%}
+.wrap{max-width:1040px;margin:18px auto 60px;padding:0 20px}
+.hid{display:none!important}
+.pg{font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--gene-ink);background:var(--gene-bg);border:0;border-radius:6px;padding:3px 7px;cursor:pointer;white-space:nowrap}
+.pg:hover{background:#c4e6dc}
+.lb{position:fixed;inset:0;z-index:3000;background:rgba(20,18,14,.92);display:none;align-items:center;justify-content:center;padding:18px;cursor:zoom-out}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:94vh;border-radius:8px;background:#fff;box-shadow:0 12px 50px rgba(0,0,0,.55)}
+.lb .cap{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#f4f2ec;font-size:13px;text-shadow:0 1px 3px #000}
+.lab{font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:10px 0 3px}
+ul.f{margin:0;padding-left:19px}ul.f li{margin:2px 0}
+.def{font-size:14.5px;line-height:1.5}.def b{color:var(--exam-strong)}
+.thumb{display:block;width:150px;border:1px solid var(--line-strong);border-radius:8px;background:#fff;cursor:zoom-in}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.chip{font:500 12px 'Inter',sans-serif;border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:5px 11px;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}.chip small{color:inherit;opacity:.6;margin-left:4px;font-family:'IBM Plex Mono',monospace;font-size:10px}
+footer{max-width:1040px;margin:0 auto 50px;padding:0 20px;color:var(--muted);font-size:12.5px}
+
+details.lec{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;margin:0 0 10px;overflow:hidden}
+details.lec>summary{list-style:none;cursor:pointer;padding:13px 16px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center}
+details.lec>summary::-webkit-details-marker{display:none}
+.lt{font-family:'Fraunces',serif;font-weight:600;font-size:18.5px;line-height:1.25}.lt::before{content:'▸';display:inline-block;width:18px;color:var(--muted);font-size:13px;transition:.15s}details[open]>summary .lt::before{transform:rotate(90deg)}
+.lmeta{font:500 11.5px 'IBM Plex Mono',monospace;color:var(--muted);white-space:nowrap;text-align:right}.lmeta .c2{color:var(--gene-ink);font-weight:600}.lmeta .c1{color:var(--warn-ink);font-weight:600}
+.mini{grid-column:1/-1;height:6px;border-radius:4px;background:#e7e2d6;overflow:hidden;display:flex}.mini i{display:block;height:100%}.mini .g{background:var(--gene-ink)}.mini .w{background:#e0a800}
+.lbody{padding:2px 12px 12px;border-top:1px solid var(--line)}
+.item{border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#fffdf9}.item.done{border-color:#9ccfc3;background:#f3fbf8}.item.flag{border-color:#e0c46a;background:#fffaea}.item.done.flag{background:linear-gradient(90deg,#fffaea,#f3fbf8)}
+.ihead{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:9px 11px}
+.tick{width:22px;height:22px;margin-top:2px;accent-color:var(--gene-ink);cursor:pointer;flex:0 0 auto}
+.ititle{cursor:pointer;font-size:15px;font-weight:600;line-height:1.35}.item.done .ititle{color:#3c6f64}
+.prev{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.fl{font:500 11px 'IBM Plex Mono',monospace;border:1px solid var(--line-strong);background:#fff;border-radius:6px;padding:3px 7px;cursor:pointer;color:var(--muted)}.item.flag .fl{background:#f6dc8a;color:#5c4300;border-color:#e0c46a}
+.ibody{display:none;padding:2px 13px 13px 43px;border-top:1px dashed var(--line)}.item.open .ibody{display:block}
+.ibody .grid{display:grid;grid-template-columns:1fr 160px;gap:14px}
+textarea.note{width:100%;min-height:50px;font:inherit;font-size:13.5px;border:1px solid var(--line-strong);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink);resize:vertical;margin-top:8px}
+.when{font:500 11px 'IBM Plex Mono',monospace;color:var(--muted);margin-top:6px}
+@media(max-width:640px){.bar{position:static}.ihead{grid-template-columns:auto 1fr}.acts{grid-column:1/-1;justify-content:flex-start}.ibody{padding-left:13px}.ibody .grid{grid-template-columns:1fr}.q{width:100%}details.lec>summary{grid-template-columns:1fr}.lmeta{text-align:left;white-space:normal}}
+
+
+.sub2{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+.cdesc{font-size:13px;color:var(--muted);margin:10px 0 2px}
+.drug{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin:5px 0;background:#fffdf9}
+.drug.done{background:#f3fbf8;border-color:#9ccfc3}.drug.done .dn{color:#3c6f64;text-decoration:line-through;text-decoration-color:#9ccfc3}
+.dn{font-weight:600;font-size:15px;line-height:1.35}.dw{font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:1px}
+.srcs{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;max-width:260px}
+.srcs span{font:500 10px 'IBM Plex Mono',monospace;background:#efece4;color:#5c6168;border-radius:5px;padding:2px 6px;white-space:nowrap}
+@media(max-width:640px){.drug{grid-template-columns:auto 1fr}.srcs{grid-column:2;justify-content:flex-start;max-width:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">NUPY · Mini 1 · pharmacology</p>
+  <h1>Drug <em>Checklist</em></h1>
+  <p class="sub">Every drug you need to know for NUPY Mini 1, grouped by disease and by class. Tick each one off once you know it; the small tags show which lecture teaches it. The lists come from the official drug-list slides (9.09 Neuropharmacology, 10.09 Local Anesthetics, the opioid classification table) plus every drug taught in the Movement Disorders and Muscle Weakness pharmacology workshops, the headache, sleep, eye, autonomic and other lectures, and the HY DOC (pages 1–100). For mechanisms and details, see the Drugs Table.</p>
+  <span class="saved">Ticks are saved in this browser on this device only — Export to back them up.</span>
+</header>
+<div class="bar"><div class="bar-in">
+  <div class="track"><i class="g" id="tg"></i></div><span class="count" id="count"></span>
+  <button class="btn on" data-f="all">All</button><button class="btn" data-f="inc">Not ticked</button>
+  <input class="q" id="q" type="search" placeholder="Search drugs / uses">
+  <button class="btn" id="expand">Open / close all</button>
+  <button class="btn" id="export">Export</button><button class="btn" id="import">Import</button><input type="file" id="importf" accept="application/json,.json" hidden><button class="btn danger" id="clear">Clear ticks</button>
+</div></div>
+<div class="wrap"><div id="wrap"></div></div>
+<footer><hr style="border:none;border-top:1px solid var(--line-strong);margin:0 0 14px">A drug that fits two groups is listed where it is mainly taught, with its other uses in the grey note. Combined lines (e.g. "Oxycodone · hydromorphone · oxymorphone") are listed together because the lectures teach them as one group.</footer>
+<script>window.DRUGS=[["Parkinson disease", "Restore dopamine or rebalance DA/ACh in the striatum.", [["Dopamine precursor", [["Levodopa + carbidopa", "L-DOPA crosses BBB → dopamine; carbidopa blocks peripheral DOPA decarboxylase", ["Movement Disorders Pharm workshop", "10.06 Basal Ganglia"]]]], ["Dopamine agonists", [["Bromocriptine", "ergot D2 agonist", ["Movement Disorders Pharm workshop"]], ["Pramipexole", "non-ergot D2/D3 agonist (also RLS)", ["Movement Disorders Pharm workshop"]], ["Ropinirole", "non-ergot D2/D3 agonist (also RLS)", ["Movement Disorders Pharm workshop", "Sleep"]], ["Rotigotine", "non-ergot agonist, transdermal patch", ["Movement Disorders Pharm workshop"]], ["Apomorphine", "injectable agonist — rescue for \"off\" episodes", ["Movement Disorders Pharm workshop"]]]], ["MAO-B inhibitors", [["Selegiline", "irreversible MAO-B inhibitor", ["Movement Disorders Pharm workshop", "9.09 Neuropharmacology"]], ["Rasagiline", "irreversible MAO-B inhibitor", ["Movement Disorders Pharm workshop"]], ["Safinamide", "reversible MAO-B inhibitor (adjunct)", ["Movement Disorders Pharm workshop"]]]], ["COMT inhibitors", [["Entacapone", "peripheral COMT inhibitor — extends levodopa", ["Movement Disorders Pharm workshop"]], ["Tolcapone", "central + peripheral; hepatotoxic", ["Movement Disorders Pharm workshop"]], ["Opicapone", "once-daily COMT inhibitor", ["Movement Disorders Pharm workshop"]]]], ["Other", [["Amantadine", "↑ dopamine release + NMDA antagonist; helps dyskinesia", ["Movement Disorders Pharm workshop"]], ["Benztropine", "anticholinergic — tremor (also acute dystonia)", ["Movement Disorders Pharm workshop"]], ["Trihexyphenidyl", "anticholinergic — tremor (also ALS drooling)", ["Movement Disorders Pharm workshop", "Muscle Weakness workshop"]]]]]], ["Other movement disorders", "Hyperkinetic disorders, tremor, dystonia — and the drugs that cause movement disorders.", [["Huntington / chorea", [["Tetrabenazine", "VMAT2 inhibitor — depletes presynaptic dopamine", ["Movement Disorders Pharm workshop", "9.09 Neuropharmacology"]], ["Deutetrabenazine", "VMAT2 inhibitor (longer-acting)", ["Movement Disorders Pharm workshop"]], ["Haloperidol", "D2 antagonist (also Tourette)", ["Movement Disorders Pharm workshop", "9.09 Neuropharmacology"]], ["Perphenazine", "D2 antagonist", ["Movement Disorders Pharm workshop"]], ["Olanzapine", "atypical antipsychotic", ["Movement Disorders Pharm workshop"]]]], ["Essential tremor", [["Propranolol", "non-selective β-blocker — first line", ["Movement Disorders Pharm workshop", "Movement Disorders Pathology"]], ["Primidone", "anticonvulsant — first line", ["Movement Disorders Pharm workshop"]], ["Gabapentin / levetiracetam / topiramate", "second-line anticonvulsants", ["Movement Disorders Pharm workshop"]], ["Alprazolam", "benzodiazepine alternative", ["Movement Disorders Pharm workshop"]]]], ["Tourette", [["Haloperidol / other D2 blockers", "suppress tics", ["Movement Disorders Pharm workshop"]], ["Clonidine", "α2 agonist alternative", ["Movement Disorders Pharm workshop"]], ["Clonazepam", "benzodiazepine alternative", ["Movement Disorders Pharm workshop"]], ["Carbamazepine", "alternative", ["Movement Disorders Pharm workshop"]]]], ["Dystonia · Wilson · RLS", [["Botulinum toxin", "blocks presynaptic ACh release — focal dystonia, blepharospasm, torticollis", ["Movement Disorders Pharm workshop", "Movement Disorders Clinical"]], ["Diphenhydramine / benztropine", "acute dystonic reaction", ["Movement Disorders Pharm workshop"]], ["Penicillamine", "copper chelator — Wilson disease", ["Movement Disorders Pharm workshop"]], ["Dopamine agonists (± gabapentin, opioids, benzos)", "restless legs syndrome", ["Movement Disorders Pharm workshop"]]]], ["Drugs that CAUSE movement disorders", [["Antipsychotics (typical > atypical)", "D2 block → drug-induced parkinsonism, acute dystonia, tardive dyskinesia, NMS", ["Movement Disorders Pharm workshop", "Movement Disorders Clinical"]], ["Metoclopramide", "D2 blocker antiemetic → parkinsonism / TD", ["Movement Disorders Clinical", "HY DOC"]], ["Reserpine", "monoamine depleter → parkinsonism, NMS", ["HY DOC"]], ["Dantrolene", "RyR1 blocker — treats NMS and malignant hyperthermia", ["HY DOC", "9.09 Neuropharmacology", "Movement Disorders Pathology"]]]]]], ["Opioids", "Know the class of each: full agonist, partial agonist, mixed, antagonist.", [["Full µ agonists", [["Morphine", "prototype", ["Treatment of Pain with Opioids"]], ["Methadone", "long half-life; opioid use disorder", ["Treatment of Pain with Opioids"]], ["Meperidine", "normeperidine → seizures; serotonin syndrome with MAOIs", ["Treatment of Pain with Opioids"]], ["Fentanyl", "very potent synthetic; patch / IV", ["Treatment of Pain with Opioids"]], ["Oxycodone · hydromorphone · oxymorphone", "other full agonists", ["Treatment of Pain with Opioids"]], ["Sufentanil · alfentanil · remifentanil", "fentanyl family (anaesthesia)", ["Treatment of Pain with Opioids"]]]], ["Partial agonists", [["Codeine", "prodrug → morphine (CYP2D6)", ["Treatment of Pain with Opioids"]], ["Hydrocodone", "often with acetaminophen", ["Treatment of Pain with Opioids"]], ["Buprenorphine", "µ partial agonist, κ antagonist — can precipitate withdrawal", ["Treatment of Pain with Opioids"]], ["Tramadol", "weak µ + 5-HT/NE reuptake inhibition; seizures", ["Treatment of Pain with Opioids"]]]], ["Mixed agonist–antagonists", [["Pentazocine", "κ agonist / µ antagonist", ["Treatment of Pain with Opioids"]], ["Nalbuphine", "κ agonist / µ antagonist", ["Treatment of Pain with Opioids"]], ["Butorphanol", "κ agonist / µ partial", ["Treatment of Pain with Opioids"]]]], ["Antagonists", [["Naloxone", "reverses overdose (IV / intranasal)", ["Treatment of Pain with Opioids"]], ["Naltrexone", "oral — alcohol / opioid use disorder", ["Treatment of Pain with Opioids"]], ["Methylnaltrexone", "peripheral only — opioid-induced constipation", ["Treatment of Pain with Opioids"]]]], ["Addressed elsewhere", [["Heroin · dextromethorphan · loperamide", "opioids covered in other courses", ["Treatment of Pain with Opioids"]]]]]], ["Local anesthetics", "Block voltage-gated Na⁺ channels. Esters have one \"i\" in the name; amides have two.", [["Esters", [["Benzocaine", "topical; methemoglobinemia", ["10.09 Local Anesthetics"]], ["Chloroprocaine", "short-acting", ["10.09 Local Anesthetics"]], ["Tetracaine", "long-acting ester; spinal / topical", ["10.09 Local Anesthetics"]], ["Cocaine", "ester + vasoconstrictor (rarely used as LA)", ["10.09 Local Anesthetics", "9.09 Neuropharmacology"]]]], ["Amides", [["Lidocaine", "most used; also antiarrhythmic", ["10.09 Local Anesthetics", "10.08 Somatosensory & Pain"]], ["Bupivacaine", "long-acting; cardiotoxic", ["10.09 Local Anesthetics"]], ["Ropivacaine", "long-acting, less cardiotoxic", ["10.09 Local Anesthetics"]], ["Prilocaine", "methemoglobinemia; in EMLA", ["10.09 Local Anesthetics"]], ["Articaine", "dental", ["10.09 Local Anesthetics"]]]], ["Adjunct", [["Epinephrine", "vasoconstrictor added to prolong block", ["10.09 Local Anesthetics"]]]]]], ["Neuropharmacology drug list (drugs of abuse)", "The 9.09 Neuropharmacology drug list.", [["Depressant", [["Ethanol", "GABA-A positive allosteric modulator", ["9.09 Neuropharmacology"]]]], ["Stimulants", [["Caffeine", "adenosine A1/A2 antagonist", ["9.09 Neuropharmacology", "Sleep"]], ["Nicotine", "nicotinic ACh receptor agonist", ["9.09 Neuropharmacology"]], ["Cocaine", "blocks DAT / NET (+ Na⁺ channels)", ["9.09 Neuropharmacology"]], ["Amphetamine", "releases DA / NE from vesicles", ["9.09 Neuropharmacology"]]]]]], ["Headache & facial pain", "Acute vs preventive migraine, cluster, GCA, trigeminal neuralgia.", [["Migraine — acute", [["Sumatriptan (triptans)", "5-HT1B/1D agonist", ["Headache", "HY DOC"]], ["NSAIDs · acetaminophen", "first-line analgesics (also tension headache)", ["Headache", "HY DOC"]], ["Gepants (CGRP receptor antagonists)", "acute or preventive", ["Headache"]], ["Dihydroergotamine · ergotamine", "ergots", ["Headache", "Movement Disorders Pharm workshop"]]]], ["Migraine — prophylaxis", [["β-blockers (propranolol)", "preventive", ["Headache"]], ["Antiepileptics (topiramate, valproate)", "preventive", ["Headache", "MINI ONE"]], ["Amitriptyline", "TCA preventive", ["MINI ONE"]], ["Verapamil", "preventive (also cluster)", ["MINI ONE"]], ["CGRP monoclonal antibodies (erenumab)", "preventive", ["Headache"]]]], ["Cluster · GCA · trigeminal neuralgia", [["100 % oxygen", "cluster rescue (non-rebreather)", ["Headache", "HY DOC"]], ["High-dose glucocorticoids", "giant cell arteritis — start before biopsy", ["Headache", "HY DOC"]], ["Carbamazepine", "trigeminal neuralgia first line", ["Headache", "HY DOC", "10.08 Somatosensory & Pain"]]]]]], ["Multiple sclerosis", "Acute relapse, disease-modifying therapy, symptoms.", [["Acute relapse", [["IV methylprednisolone", "high-dose glucocorticoid", ["Muscle Weakness workshop", "HY DOC"]], ["Plasma exchange · ACTH", "steroid-refractory relapse", ["Muscle Weakness workshop"]]]], ["Disease-modifying", [["Interferon-β", "cytokine (IFN-γ worsens MS)", ["Muscle Weakness workshop", "HY DOC"]], ["Glatiramer acetate", "myelin-basic-protein decoy", ["Muscle Weakness workshop", "HY DOC"]], ["Dimethyl fumarate", "oral; Nrf2 pathway", ["Muscle Weakness workshop"]], ["Fingolimod", "S1P modulator — traps lymphocytes in nodes", ["Muscle Weakness workshop"]], ["Mitoxantrone", "cytotoxic; cardiotoxic", ["Muscle Weakness workshop"]], ["Natalizumab", "anti-α4-integrin — PML risk", ["Muscle Weakness workshop", "HY DOC"]], ["Ocrelizumab · ofatumumab", "anti-CD20", ["Muscle Weakness workshop", "HY DOC"]], ["Alemtuzumab", "anti-CD52", ["Muscle Weakness workshop"]], ["Daclizumab", "anti-CD25", ["Muscle Weakness workshop"]]]], ["Symptoms (MS / ALS)", [["Baclofen", "GABA-B agonist — spasticity", ["Muscle Weakness workshop"]], ["Diazepam", "benzodiazepine — spasticity", ["Muscle Weakness workshop"]], ["Gabapentin · amitriptyline", "neuropathic pain", ["Muscle Weakness workshop"]], ["Oxybutynin", "antimuscarinic — neurogenic bladder", ["Muscle Weakness workshop"]]]]]], ["Neuromuscular disease", "MG, LEMS, GBS, ALS, SMA, myopathies, neuropathy, malignant hyperthermia.", [["Myasthenia gravis", [["Pyridostigmine", "oral AChE inhibitor — mainstay", ["Muscle Weakness workshop", "HY DOC"]], ["Neostigmine", "injectable AChE inhibitor", ["Muscle Weakness workshop"]], ["Edrophonium", "very short-acting — Tensilon test", ["Muscle Weakness workshop"]], ["Glucocorticoids (prednisone)", "immunosuppression", ["Muscle Weakness workshop", "HY DOC"]], ["Azathioprine · cyclosporine · mycophenolate", "steroid-sparing immunosuppressants", ["Muscle Weakness workshop"]], ["IVIG · plasmapheresis", "crisis / pre-op", ["Muscle Weakness workshop", "HY DOC"]]]], ["LEMS · GBS", [["Amifampridine (aminopyridines)", "K⁺ channel blocker → ↑ ACh release (LEMS)", ["Muscle Weakness workshop", "HY DOC"]], ["IVIG or plasma exchange", "GBS — steroids do NOT help", ["Muscle Weakness workshop", "HY DOC"]]]], ["ALS · SMA · myopathies", [["Riluzole", "anti-glutamate — ALS", ["Muscle Weakness workshop", "HY DOC"]], ["Edaravone", "free-radical scavenger — ALS", ["Muscle Weakness workshop", "HY DOC"]], ["Nusinersen", "antisense oligo — SMA", ["HY DOC"]], ["Prednisone / deflazacort", "Duchenne muscular dystrophy", ["HY DOC"]], ["Corticosteroids · methotrexate · azathioprine", "dermatomyositis / polymyositis", ["HY DOC"]]]], ["Neuropathy & malignant hyperthermia", [["Gabapentin · pregabalin · duloxetine", "painful diabetic neuropathy", ["HY DOC"]], ["Dantrolene", "malignant hyperthermia (see movement)", ["Pathology of Muscle Weakness", "HY DOC"]], ["Succinylcholine · halogenated inhalational anaesthetics", "TRIGGERS of malignant hyperthermia (RYR1)", ["Pathology of Muscle Weakness"]]]]]], ["Sleep & arousal", "Hypnotics and wake-promoting drugs.", [["Hypnotics", [["Zolpidem · zaleplon · eszopiclone", "\"Z-drugs\" — BZD site of GABA-A", ["Sleep"]], ["Benzodiazepines (triazolam, temazepam)", "sedative-hypnotic", ["Sleep"]], ["Ramelteon", "melatonin MT1/MT2 agonist", ["Sleep"]], ["Suvorexant", "orexin receptor antagonist", ["Sleep"]], ["Melatonin", "pineal hormone; circadian", ["Sleep", "9.17 Diencephalon"]]]], ["Arousal", [["Modafinil", "narcolepsy", ["Sleep"]], ["Sedating antihistamines (diphenhydramine)", "H1 block → drowsiness", ["11.03 Reticular Formation", "Movement Disorders Pharm workshop"]]]]]], ["Eye", "Glaucoma, pupils, infection, AMD — and drugs that harm the eye.", [["Acute angle-closure glaucoma", [["Carbonic anhydrase inhibitors (acetazolamide)", "↓ aqueous production", ["Eye Clinical workshop"]], ["Topical β-blockers (timolol)", "↓ aqueous production", ["Eye Clinical workshop"]], ["α-agonists", "↓ aqueous production", ["Eye Clinical workshop"]], ["Pilocarpine", "muscarinic agonist — miosis opens the angle", ["Eye Clinical workshop", "Autonomic workshop"]], ["Hyperosmotic agents", "draw fluid out of the eye", ["Eye Clinical workshop"]], ["Topical steroids", "reduce inflammation", ["Eye Clinical workshop"]]]], ["Open-angle glaucoma", [["Prostaglandin analogues", "↑ uveoscleral outflow", ["Eye Clinical workshop"]], ["α-adrenergics · cholinergic agonists · topical β-blockers", "other IOP-lowering drops", ["Eye Clinical workshop"]]]], ["Pupil drugs & tests", [["Atropine", "antimuscarinic — dilates", ["Autonomic workshop"]], ["Cocaine", "blocks NE reuptake — Horner test", ["Autonomic workshop"]], ["Dilute pilocarpine", "Adie pupil supersensitivity", ["Autonomic workshop"]], ["Phenylephrine", "blanches episcleritis, not scleritis", ["Eye Clinical workshop"]], ["Scopolamine", "dilates / cycloplegia in uveitis", ["Eye Clinical workshop"]]]], ["Infection · inflammation · AMD", [["Ceftriaxone", "gonococcal neonatal conjunctivitis", ["HY DOC"]], ["Erythromycin eye ointment", "neonatal prophylaxis (does not prevent chlamydia)", ["HY DOC"]], ["Topical antibiotic / antiviral / antifungal drops", "keratitis — NO topical steroids in ulcers", ["Eye Clinical workshop"]], ["NSAIDs · systemic steroids", "scleritis / uveitis", ["Eye Clinical workshop"]], ["Vitamins C, E, β-carotene, zinc, copper", "dry AMD", ["Eye Pathology"]], ["VEGF inhibitors", "wet AMD", ["Eye Pathology", "HY DOC"]]]], ["Drugs that harm the eye", [["Corticosteroids", "cataract", ["Eye Pathology", "HY DOC"]], ["Anticholinergics · sympathomimetics", "can precipitate angle closure", ["Eye Clinical workshop", "Eye Pathology"]]]]]], ["Other clinical neuro", "Single-drug facts scattered through the lectures.", [["", [["Nimodipine", "prevents vasospasm after SAH", ["HY DOC"]], ["Acetazolamide", "idiopathic intracranial hypertension", ["Neurocytopathology", "HY DOC"]], ["Tetracyclines · vitamin A · danazol", "CAUSES of IIH", ["Neurocytopathology", "HY DOC"]], ["Folic acid", "prevents neural tube defects", ["9.02 Neuroembryology"]], ["Thiamine (B1)", "Wernicke–Korsakoff", ["11.01 Limbic System", "Diencephalon"]], ["Vitamin B12", "subacute combined degeneration", ["HY DOC"]], ["Atropine · vasopressors · fluids", "neurogenic shock", ["Neuroscience.pdf"]], ["Quinine · aspirin · streptomycin (aminoglycosides)", "ototoxic drugs", ["Auditory System", "Neuroscience.pdf"]]]]]]];</script>
+<script>
+(function(){
+var C=window.DRUGS,KEY='nupyDrugChecklist_v1',ST;
+try{ST=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+if(!ST||typeof ST!=='object')ST={tick:{}};ST.tick=ST.tick||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){alert('Could not save — browser storage unavailable.');}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function id(ci,si,di){return C[ci][0]+'|'+C[ci][2][si][0]+'|'+C[ci][2][si][1][di][0];}
+var wrap=document.getElementById('wrap'),filter='all',query='';
+var h='';
+C.forEach(function(c,ci){
+  h+='<details class="lec" open><summary><span class="lt">'+esc(c[0])+'</span><span class="lmeta" id="m'+ci+'"></span><div class="mini" id="b'+ci+'"><i class="g"></i></div></summary><div class="lbody"><div class="cdesc">'+esc(c[1])+'</div>';
+  c[2].forEach(function(s,si){
+    h+='<div class="grp">'+(s[0]?'<div class="sub2">'+esc(s[0])+'</div>':'');
+    s[1].forEach(function(d,di){
+      h+='<label class="drug" data-id="'+esc(id(ci,si,di))+'" data-c="'+ci+'"><input type="checkbox" class="tick"><div><div class="dn">'+esc(d[0])+'</div><div class="dw">'+esc(d[1])+'</div></div><div class="srcs">'+d[2].map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div></label>';
+    });
+    h+='</div>';
+  });
+  h+='</div></details>';
+});
+wrap.innerHTML=h;
+var items=[].slice.call(wrap.querySelectorAll('.drug'));
+items.forEach(function(el){var cb=el.querySelector('.tick');cb.onchange=function(){if(cb.checked)ST.tick[el.dataset.id]=Date.now();else delete ST.tick[el.dataset.id];save();paint();};});
+function paint(){
+  var tot=items.length,done=0;
+  C.forEach(function(c,ci){
+    var n=0,d=0;
+    items.forEach(function(el){if(+el.dataset.c!==ci)return;n++;var t=!!ST.tick[el.dataset.id];if(t)d++;el.classList.toggle('done',t);el.querySelector('.tick').checked=t;
+      var ok=(filter==='all'||!t)&&(!query||el.textContent.toLowerCase().indexOf(query)>=0);el.classList.toggle('hid',!ok);});
+    done+=d;document.getElementById('m'+ci).innerHTML='<span class="c2">'+d+'</span> / '+n;
+    document.getElementById('b'+ci).children[0].style.width=(100*d/n)+'%';
+    var det=document.getElementById('b'+ci).closest('details');det.classList.toggle('hid',!det.querySelector('.drug:not(.hid)'));
+    det.querySelectorAll('.grp').forEach(function(g){g.classList.toggle('hid',!g.querySelector('.drug:not(.hid)'));});
+  });
+  document.getElementById('tg').style.width=(100*done/tot)+'%';
+  document.getElementById('count').innerHTML='<b>'+done+'</b> / '+tot+' ticked';
+}
+document.querySelectorAll('.btn[data-f]').forEach(function(b){b.onclick=function(){document.querySelectorAll('.btn[data-f]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');filter=b.dataset.f;paint();};});
+document.getElementById('q').oninput=function(){query=this.value.trim().toLowerCase();paint();};
+var openAll=true;document.getElementById('expand').onclick=function(){openAll=!openAll;wrap.querySelectorAll('details.lec').forEach(function(d){d.open=openAll;});};
+document.getElementById('export').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(ST)],{type:'application/json'}));a.download='drug-checklist.json';a.click();};
+document.getElementById('import').onclick=function(){document.getElementById('importf').click();};
+document.getElementById('importf').onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);if(!o.tick)throw 0;ST=o;save();paint();}catch(e){alert('Not a checklist export.');}};r.readAsText(f);};
+document.getElementById('clear').onclick=function(){if(confirm('Clear all ticks?')){ST.tick={};save();paint();}};
+paint();
+})();
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:8px;flex:0 0 auto;opacity:.55;text-decoration:none;padding:6px 4px;border-radius:7px}
+  .sitenav .sk-brand:hover{opacity:1;background:transparent}
+  .sitenav .sk-brand-on{opacity:1}
+  .sitenav .sk-gap{flex:0 0 auto;width:14px}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{font-size:10px;letter-spacing:.1em;margin-right:4px} .sitenav .sk-gap{width:8px} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  var COURSES=[
+    {id:'enre', brand:'ENRE', home:'index.html', minis:[
+      {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+        ['mini1.html','Overview'],
+        ['master_table.html','Master'],
+        ['pathology_table.html','Pathology'],
+        ['pathology_checklist.html','Path Checklist'],
+        ['physio_table.html','Physiology'],
+        ['drugs_table.html','Drugs'],
+        ['biochem_table.html','Biochem'],
+        ['embryo_anatomy_table.html','Embryo / Anatomy'],
+        ['pattern_recognition.html','Patterns'],
+        ['lecture_recall.html','Lecture Recall'],
+        ['physio_quiz.html','Physio Quiz'],
+        ['endocrine_path_quiz.html','Endo Path Quiz'],
+        ['male_path_quiz.html','Male Path Quiz'],
+        ['physio_ext1_quiz.html','Repro Physio Q'],
+        ['physio_ext2_quiz.html','Physio Bank 1'],
+        ['physio_ext3_quiz.html','Physio Bank 2'],
+        ['pharmq_quiz.html','Pharm Quiz'],
+        ['review_planner.html','Planner'],
+        ['gi_path_table.html','GI Path']
+      ]},
+      {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+        ['mini2.html','Overview'],
+        ['mini2_pathology_table.html','Pathology'],
+        ['mini2_pathology_checklist.html','Path Checklist'],
+        ['mini2_physio_table.html','Physiology'],
+        ['mini2_drugs_table.html','Drugs'],
+        ['mini2_foundations_table.html','Foundations'],
+        ['mini2_clinical_obgyn_table.html','Clinical OB/GYN'],
+        ['mini2_community_health_table.html','Public Health'],
+        ['mini2_review_hub.html','Review Hub'],
+        ['mini2_path_quiz_infancy.html','Infancy Path Quiz'],
+        ['mini2_path_quiz_female.html','Female Path Quiz'],
+        ['mini2_path_quiz_breast.html','Breast Path Quiz'],
+        ['mini2_physio_quizzes.html','Physio Quizzes'],
+        ['mini2_study_guide.html','Resource Guide']
+      ]}
+    ]},
+    {id:'nupy', brand:'NUPY', home:'nupy.html', minis:[
+      {id:'nupy1', label:'Mini 1', home:'nupy_mini1.html', pages:[
+        ['nupy_mini1.html','Overview'],
+        ['nupy_neuroanatomy_table.html','Neuroanatomy'],
+        ['nupy_neuroanatomy_doc.html','Neuroanatomy Doc'],
+        ['nupy_headneck_doc.html','Head & Neck Doc'],
+        ['nupy_cranial_nerves.html','Cranial Nerves'],
+        ['nupy_recall_decks.html','Recall Decks'],
+        ['nupy_eye_infections.html','Eye Infections'],
+        ['nupy_pathology_table.html','Pathology Table'],
+        ['nupy_lesion_localization.html','Lesion Localization'],
+        ['nupy_head_neck.html','Head & Neck Table'],
+        ['nupy_drugs_table.html','Drugs Table'],['nupy_drug_checklist.html','Drug Checklist'],
+        ['nupy_physio_table.html','Physiology Table'],['nupy_special_senses.html','Special Senses Table'],
+        ['nupy_pathway_map.html','Pathway Map'],
+        ['nupy_lecture_review.html','Lecture Review'],
+        ['nupy_neuroanatomy_checklist.html','Neuro Checklist'],['nupy_hy_checklist.html','HY Notes Checklist'],['nupy_hy_learn.html','HY Notes Learn'],['nupy_mcq_quizzes.html','MCQ Quizzes 🔒']
+      ]},
+      {id:'nupy2', label:'Mini 2', home:'nupy_mini2.html', pages:[
+        ['nupy_mini2.html','Overview']
+      ]}
+    ]}
+  ];
+  var MINIS=[]; COURSES.forEach(function(c){ c.minis.forEach(function(m){ m.course=c; MINIS.push(m); }); });
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null, course=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  COURSES.forEach(function(c){ if(c.home.toLowerCase()===here) course=c; });
+  if(mini) course=mini.course;
+  if(!course) course=COURSES[0];
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  COURSES.forEach(function(c,ci){
+    var brand=document.createElement('a'); brand.className='sk-brand'+(c===course?' sk-brand-on':''); brand.href=c.home; brand.textContent=c.brand; nav.appendChild(brand);
+    var sw=document.createElement('span'); sw.className='sk-minis';
+    c.minis.forEach(function(m){
+      var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+      a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+      sw.appendChild(a);
+    });
+    nav.appendChild(sw);
+    if(ci<COURSES.length-1){ var gap=document.createElement('span'); gap.className='sk-gap'; nav.appendChild(gap); }
+  });
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+
+
+</body>
+</html>
