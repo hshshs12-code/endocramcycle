@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NUPY Mini 2 — placeholder</title>
+<title>NUPY Mini 2 — Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -12,8 +12,8 @@
     --paper:#f4f2ec; --surface:#ffffff; --ink:#1c2024; --muted:#6c7077;
     --line:#e3ded3; --line-strong:#cdc6b6;
     --gene-bg:#d8efe9; --gene-ink:#0c5247;
+    --buzz-hl:#ffeaa7; --buzz-ink:#5c4400;
     --exam-bg:#fdeceb; --exam-ink:#9a1f2e; --exam-strong:#7a1422;
-    --soon-bg:#fdf1cd; --soon-ink:#8a6d00;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);
@@ -21,44 +21,27 @@
   header{max-width:1200px;margin:0 auto;padding:38px 28px 0}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
     text-transform:uppercase;color:var(--muted);margin:0 0 8px}
-  .eyebrow a{color:inherit;text-decoration:none}
-  .eyebrow a:hover{color:var(--exam-strong)}
   h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,5vw,50px);line-height:1.02;margin:0;letter-spacing:-.01em}
   h1 em{font-style:italic;color:var(--exam-strong)}
   .sub{color:var(--muted);max-width:66ch;margin:14px 0 0;font-size:15px}
   .wrap{max-width:1200px;margin:26px auto 60px;padding:0 28px}
-
-  .banner{background:var(--surface);border:1px solid var(--line-strong);border-left:4px solid #c9a227;
-    border-radius:12px;padding:17px 20px;margin-bottom:28px}
-  .banner h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 6px}
-  .banner p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
-  .banner p + p{margin-top:8px}
-  .banner b{color:var(--ink)}
-
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+  a.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;padding:18px 19px;
+    transition:.14s;position:relative;overflow:hidden}
+  a.card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  a.card .ic{font-size:22px;margin-bottom:10px}
+  a.card h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 5px;letter-spacing:-.005em}
+  a.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+  a.card .tag{margin-top:11px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--gene-ink);background:var(--gene-bg);align-self:flex-start;
+    padding:3px 8px;border-radius:6px}
+  a.card.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:18px}
+  a.card.wide .ic{margin:0}
+  a.card.wide .body{flex:1}
+  a.card.plan .tag{color:var(--exam-strong);background:var(--exam-bg)}
   .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
     color:var(--muted);margin:30px 0 12px;border-bottom:1px solid var(--line-strong);padding-bottom:8px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-
-  a.card{display:flex;text-decoration:none;color:inherit;background:var(--surface);
-    border:1px solid var(--line-strong);border-radius:14px;padding:18px 20px;margin:0 0 14px;
-    transition:.14s;align-items:center;gap:18px}
-  a.card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
-  a.card .ic{font-size:24px;flex:0 0 auto}
-  a.card .body{flex:1}
-  a.card h2{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0 0 5px;letter-spacing:-.005em}
-  a.card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
-  a.card .tag{display:inline-block;margin-top:11px;font-family:'IBM Plex Mono',monospace;font-size:10px;
-    letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:6px}
-  a.card .tag.live{color:var(--gene-ink);background:var(--gene-bg)}
-  .slot{display:flex;flex-direction:column;background:#fbfaf6;border:1px dashed var(--line-strong);
-    border-radius:14px;padding:18px 19px;opacity:.92}
-  .slot .ic{font-size:22px;margin-bottom:10px;filter:grayscale(.35);opacity:.75}
-  .slot h3{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 5px;letter-spacing:-.005em;color:#4c5157}
-  .slot p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
-  .slot .tag{margin-top:11px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
-    text-transform:uppercase;color:var(--soon-ink);background:var(--soon-bg);align-self:flex-start;
-    padding:3px 8px;border-radius:6px}
-
   footer{max-width:1200px;margin:0 auto 50px;padding:0 28px;color:var(--muted);font-size:12px}
   footer hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 14px}
 </style>
@@ -66,50 +49,89 @@
 <body>
 
 <header>
-  <p class="eyebrow"><a href="nupy.html">NUPY Hub</a> &middot; Mini 2 &middot; placeholder</p>
-  <h1>NUPY Mini 2 is <em>next month</em>.</h1>
-  <p class="sub">Nothing is built here yet. The section exists so the navigation, the hub and the links are in place; when the Mini 2 material arrives it gets the same treatment as Mini 1 &mdash; a searchable reference table with the lecture slides on every row, a page-by-page doc for any summary file, and a mastery checklist.</p>
+  <p class="eyebrow"><a href="nupy.html" style="color:inherit;text-decoration:none">NUPY Hub</a> · Mini 2 · Neurology &amp; Psychiatry</p>
+  <h1>Everything for <em>NUPY Mini 2</em>,<br>one click away.</h1>
+  <p class="sub">Built from the 29 Mini 2 lecture and session PDFs plus the Arbat summary sheets — pathology, pharmacology, psychiatry, stroke and the neuro exam as searchable tables with full-slide images, a drug checklist, a lecture-by-lecture review checklist and every practice question from the PDFs.</p>
 </header>
 
 <div class="wrap">
-  <div class="banner">
-    <h2>Placeholder</h2>
-    <p>The dashed tiles below are <b>empty slots</b>, not working pages. Drop the Mini 2 decks and summaries into the NUPY folder and say the word.</p>
-  </div>
 
-  <p class="kicker">Planned</p>
+    <a class="card plan wide" href="nupy_m2_lecture_review.html">
+      <div class="ic">✅</div>
+      <div class="body">
+      <h2>Lecture Review Checklist</h2>
+      <p>Every Mini 2 lecture organised by its own learning objectives: what you should be able to do, exactly what to know, recall prompts and a hidden model answer. Three statuses, notes, weak-topics list, repeat passes, export / import.</p>
+      <span class="tag">276 items · 26 lectures · start here when reviewing</span>
+      </div>
+    </a>
+
+  <p class="kicker">Core reference</p>
   <div class="grid">
-    <div class="slot">
-      <div class="ic">&#129504;</div>
-      <h3>Reference Table</h3>
-      <p>One row per structure / concept, the tested fact highlighted, full lecture slides attached.</p>
-      <span class="tag">empty slot</span>
-    </div>
-    <div class="slot">
-      <div class="ic">&#128211;</div>
-      <h3>Summary Doc</h3>
-      <p>Any summary file transcribed page by page beside the page image.</p>
-      <span class="tag">empty slot</span>
-    </div>
-    <div class="slot">
-      <div class="ic">&#9989;</div>
-      <h3>Mastery Checklist</h3>
-      <p>Everything from the table, grouped and numbered, to tick off while reviewing.</p>
-      <span class="tag">empty slot</span>
-    </div>
-    <div class="slot">
-      <div class="ic">&#128218;</div>
-      <h3>Quiz banks</h3>
-      <p>Original practice questions with per-option feedback, highlighting and flags.</p>
-      <span class="tag">empty slot</span>
-    </div>
+    <a class="card" href="nupy_m2_pathology.html">
+      <div class="ic">🔬</div>
+      <div class="body">
+      <h2>Pathology Table</h2>
+      <p>CNS infections, CNS and PNS tumours, head and spinal trauma (with the TBI TBL), cerebrovascular disease and neurodegeneration — etiology, gross and micro buzzwords, clinical and imaging, the key differentiator, plus the Arbat tumour sheets.</p>
+      <span class="tag">168 entries · full slides</span>
+      </div>
+    </a>
+
+    <a class="card" href="nupy_m2_drugs.html">
+      <div class="ic">💊</div>
+      <div class="body">
+      <h2>Drugs Table</h2>
+      <p>Antiepileptics, sedative-hypnotics, general anaesthetics, antidepressants, antipsychotics and mood stabilisers, ADHD, dementia, substance-use and stroke drugs — mechanism, use, adverse effects — plus treatment-algorithm cards and the Arbat drug summaries.</p>
+      <span class="tag">250 entries · full slides</span>
+      </div>
+    </a>
+
+    <a class="card" href="nupy_m2_drug_checklist.html">
+      <div class="ic">☑️</div>
+      <div class="body">
+      <h2>Drug Checklist</h2>
+      <p>Just the list: every Mini 2 drug, grouped by class, tiered need-to-know / know-what-it’s-for / skip, with a tick box and the lecture that teaches it.</p>
+      <span class="tag">142 entries · tiered</span>
+      </div>
+    </a>
+
+    <a class="card" href="nupy_m2_psych.html">
+      <div class="ic">🧠</div>
+      <div class="body">
+      <h2>Psychiatry Table</h2>
+      <p>Every DSM disorder in Mini 2 — depressive, bipolar, psychotic, anxiety, OCD and trauma, somatic and dissociative, personality, substance use, neurocognitive, neurodevelopmental, and later adulthood — criteria, duration, differentiator, treatment.</p>
+      <span class="tag">221 entries · full slides</span>
+      </div>
+    </a>
+
+    <a class="card" href="nupy_m2_stroke.html">
+      <div class="ic">🩸</div>
+      <div class="body">
+      <h2>Stroke & Vascular</h2>
+      <p>Artery → territory → deficit, brainstem and spinal vascular syndromes, stroke types with workup and acute-management algorithms, venous sinuses and the BBB, and every stroke post-session case with its answer.</p>
+      <span class="tag">91 entries · full slides</span>
+      </div>
+    </a>
+
+    <a class="card" href="nupy_m2_neuro_clinical.html">
+      <div class="ic">🩺</div>
+      <div class="body">
+      <h2>Neuro Exam, Seizures & Limbic</h2>
+      <p>The neuro exam with what each abnormal finding localises to, seizure types and seizure-vs-syncope, the limbic system and memory, and the ten Integrated Approach to CNS Diseases cases.</p>
+      <span class="tag">114 entries · full slides</span>
+      </div>
+    </a>
+
+    <a class="card" href="nupy_m2_mcq.html">
+      <div class="ic">🔒</div>
+      <div class="body">
+      <h2>Practice Questions</h2>
+      <p>Password-protected (encrypted). Every multiple-choice, true/false and lettered case question printed in the Mini 2 PDFs, one quiz per lecture — AI hint, the doc’s answer and explanation word for word, a separate labelled AI explanation, and AI-keyed answers clearly marked where the doc gives none.</p>
+      <span class="tag">130 questions · 14 quizzes · encrypted</span>
+      </div>
+    </a>
+
   </div>
 </div>
-
-<footer>
-  <hr>
-  Self-contained study reference set compiled from lecture material. Runs entirely in the browser &mdash; no accounts, no tracking.
-</footer>
 
 <!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
 <style id="sitekit">
@@ -229,7 +251,15 @@
         ['nupy_neuroanatomy_checklist.html','Neuro Checklist'],['nupy_hy_checklist.html','HY Notes Checklist'],['nupy_hy_learn.html','HY Notes Learn'],['nupy_mcq_quizzes.html','MCQ Quizzes 🔒']
       ]},
       {id:'nupy2', label:'Mini 2', home:'nupy_mini2.html', pages:[
-        ['nupy_mini2.html','Overview']
+        ['nupy_mini2.html','Overview'],
+        ['nupy_m2_lecture_review.html','Lecture Review'],
+        ['nupy_m2_pathology.html','Pathology Table'],
+        ['nupy_m2_drugs.html','Drugs Table'],
+        ['nupy_m2_drug_checklist.html','Drug Checklist'],
+        ['nupy_m2_psych.html','Psychiatry Table'],
+        ['nupy_m2_stroke.html','Stroke & Vascular'],
+        ['nupy_m2_neuro_clinical.html','Neuro Exam & Seizures'],
+        ['nupy_m2_mcq.html','Practice Questions 🔒']
       ]}
     ]}
   ];

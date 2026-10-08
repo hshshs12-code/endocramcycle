@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<title>Drug Checklist — NUPY Mini 2</title>
+<style>
+:root{--paper:#f4f2ec;--surface:#fff;--ink:#1c2024;--muted:#6c7077;--line:#e3ded3;--line-strong:#cdc6b6;--gene-bg:#d8efe9;--gene-ink:#0c5247;--exam-bg:#fdeceb;--exam-ink:#9a1f2e;--exam-strong:#7a1422;--warn-bg:#fdf3d7;--warn-ink:#8a6100}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+header.top{max-width:1040px;margin:0 auto;padding:30px 20px 0}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4.5vw,42px);line-height:1.05;margin:0}h1 em{font-style:italic;color:var(--exam-strong)}
+.sub{color:var(--muted);max-width:75ch;margin:12px 0 0;font-size:15px}
+.saved{display:inline-block;margin-top:10px;font:500 11.5px 'IBM Plex Mono',monospace;background:var(--warn-bg);color:var(--warn-ink);border-radius:7px;padding:4px 9px}
+.bar{position:sticky;top:0;z-index:20;background:rgba(244,242,236,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line-strong);margin-top:18px}
+.bar-in{max-width:1040px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.track{flex:1 1 160px;height:10px;background:#e7e2d6;border-radius:6px;overflow:hidden;display:flex;min-width:120px}
+.track i{display:block;height:100%;transition:width .25s}.track .g{background:var(--gene-ink)}.track .w{background:#e0a800}
+.count{font-family:'IBM Plex Mono',monospace;font-size:12px}.count b{color:var(--gene-ink)}.count .w{color:var(--warn-ink);font-weight:600}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 11px;cursor:pointer}
+.btn:hover{border-color:var(--ink)}.btn.on{background:var(--gene-bg);border-color:var(--gene-ink);color:var(--gene-ink)}.btn.danger{color:var(--exam-ink)}.btn.big{font-size:14px;padding:10px 16px}
+.btn.primary{background:var(--exam-strong);border-color:var(--exam-strong);color:#fff}
+.q{font:inherit;font-size:13px;border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;background:var(--surface);color:var(--ink);width:180px;max-width:100%}
+.wrap{max-width:1040px;margin:18px auto 60px;padding:0 20px}
+.hid{display:none!important}
+.pg{font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--gene-ink);background:var(--gene-bg);border:0;border-radius:6px;padding:3px 7px;cursor:pointer;white-space:nowrap}
+.pg:hover{background:#c4e6dc}
+.lb{position:fixed;inset:0;z-index:3000;background:rgba(20,18,14,.92);display:none;align-items:center;justify-content:center;padding:18px;cursor:zoom-out}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:94vh;border-radius:8px;background:#fff;box-shadow:0 12px 50px rgba(0,0,0,.55)}
+.lb .cap{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#f4f2ec;font-size:13px;text-shadow:0 1px 3px #000}
+.lab{font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:10px 0 3px}
+ul.f{margin:0;padding-left:19px}ul.f li{margin:2px 0}
+.def{font-size:14.5px;line-height:1.5}.def b{color:var(--exam-strong)}
+.thumb{display:block;width:150px;border:1px solid var(--line-strong);border-radius:8px;background:#fff;cursor:zoom-in}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.chip{font:500 12px 'Inter',sans-serif;border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:5px 11px;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}.chip small{color:inherit;opacity:.6;margin-left:4px;font-family:'IBM Plex Mono',monospace;font-size:10px}
+footer{max-width:1040px;margin:0 auto 50px;padding:0 20px;color:var(--muted);font-size:12.5px}
+
+details.lec{background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;margin:0 0 10px;overflow:hidden}
+details.lec>summary{list-style:none;cursor:pointer;padding:13px 16px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center}
+details.lec>summary::-webkit-details-marker{display:none}
+.lt{font-family:'Fraunces',serif;font-weight:600;font-size:18.5px;line-height:1.25}.lt::before{content:'▸';display:inline-block;width:18px;color:var(--muted);font-size:13px;transition:.15s}details[open]>summary .lt::before{transform:rotate(90deg)}
+.lmeta{font:500 11.5px 'IBM Plex Mono',monospace;color:var(--muted);white-space:nowrap;text-align:right}.lmeta .c2{color:var(--gene-ink);font-weight:600}.lmeta .c1{color:var(--warn-ink);font-weight:600}
+.mini{grid-column:1/-1;height:6px;border-radius:4px;background:#e7e2d6;overflow:hidden;display:flex}.mini i{display:block;height:100%}.mini .g{background:var(--gene-ink)}.mini .w{background:#e0a800}
+.lbody{padding:2px 12px 12px;border-top:1px solid var(--line)}
+.item{border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#fffdf9}.item.done{border-color:#9ccfc3;background:#f3fbf8}.item.flag{border-color:#e0c46a;background:#fffaea}.item.done.flag{background:linear-gradient(90deg,#fffaea,#f3fbf8)}
+.ihead{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:9px 11px}
+.tick{width:22px;height:22px;margin-top:2px;accent-color:var(--gene-ink);cursor:pointer;flex:0 0 auto}
+.ititle{cursor:pointer;font-size:15px;font-weight:600;line-height:1.35}.item.done .ititle{color:#3c6f64}
+.prev{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.fl{font:500 11px 'IBM Plex Mono',monospace;border:1px solid var(--line-strong);background:#fff;border-radius:6px;padding:3px 7px;cursor:pointer;color:var(--muted)}.item.flag .fl{background:#f6dc8a;color:#5c4300;border-color:#e0c46a}
+.ibody{display:none;padding:2px 13px 13px 43px;border-top:1px dashed var(--line)}.item.open .ibody{display:block}
+.ibody .grid{display:grid;grid-template-columns:1fr 160px;gap:14px}
+textarea.note{width:100%;min-height:50px;font:inherit;font-size:13.5px;border:1px solid var(--line-strong);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink);resize:vertical;margin-top:8px}
+.when{font:500 11px 'IBM Plex Mono',monospace;color:var(--muted);margin-top:6px}
+@media(max-width:640px){.bar{position:static}.ihead{grid-template-columns:auto 1fr}.acts{grid-column:1/-1;justify-content:flex-start}.ibody{padding-left:13px}.ibody .grid{grid-template-columns:1fr}.q{width:100%}details.lec>summary{grid-template-columns:1fr}.lmeta{text-align:left;white-space:normal}}
+
+
+.sub2{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+.cdesc{font-size:13px;color:var(--muted);margin:10px 0 2px}
+.drug{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin:5px 0;background:#fffdf9}
+.drug.done{background:#f3fbf8;border-color:#9ccfc3}.drug.done .dn{color:#3c6f64;text-decoration:line-through;text-decoration-color:#9ccfc3}
+.dn{font-weight:600;font-size:15px;line-height:1.35}.dw{font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:1px}
+.srcs{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;max-width:260px}
+.tier{display:inline-block;font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:2px 7px;margin-left:8px;vertical-align:2px}.tier.N{background:#e3f2ec;color:#0c5247}.tier.O{background:#fdf3d7;color:#8a6100}.tier.S{background:#f1efe9;color:#8b857a;border:1px dashed #b9b2a3}
+.drug.tS .dn{color:#8b857a}.drug.tS{background:#faf9f6}.why{font-size:11.5px;color:#8b857a;font-style:italic;margin-top:2px}
+.legend2{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);margin:12px 0 0}
+.srcs span{font:500 10px 'IBM Plex Mono',monospace;background:#efece4;color:#5c6168;border-radius:5px;padding:2px 6px;white-space:nowrap}
+@media(max-width:640px){.drug{grid-template-columns:auto 1fr}.srcs{grid-column:2;justify-content:flex-start;max-width:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">NUPY · Mini 2 · pharmacology</p>
+  <h1>Drug <em>Checklist</em></h1>
+  <p class="sub">Every drug you need to know for NUPY Mini 2, grouped by class. Tick each one off once you know it; the small tags show which lecture teaches it (“Arbat summary” = the Sauce/Arbat Mini 2 drug sheets). The lists come from the drug-list sections of the epilepsy TBL, the sedative-hypnotics workshop and General Anesthetics, plus every drug taught in the depression, psychotic/bipolar, anxiety, neurodevelopmental, NCD, substance-use and cerebrovascular sessions. For mechanisms and details, see the Drugs Table.</p>
+  <div class="legend2"><span><span class="tier N" style="margin:0">Need to know</span> class, mechanism, key side effect and use: official drug lists, their own section in a pharm lecture, a review/practice question, or the Arbat drug summary</span><span><span class="tier O" style="margin:0">Know what it's for</span> just the one-line drug → disease link from a clinical lecture</span><span><span class="tier S" style="margin:0">Skip</span> named once in passing (the reason is given under it)</span></div>
+  <p class="sub" style="font-size:13px;margin-top:8px" id="tiercount"></p>
+  <span class="saved">Ticks are saved in this browser on this device only — Export to back them up.</span>
+</header>
+<div class="bar"><div class="bar-in">
+  <div class="track"><i class="g" id="tg"></i></div><span class="count" id="count"></span>
+  <button class="btn on" data-f="all">All</button><button class="btn" data-f="N">Need to know</button><button class="btn" data-f="NO">+ Know what it's for</button><button class="btn" data-f="inc">Not ticked</button>
+  <input class="q" id="q" type="search" placeholder="Search drugs / uses">
+  <button class="btn" id="expand">Open / close all</button>
+  <button class="btn" id="export">Export</button><button class="btn" id="import">Import</button><input type="file" id="importf" accept="application/json,.json" hidden><button class="btn danger" id="clear">Clear ticks</button>
+</div></div>
+<div class="wrap"><div id="wrap"></div></div>
+<footer><hr style="border:none;border-top:1px solid var(--line-strong);margin:0 0 14px">Tiers were set by how each drug is taught: own section with mechanism in a pharmacology session, official drug-list slide, review/practice question or the Arbat drug summary = need to know; a single drug→disease line in a clinical lecture = know what it's for; named once as an alternative, in handwriting only, or “addressed elsewhere” = skip. A drug that fits two groups is listed where it is mainly taught, with its other uses in the grey note. Combined lines (e.g. "Oxycodone · hydromorphone · oxymorphone") are listed together because the lectures teach them as one group.</footer>
+<script>window.DRUGS=[["Antiepileptics", "From the epilepsy TBL drug list (part 2).", [["Sodium-channel blockers", [["Phenytoin", "Na⁺ channel blocker — zero-order kinetics, gingival hyperplasia, teratogen", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Fosphenytoin", "IV prodrug of phenytoin — status epilepticus", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Carbamazepine", "Na⁺ channel blocker — first line focal; also trigeminal neuralgia, bipolar; CYP inducer, SJS (HLA-B*1502)", ["Epilepsy TBL", "Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Oxcarbazepine", "carbamazepine analogue, fewer interactions; hyponatremia", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Lamotrigine", "Na⁺ channel — broad spectrum; SJS rash; bipolar depression", ["Epilepsy TBL", "Psychotic & Bipolar TBL", "Arbat summary"], "N", ""]]], ["Other mechanisms", [["Ethosuximide", "T-type Ca²⁺ channel blocker — absence seizures", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Valproic acid", "broad spectrum (Na⁺, T-Ca²⁺, ↑GABA) — hepatotoxic, pancreatitis, neural tube defects; bipolar", ["Epilepsy TBL", "Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Levetiracetam", "SV2A binder — broad spectrum, behavioural side effects", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Gabapentin", "α2δ Ca²⁺ channel subunit — focal seizures, neuropathic pain", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Topiramate", "multiple (Na⁺, GABA, AMPA) — weight loss, kidney stones, cognitive slowing", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Phenobarbital", "barbiturate AED — GABA-A duration; neonates", ["Epilepsy TBL", "Sedative Hypnotics", "Arbat summary"], "N", ""], ["Felbamate", "aplastic anaemia / hepatic failure black box", ["Epilepsy TBL"], "O", ""], ["Cannabidiol", "Lennox-Gastaut / Dravet", ["Epilepsy TBL"], "O", ""]]], ["Status epilepticus", [["Lorazepam / diazepam / midazolam", "first-line benzodiazepine for status epilepticus", ["Epilepsy TBL", "Arbat summary"], "N", ""], ["Pentobarbital", "refractory status epilepticus (coma)", ["Epilepsy TBL"], "O", ""]]]]], ["Sedative-hypnotics", "From the Sedative Hypnotics workshop drug list and the Arbat summary.", [["Benzodiazepines", [["Diazepam", "long-acting BZD — ↑ frequency of GABA-A Cl⁻ opening; status, alcohol withdrawal, spasm", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Lorazepam", "intermediate, no active metabolites (LOT) — status epilepticus, liver disease", ["Sedative Hypnotics", "Epilepsy TBL", "Arbat summary"], "N", ""], ["Alprazolam", "short/intermediate — panic disorder; high misuse", ["Sedative Hypnotics", "Anxiety lecture", "Arbat summary"], "N", ""], ["Midazolam", "short-acting IV — procedural sedation, anaesthesia induction", ["Sedative Hypnotics", "General Anesthetics", "Arbat summary"], "N", ""], ["Triazolam", "short-acting hypnotic", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Chlordiazepoxide", "long-acting — alcohol withdrawal", ["Sedative Hypnotics", "Substance Use TBL", "Arbat summary"], "N", ""], ["Clonazepam", "long-acting — panic, seizures", ["Sedative Hypnotics", "Arbat summary"], "O", ""], ["Oxazepam / temazepam", "no active metabolites — safe in liver disease (LOT)", ["Sedative Hypnotics", "Arbat summary"], "O", ""], ["Nitrazepam", "named once in the class list", ["Sedative Hypnotics"], "S", "one mention in a list"]]], ["Antagonist", [["Flumazenil", "competitive BZD-site antagonist — reverses BZD/Z-drug overdose; may precipitate seizures", ["Sedative Hypnotics", "Arbat summary"], "N", ""]]], ["Barbiturates", [["Barbiturates (class)", "↑ duration of GABA-A Cl⁻ opening; no ceiling → respiratory depression; CYP inducers", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Thiopental", "ultra-short IV barbiturate — anaesthesia induction", ["Sedative Hypnotics", "General Anesthetics", "Arbat summary"], "N", ""], ["Pentobarbital / secobarbital", "short-acting barbiturates", ["Sedative Hypnotics", "Arbat summary"], "O", ""]]], ["Newer hypnotics", [["Zolpidem", "Z-drug — BZD1 (α1) site; sleep onset", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Zaleplon", "Z-drug — shortest acting", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Eszopiclone", "Z-drug — sleep maintenance", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Ramelteon", "MT1/MT2 melatonin agonist — no dependence", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Suvorexant", "orexin receptor antagonist", ["Sedative Hypnotics", "Arbat summary"], "N", ""], ["Lemborexant", "orexin receptor antagonist", ["Sedative Hypnotics", "Arbat summary"], "O", ""], ["Tasimelteon", "melatonin agonist (non-24-h disorder)", ["Sedative Hypnotics"], "S", "named next to ramelteon only"]]], ["Non-sedating anxiolytic", [["Buspirone", "5-HT1A partial agonist — GAD; slow onset, no dependence", ["Sedative Hypnotics", "Anxiety lecture", "Arbat summary"], "N", ""]]], ["Other sedating drugs", [["Sedating antihistamines · chloral hydrate · older sedatives", "listed as other sedatives", ["Sedative Hypnotics"], "S", "one slide list"]]]]], ["General anaesthetics", "From the General Anesthetics drug lists.", [["Inhaled", [["Nitrous oxide", "low potency (high MAC), fast; diffusion hypoxia", ["General Anesthetics", "Arbat summary"], "N", ""], ["Isoflurane", "most potent of the list (low MAC)", ["General Anesthetics", "Arbat summary"], "N", ""], ["Sevoflurane", "fast, non-pungent — mask induction", ["General Anesthetics", "Arbat summary"], "N", ""], ["Desflurane", "fastest onset/offset (lowest blood:gas λ); airway irritant", ["General Anesthetics"], "N", ""], ["Halothane", "hepatitis; arrhythmias", ["General Anesthetics", "Arbat summary"], "N", ""], ["Enflurane", "older volatile agent", ["General Anesthetics"], "S", "named once next to halothane"]]], ["Intravenous", [["Propofol", "GABA-A — rapid recovery, antiemetic; hypotension", ["General Anesthetics", "Arbat summary"], "N", ""], ["Etomidate", "haemodynamically stable — adrenal suppression", ["General Anesthetics", "Arbat summary"], "N", ""], ["Ketamine", "NMDA antagonist — dissociative; ↑BP, emergence reactions", ["General Anesthetics", "Arbat summary"], "N", ""]]], ["Adjuncts & complications", [["Dantrolene", "RyR1 blocker — malignant hyperthermia", ["General Anesthetics", "Arbat summary"], "N", ""], ["Opioid adjuncts (morphine, fentanyl)", "analgesia in balanced anaesthesia", ["General Anesthetics"], "O", ""], ["Atropine · neuromuscular blockers · ondansetron · PPIs", "perioperative adjunct list", ["General Anesthetics"], "O", ""]]]]], ["Antidepressants", "From the Depressive Disorders lecture and the Arbat summary.", [["SSRIs", [["Fluoxetine", "SSRI — longest half-life; CYP2D6 inhibitor; 5-week washout before MAOI", ["Depression lecture", "Arbat summary"], "N", ""], ["Paroxetine", "SSRI — most anticholinergic, worst discontinuation; avoid in pregnancy", ["Depression lecture", "Arbat summary"], "N", ""], ["Sertraline", "SSRI", ["Depression lecture", "Arbat summary"], "N", ""], ["Citalopram / escitalopram", "SSRIs — QT (citalopram)", ["Depression lecture", "Arbat summary"], "N", ""]]], ["SNRIs", [["Venlafaxine", "SNRI — ↑BP; GAD, neuropathic pain", ["Depression lecture", "Arbat summary"], "N", ""], ["Duloxetine", "SNRI — neuropathic pain, stress incontinence", ["Depression lecture", "Arbat summary"], "N", ""], ["Desvenlafaxine", "active metabolite of venlafaxine", ["Depression lecture", "Arbat summary"], "O", ""]]], ["TCAs & MAOIs", [["Amitriptyline", "TCA — anticholinergic, sedation, QRS widening in overdose", ["Depression lecture", "Arbat summary"], "N", ""], ["Imipramine", "TCA — also enuresis", ["Depression lecture", "Neurodevelopmental workshop", "Arbat summary"], "N", ""], ["Clomipramine", "TCA — OCD", ["Depression lecture", "Anxiety lecture", "Arbat summary"], "N", ""], ["Phenelzine", "MAOI — tyramine hypertensive crisis", ["Depression lecture", "Arbat summary"], "N", ""], ["Selegiline patch", "transdermal MAOI", ["Depression lecture"], "O", ""]]], ["Atypicals", [["Bupropion", "NE/DA reuptake inhibitor — no sexual AE; seizures; smoking cessation, ADHD", ["Depression lecture", "Substance Use TBL", "Arbat summary"], "N", ""], ["Mirtazapine", "α2 antagonist — sedation, weight gain (insomnia + weight loss)", ["Depression lecture", "Arbat summary"], "N", ""], ["Trazodone", "5-HT2 antagonist — sedation, priapism", ["Depression lecture", "Arbat summary"], "N", ""]]], ["Toxicity", [["Serotonin syndrome", "SSRI + MAOI/triptan/etc. — hyperthermia, clonus; cyproheptadine", ["Depression lecture", "Arbat summary"], "N", ""]]]]], ["Antipsychotics & mood stabilisers", "From the Psychotic & Bipolar TBL and the Arbat summary.", [["Typical", [["Haloperidol", "high-potency D2 blocker — EPS", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Fluphenazine", "high-potency typical — depot", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Chlorpromazine", "low-potency typical — anticholinergic, sedation, orthostasis", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Thioridazine", "low potency — retinal deposits, QT", ["Psychotic & Bipolar TBL", "Arbat summary"], "O", ""], ["Pimozide", "high potency — Tourette", ["Psychotic & Bipolar TBL", "Neurodevelopmental workshop"], "O", ""]]], ["Atypical", [["Clozapine", "treatment-resistant schizophrenia — agranulocytosis (ANC monitoring), seizures", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Olanzapine", "weight gain, metabolic syndrome", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Risperidone", "hyperprolactinemia", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Quetiapine", "sedation; least EPS", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Aripiprazole", "D2 partial agonist — akathisia", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""], ["Ziprasidone", "QT prolongation", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""]]], ["Mood stabiliser", [["Lithium", "narrow index — tremor, hypothyroidism, nephrogenic DI; Ebstein anomaly; ↓ suicide", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""]]], ["Adverse-effect syndromes", [["EPS · tardive dyskinesia · NMS · hyperprolactinemia", "antipsychotic adverse effects to recognise", ["Psychotic & Bipolar TBL", "Arbat summary"], "N", ""]]]]], ["Anxiety, OCD & trauma treatments", "Beyond SSRIs/SNRIs: from the Anxiety lecture.", [["", [["β-blockers (propranolol)", "performance (social) anxiety", ["Anxiety lecture", "Arbat summary"], "O", ""], ["α-blockers (prazosin)", "PTSD nightmares", ["Anxiety lecture"], "O", ""], ["ECT · TMS", "treatment-resistant depression", ["Depression lecture"], "O", ""]]]]], ["ADHD & neurodevelopmental", "From the Neurodevelopmental / Stimulant Pharmacology workshop.", [["Stimulants", [["Amphetamine / dextroamphetamine", "release DA/NE from vesicles — first line ADHD", ["Neurodevelopmental workshop", "Arbat summary"], "N", ""], ["Lisdexamfetamine", "amphetamine prodrug — lower misuse", ["Neurodevelopmental workshop", "Arbat summary"], "N", ""], ["Methylphenidate", "DAT/NET blocker — first line ADHD", ["Neurodevelopmental workshop", "Arbat summary"], "N", ""]]], ["Non-stimulants", [["Atomoxetine", "selective NET inhibitor — no misuse; suicidal ideation black box", ["Neurodevelopmental workshop", "Arbat summary"], "N", ""], ["Guanfacine / clonidine", "α2A agonists — ADHD, tics", ["Neurodevelopmental workshop", "Arbat summary"], "N", ""]]], ["Enuresis", [["Desmopressin", "ADH analogue — nocturnal enuresis", ["Neurodevelopmental workshop", "Arbat summary"], "N", ""]]]]], ["Dementia & confusion", "From the NCD workshop.", [["", [["Donepezil", "cholinesterase inhibitor — all stages of AD", ["NCD workshop", "Arbat summary"], "N", ""], ["Rivastigmine", "cholinesterase inhibitor (patch) — AD, PD dementia", ["NCD workshop", "Arbat summary"], "N", ""], ["Galantamine", "cholinesterase inhibitor + nicotinic modulator", ["NCD workshop", "Arbat summary"], "N", ""], ["Memantine", "NMDA antagonist — moderate-severe AD", ["NCD workshop", "Arbat summary"], "N", ""], ["Lecanemab / donanemab", "anti-amyloid mAbs — early AD; ARIA", ["NCD workshop", "Arbat summary"], "N", ""], ["Thiamine", "Wernicke — give before glucose", ["NCD workshop", "Arbat summary"], "N", ""], ["Vitamin E", "modest benefit; NSAIDs, estrogen, ginkgo — no benefit", ["NCD workshop"], "O", ""], ["Aducanumab", "withdrawn anti-amyloid mAb", ["NCD workshop"], "S", "named in passing"]]]]], ["Substance use treatment", "From the Substance Use Disorders TBL.", [["Alcohol", [["Naltrexone", "opioid antagonist — ↓ craving (alcohol & opioid)", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Acamprosate", "NMDA/GABA modulation — maintain abstinence; renal dosing", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Disulfiram", "aldehyde dehydrogenase inhibitor — aversive", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Chlordiazepoxide / diazepam", "alcohol withdrawal (long-acting BZD)", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Other AUD drugs (baclofen, nalmefene, topiramate, gabapentin…)", "off-label list", ["Substance Use TBL"], "S", "one list slide"]]], ["Opioids", [["Naloxone", "opioid overdose reversal", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Methadone", "full µ agonist — maintenance; QT", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Buprenorphine (± naloxone)", "partial µ agonist — maintenance; precipitated withdrawal", ["Substance Use TBL", "Arbat summary"], "N", ""]]], ["Nicotine", [["Nicotine replacement therapy", "gum, lozenge, patch", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Varenicline", "α4β2 nicotinic partial agonist — most effective cessation drug", ["Substance Use TBL", "Arbat summary"], "N", ""]]]]], ["Drugs of abuse", "Pharmacology of each substance (intoxication/withdrawal are on the Psychiatry Table).", [["", [["Alcohol", "GABA-A ↑ / NMDA ↓", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Nicotine", "nicotinic agonist", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Opioids (heroin, fentanyl)", "µ agonists — pinpoint pupils, respiratory depression", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Cocaine", "blocks DAT/NET/SERT — vasospasm, MI", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Amphetamine / methamphetamine", "release monoamines", ["Substance Use TBL", "Arbat summary"], "N", ""], ["Cannabis (THC)", "CB1 agonist", ["Substance Use TBL", "Arbat summary"], "N", ""], ["LSD / psilocybin", "5-HT2A agonists", ["Substance Use TBL", "Arbat summary"], "N", ""], ["PCP / ketamine", "NMDA antagonists — nystagmus, violence", ["Substance Use TBL", "Arbat summary"], "N", ""], ["MDMA (ecstasy)", "serotonin release — hyponatremia, hyperthermia", ["Substance Use TBL", "Arbat summary"], "O", ""], ["Synthetic cathinones · synthetic cannabinoids", "\"bath salts\", \"spice\"", ["Substance Use TBL", "Arbat summary"], "O", ""], ["Inhalants", "solvents, aerosols", ["Substance Use TBL", "Arbat summary"], "O", ""], ["Carfentanil", "ultra-potent fentanyl analogue", ["Substance Use TBL"], "S", "one mention"]]]]], ["Stroke & vascular", "From the Cerebrovascular workshop and the stroke sessions.", [["Thrombolytics", [["Alteplase (tPA)", "within 4.5 h of onset; BP < 185/110; check contraindications", ["Stroke post-session", "Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Tenecteplase", "alternative thrombolytic", ["Cerebrovascular workshop", "Arbat summary"], "O", ""], ["Streptokinase", "older thrombolytic", ["Cerebrovascular workshop"], "S", "named once"]]], ["Antiplatelets", [["Aspirin", "irreversible COX-1 inhibitor — secondary prevention", ["Stroke post-session", "Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Clopidogrel", "P2Y12 (ADP) blocker — prodrug, CYP2C19", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Prasugrel / ticagrelor", "P2Y12 blockers", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Dipyridamole", "PDE3 inhibitor — with aspirin", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Abciximab / eptifibatide / tirofiban", "GpIIb/IIIa inhibitors", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Cilostazol", "PDE3 inhibitor", ["Cerebrovascular workshop", "Arbat summary"], "O", ""], ["Cangrelor", "IV P2Y12", ["Cerebrovascular workshop"], "S", "named once"]]], ["Anticoagulants", [["Warfarin", "vitamin K antagonist — INR; reverse with vitamin K + PCC/FFP", ["Cerebrovascular workshop", "Stroke post-session", "Arbat summary"], "N", ""], ["Unfractionated heparin", "↑ antithrombin — aPTT; HIT; protamine", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Enoxaparin (LMWH)", "factor Xa > IIa; anti-Xa levels", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Fondaparinux", "factor Xa via antithrombin", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Apixaban / rivaroxaban / edoxaban", "direct Xa inhibitors — AF", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Dabigatran", "direct thrombin inhibitor — idarucizumab reversal", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Argatroban / bivalirudin", "parenteral direct thrombin inhibitors — HIT", ["Cerebrovascular workshop", "Arbat summary"], "O", ""], ["Dalteparin · nadroparin · tinzaparin", "other LMWHs", ["Cerebrovascular workshop"], "S", "listed with enoxaparin"]]], ["Reversal agents", [["Vitamin K · protamine · idarucizumab", "reverse warfarin · heparin · dabigatran", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["FFP / PCC · tranexamic acid", "other reversal options", ["Cerebrovascular workshop"], "O", ""]]], ["BP, lipids & SAH", [["Labetalol · nicardipine", "IV BP control in acute stroke / ICH", ["Stroke post-session", "Cerebrovascular workshop"], "N", ""], ["Nimodipine", "prevents vasospasm after SAH", ["Stroke post-session", "Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Statins", "secondary prevention", ["Cerebrovascular workshop", "Arbat summary"], "N", ""], ["Enalapril · nitroprusside", "other IV antihypertensives", ["Stroke post-session"], "O", ""], ["ACE inhibitor + thiazide", "long-term BP control after stroke", ["Cerebrovascular workshop", "Arbat summary"], "O", ""]]]]]];</script>
+<script>
+(function(){
+var C=window.DRUGS,KEY='nupyM2DrugChecklist_v1',ST;
+try{ST=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+if(!ST||typeof ST!=='object')ST={tick:{}};ST.tick=ST.tick||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){alert('Could not save — browser storage unavailable.');}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function id(ci,si,di){return C[ci][0]+'|'+C[ci][2][si][0]+'|'+C[ci][2][si][1][di][0];}
+var wrap=document.getElementById('wrap'),filter='all',query='';
+var h='';
+C.forEach(function(c,ci){
+  h+='<details class="lec" open><summary><span class="lt">'+esc(c[0])+'</span><span class="lmeta" id="m'+ci+'"></span><div class="mini" id="b'+ci+'"><i class="g"></i></div></summary><div class="lbody"><div class="cdesc">'+esc(c[1])+'</div>';
+  c[2].forEach(function(s,si){
+    h+='<div class="grp">'+(s[0]?'<div class="sub2">'+esc(s[0])+'</div>':'');
+    s[1].forEach(function(d,di){
+      var TN={N:'Need to know',O:"Know what it's for",S:'Skip'};
+      h+='<label class="drug t'+d[3]+'" data-t="'+d[3]+'" data-id="'+esc(id(ci,si,di))+'" data-c="'+ci+'"><input type="checkbox" class="tick"><div><div class="dn">'+esc(d[0])+'<span class="tier '+d[3]+'">'+TN[d[3]]+'</span></div><div class="dw">'+esc(d[1])+'</div>'+(d[4]?'<div class="why">Why skip: '+esc(d[4])+'</div>':'')+'</div><div class="srcs">'+d[2].map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div></label>';
+    });
+    h+='</div>';
+  });
+  h+='</div></details>';
+});
+wrap.innerHTML=h;
+var items=[].slice.call(wrap.querySelectorAll('.drug'));
+items.forEach(function(el){var cb=el.querySelector('.tick');cb.onchange=function(){if(cb.checked)ST.tick[el.dataset.id]=Date.now();else delete ST.tick[el.dataset.id];save();paint();};});
+function paint(){
+  var tot=items.length,done=0;
+  C.forEach(function(c,ci){
+    var n=0,d=0;
+    items.forEach(function(el){if(+el.dataset.c!==ci)return;n++;var t=!!ST.tick[el.dataset.id];if(t)d++;el.classList.toggle('done',t);el.querySelector('.tick').checked=t;
+      var tt=el.dataset.t;var ok=(filter==='all'||(filter==='inc'&&!t)||(filter==='N'&&tt==='N')||(filter==='NO'&&tt!=='S'))&&(!query||el.textContent.toLowerCase().indexOf(query)>=0);el.classList.toggle('hid',!ok);});
+    done+=d;document.getElementById('m'+ci).innerHTML='<span class="c2">'+d+'</span> / '+n;
+    document.getElementById('b'+ci).children[0].style.width=(100*d/n)+'%';
+    var det=document.getElementById('b'+ci).closest('details');det.classList.toggle('hid',!det.querySelector('.drug:not(.hid)'));
+    det.querySelectorAll('.grp').forEach(function(g){g.classList.toggle('hid',!g.querySelector('.drug:not(.hid)'));});
+  });
+  document.getElementById('tg').style.width=(100*done/tot)+'%';
+  document.getElementById('count').innerHTML='<b>'+done+'</b> / '+tot+' ticked';
+}
+document.querySelectorAll('.btn[data-f]').forEach(function(b){b.onclick=function(){document.querySelectorAll('.btn[data-f]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');filter=b.dataset.f;paint();};});
+document.getElementById('q').oninput=function(){query=this.value.trim().toLowerCase();paint();};
+var openAll=true;document.getElementById('expand').onclick=function(){openAll=!openAll;wrap.querySelectorAll('details.lec').forEach(function(d){d.open=openAll;});};
+document.getElementById('export').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(ST)],{type:'application/json'}));a.download='drug-checklist.json';a.click();};
+document.getElementById('import').onclick=function(){document.getElementById('importf').click();};
+document.getElementById('importf').onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);if(!o.tick)throw 0;ST=o;save();paint();}catch(e){alert('Not a checklist export.');}};r.readAsText(f);};
+document.getElementById('clear').onclick=function(){if(confirm('Clear all ticks?')){ST.tick={};save();paint();}};
+var cnt={N:0,O:0,S:0};items.forEach(function(el){cnt[el.dataset.t]++;});
+document.getElementById('tiercount').textContent=cnt.N+" need to know · "+cnt.O+" know what it’s for · "+cnt.S+" skip";
+paint();
+})();
+</script>
+<!-- ===== SITE KIT · shared nav + image lightbox + responsive tables (identical on every page) ===== -->
+<style id="sitekit">
+  :root{ --sk-ink:#23272c; --sk-muted:#6c7077; --sk-line:#cdc6b6; --sk-accent:#7a1422; }
+  .sitenav{background:#23272c;border-bottom:1px solid rgba(0,0,0,.25);
+    display:flex;gap:4px;align-items:center;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+  .sitenav::-webkit-scrollbar{height:0}
+  .sitenav .sk-brand{color:#f4f2ec;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:8px;flex:0 0 auto;opacity:.55;text-decoration:none;padding:6px 4px;border-radius:7px}
+  .sitenav .sk-brand:hover{opacity:1;background:transparent}
+  .sitenav .sk-brand-on{opacity:1}
+  .sitenav .sk-gap{flex:0 0 auto;width:14px}
+  .sitenav a{flex:0 0 auto;color:#cfd3d8;text-decoration:none;font-size:12px;letter-spacing:.02em;
+    padding:6px 11px;border-radius:7px;transition:.12s;border:1px solid transparent}
+  .sitenav a:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-here{background:var(--sk-accent);color:#fff;font-weight:600}
+  .sitenav .sk-minis{display:flex;gap:2px;flex:0 0 auto;background:#1a1e22;border:1px solid #3a4046;border-radius:9px;padding:2px}
+  .sitenav a.sk-mini{padding:5px 12px;border-radius:7px;font-weight:600;color:#aeb4bb}
+  .sitenav a.sk-mini:hover{background:#31363c;color:#fff}
+  .sitenav a.sk-mini.sk-mini-on{background:#f4f2ec;color:#23272c}
+  .sitenav .sk-div{flex:0 0 auto;width:1px;align-self:stretch;background:#3a4046;margin:5px 9px}
+  @media(max-width:600px){ .sitenav .sk-brand{font-size:10px;letter-spacing:.1em;margin-right:4px} .sitenav .sk-gap{width:8px} }
+
+  /* image lightbox */
+  .sk-lb{position:fixed;inset:0;z-index:2000;background:rgba(20,18,14,.9);display:none;
+    align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .sk-lb.on{display:flex}
+  .sk-lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.55);background:#fff;cursor:default}
+  .sk-lb .sk-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#f4f2ec;
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;padding:0 24px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .sk-lb .sk-x{position:absolute;top:12px;right:20px;color:#f4f2ec;font-size:32px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif;opacity:.85}
+  .sk-lb .sk-x:hover{opacity:1}
+  a[target="_blank"] > img{cursor:zoom-in}
+
+  /* responsive tables */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  @media(max-width:760px){
+    table.mobreflow{display:block;width:100%!important}
+    table.mobreflow>colgroup{display:none}
+    table.mobreflow>thead{display:none}
+    table.mobreflow>tbody{display:block}
+    table.mobreflow>tbody>tr{display:block}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal){
+      border:1px solid var(--sk-line);border-radius:11px;margin:0 0 12px;background:#fff;overflow:hidden}
+    table.mobreflow>tbody>tr.row:not(.pathway):not(.compare):not(.signal)>td{
+      display:block;width:auto!important;border:none;border-bottom:1px solid #e6e1d6;padding:9px 13px}
+    table.mobreflow>tbody>tr.row>td:last-child{border-bottom:none}
+    table.mobreflow>tbody>tr.row>td[data-label]::before{
+      content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+      letter-spacing:.09em;text-transform:uppercase;color:var(--sk-muted);margin-bottom:3px;font-weight:600}
+    table.mobreflow>tbody>tr.row.pathway>td,
+    table.mobreflow>tbody>tr.row.compare>td,
+    table.mobreflow>tbody>tr.row.signal>td{display:block;overflow-x:auto}
+    table.mobreflow>tbody>tr.sec{display:block;margin:16px 0 6px}
+    table.mobreflow>tbody>tr.sec>td{display:block}
+  }
+</style>
+<div class="sk-lb" id="skLb" aria-hidden="true"><span class="sk-x">&times;</span><img alt=""><div class="sk-cap"></div></div>
+<script id="sitekit-js">
+(function(){
+  var COURSES=[
+    {id:'enre', brand:'ENRE', home:'index.html', minis:[
+      {id:'mini1', label:'Mini 1', home:'mini1.html', pages:[
+        ['mini1.html','Overview'],
+        ['master_table.html','Master'],
+        ['pathology_table.html','Pathology'],
+        ['pathology_checklist.html','Path Checklist'],
+        ['physio_table.html','Physiology'],
+        ['drugs_table.html','Drugs'],
+        ['biochem_table.html','Biochem'],
+        ['embryo_anatomy_table.html','Embryo / Anatomy'],
+        ['pattern_recognition.html','Patterns'],
+        ['lecture_recall.html','Lecture Recall'],
+        ['physio_quiz.html','Physio Quiz'],
+        ['endocrine_path_quiz.html','Endo Path Quiz'],
+        ['male_path_quiz.html','Male Path Quiz'],
+        ['physio_ext1_quiz.html','Repro Physio Q'],
+        ['physio_ext2_quiz.html','Physio Bank 1'],
+        ['physio_ext3_quiz.html','Physio Bank 2'],
+        ['pharmq_quiz.html','Pharm Quiz'],
+        ['review_planner.html','Planner'],
+        ['gi_path_table.html','GI Path']
+      ]},
+      {id:'mini2', label:'Mini 2', home:'mini2.html', pages:[
+        ['mini2.html','Overview'],
+        ['mini2_pathology_table.html','Pathology'],
+        ['mini2_pathology_checklist.html','Path Checklist'],
+        ['mini2_physio_table.html','Physiology'],
+        ['mini2_drugs_table.html','Drugs'],
+        ['mini2_foundations_table.html','Foundations'],
+        ['mini2_clinical_obgyn_table.html','Clinical OB/GYN'],
+        ['mini2_community_health_table.html','Public Health'],
+        ['mini2_review_hub.html','Review Hub'],
+        ['mini2_path_quiz_infancy.html','Infancy Path Quiz'],
+        ['mini2_path_quiz_female.html','Female Path Quiz'],
+        ['mini2_path_quiz_breast.html','Breast Path Quiz'],
+        ['mini2_physio_quizzes.html','Physio Quizzes'],
+        ['mini2_study_guide.html','Resource Guide']
+      ]}
+    ]},
+    {id:'nupy', brand:'NUPY', home:'nupy.html', minis:[
+      {id:'nupy1', label:'Mini 1', home:'nupy_mini1.html', pages:[
+        ['nupy_mini1.html','Overview'],
+        ['nupy_neuroanatomy_table.html','Neuroanatomy'],
+        ['nupy_neuroanatomy_doc.html','Neuroanatomy Doc'],
+        ['nupy_headneck_doc.html','Head & Neck Doc'],
+        ['nupy_cranial_nerves.html','Cranial Nerves'],
+        ['nupy_recall_decks.html','Recall Decks'],
+        ['nupy_eye_infections.html','Eye Infections'],
+        ['nupy_pathology_table.html','Pathology Table'],
+        ['nupy_lesion_localization.html','Lesion Localization'],
+        ['nupy_head_neck.html','Head & Neck Table'],
+        ['nupy_drugs_table.html','Drugs Table'],['nupy_drug_checklist.html','Drug Checklist'],
+        ['nupy_physio_table.html','Physiology Table'],['nupy_special_senses.html','Special Senses Table'],
+        ['nupy_pathway_map.html','Pathway Map'],
+        ['nupy_lecture_review.html','Lecture Review'],
+        ['nupy_neuroanatomy_checklist.html','Neuro Checklist'],['nupy_hy_checklist.html','HY Notes Checklist'],['nupy_hy_learn.html','HY Notes Learn'],['nupy_mcq_quizzes.html','MCQ Quizzes 🔒']
+      ]},
+      {id:'nupy2', label:'Mini 2', home:'nupy_mini2.html', pages:[
+        ['nupy_mini2.html','Overview'],
+        ['nupy_m2_lecture_review.html','Lecture Review'],
+        ['nupy_m2_pathology.html','Pathology Table'],
+        ['nupy_m2_drugs.html','Drugs Table'],
+        ['nupy_m2_drug_checklist.html','Drug Checklist'],
+        ['nupy_m2_psych.html','Psychiatry Table'],
+        ['nupy_m2_stroke.html','Stroke & Vascular'],
+        ['nupy_m2_neuro_clinical.html','Neuro Exam & Seizures'],
+        ['nupy_m2_mcq.html','Practice Questions 🔒']
+      ]}
+    ]}
+  ];
+  var MINIS=[]; COURSES.forEach(function(c){ c.minis.forEach(function(m){ m.course=c; MINIS.push(m); }); });
+  var here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(here==='') here='index.html';
+  var mini=null, course=null;
+  MINIS.forEach(function(m){
+    if(m.home.toLowerCase()===here) mini=m;
+    m.pages.forEach(function(p){ if(p[0].toLowerCase()===here) mini=m; });
+  });
+  COURSES.forEach(function(c){ if(c.home.toLowerCase()===here) course=c; });
+  if(mini) course=mini.course;
+  if(!course) course=COURSES[0];
+  var nav=document.createElement('nav'); nav.className='sitenav';
+  COURSES.forEach(function(c,ci){
+    var brand=document.createElement('a'); brand.className='sk-brand'+(c===course?' sk-brand-on':''); brand.href=c.home; brand.textContent=c.brand; nav.appendChild(brand);
+    var sw=document.createElement('span'); sw.className='sk-minis';
+    c.minis.forEach(function(m){
+      var a=document.createElement('a'); a.href=m.home; a.textContent=m.label;
+      a.className='sk-mini'+(mini===m?' sk-mini-on':'');
+      sw.appendChild(a);
+    });
+    nav.appendChild(sw);
+    if(ci<COURSES.length-1){ var gap=document.createElement('span'); gap.className='sk-gap'; nav.appendChild(gap); }
+  });
+  if(mini && mini.pages.length){
+    var dv=document.createElement('span'); dv.className='sk-div'; nav.appendChild(dv);
+    mini.pages.forEach(function(p){
+      var a=document.createElement('a'); a.href=p[0]; a.textContent=p[1];
+      if(p[0].toLowerCase()===here) a.className='sk-here';
+      nav.appendChild(a);
+    });
+  }
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  var lb=document.getElementById('skLb'), lbImg=lb.querySelector('img'), lbCap=lb.querySelector('.sk-cap');
+  function openLb(src,cap){ lbImg.src=src; lbCap.textContent=cap||''; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); }
+  function closeLb(){ lb.classList.remove('on'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a) return;
+    var img=a.querySelector('img'); var href=a.getAttribute('href')||'';
+    if(img && /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(href)){
+      e.preventDefault(); openLb(href, img.getAttribute('alt')||'');
+    }
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==lbImg) closeLb(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||e.keyCode===27) closeLb(); });
+
+  function reflow(){
+    var tables=[].slice.call(document.querySelectorAll('table')).filter(function(t){ return !t.closest('td'); });
+    tables.forEach(function(t){
+      var hasRows=t.querySelector(':scope > tbody > tr.row');
+      if(hasRows){
+        t.classList.add('mobreflow');
+        var heads=[].slice.call(t.querySelectorAll(':scope > thead > tr > th')).map(function(th){return th.textContent.trim();});
+        if(heads.length){
+          [].slice.call(t.querySelectorAll(':scope > tbody > tr')).forEach(function(tr){
+            var tds=[].slice.call(tr.querySelectorAll(':scope > td'));
+            if(tds.length===heads.length){
+              tds.forEach(function(td,i){ if(!td.hasAttribute('data-label')) td.setAttribute('data-label',heads[i]); });
+            }
+          });
+        }
+      } else if(t.parentElement && !t.parentElement.classList.contains('tscroll')){
+        var w=document.createElement('div'); w.className='tscroll';
+        t.parentElement.insertBefore(w,t); w.appendChild(t);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reflow); else reflow();
+})();
+</script>
+
+
+
+</body>
+</html>
