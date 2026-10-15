@@ -54,8 +54,8 @@ footer{max-width:1000px;margin:0 auto 50px;padding:0 20px;color:var(--muted);fon
 .side{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;background:#fff;border:1px solid var(--line-strong);border-radius:18px;box-shadow:0 6px 24px rgba(40,30,10,.08);display:flex;flex-direction:column;padding:14px 18px 18px}
 .side.back{transform:rotateX(180deg)}
 .fc-h{display:flex;justify-content:space-between;align-items:center}
-.fc-t{flex:1;display:flex;align-items:center;justify-content:center;overflow:auto;padding:10px 22px;line-height:1.45}
-.fc-t>div{max-width:100%}
+.fc-t{flex:1;display:flex;overflow:auto;padding:10px 22px;line-height:1.45}
+.fc-t>div{max-width:100%;margin:auto}
 .ib{border:0;background:transparent;font-size:17px;cursor:pointer;padding:4px 7px;border-radius:8px;color:var(--muted);line-height:1}
 .ib:hover{background:#f1ede4;color:var(--ink)}.ib.on{color:#d39b00}
 .ib.st.on{color:#e0a800}
@@ -215,6 +215,19 @@ input.wr.ok{border-color:var(--ok);background:var(--ok-bg)}input.wr.no{border-co
 .bk .lq-p{font-size:16px;margin:6px 0 12px}
 .bk .mcg{grid-template-columns:1fr}
 
+/* deck filter + details */
+.dfbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 14px;padding:10px 12px;background:#fff;border:1px solid var(--line-strong);border-radius:12px}
+.dfbar .flab{font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.sc{font:500 12px 'Inter',sans-serif;border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:5px 11px;cursor:pointer;color:var(--ink)}
+.sc small{opacity:.6;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-left:3px}
+.sc.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+#dfLec{font:inherit;font-size:13px;border:1px solid var(--line-strong);border-radius:8px;padding:6px 9px;background:#fff;color:var(--ink);max-width:100%}
+.dfn{font-size:12px;color:var(--gene-ink);font-weight:600;margin-left:auto}
+.xd{margin-top:12px;text-align:left;font-size:13px;line-height:1.45;display:grid;gap:7px}
+.xd>div{background:#faf8f3;border:1px solid var(--line);border-radius:9px;padding:7px 10px}
+.xd .lab{display:block;margin-bottom:1px;font-size:9.5px}
+.fc .xd{font-size:12.5px;border-top:1px dashed var(--line-strong);padding-top:10px}
+details.xdd{margin-top:6px}details.xdd summary{cursor:pointer;font:600 11.5px 'IBM Plex Mono',monospace;color:var(--gene-ink)}
 /* terms list */
 .terms{max-width:1000px;margin:10px auto 40px;padding:0 20px}
 .terms h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0}
@@ -258,7 +271,7 @@ input.wr.ok{border-color:var(--ok);background:var(--ok-bg)}input.wr.no{border-co
   <button class="qt" data-m="blast"><span class="ic">🚀</span>Blast</button>
   <button class="qt" data-m="blocks"><span class="ic">🟪</span>Blocks</button>
 </div></div>
-<div class="wrap"><div id="stage"></div></div>
+<div class="wrap"><div id="dfbar" class="dfbar hid"></div><div id="stage"></div></div>
 <section class="terms" id="terms"></section>
 <footer><hr style="border:none;border-top:1px solid var(--line-strong);margin:0 0 14px">Card text is copied word for word from the Quizlet set, typos included, so answers match the original cards. Quizlet's Charms game is not here because Quizlet hasn't published how it works.</footer>
 <script>window.QZ={"id": "m2drugs", "title": "NUPY Mini 2 Drugs", "source": "Quizlet set 1141035766 (made by your friend)", "cards": [["Atomoxetine", "MOA: Non-stimulant selective norepinephrine reuptake inhibitor\nAdverse Effects: Slower onset, Erectile Dysfunction, ↑ suicide risk in youth\nUse: ADHD"], ["Guanfacine and Clonidine", "MOA: Non-stimulant α₂-adrenergic receptor agonist\nAdverse Effects: Sedation, hypotension, rebound HTN if stopped abruptly\nUse: ADHD, tics"], ["Bupropion", "MOA: Atypical antidepressant NE & DA reuptake inhibition\nAdverse Effect: Increased risk of siezures\nUse: ADHD and Depression"], ["Clopidogrel\nPrasugrel\nTicagrelor\nCangrelor", "MOA: P2Y12 (ADP) Receptor Blocker\nUse: Dual antiplatelet therapy, stroke & ACS prevention"], ["Abciximab\nEptifibatide\nTirofiban", "MOA: Gp IIb/IIIa Inhibitor"], ["Dipyridamole\nCilostazol", "MOA: Phosphodiesterase-3 (PDE-3) Inhibitor ↑cAMP → ↓platelet aggregation\nUse: Stroke prevention"], ["Apixaban\nRivaroxaban", "MOA: Direct inhibition of factor Xa\nUse: Stroke prevention (AF), DVT/PE"], ["Dabigatran\nArgatroban\nBivalirudin", "MOA: Direct thrombin (IIa) inhibition\nUse: Stroke prevention"], ["Nimodipine", "MOA: Calcium channel blocker\nUse: Prevents vasospasm after subarachnoid hemorrhage"], ["Atorvastatin", "MOA: HMG-CoA reductase inhibitor\nUse: Secondary stroke prevention"], ["Labetalol", "MOA: Beta-blocker\nUse: BP control before tPA in treatment of stroke with systolic BP over 185"], ["Nitroprusside", "MOA: Vasodilator\nUse: Severe hypertension in stroke"], ["Donepezil", "MOA: Reversible AChE inhibition → ↑ acetylcholine\nAdverse Effects: GI upset, bradycardia, syncope, sleep disturbance; CYP2D6/3A4 metabolism\nUse: Mild → severe Alzheimer disease"], ["Rivastigmine", "MOA: Inhibits AChE & BuChE (used in a transdermal patch)\nAdverse Effects:\nUse: Mild-moderate AD; Parkinson disease dementia"], ["Galantamine", "MOA: Competitive AChE inhibition\nAdverse Effects: GI effects, bradycardia; CYP2D6/3A4 metabolism\nUse: Mild-moderate AD"], ["Memantine", "MOA: NMDA (glutamate) receptor blockade → ↓ excitotoxic Ca²⁺ influx\nAdverse Effects: Dizziness, confusion, hallucinations; interacts with alkalinized urine\nUse: Moderate-severe AD (alongside AChE inhib); vascular dementia (off-label)"], ["Aducanumab\nLecanemab\nDonanemab", "MOA: Anti-Aβ monoclonal antibody\nAdverse Effects: Amyloid-related imaging abnormalities (ARIA)\nUse: Alzheimers Disease"], ["Treatment for Wernicke-Korsakoff Syndrome", "Thiamine given before glucose"], ["Benzodiazepines\nHypnotics\nH1 antagonists (e.g., diphenhydramine)\nTricyclic antidepressants\nAntimuscarinics (e.g., oxybutynin)\nAntipsychotics (typical & atypical)", "Drugs That Can Worsen or Cause Acute Confusion"], ["Aspirin and Statins", "MOA: Irriversible Inhbiition COX enzyme and Inhibits HMG-CoA reductase\nUse: first line for stroke prophylaxis"], ["acetaminophen", "Temp reducer in people with stroke"], ["Warfarin", "Stroke prophylaxis for people with A fib"], ["Alteplase", "Treatment of Stroke within 3-4.5 hours"], ["Naltrexone or Acamprosate", "First line therapy for alcoholism"], ["Benzodiazepam", "First line for alcohol withdrawal"], ["Naltrexone", "MOA: μ-opioid receptor antagonist → ↓ reward from alcohol\nRoute: Monthly Injection\nUse: Reduces cravings & heavy drinking; avoid in acute hepatitis or opioid use"], ["Acamprosate", "MOA: Modulates glutamate (NMDA antagonist; GABA support) → restores excitatory/inhibitory balance\nRoute: Oral\nUse: Best for maintaining abstinence; safe in liver disease; adjust in renal impairment"], ["Disulfiram", "MOA: Inhibits aldehyde dehydrogenase → acetaldehyde accumulation → aversive reaction\nRoute: Oral\nUse: Second line treatment, Requires high motivation; causes flushing, nausea if alcohol consumed"], ["Methadone (patient is observed while taking), Buprenorphine, or Buprenorphine/Naloxone", "First Line Treatments of Opioid Use Disorder"], ["Naltrexone (extended-release)", "MOA: μ-opioid antagonist\nRoute: IM monthly\nUse: Treatment of OUD for patients who can go clean for 10 days before starting treatment"], ["Naloxone (overdose)", "MOA: μ-opioid antagonist\nRoute: IN, IM, or IV\nUse: Short acting Emergency treatment for Opiod Overdose"], ["Nicotine Replacement Therapy (NRT)+Bupropion SR, or Varenicline", "First line treatments of Tobacco / Nicotine Use Disorder"], ["Nicotine Replacement Therapy (NRT)", "MOA: Stimulates nicotinic receptors → reduces withdrawal\nRoute: Patch, gum, lozenge, inhaler, nasal spray\nUse: Smoking cessation short-acting form most effective"], ["Varenicline", "MOA: Partial nicotinic (α4β2) agonist\nRoute: Oral\nUse: Most effective monotherapy for smoking cessation blocking the reward; may cause vivid dreams"], ["Bupropion SR", "MOA: NE/DA reuptake inhibitor; nicotinic antagonist\nRoute: Oral\nUse: Smoking cessation but avoid in seizure disorders"], ["Nortriptyline (off-label)", "MOA: TCA\nRoute: Oral\nUse: Smoking cessation with comorbid depression"], ["Contingency Management with a Behavioral reward system", "First line treatment in Stimulant Use Disorder (Cocaine, Methamphetamine)"], ["Cognitive Behavioral Therapy", "First line treatment for Cannabis Use Disorder"], ["Gabapentin", "May help with cannabis withdrawal symptoms"], ["Long acting Benzodiazepines (Diazepam and Clonazepam)", "First line for benzodiazepine use disorder"], ["Phenobarbital", "Used in severe withdrawal from benzos"], ["PCP", "MOA: A non-competitive antagonist of the NMDA-type of glutamate receptor"], ["Mild- Lorazepam\nModerate- Midazolam\nSevere- Haloperidol", "Treatment for Agitation"]]};</script>
@@ -266,18 +279,21 @@ input.wr.ok{border-color:var(--ok);background:var(--ok-bg)}input.wr.no{border-co
 (function(){
 'use strict';
 var D=window.QZ;
-var C=D.cards.map(function(c,i){return {i:i,t:c[0],d:c[1]};});
+var C=D.cards.map(function(c,i){return Array.isArray(c)?{i:i,t:c[0],d:c[1],g:[],l:[]}:{i:i,t:c.t,d:c.d,x:c.x||null,g:c.g||[],l:c.l||[]};});
 var N=C.length;
 var KEY='nupyQz_'+D.id+'_v1';
 function dflt(){return {star:{},lv:{},seen:{},best:{},
   fc:{front:'term',starred:false,shuffle:false,track:true,tts:false},
   ls:{types:{flash:false,mc:true,tf:false,wr:true},ans:'term',starred:false,shuffle:false,goal:'memorize',smart:true,retype:true},
   ts:{count:Math.min(20,N),ans:'term',tf:true,mc:true,match:true,wr:true,starred:false},
-  bs:{ans:'term'},tl:{group:true,starred:false}};}
+  bs:{ans:'term'},tl:{group:true,starred:false},flt:{subj:'all',lec:'all'}};}
 function load(){var d=dflt(),s={};try{s=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){s={};}
   for(var k in d){if(s[k]===undefined||s[k]===null||typeof s[k]!==typeof d[k])s[k]=d[k];else if(typeof d[k]==='object'){for(var j in d[k])if(s[k][j]===undefined)s[k][j]=d[k][j];}}
   return s;}
 var S=load();
+function inDeck(c){var f=S.flt;return (f.subj==='all'||c.g.indexOf(f.subj)>=0)&&(f.lec==='all'||c.l.indexOf(f.lec)>=0);}
+function A(){var a=C.filter(inDeck);return a.length?a:C.slice();}
+function xHTML(c){if(!c.x)return '';return '<div class="xd">'+Object.keys(c.x).map(function(k){return '<div><span class="lab">'+esc(k)+'</span>'+fmt(c.x[k])+'</div>';}).join('')+'</div>';}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}tlRender();}
 
 /* ---------- helpers ---------- */
@@ -311,8 +327,9 @@ function grade(inp,ans,smart){
   var wb=b3.split(' ').filter(function(w,i,arr){return w.length>2&&arr.indexOf(w)===i;}),wa=a3.split(' ');
   if(wb.length>=5){var hit=wb.filter(function(w){return wa.some(function(x){return x===w||(x.length>3&&lev(x,w)<=1);});}).length;if(hit/wb.length>=.7)return true;}
   return false;}
-function distract(c,aw,k){var seen={},out=[];seen[norm(side(c,aw))]=1;
-  shuf(C).forEach(function(o){if(out.length>=k||o.i===c.i)return;var n=norm(side(o,aw));if(seen[n])return;seen[n]=1;out.push(o);});return out;}
+function distract(c,aw,k){var seen={},out=[],act=A(),g=c.g[0];seen[norm(side(c,aw))]=1;
+  [g?act.filter(function(o){return o.g.indexOf(g)>=0;}):[],act,C].forEach(function(t){
+  shuf(t).forEach(function(o){if(out.length>=k||o.i===c.i)return;var n=norm(side(o,aw));if(seen[n])return;seen[n]=1;out.push(o);});});return out;}
 function speak(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(String(t).replace(/\n/g,'. ').replace(/→/g,' leads to ').replace(/↑/g,' increased ').replace(/↓/g,' decreased '));u.lang='en-US';speechSynthesis.speak(u);}catch(e){}}
 function starBtn(c){return '<button class="ib st'+(S.star[c.i]?' on':'')+'" data-star="'+c.i+'" title="Star (S)">'+(S.star[c.i]?'★':'☆')+'</button>';}
 function sayBtn(c,w){return '<button class="ib sp" data-say="'+c.i+'|'+w+'" title="Read aloud">🔊</button>';}
@@ -333,7 +350,7 @@ function seg(id,opts,val){return '<span class="seg" id="'+id+'">'+opts.map(funct
 function segVal(m,id){var b=$('#'+id+' button.on',m);return b?b.getAttribute('data-v'):null;}
 function swh(id,on){return '<label class="sw"><input type="checkbox" id="'+id+'"'+(on?' checked':'')+'><span></span></label>';}
 function frow(label,desc,ctl){return '<div class="frow"><div class="fl">'+label+(desc?'<span class="fd">'+desc+'</span>':'')+'</div>'+ctl+'</div>';}
-function starredCount(){return C.filter(function(c){return S.star[c.i];}).length;}
+function starredCount(){return A().filter(function(c){return S.star[c.i];}).length;}
 
 /* ---------- mode framework ---------- */
 var MODES=['flashcards','learn','test','match','blast','blocks'];
@@ -354,12 +371,12 @@ document.addEventListener('keydown',function(e){if($('.md-bg'))return;if(e.metaK
    FLASHCARDS
    ===================================================================== */
 var F=null;
-function fcPool(){var p=C.filter(function(c){return !S.fc.starred||S.star[c.i];});return p.length?p:C.slice();}
+function fcPool(){var p=A().filter(function(c){return !S.fc.starred||S.star[c.i];});return p.length?p:A();}
 function fcInit(list){var p=list&&list.length?list:fcPool();var o=p.map(function(c){return c.i;});if(S.fc.shuffle)o=shuf(o);
   F={ord:o,pos:0,flip:false,know:{},learn:{},hist:[],auto:false};}
 function fcCard(){return C[F.ord[F.pos]];}
 R.flashcards=function(){if(!F)fcInit();T.key=fcKey;fcRender(true);};
-function fcFace(cls,w,c){var txt=side(c,w);return '<div class="side '+cls+'"><div class="fc-h"><span class="lab">'+(w==='term'?'Term':'Definition')+'</span><span>'+sayBtn(c,w)+starBtn(c)+'</span></div><div class="fc-t" style="'+tstyle(txt)+'"><div>'+fmt(txt)+'</div></div></div>';}
+function fcFace(cls,w,c){var txt=side(c,w);return '<div class="side '+cls+'"><div class="fc-h"><span class="lab">'+(w==='term'?'Term':'Definition')+'</span><span>'+sayBtn(c,w)+starBtn(c)+'</span></div><div class="fc-t" style="'+tstyle(txt)+'"><div>'+fmt(txt)+(w==='def'?xHTML(c):'')+'</div></div></div>';}
 function fcRender(speakIt){
   var st=$('#stage'),n=F.ord.length,tr=S.fc.track;
   if(tr&&F.pos>=n)return fcDone();
@@ -434,7 +451,7 @@ function fcSettings(){var sc=starredCount();
    ===================================================================== */
 var L=null;
 var PRAISE=['Nice work!','You’re on a roll!','Great job!','Correct!','Way to go!','Nailed it!','Awesome!','Keep it up!'];
-function lPool(){var p=C.filter(function(c){return !S.ls.starred||S.star[c.i];});return p.length?p:C.slice();}
+function lPool(){var p=A().filter(function(c){return !S.ls.starred||S.star[c.i];});return p.length?p:A();}
 function lv(c){return S.lv[c.i]||0;}
 function lStat(c){var v=lv(c);return v>=2?'m':(v===1||S.seen[c.i])?'f':'n';}
 function lCounts(p){var o={m:0,f:0,n:0};p.forEach(function(c){o[lStat(c)]++;});return o;}
@@ -485,7 +502,7 @@ function lResolve(ok){var q=L.q;if(q.done)return;q.done=true;q.ok=ok;var c=q.c;S
   var hd=$('.lhead');if(hd){var tmp=document.createElement('div');tmp.innerHTML=lHead();hd.replaceWith(tmp.firstChild);$('#lO').onclick=lSettings;}}
 function lCont(){if(L.q&&L.q.done)lNext();}
 function lFbOk(extra){$('#fb').innerHTML='<div class="fbk ok">'+PRAISE[rnd(PRAISE.length)]+'</div>'+(extra||'');var dk=$('#dk');if(dk)dk.remove();}
-function lFbNo(body){$('#fb').innerHTML='<div class="fbk no">No worries — you’re still learning! This one will come back.</div>'+(body||'')+
+function lFbNo(body){$('#fb').innerHTML='<div class="fbk no">No worries — you’re still learning! This one will come back.</div>'+(body||'')+(L.q&&L.q.c.x?'<details class="xdd" open><summary>'+esc(L.q.c.t.split('\n')[0])+' — details</summary>'+xHTML(L.q.c)+'</details>':'')+
   '<div class="cont"><span class="hint" style="margin:0">Press any key to continue</span><button class="btn primary" id="lc">Continue</button></div>';
   $('#lc').onclick=lCont;var dk=$('#dk');if(dk)dk.remove();}
 function lPickMc(k){var q=L.q;if(q.done)return;var ok=q.opts[k]===q.c;lResolve(ok);
@@ -511,7 +528,7 @@ function lWrong(v){var q=L.q,ans=side(q.c,q.aw);
     (v!==null?'<div style="margin-top:8px"><button class="lnk" id="ovr">Override: I was correct</button></div>':'');
   if(S.ls.retype){
     $('#fb').innerHTML='<div class="fbk no">No worries — you’re still learning! Type the correct answer to continue.</div>'+body+
-      '<div class="wrrow" style="margin-top:10px"><input class="wr" id="rtIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the correct answer"><button class="btn primary" id="rtGo" disabled>Continue</button></div>';
+      (q.c.x?'<details class="xdd"><summary>Details</summary>'+xHTML(q.c)+'</details>':'')+'<div class="wrrow" style="margin-top:10px"><input class="wr" id="rtIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the correct answer"><button class="btn primary" id="rtGo" disabled>Continue</button></div>';
     var dk=$('#dk');if(dk)dk.remove();
     var ri=$('#rtIn'),rg=$('#rtGo');
     ri.oninput=function(){var ok=grade(ri.value,ans,true);rg.disabled=!ok;ri.classList.toggle('ok',ok);};
@@ -570,7 +587,7 @@ function lSettings(){var sc=starredCount(),t=S.ls.types;
 var TT=null;
 R.test=function(){T.key=null;if(TT&&TT.state==='take')ttTake();else if(TT&&TT.state==='res')ttRes();else ttSetup();};
 var TYL={tf:'True or false',mc:'Multiple choice',match:'Matching',wr:'Written'};
-function ttSetup(){var s=S.ts,sc=starredCount();
+function ttSetup(){var s=S.ts,sc=starredCount(),N=A().length;
   $('#stage').innerHTML='<div class="panel" style="max-width:620px;margin:0 auto"><h2>Set up your test</h2>'+
     frow('Questions','max '+N+(sc?' · '+sc+' starred':''),'<input class="num" type="number" id="tN" min="1" max="'+N+'" value="'+Math.min(s.count,N)+'">')+
     frow('Answer with',null,seg('tA',[['term','Term'],['def','Definition'],['both','Both']],s.ans))+
@@ -580,8 +597,8 @@ function ttSetup(){var s=S.ts,sc=starredCount();
   var st=$('#stage');st.addEventListener('click',function(e){var sb=e.target.closest('.seg button');if(sb){$$('button',sb.parentNode).forEach(function(x){x.classList.toggle('on',x===sb);});}});
   $('#tGo').onclick=function(){var ty={tf:$('#tTf').checked,mc:$('#tMc').checked,match:$('#tMa').checked,wr:$('#tWr').checked};
     if(!ty.tf&&!ty.mc&&!ty.match&&!ty.wr){alert('Pick at least one question type.');return;}
-    S.ts={count:Math.max(1,Math.min(N,parseInt($('#tN').value,10)||20)),ans:segVal(st,'tA'),tf:ty.tf,mc:ty.mc,match:ty.match,wr:ty.wr,starred:$('#tSt').checked};save();ttGen();ttTake();window.scrollTo(0,$('.qtabs').offsetTop);};}
-function ttGen(){var s=S.ts,pool=C.filter(function(c){return !s.starred||S.star[c.i];});if(!pool.length)pool=C.slice();
+    S.ts={count:Math.max(1,Math.min(A().length,parseInt($('#tN').value,10)||20)),ans:segVal(st,'tA'),tf:ty.tf,mc:ty.mc,match:ty.match,wr:ty.wr,starred:$('#tSt').checked};save();ttGen();ttTake();window.scrollTo(0,$('.qtabs').offsetTop);};}
+function ttGen(){var s=S.ts,pool=A().filter(function(c){return !s.starred||S.star[c.i];});if(!pool.length)pool=A();
   var n=Math.min(s.count,pool.length),items=shuf(pool).slice(0,n),types=['tf','mc','match','wr'].filter(function(t){return s[t];}),sz={};
   types.forEach(function(t,k){sz[t]=Math.floor(n/types.length)+(k<n%types.length?1:0);});
   if(sz.match===1){var to=types.filter(function(t){return t!=='match';})[0]||'mc';sz[to]=(sz[to]||0)+1;sz.match=0;if(types.indexOf(to)<0)types.push(to);}
@@ -602,6 +619,7 @@ function ttQ(q,res){var c=q.c,pw=other(q.aw),pr=side(c,pw),h='',n=TT.qs.length;
   if(q.ty==='mc'){h+='<div class="lab">Choose an answer</div><div class="mcg">'+q.opts.map(function(o,k){var cls=res?(o===c?' ok':(q.resp===k?' no':' dim')):(q.resp===k?' sel':'');return '<button class="opt'+cls+'" data-mc="'+k+'"'+(res?' disabled':'')+'><span class="nb">'+(k+1)+'</span><span>'+fmt(side(o,q.aw))+'</span></button>';}).join('')+'</div>';}
   if(q.ty==='wr'){if(res){h+='<div class="rline yours'+(q.right?' ok':'')+'"><span class="lab">Your answer</span>'+(q.resp?esc(q.resp):'<i>(blank)</i>')+'</div>'+(q.right&&norm(q.resp)===norm(side(c,q.aw))?'':'<div class="rline right"><span class="lab">Correct answer</span>'+fmt(side(c,q.aw))+'</div>');}
     else h+='<div class="lab">Your answer</div><div class="wrrow"><input class="wr" data-wr="'+q.n+'" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the '+(q.aw==='term'?'term':'definition')+'" value="'+esc(q.resp||'')+'"></div>';}
+  if(res&&!q.right&&c.x)h+='<details class="xdd"><summary>Details: '+esc(c.t.split('\n')[0])+'</summary>'+xHTML(c)+'</details>';
   return h+'</div>';}
 function ttMatch(g,gi,res){var h='<div class="tq"><div class="tq-h"><span class="lab">Match each '+(other(g.aw)==='term'?'term':'definition')+' with its '+(g.aw==='term'?'term':'definition')+'</span><span class="mono" style="color:var(--muted);font-size:12px">'+g.qs[0].n+'–'+g.qs[g.qs.length-1].n+' of '+TT.qs.length+'</span></div>';
   h+='<div class="mt-ans">'+g.ans.map(function(c,k){return '<div><b>'+L2(k)+'</b><span>'+fmt(side(c,g.aw))+'</span></div>';}).join('')+'</div>';
@@ -652,9 +670,9 @@ R.match=function(){T.key=null;var b=S.best.match;
   $('#stage').innerHTML='<div class="done"><h2>Ready to play?</h2><p>Match all the terms with their definitions as fast as you can.<br>Avoid wrong matches — each one adds 1 second to your time.</p>'+
     (b?'<p class="mono" style="margin-top:12px">Your best: <b>'+fmtT(b)+' s</b></p>':'')+'<div class="dn-act"><button class="btn primary big" id="mGo">Start game</button></div></div>';
   $('#mGo').onclick=mStart;};
-function mStart(){var pick=shuf(C).slice(0,6),tiles=[];pick.forEach(function(c){tiles.push({c:c,k:'t'});tiles.push({c:c,k:'d'});});tiles=shuf(tiles);
-  M={tiles:tiles,sel:null,left:6,pen:0,t0:performance.now(),lock:false};
-  $('#stage').innerHTML='<div class="mg-top"><span class="timer" id="mT">0.0</span><span class="mono" id="mL">6 pairs left</span><button class="btn" id="mR">Restart</button></div><div class="mgrid">'+
+function mStart(){var pick=shuf(A()).slice(0,6),tiles=[];pick.forEach(function(c){tiles.push({c:c,k:'t'});tiles.push({c:c,k:'d'});});tiles=shuf(tiles);
+  M={tiles:tiles,sel:null,left:pick.length,pen:0,t0:performance.now(),lock:false};
+  $('#stage').innerHTML='<div class="mg-top"><span class="timer" id="mT">0.0</span><span class="mono" id="mL">'+plural(pick.length,'pair')+' left</span><button class="btn" id="mR">Restart</button></div><div class="mgrid">'+
     tiles.map(function(t,k){return '<button class="tile'+(t.k==='t'?' term':'')+'" data-k="'+k+'">'+fmt(t.k==='t'?t.c.t:t.c.d)+'</button>';}).join('')+'</div>';
   $('#mR').onclick=mStart;
   every(function(){var el=$('#mT');if(el)el.textContent=fmtT((performance.now()-M.t0)/1000+M.pen);},100);
@@ -685,7 +703,7 @@ R.blast=function(){T.key=null;var b=S.best.blast||0,aw=S.bs.ans;
   $('#bGo').onclick=bStart;};
 function bStart(){var ar=$('.arena');ar.innerHTML='<div class="bhud"><span id="bS">Score 0</span><span id="bLv"></span><span id="bH">❤️❤️❤️</span></div><div class="bprompt" id="bP"></div>';
   B={score:0,lives:3,v:34,bubs:[],c:null,miss:[],last:0,ar:ar,on:true};bRound();B.last=performance.now();T.raf=requestAnimationFrame(bLoop);}
-function bRound(){var aw=S.bs.ans,c=C[rnd(N)];if(B.c&&N>1)while(c===B.c)c=C[rnd(N)];B.c=c;
+function bRound(){var aw=S.bs.ans,P=A(),c=P[rnd(P.length)];if(B.c&&P.length>1)while(c===B.c)c=P[rnd(P.length)];B.c=c;
   B.bubs.forEach(function(x){x.el.remove();});B.bubs=[];
   var opts=shuf([c].concat(distract(c,aw,3))),W=B.ar.clientWidth,bw=W<600?150:210,lanes=opts.length,gap=(W-bw)/Math.max(1,lanes-1);
   opts.forEach(function(o,k){var el=document.createElement('div');el.className='bub'+(aw==='term'?' term':'');el.innerHTML=fmt(side(o,aw));B.ar.appendChild(el);
@@ -728,7 +746,7 @@ R.blocks=function(){T.key=blKey;var b=S.best.blocks||0;
     (b?'<p class="mono" style="margin-top:12px">Best score: <b>'+b+'</b></p>':'')+'<div class="dn-act"><button class="btn primary big" id="blGo">Start game</button></div></div>';
   $('#blGo').onclick=blStart;};
 function blStart(){BL={bd:new Array(64).fill(0),score:0,strikes:0,state:'q',q:null,piece:null,col:null,lines:0};blQ();}
-function blQ(){var aw=S.bs.ans==='def'?'def':'term',c=C[rnd(N)];BL.q={c:c,aw:aw,opts:shuf([c].concat(distract(c,aw,3))),done:false};BL.state='q';BL.piece=null;blRender();}
+function blQ(){var aw=S.bs.ans==='def'?'def':'term',P=A(),c=P[rnd(P.length)];BL.q={c:c,aw:aw,opts:shuf([c].concat(distract(c,aw,3))),done:false};BL.state='q';BL.piece=null;blRender();}
 function blRender(){var bd=BL.bd;
   var side_='';
   if(BL.state==='q'){var q=BL.q;side_='<div class="lq"><div class="lq-h"><span class="lab">'+(q.aw==='term'?'Definition':'Term')+'</span>'+starBtn(q.c)+'</div><div class="lq-p">'+fmt(side(q.c,other(q.aw)))+'</div><div class="lab">Answer to earn a block</div><div class="mcg">'+
@@ -773,10 +791,10 @@ function blKey(e){if(!BL)return;
 /* =====================================================================
    TERMS IN THIS SET
    ===================================================================== */
-function tlRender(){var el=$('#terms');if(!el)return;var g=S.tl.group,so=S.tl.starred,sc=starredCount();
-  var list=C.filter(function(c){return !so||S.star[c.i];});
-  function row(c){return '<div class="trow"><div class="tt">'+fmt(c.t)+'</div><div class="td">'+fmt(c.d)+'</div><div class="acts">'+starBtn(c)+sayBtn(c,'term')+'</div></div>';}
-  var h='<div class="th"><h2>Terms in this set ('+N+')</h2><span style="display:flex;gap:8px;flex-wrap:wrap">'+seg('tlS',[['all','All'],['star','Starred ('+sc+')']],so?'star':'all')+seg('tlG',[['prog','Your progress'],['orig','Original order']],g?'prog':'orig')+'</span></div>';
+function tlRender(){var el=$('#terms');if(!el)return;var g=S.tl.group,so=S.tl.starred,sc=starredCount(),act=A();
+  var list=act.filter(function(c){return !so||S.star[c.i];});
+  function row(c){return '<div class="trow"><div class="tt">'+fmt(c.t)+'</div><div class="td">'+fmt(c.d)+(c.x?'<details class="xdd"><summary>Details</summary>'+xHTML(c)+'</details>':'')+'</div><div class="acts">'+starBtn(c)+sayBtn(c,'term')+'</div></div>';}
+  var h='<div class="th"><h2>Terms in this '+(act.length<N?'deck ('+act.length+' of '+N+')':'set ('+N+')')+'</h2><span style="display:flex;gap:8px;flex-wrap:wrap">'+seg('tlS',[['all','All'],['star','Starred ('+sc+')']],so?'star':'all')+seg('tlG',[['prog','Your progress'],['orig','Original order']],g?'prog':'orig')+'</span></div>';
   if(!list.length)h+='<p class="hint" style="text-align:left">No starred terms yet — tap ☆ on any card.</p>';
   else if(g){var lab={n:['Not studied','You haven’t studied these terms yet.'],f:['Still learning','You’ve started learning these terms. Keep it up!'],m:['Mastered','You know these terms well.']};
     ['f','n','m'].forEach(function(s){var sub=list.filter(function(c){return lStat(c)===s;});if(!sub.length)return;
@@ -786,7 +804,16 @@ function tlRender(){var el=$('#terms');if(!el)return;var g=S.tl.group,so=S.tl.st
   $('#tlS').onclick=function(e){var b=e.target.closest('button');if(!b)return;S.tl.starred=b.getAttribute('data-v')==='star';save();};
   $('#tlG').onclick=function(e){var b=e.target.closest('button');if(!b)return;S.tl.group=b.getAttribute('data-v')==='prog';save();};}
 
-$('#nCards').textContent=N;
+function dfRender(){var el=$('#dfbar');if(!D.SUBJ&&!D.LEC)return;var f=S.flt,h='<span class="flab">Deck</span>';
+  if(D.SUBJ){h+='<button class="sc'+(f.subj==='all'?' on':'')+'" data-s="all">All subjects <small>'+N+'</small></button>'+D.SORDER.map(function(k){var n=C.filter(function(c){return c.g.indexOf(k)>=0;}).length;return n?'<button class="sc'+(f.subj===k?' on':'')+'" data-s="'+k+'">'+esc(D.SUBJ[k])+' <small>'+n+'</small></button>':'';}).join('');}
+  if(D.LEC){h+='<select id="dfLec"><option value="all">All lectures</option>'+D.LORDER.filter(function(k){return D.LEC[k]&&C.some(function(c){return c.l.indexOf(k)>=0;});}).map(function(k){var n=C.filter(function(c){return c.l.indexOf(k)>=0&&(f.subj==='all'||c.g.indexOf(f.subj)>=0);}).length;return '<option value="'+k+'"'+(f.lec===k?' selected':'')+'>'+esc(D.LEC[k])+' ('+n+')</option>';}).join('')+'</select>';}
+  var a=C.filter(inDeck).length;h+='<span class="mono dfn">'+(a?plural(a,'card')+' in deck':'No cards match — using all')+'</span>';
+  el.innerHTML=h;el.classList.remove('hid');
+  $$('.sc',el).forEach(function(b){b.onclick=function(){S.flt.subj=b.getAttribute('data-s');if(!C.some(inDeck))S.flt.lec='all';setFlt();};});
+  var ls=$('#dfLec');if(ls)ls.onchange=function(){S.flt.lec=ls.value;if(!C.some(inDeck))S.flt.subj='all';setFlt();};}
+function setFlt(){save();F=null;L=null;TT=null;M=null;BL=null;dfRender();go(cur);}
+var nc=$('#nCards');if(nc)nc.textContent=N;
+dfRender();
 tlRender();
 go((location.hash||'').replace('#','')||'flashcards');
 })();
@@ -916,6 +943,7 @@ go((location.hash||'').replace('#','')||'flashcards');
         ['nupy_m2_path_checklist.html','Pathology Checklist'],
         ['nupy_m2_image_quiz.html','HY Image Quiz'],
         ['nupy_m2_drug_cards.html','Drug Cards'],
+        ['nupy_m2_path_cards.html','Pathology Cards'],
         ['nupy_m2_drugs.html','Drugs Table'],
         ['nupy_m2_drug_checklist.html','Drug Checklist'],
         ['nupy_m2_psych.html','Psychiatry Table'],
