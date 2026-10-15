@@ -173,6 +173,40 @@ li.shut>.qn .tg::after{content:' +'}
 .quiz .why{margin-top:12px;background:#faf8f3;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
 .quiz .qnav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:10px;flex-wrap:wrap}
 
+/* ---------- look-alikes ---------- */
+.lk-bar{position:sticky;top:53px;z-index:20;background:rgba(244,242,236,.96);padding:8px 0 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.lk-bar .sp{flex:1}
+.sc{font:500 12px 'Inter',sans-serif;border:1px solid var(--line-strong);background:#fff;border-radius:999px;padding:5px 11px;cursor:pointer;color:var(--ink)}
+.sc.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sc .fdot{margin-right:5px}
+.lk-prog{font:600 12px 'IBM Plex Mono',monospace;color:var(--gene-ink)}
+.tgl{display:inline-flex;align-items:center;gap:7px;font:600 12.5px 'Inter',sans-serif;cursor:pointer;user-select:none;border:1px solid var(--line-strong);background:#fff;border-radius:999px;padding:5px 12px}
+.tgl input{accent-color:var(--exam-strong);width:15px;height:15px}
+.lk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px}
+.lk{background:#fff;border:1px solid var(--line-strong);border-top:5px solid var(--c);border-radius:16px;padding:14px 16px 12px;display:flex;flex-direction:column}
+.lk.got{opacity:.62}
+.lk .lh{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.lk h3{font-size:19px;line-height:1.2}
+.lk .ax{margin:8px 0 10px;background:var(--warn-bg);border-radius:9px;padding:7px 11px;font-size:13.5px}
+.lk .ax b{color:var(--warn-ink);font:700 10.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
+.lk .mm{display:grid;gap:7px}
+.lk .m{display:grid;grid-template-columns:minmax(120px,36%) 1fr;gap:10px;align-items:start;border-top:1px dashed var(--line);padding-top:7px}
+.lk .m:first-child{border-top:0;padding-top:0}
+.lk .mn2{font-weight:600;font-size:13.5px;line-height:1.3;display:flex;gap:6px;align-items:flex-start}
+.lk .mn2 .fdot{margin-top:5px;flex:0 0 auto}
+.lk .mn2 a{color:inherit;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+.lk .tell{font-size:13.5px;line-height:1.4;border-radius:7px;transition:filter .15s,background .15s}
+.lk .tell b{color:var(--exam-strong)}
+.lk .tell .cue{display:inline-block;font:600 10.5px 'IBM Plex Mono',monospace;background:#efece4;border-radius:5px;padding:1px 6px;margin-left:4px;color:#4d5259;white-space:nowrap}
+.covered .lk .tell:not(.shown){filter:blur(6px);background:#f3f0e8;cursor:pointer;user-select:none}
+.lk .mem2{margin-top:10px;font-size:12.5px;color:var(--muted);font-style:italic}
+.covered .lk .mem2:not(.shown){filter:blur(5px);cursor:pointer}
+.lk .lf{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+.gotb{font:600 12px 'IBM Plex Mono',monospace;border:1.5px solid var(--ok);color:var(--ok);background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer}
+.lk.got .gotb{background:var(--ok);color:#fff}
+.revb{font:600 12px 'IBM Plex Mono',monospace;border:1px solid var(--line-strong);background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer}
+.lk-empty{color:var(--muted);padding:30px;text-align:center;grid-column:1/-1}
+@media(max-width:760px){.lk-grid{grid-template-columns:1fr}.lk .m{grid-template-columns:1fr;gap:3px}.lk-bar{position:static}}
 /* ---------- drawer ---------- */
 .dr-bg{position:fixed;inset:0;background:rgba(20,18,14,.45);z-index:3500;display:none}
 .dr-bg.on{display:block}
@@ -207,7 +241,7 @@ li.shut>.qn .tg::after{content:' +'}
 <header class="top">
   <p class="eyebrow">NUPY · Mini 2 · psychiatry · diagnostic map</p>
   <h1>Psych <em>Diagnosis</em> Map</h1>
-  <p class="sub">Every psychiatric condition taught in Mini 2, sorted the way you'd reason through it on an exam. <b>Diagnose it</b> walks you through one question at a time. The <b>Flowchart</b> shows every branch at once. <b>Families</b> groups the conditions into colour-coded clusters. <b>Time thresholds</b> lines up every duration cut-off on one ruler. <b>Schizo-</b> separates everything with "schizo" in the name. Tap any condition for its full criteria from the Pathology Table.</p>
+  <p class="sub">Every psychiatric condition taught in Mini 2, sorted the way you'd reason through it on an exam. <b>Diagnose it</b> walks you through one question at a time. The <b>Flowchart</b> shows every branch at once. <b>Families</b> groups the conditions into colour-coded clusters. <b>Time thresholds</b> lines up every duration cut-off on one ruler. <b>Schizo-</b> separates everything with "schizo" in the name. <b>Look-alikes</b> groups the ones that get confused, with the one tell for each, plus a cover-and-check mode for cramming. Tap any condition for its full criteria from the Pathology Table.</p>
 </header>
 <div class="tabs"><div class="tabs-in" id="tabs">
   <button class="tb" data-v="dx"><span class="n">1</span>Diagnose it</button>
@@ -215,6 +249,7 @@ li.shut>.qn .tg::after{content:' +'}
   <button class="tb" data-v="fam"><span class="n">3</span>Families</button>
   <button class="tb" data-v="time"><span class="n">4</span>Time thresholds</button>
   <button class="tb" data-v="schizo"><span class="n">5</span>Schizo- family</button>
+  <button class="tb" data-v="look"><span class="n">6</span>Look-alikes · cram</button>
 </div></div>
 <div class="wrap">
   <section class="view" id="v-dx"><div id="stepper"></div></section>
@@ -235,6 +270,12 @@ li.shut>.qn .tg::after{content:' +'}
     <div class="ruler" id="ruler" style="--lw:240px"></div>
   </section>
   <section class="view" id="v-schizo"><div id="schizo"></div></section>
+  <section class="view" id="v-look">
+    <h2>Look-alikes: what separates them</h2>
+    <p class="lead">Each card groups conditions that get confused, names the <b>one axis</b> that separates them, then gives each one its tell. For cramming, switch on <b>Cover the tells</b>, say the difference out loud, tap to check, then tick <b>Got it</b>.</p>
+    <div class="lk-bar" id="lkbar"></div>
+    <div class="lk-grid" id="lkgrid"></div>
+  </section>
 </div>
 <div class="dr-bg" id="drbg"></div>
 <aside class="drawer" id="drawer" aria-hidden="true"><div class="drh"><div class="fl" id="drf"></div><h3 id="drt"></h3><button class="x" id="drx" aria-label="Close">×</button></div><div class="drb" id="drb"></div></aside>
@@ -622,14 +663,69 @@ function vq(){var el=$('#vq');if(QZ.i>=VIG.length){el.innerHTML='<div class="lab
     $('#vqw').innerHTML='<div class="why"><b>'+(ok?'Correct.':'Answer: '+esc(vlab(right))+'.')+'</b> '+esc(v[2])+'</div><div class="qnav"><button class="btn" data-dx="'+esc(right)+'">Criteria for '+esc(vlab(right))+'</button><button class="btn primary" id="vqn">Next vignette →</button></div>';
     $('#vqn').onclick=function(){QZ.i++;vq();};};});}
 
+
+/* ---------- 6. look-alikes (cram) ---------- */
+/* group: t title, f family key (colour + filter), ax deciding axis, m [[name or label, tell(html-safe text, **bold** allowed), cue]], mn memory hook */
+var LK=[
+ {t:'Psychosis by duration',f:'psy',ax:'How long has it lasted?',m:[['Brief psychotic disorder','**≥1** psychotic symptom, then **full return to baseline**; often after a stressor','1 d – <1 mo'],['Schizophreniform disorder','Schizophrenia picture (**≥2** symptoms) but not long enough yet','1 – 6 mo'],['Schizophrenia','≥2 symptoms + **functional decline**; prodrome and residual count','≥6 mo (≥1 mo active)']],mn:'Brief → -form → -phrenia: 1 month, 6 months.'},
+ {t:'Psychosis plus mood',f:'psy',ax:'Where does the psychosis sit relative to the mood episodes?',m:[['Schizoaffective disorder','Mood episodes for **most of the illness** AND psychosis **alone ≥2 weeks**','≥2 wk without mood'],['Major depressive disorder (MDD)','“With psychotic features” (also bipolar I): psychosis **only during** mood episodes','Mood disorder'],['Schizophrenia','Mood episodes **absent or brief** compared with the psychosis','']],mn:'Psychosis that can stand alone + lots of mood = schizoaffective.'},
+ {t:'Fixed beliefs',f:'psy',ax:'Is it a true delusion, and is anything else psychotic going on?',m:[['Delusional disorder','**Delusion only**; behaviour not bizarre; functioning intact','≥1 mo'],['Paranoid PD','**Suspicious trait**, lifelong; can doubt it; not psychotic','Cluster A'],['Schizophrenia','Delusions **plus** hallucinations, disorganization or negative symptoms; decline','≥6 mo'],['Schizotypal PD','**Odd/magical** beliefs and ideas of reference, short of delusions','Cluster A']]},
+ {t:'The loners',f:'pd',ax:'Do they WANT relationships, and is their thinking odd?',m:[['Schizoid PD','**Doesn’t want** relationships; cold and flat; no odd thinking','Cluster A'],['Schizotypal PD','Few friends + **odd beliefs, magical thinking**, eccentric','Cluster A'],['Avoidant PD','**Wants** relationships but avoids them for **fear of rejection**','Cluster C'],['Autism spectrum disorder (ASD)','**Early childhood** onset; social-communication deficits + **restricted/repetitive** behaviours','Neurodevelopmental']],mn:'Schizoid = void and fine with it · Avoidant = wants in, scared.'},
+ {t:'How high do the highs go?',f:'bip',ax:'Severity of the elevated mood (and whether depression is needed)',m:[['Bipolar I disorder','≥1 **manic** episode; depression **not required**','Mania >1 wk or hospitalized'],['Bipolar II disorder','**Hypomania** + **major depression**; never full mania','Hypo ≥4 d + MDE ≥2 wk'],['Cyclothymic disorder','Many hypomanic and depressive **symptoms that never meet episode criteria**','≥2 yr (1 yr kids)']]},
+ {t:'Mania vs hypomania',f:'bip',ax:'Marked impairment, hospitalization or psychosis?',m:[['Manic episode (concept)','**Marked impairment**, hospitalization or **psychosis**; ≥3 DIG FAST (≥4 if only irritable)','>1 wk (any if hospitalized)'],['Hypomanic episode (concept)','Same symptoms, noticeable change but **no marked impairment, no psychosis**','≥4 days'],['Antidepressant/ECT-emergent hypomania','Starts after an antidepressant/ECT; counts as bipolar **only if it outlasts the drug effect**','']]},
+ {t:'Low mood: how long, how many',f:'dep',ax:'Number of symptoms × duration (and is there a stressor?)',m:[['Major depressive disorder (MDD)','**≥5 of 9** SIG E CAPS (incl. low mood or anhedonia)','≥2 weeks'],['Persistent depressive disorder (PDD, dysthymia)','**≥2** symptoms, most days; never >2 months symptom-free','≥2 yr (1 yr kids)'],['Adjustment disorder','Out-of-proportion distress after a **stressor**; doesn’t meet MDD','≤3 mo after, ends ≤6 mo'],['Cyclothymic disorder','Lows **and hypomanic highs**, all subthreshold','≥2 yr']],mn:'MDD = more symptoms, short; PDD = fewer symptoms, long.'},
+ {t:'Depression with a pattern or a cause',f:'dep',ax:'What is the depression tied to?',m:[['Seasonal affective disorder (SAD)','Recurs with the **season** (fall/winter); light therapy','MDD specifier'],['Premenstrual dysphoric disorder (PMDD)','Week **before menses**, gone in the days after','Cyclical'],['Substance/medication-induced depressive disorder','Starts with a **drug/medication or withdrawal**; settles within ~1 month of stopping',''],['Depressive disorder due to another medical condition','**Follows a medical illness** (e.g. hypothyroidism, stroke)','']]},
+ {t:'The angry, irritable child',f:'nd',ax:'Is the child irritable BETWEEN outbursts, and whose rights are hurt?',m:[['Disruptive mood dysregulation disorder (DMDD)','Outbursts **≥3/week** + **persistently irritable mood in between**','≥12 mo, onset <10, dx 6–18'],['Oppositional defiant disorder (ODD)','Angry, argumentative, **defiant toward authority**; no serious rights violations','≥4 sx, ≥6 mo'],['Conduct disorder (CD)','**Violates others’ rights**: aggression, theft, fire-setting, cruelty','≥3 in 12 mo'],['Intermittent explosive disorder (IED)','**Sudden impulsive** outbursts out of proportion; **normal mood between**','Age ≥6']]},
+ {t:'Rule-breaking across ages',f:'pd',ax:'Age, and severity of rule-breaking',m:[['Oppositional defiant disorder (ODD)','Defiance and anger, **no rights violations**','Child'],['Conduct disorder (CD)','Rights violations; **<18**','Child/teen'],['Antisocial PD','**≥18** with conduct disorder **before 15**; no remorse','Adult']],mn:'ODD → CD → ASPD as the rule-breaking escalates and the patient ages.'},
+ {t:'Panic and its neighbours',f:'anx',ax:'Are the attacks unexpected, and what is avoided?',m:[['Panic attack','A **symptom**: surge of fear peaking **within minutes**; not a diagnosis on its own','Specifier'],['Panic disorder','**Recurrent, unexpected** attacks + **≥1 month** of worry or behaviour change',''],['Agoraphobia','Fear of places **hard to escape** (≥2 of 5: transport, open, enclosed, crowds, outside alone)','>6 mo'],['Specific phobia','Fear **cued by one object/situation** (spiders, heights, needles)','>6 mo']]},
+ {t:'What exactly is feared?',f:'anx',ax:'The content of the fear',m:[['Social anxiety disorder (social phobia)','Being **judged or embarrassed** in social situations','>6 mo'],['Agoraphobia','**Can’t escape** or get help (not judgment)','>6 mo'],['Separation anxiety disorder','**Losing or separating from** an attachment figure','≥4 wk kids · 6 mo adults'],['Selective mutism','Child **won’t speak** in specific settings (school) but speaks at home','≥1 mo'],['Avoidant PD','Pervasive **inadequacy and fear of rejection** since early adulthood, across all settings','Personality']]},
+ {t:'Worriers',f:'anx',ax:'What is the worry about?',m:[['Generalized anxiety disorder (GAD)','**Many everyday domains**, more days than not; ≥3 of 6 symptoms','≥6 mo'],['Illness anxiety disorder','Fear of **having a serious illness**, with few or no symptoms','≥6 mo'],['Somatic symptom disorder','**Real symptoms** + excessive thoughts, feelings or behaviour about them','>6 mo'],['Obsessive-compulsive disorder (OCD)','**Intrusive, unwanted** obsessions neutralized by compulsions','>1 h/day']]},
+ {t:'Obsessive or just particular?',f:'ocd',ax:'Ego-dystonic (unwanted) vs ego-syntonic (feels right)?',m:[['Obsessive-compulsive disorder (OCD)','**Ego-dystonic** obsessions/compulsions the patient tries to resist','>1 h/day'],['Obsessive-compulsive PD (OCPD)','**Ego-syntonic** perfectionism, rules, control; **no true obsessions**','Cluster C'],['Body dysmorphic disorder','Preoccupied with a **perceived appearance flaw** + checking/grooming',''],['Hoarding · trichotillomania · excoriation (listed)','**Can’t discard** / **hair pulling** / **skin picking**','']],mn:'OCD bothers the patient; OCPD bothers everyone else.'},
+ {t:'After a trauma or stressor',f:'trm',ax:'Kind of stressor, and time since it',m:[['Acute stress disorder','**Trauma** → intrusion, avoidance, dissociation, arousal','3 d – 1 mo'],['Posttraumatic stress disorder (PTSD)','Same picture after **trauma**, lasting longer','>1 mo (delayed ≥6 mo)'],['Adjustment disorder','**Any stressor** (not trauma-level) → out-of-proportion distress','≤3 mo after, ends ≤6 mo']],mn:'Under a month = acute stress; over a month = PTSD.'},
+ {t:'Neglected children',f:'trm',ax:'Inhibited or disinhibited? Is there a neglect history?',m:[['Reactive attachment disorder (RAD)','**Inhibited**: withdrawn, rarely seeks or responds to comfort','Before 5 y'],['Disinhibited social engagement disorder (DSED)','**Disinhibited**: overly familiar with strangers, wanders off','Childhood'],['Autism spectrum disorder (ASD)','**No neglect** needed; restricted/repetitive behaviours','Neurodevelopmental']]},
+ {t:'Faking vs not faking',f:'som',ax:'Is it intentional, and what is the motive?',m:[['Functional neurological symptom disorder (FNSD, conversion)','**Not intentional**; neurological symptom that doesn’t fit neuro disease','Often after a stressor'],['Somatic symptom disorder','**Not intentional**; real symptoms + excessive concern',''],['Factitious disorder imposed on self','**Intentional**, motive = **sick role**, no external reward',''],['Factitious disorder imposed on another (formerly Munchausen by proxy)','Intentionally makes **someone else** (e.g. a child) ill','Perpetrator gets dx'],['Malingering','**Intentional** for **external reward** (money, avoid work or jail, drugs)','Not a mental disorder']],mn:'Factitious = wants to be a patient; malingering = wants a payoff.'},
+ {t:'Body-focused complaints',f:'som',ax:'Symptoms present? What is the focus?',m:[['Somatic symptom disorder','**Has symptoms**; the problem is excessive response to them',''],['Illness anxiety disorder','**Few/no symptoms**; fear of **having a disease**',''],['Functional neurological symptom disorder (FNSD, conversion)','A **neurological** deficit incompatible with neuro disease',''],['Body dysmorphic disorder','Focus is **appearance**, not illness','OCD family']]},
+ {t:'Dissociation',f:'dis',ax:'Which part of experience is disrupted (and is reality testing intact)?',m:[['Dissociative amnesia (± dissociative fugue)','**Memory**: can’t recall personal info, often trauma; ± travel (fugue)',''],['Dissociative identity disorder (multiple personality)','**Identity**: ≥2 personality states + memory gaps',''],['Depersonalization/derealization disorder','**Self/world feels unreal**, but **reality testing intact**',''],['Schizophrenia','Contrast: **reality testing lost** = psychosis, not dissociation','']]},
+ {t:'Cluster B: what do they want?',f:'pd',ax:'The motive behind the behaviour',m:[['Antisocial PD','**Personal gain**; violates rights, no remorse','≥18, CD <15'],['Borderline PD','**Avoid abandonment**; unstable mood, self-image, relationships; self-harm; splitting','≥5 of 9'],['Histrionic PD','**Attention**; seductive, dramatic, shallow emotions','≥5 of 8'],['Narcissistic PD','**Admiration**; grandiose, entitled, lacks empathy','≥5 of 9']],mn:'Gain · abandonment · attention · admiration.'},
+ {t:'Cluster C: what do they fear?',f:'pd',ax:'The core fear',m:[['Avoidant PD','**Rejection**: avoids people despite wanting them','≥4 of 7'],['Dependent PD','**Being alone or uncared for**: clingy, submissive, can’t decide alone','≥5 of 8'],['Obsessive-compulsive PD (OCPD)','**Loss of control**: perfectionism, rules, rigidity','≥4 of 8']]},
+ {t:'Tics by type and time',f:'nd',ax:'Motor AND vocal? More than a year? (Onset before 18)',m:[['Provisional tic disorder','Any tics, **<1 year**',''],['Persistent (chronic) motor or vocal tic disorder','Motor **OR** vocal, **>1 year**',''],['Tourette syndrome (Tourette disorder)','Multiple motor **AND** ≥1 vocal, **>1 year**','']]},
+ {t:'Social communication',f:'nd',ax:'Restricted/repetitive behaviours? Global intellect affected?',m:[['Autism spectrum disorder (ASD)','Social-communication deficits **+ restricted/repetitive** behaviours',''],['Social (pragmatic) communication disorder','Social use of language impaired, **no RRBs**',''],['Language disorder','**Structural** language (vocabulary, grammar) impaired',''],['Intellectual disability (ID)','**Global** intellectual + adaptive deficits','']]},
+ {t:'Confused or forgetful?',f:'ncd',ax:'Onset speed, attention, and independence',m:[['Delirium / acute confusional state (acute toxic-metabolic encephalopathy)','**Acute**, **fluctuating attention**/awareness; find the medical cause','Hours–days'],['Major neurocognitive disorder (dementia)','**Gradual** decline that **takes away independence**',''],['Mild neurocognitive disorder / mild cognitive impairment (MCI)','Measurable decline, **still independent**',''],['Major depressive disorder (MDD)','“Pseudodementia”: poor effort/“I don’t know”, mood symptoms; improves with treatment','']]},
+ {t:'Which dementia?',f:'ncd',ax:'What came first?',m:[['Alzheimer disease (AD)','**Memory** first, gradual',''],['Lewy body disease (LBD)','**Visual hallucinations**, fluctuations; parkinsonism **within 1 year**',''],['Parkinson disease dementia (PDD)','Dementia **>1 year after** established Parkinson disease',''],['Frontotemporal dementia — behavioural variant (bvFTD)','**Personality/behaviour** first; younger',''],['Vascular dementia (incl. multi-infarct)','**Stepwise** decline with strokes',''],['Normal pressure hydrocephalus (NPH)','**Wet, wobbly, wacky**; reversible with shunt','']],mn:'LBD vs PDD = the 1-year rule.'},
+ {t:'Intoxication look-alikes',f:'sub',ax:'Pupils, vitals and eye movements',m:[['Opioids (heroin, fentanyl, carfentanil, prescription)','**Pinpoint pupils**, respiratory depression, coma','Naloxone'],['Cocaine','**Dilated pupils**, tachycardia/HTN, chest pain, paranoia','Stimulant'],['Dissociatives — PCP, ketamine','**Violent**, **vertical + horizontal nystagmus**, analgesia',''],['Cannabis (marijuana, THC)','**Red eyes**, appetite, slowed time, anxiety',''],['Hallucinogens — LSD, psilocybin','**Visual distortions**, synesthesia; **no withdrawal**','']]},
+ {t:'Withdrawal: dangerous or not?',f:'sub',ax:'Can the withdrawal kill?',m:[['Alcohol withdrawal','4–12 h after last drink; **seizures**; can progress to DTs','**Dangerous**'],['Sedatives / hypnotics / anxiolytics (benzodiazepines e.g. alprazolam)','Same GABA picture: **seizures** (up to 30%)','**Dangerous**'],['Opioids (heroin, fentanyl, carfentanil, prescription)','Flu-like, **dilated pupils**, yawning, diarrhoea','Miserable, not lethal'],['Cocaine','“Crash”: **hypersomnia, hunger, depression**','Not lethal']],mn:'Downers (alcohol, benzos) = dangerous withdrawal.'}
+];
+var LKS={got:{},cover:false,f:'all',todo:false};
+try{var _l=JSON.parse(localStorage.getItem('nupyPsyLook_v1')||'{}');if(_l.got)LKS.got=_l.got;}catch(e){}
+function lkSave(){try{localStorage.setItem('nupyPsyLook_v1',JSON.stringify({got:LKS.got}));}catch(e){}}
+function md(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');}
+function lkBar(){var fams=[];LK.forEach(function(g){if(fams.indexOf(g.f)<0)fams.push(g.f);});var got=LK.filter(function(g,i){return LKS.got[i];}).length;
+  $('#lkbar').innerHTML='<label class="tgl"><input type="checkbox" id="lkc"'+(LKS.cover?' checked':'')+'> Cover the tells</label><button class="sc'+(LKS.todo?' on':'')+'" id="lkt">Not got yet</button><button class="sc'+(LKS.f==='all'?' on':'')+'" data-lf="all">All</button>'+
+    fams.map(function(f){return '<button class="sc'+(LKS.f===f?' on':'')+'" data-lf="'+f+'"><span class="fdot" style="--c:'+FAM[f].c+'"></span>'+esc(FAM[f].n)+'</button>';}).join('')+'<span class="sp"></span><span class="lk-prog">'+got+' / '+LK.length+' got</span><button class="btn" id="lkr">Reset ticks</button>';
+  $('#lkc').onchange=function(){LKS.cover=this.checked;lkGrid();};
+  $('#lkt').onclick=function(){LKS.todo=!LKS.todo;lkBar();lkGrid();};
+  $$('[data-lf]',$('#lkbar')).forEach(function(b){b.onclick=function(){LKS.f=b.getAttribute('data-lf');lkBar();lkGrid();};});
+  $('#lkr').onclick=function(){LKS.got={};lkSave();lkBar();lkGrid();};}
+function lkGrid(){var el=$('#lkgrid');el.classList.toggle('covered',LKS.cover);
+  var h=LK.map(function(g,i){if(LKS.f!=='all'&&g.f!==LKS.f)return '';if(LKS.todo&&LKS.got[i])return '';
+    return '<div class="lk'+(LKS.got[i]?' got':'')+'" style="--c:'+FAM[g.f].c+'" data-g="'+i+'"><div class="lh"><h3>'+esc(g.t)+'</h3><span class="lab" style="white-space:nowrap">'+g.m.length+' to separate</span></div><div class="ax"><b>Decide by</b>'+esc(g.ax)+'</div><div class="mm">'+
+      g.m.map(function(m){var known=!!DET[m[0]];return '<div class="m"><div class="mn2"><span class="fdot" style="--c:'+(known?fc(m[0]):'var(--muted)')+'"></span>'+(known?'<a data-dx="'+esc(m[0])+'">'+esc(sn(m[0]))+'</a>':esc(m[0]))+'</div><div class="tell">'+md(m[1])+(m[2]?'<span class="cue">'+md(m[2])+'</span>':'')+'</div></div>';}).join('')+'</div>'+
+      (g.mn?'<div class="mem2">💡 '+esc(g.mn)+'</div>':'')+'<div class="lf"><button class="revb">'+(LKS.cover?'Reveal all':'')+'</button><button class="gotb">'+(LKS.got[i]?'✓ Got it':'Got it')+'</button></div></div>';}).join('');
+  el.innerHTML=h||'<div class="lk-empty">Nothing left here. Every group is ticked 🎉</div>';
+  $$('.lk',el).forEach(function(c){var i=+c.getAttribute('data-g'),rb=c.querySelector('.revb');if(!LKS.cover)rb.style.visibility='hidden';
+    rb.onclick=function(){$$('.tell,.mem2',c).forEach(function(t){t.classList.add('shown');});};
+    c.querySelector('.gotb').onclick=function(){if(LKS.got[i])delete LKS.got[i];else LKS.got[i]=1;lkSave();lkBar();lkGrid();};});
+  el.onclick=function(e){var t=e.target.closest('.tell,.mem2');if(t&&LKS.cover&&!t.classList.contains('shown')){e.stopPropagation();t.classList.add('shown');}};}
+function lkRender(){lkBar();lkGrid();}
+
 /* ---------- views ---------- */
 var cur=null,built={};
 function view(v){cur=v;$$('#tabs .tb').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-v')===v);});$$('section.view').forEach(function(s){s.classList.toggle('on',s.id==='v-'+v);});
-  if(!built[v]){built[v]=1;({dx:renderStep,flow:ftree,fam:famGrid,time:ruler,schizo:szRender})[v]();}
+  if(!built[v]){built[v]=1;({dx:renderStep,flow:ftree,fam:famGrid,time:ruler,schizo:szRender,look:lkRender})[v]();}
   try{history.replaceState(null,'','#'+v);}catch(e){}}
 $('#tabs').onclick=function(e){var b=e.target.closest('.tb');if(b)view(b.getAttribute('data-v'));};
-var miss=[];Object.keys(FAMOF).forEach(function(n){if(!DET[n])miss.push(n);});Object.keys(PATHS).forEach(function(n){if(!DET[n])miss.push(n);});if(miss.length)console.error('PDX missing',miss);
-var h0=(location.hash||'').slice(1);view(['dx','flow','fam','time','schizo'].indexOf(h0)>=0?h0:'dx');
+var miss=[];Object.keys(FAMOF).forEach(function(n){if(!DET[n])miss.push(n);});Object.keys(PATHS).forEach(function(n){if(!DET[n])miss.push(n);});LK.forEach(function(g){g.m.forEach(function(m){if(!DET[m[0]])miss.push('LK:'+m[0]);});});if(miss.length)console.error('PDX missing',miss);
+var h0=(location.hash||'').slice(1);view(['dx','flow','fam','time','schizo','look'].indexOf(h0)>=0?h0:'dx');
 })();
 </script>
 
