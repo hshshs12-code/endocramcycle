@@ -207,6 +207,37 @@ li.shut>.qn .tg::after{content:' +'}
 .revb{font:600 12px 'IBM Plex Mono',monospace;border:1px solid var(--line-strong);background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer}
 .lk-empty{color:var(--muted);padding:30px;text-align:center;grid-column:1/-1}
 @media(max-width:760px){.lk-grid{grid-template-columns:1fr}.lk .m{grid-template-columns:1fr;gap:3px}.lk-bar{position:static}}
+/* ---------- treatment ---------- */
+.rx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px}
+.rx{background:#fff;border:1px solid var(--line-strong);border-left:6px solid var(--k);border-radius:14px;padding:13px 15px}
+.rx .rh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rx h3{font-size:19px}
+.rx .kind{font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--k);white-space:nowrap}
+.rx .how{font-size:13px;color:var(--muted);margin:3px 0 9px;line-height:1.4}
+.rx .rm{display:grid;gap:5px}
+.rx .ri{display:grid;grid-template-columns:minmax(130px,40%) 1fr;gap:10px;font-size:13.5px;line-height:1.35;border-top:1px dashed var(--line);padding-top:5px}
+.rx .ri:first-child{border-top:0;padding-top:0}
+.rx .ri .cn{font-weight:600;display:flex;gap:6px;align-items:flex-start}
+.rx .ri .cn .fdot{margin-top:5px;flex:0 0 auto}
+.rx .ri .cn a{color:inherit;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+.rx .ri .nt{color:#3f444a}
+.rx .ri .nt b{color:var(--exam-strong)}
+.rx .pearl{margin-top:9px;background:var(--warn-bg);border-radius:8px;padding:6px 10px;font-size:12.5px}
+.rx.never{--k:var(--no);background:#fffafa}
+.rx.never .ri .cn{color:var(--no)}
+.covered .rx .ri .nt:not(.shown),.covered .rx .pearl:not(.shown){filter:blur(6px);background:#f3f0e8;border-radius:6px;cursor:pointer;user-select:none}
+.covered.byc .ct .tg:not(.shown){filter:blur(5px);cursor:pointer}
+.rxc{display:grid;gap:14px}
+.rxf{background:#fff;border:1px solid var(--line-strong);border-top:5px solid var(--c);border-radius:14px;padding:10px 14px 12px}
+.rxf h3{font-size:18px;margin-bottom:4px}
+.ct{display:grid;grid-template-columns:minmax(150px,30%) 1fr;gap:10px;align-items:start;border-top:1px dashed var(--line);padding:7px 0 2px;font-size:13.5px}
+.ct .cn{font-weight:600;display:flex;gap:6px}.ct .cn .fdot{margin-top:5px;flex:0 0 auto}
+.ct .cn a{color:inherit;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+.ct .tgs{display:flex;flex-wrap:wrap;gap:5px}
+.tg{display:inline-block;border:1.5px solid var(--k);border-radius:8px;padding:2px 8px;font-size:12.5px;line-height:1.35;background:color-mix(in srgb,var(--k) 8%,#fff)}
+.tg b{color:var(--k);font-weight:700}
+.tg.none{border-style:dashed;color:var(--muted)}
+@media(max-width:760px){.rx-grid{grid-template-columns:1fr}.rx .ri,.ct{grid-template-columns:1fr;gap:2px}}
 /* ---------- drawer ---------- */
 .dr-bg{position:fixed;inset:0;background:rgba(20,18,14,.45);z-index:3500;display:none}
 .dr-bg.on{display:block}
@@ -241,7 +272,7 @@ li.shut>.qn .tg::after{content:' +'}
 <header class="top">
   <p class="eyebrow">NUPY · Mini 2 · psychiatry · diagnostic map</p>
   <h1>Psych <em>Diagnosis</em> Map</h1>
-  <p class="sub">Every psychiatric condition taught in Mini 2, sorted the way you'd reason through it on an exam. <b>Diagnose it</b> walks you through one question at a time. The <b>Flowchart</b> shows every branch at once. <b>Families</b> groups the conditions into colour-coded clusters. <b>Time thresholds</b> lines up every duration cut-off on one ruler. <b>Schizo-</b> separates everything with "schizo" in the name. <b>Look-alikes</b> groups the ones that get confused, with the one tell for each, plus a cover-and-check mode for cramming. Tap any condition for its full criteria from the Pathology Table.</p>
+  <p class="sub">Every psychiatric condition taught in Mini 2, sorted the way you'd reason through it on an exam. <b>Diagnose it</b> walks you through one question at a time. The <b>Flowchart</b> shows every branch at once. <b>Families</b> groups the conditions into colour-coded clusters. <b>Time thresholds</b> lines up every duration cut-off on one ruler. <b>Schizo-</b> separates everything with "schizo" in the name. <b>Treatment</b> groups conditions by what they're treated with. <b>Look-alikes</b> groups the ones that get confused, with the one tell for each, plus a cover-and-check mode for cramming. Tap any condition for its full criteria from the Pathology Table.</p>
 </header>
 <div class="tabs"><div class="tabs-in" id="tabs">
   <button class="tb" data-v="dx"><span class="n">1</span>Diagnose it</button>
@@ -250,6 +281,7 @@ li.shut>.qn .tg::after{content:' +'}
   <button class="tb" data-v="time"><span class="n">4</span>Time thresholds</button>
   <button class="tb" data-v="schizo"><span class="n">5</span>Schizo- family</button>
   <button class="tb" data-v="look"><span class="n">6</span>Look-alikes · cram</button>
+  <button class="tb" data-v="rx"><span class="n">7</span>Treatment · cram</button>
 </div></div>
 <div class="wrap">
   <section class="view" id="v-dx"><div id="stepper"></div></section>
@@ -275,6 +307,12 @@ li.shut>.qn .tg::after{content:' +'}
     <p class="lead">Each card groups conditions that get confused, names the <b>one axis</b> that separates them, then gives each one its tell. For cramming, switch on <b>Cover the tells</b>, say the difference out loud, tap to check, then tick <b>Got it</b>.</p>
     <div class="lk-bar" id="lkbar"></div>
     <div class="lk-grid" id="lkgrid"></div>
+  </section>
+  <section class="view" id="v-rx">
+    <h2>Treatment at a glance</h2>
+    <p class="lead"><b>By treatment</b> lists each drug class or therapy with the conditions it treats. <b>By condition</b> flips it round. Start with the red <b>Never do</b> card. To cram, turn on <b>Cover</b>, recall the answer, then tap to check.</p>
+    <div class="lk-bar" id="rxbar"></div>
+    <div id="rxbody"></div>
   </section>
 </div>
 <div class="dr-bg" id="drbg"></div>
@@ -718,14 +756,212 @@ function lkGrid(){var el=$('#lkgrid');el.classList.toggle('covered',LKS.cover);
   el.onclick=function(e){var t=e.target.closest('.tell,.mem2');if(t&&LKS.cover&&!t.classList.contains('shown')){e.stopPropagation();t.classList.add('shown');}};}
 function lkRender(){lkBar();lkGrid();}
 
+
+/* ---------- 7. treatment (cram) ---------- */
+/* group: id, t title, k kind (drug|therapy|other), col colour, how, m [[condition, note]], pearl */
+var RX=[
+ {t:'SSRIs',k:'drug',col:'#2f5fa8',how:'First-line drug for depression, anxiety, OCD and PTSD. Response expected by 4–6 weeks.',m:[
+  ['Major depressive disorder (MDD)','**1st line** (fluoxetine, paroxetine, sertraline); CBT + drug beats either alone'],
+  ['Persistent depressive disorder (PDD, dysthymia)','Antidepressant + psychotherapy'],
+  ['Seasonal affective disorder (SAD)','Antidepressant + **light therapy**'],
+  ['Panic disorder','Antidepressants + CBT'],
+  ['Social anxiety disorder (social phobia)','SSRIs + CBT/desensitization (β-blocker for performance)'],
+  ['Generalized anxiety disorder (GAD)','Antidepressants + CBT'],
+  ['Obsessive-compulsive disorder (OCD)','SSRI, **try ≥2** before switching; + ERP'],
+  ['Body dysmorphic disorder','Can be tried (not FDA-approved for BDD); CBT'],
+  ['Posttraumatic stress disorder (PTSD)','SSRIs + trauma-focused CBT'],
+  ['Intermittent explosive disorder (IED)','**Fluoxetine 1st line** + CBT'],
+  ['Somatic symptom disorder','Specific antidepressants, alongside CBT'],
+  ['Agoraphobia','Not specified; anxiety disorders in general: medication, CBT or both'],
+  ['Separation anxiety disorder','Not specified; anxiety disorders in general: medication, CBT or both'],
+  ['Selective mutism','Not specified; anxiety disorders in general: medication, CBT or both']],pearl:'Boxed warning: ↑ suicidality in children, adolescents and adults 18–24 during the first 1–2 months. Always screen for mania first.'},
+ {t:'Other antidepressants',k:'drug',col:'#4a78c0',how:'Second-line or condition-specific options.',m:[
+  ['Obsessive-compulsive disorder (OCD)','**Clomipramine** (TCA) or **venlafaxine** (SNRI) after SSRIs'],
+  ['Enuresis','**Imipramine** (TCA), 3rd line, after alarm and desmopressin (QT prolongation)'],
+  ['Attention-deficit/hyperactivity disorder (ADHD)','**Bupropion** as a non-stimulant'],
+  ['Nicotine / tobacco','**Bupropion** (seizure-risk warning; can combine with NRT)']]},
+ {t:'Antipsychotics',k:'drug',col:'#b23a48',how:'D2 blockade in the mesolimbic pathway reduces positive symptoms. SGAs (risperidone, olanzapine) have fewer extrapyramidal effects than FGAs (haloperidol).',m:[
+  ['Schizophrenia','SGAs; **LAI IM every 3–4 wk** for adherence; + family therapy (↓ relapse)'],
+  ['Schizoaffective disorder','Antipsychotic **± mood treatment**'],
+  ['Schizophreniform disorder','Antipsychotics'],
+  ['Brief psychotic disorder','Antipsychotics'],
+  ['Delusional disorder','Risperidone/olanzapine, **often poor response**; build trust'],
+  ['Tourette syndrome (Tourette disorder)','Moderate-severe: **risperidone or haloperidol**'],
+  ['Obsessive-compulsive disorder (OCD)','SGA augmentation in refractory cases']],pearl:'Contraindicated in alcohol withdrawal/DTs (lower the seizure threshold); don\'t add them in delirium.'},
+ {t:'Mood stabilizers',k:'drug',col:'#d07a1e',how:'Bipolar-spectrum mainstay (e.g. lithium, valproate). Antidepressant monotherapy can trigger mania.',m:[
+  ['Bipolar I disorder','Mood stabilizers + psychoeducation, ISRT, family therapy, CBT'],
+  ['Bipolar II disorder','As for bipolar I'],
+  ['Cyclothymic disorder','May need treatment for symptoms'],
+  ['Schizoaffective disorder','Added to the antipsychotic'],
+  ['Delusional disorder','May be added'],
+  ['Intermittent explosive disorder (IED)','Later line: **phenytoin/oxcarbazepine (2nd)**, then lamotrigine, topiramate, lithium, valproate']]},
+ {t:'Benzodiazepines',k:'drug',col:'#7a5bb5',how:'GABA-A agonists. Used for alcohol/sedative withdrawal and short-term anxiety; avoid in the elderly and in delirium.',m:[
+  ['Alcohol withdrawal','**Diazepam / chlordiazepoxide** taper (or barbiturates); hospitalize'],
+  ['Delirium tremens (alcohol withdrawal delirium)','Benzos + fluids + thiamine; **medical emergency**'],
+  ['Sedatives / hypnotics / anxiolytics (benzodiazepines e.g. alprazolam)','Use disorder: switch to **diazepam** (long half-life), then taper over months'],
+  ['Generalized anxiety disorder (GAD)','Anxiolytics (alongside antidepressants/CBT)']],pearl:'Delirium: avoid benzos, hypnotics, H1 antihistamines, TCAs and antimuscarinics in the elderly.'},
+ {t:'α- and β-blockers',k:'drug',col:'#1f8a8a',how:'Block adrenergic symptoms such as tremor, tachycardia and nightmares.',m:[
+  ['Social anxiety disorder (social phobia)','**β-blocker** for performance anxiety'],
+  ['Generalized anxiety disorder (GAD)','α and β blockers'],
+  ['Posttraumatic stress disorder (PTSD)','α blockers (nightmares), β blockers']],pearl:'Don\'t use β-blockers or clonidine in alcohol withdrawal; they mask the signs that predict a seizure.'},
+ {t:'Stimulants',k:'drug',col:'#c0392b',how:'Amphetamines and methylphenidate: first line for ADHD, with 70–80% improving.',m:[
+  ['Attention-deficit/hyperactivity disorder (ADHD)','**1st line**; check baseline height, weight, BP, HR and **tics** first'],
+  ['Autism spectrum disorder (ASD)','For comorbid hyperactivity (symptomatic only)']]},
+ {t:'α2-agonists & non-stimulants',k:'drug',col:'#8d3f84',how:'Clonidine and guanfacine (α2 agonists); atomoxetine (NE reuptake inhibitor).',m:[
+  ['Attention-deficit/hyperactivity disorder (ADHD)','Non-stimulants: **atomoxetine**, bupropion, **guanfacine/clonidine**'],
+  ['Tourette syndrome (Tourette disorder)','Mild-moderate: **clonidine / guanfacine**'],
+  ['Persistent (chronic) motor or vocal tic disorder','As for Tourette (CBT, α2 agonists)'],
+  ['Autism spectrum disorder (ASD)','α2 agonists for symptoms']]},
+ {t:'Addiction pharmacotherapy',k:'drug',col:'#a3741a',how:'Pair with psychosocial treatment (CBT, MI, 12-step). Match the drug to the substance.',m:[
+  ['Alcohol use disorder (AUD)','**Naltrexone** (1st; CI hepatitis/liver failure, opioid use) · **acamprosate** (1st; CI renal, OK in liver disease) · **disulfiram** (2nd; needs motivation)'],
+  ['Opioids (heroin, fentanyl, carfentanil, prescription)','Overdose **naloxone** · OUD: **methadone** (full μ agonist), **buprenorphine** (partial, ceiling), **naltrexone** (only after 1 wk opioid-free)'],
+  ['Nicotine / tobacco','**NRT 1st line** · varenicline (partial α4β2 agonist) · bupropion'],
+  ['Cocaine','**No effective pharmacotherapy**'],
+  ['Amphetamine, methamphetamine, methylphenidate','No effective pharmacotherapy'],
+  ['Cannabis (marijuana, THC)','No specific drug (NAC, gabapentin: modest)']]},
+ {t:'Thiamine',k:'drug',col:'#3f8a55',how:'Give in any alcohol-related presentation, and before glucose.',m:[
+  ['Wernicke encephalopathy (WE)','**Thiamine before glucose**'],
+  ['Korsakoff psychosis (amnestic-confabulatory NCD)','Thiamine (often irreversible)'],
+  ['Alcohol withdrawal','Thiamine **in all cases** ("banana bag") + K, Mg, phosphate'],
+  ['Delirium tremens (alcohol withdrawal delirium)','Thiamine + benzos + fluids']]},
+ {t:'Dementia treatments',k:'drug',col:'#5d6168',how:'Cholinesterase inhibitors, memantine, anti-amyloid antibodies and a shunt.',m:[
+  ['Alzheimer disease (AD)','**Donepezil** (mild→severe), rivastigmine, galantamine; **memantine** for moderate-severe'],
+  ['Mild neurocognitive disorder / mild cognitive impairment (MCI)','**Lecanemab/donanemab** only if amyloid-positive (watch for ARIA)'],
+  ['Parkinson disease dementia (PDD)','**Rivastigmine**: the only ChEI approved for PDD (patch available)'],
+  ['Mixed dementia','As for AD + vascular risk-factor control'],
+  ['Vascular dementia (incl. multi-infarct)','Vascular risk-factor control'],
+  ['Normal pressure hydrocephalus (NPH)','**Ventriculoperitoneal shunt** (reversible)']]},
+ {t:'ECT · TMS · light',k:'other',col:'#2d7d6f',how:'Brain stimulation and light therapy.',m:[
+  ['Major depressive disorder (MDD)','**ECT if urgent** (suicidal, not eating); TMS'],
+  ['Bipolar I disorder','**ECT 1st line if suicidal or refusing food/drink**; safe in pregnancy'],
+  ['Obsessive-compulsive disorder (OCD)','TMS; **deep brain stimulation** if refractory'],
+  ['Seasonal affective disorder (SAD)','**Light therapy** + daily outdoor activity']]},
+ {t:'CBT',k:'therapy',col:'#3f8a55',how:'Cognitive-behavioural therapy: the default psychotherapy for depression, anxiety and somatic disorders.',m:[
+  ['Major depressive disorder (MDD)','CBT + antidepressant > either alone'],
+  ['Panic disorder','CBT ± antidepressant'],
+  ['Generalized anxiety disorder (GAD)','CBT, mindfulness, relaxation'],
+  ['Body dysmorphic disorder','CBT'],
+  ['Somatic symptom disorder','CBT, mindfulness'],
+  ['Illness anxiety disorder','CBT (same approach as SSD)'],
+  ['Intermittent explosive disorder (IED)','CBT + SSRI'],
+  ['Bipolar I disorder','CBT + psychoeducation, alongside drugs'],
+  ['Substance use disorder (SUD) — DSM-5-TR','**Psychosocial interventions most effective**; tailor to the substance; multidisciplinary'],
+  ['Alcohol use disorder (AUD)','CBT, 12-step (AA, SMART), motivational interviewing + drugs']]},
+ {t:'Exposure therapies',k:'therapy',col:'#2f86b8',how:'Face the feared thing until the fear fades, without escaping.',m:[
+  ['Specific phobia','**Exposure**: graded, flooding, systematic desensitization (drugs barely used)'],
+  ['Social anxiety disorder (social phobia)','Systematic desensitization + CBT'],
+  ['Obsessive-compulsive disorder (OCD)','**ERP** (exposure + response prevention)'],
+  ['Posttraumatic stress disorder (PTSD)','**Trauma-focused CBT**: prolonged exposure, cognitive processing therapy; EMDR'],
+  ['Acute stress disorder','Trauma-focused CBT']]},
+ {t:'Personality-disorder therapy',k:'therapy',col:'#8d3f84',how:'No drug treats a PD. Psychotherapy and managing your own countertransference.',m:[
+  ['Borderline PD','**DBT** (Linehan: CBT + mindfulness); transference-focused (Kernberg)'],
+  ['Antisocial PD','Hard to treat; seldom seek help unless **court-mandated**'],
+  ['Histrionic PD','**Set limits**'],
+  ['Paranoid PD','**Clear, consistent, non-defensive** information'],
+  ['Schizoid PD','No specific therapy covered; countertransference: boredom'],
+  ['Avoidant PD','No specific therapy covered; countertransference: cheerleader, pity']],pearl:'Exam favourite: borderline PD → DBT.'},
+ {t:'Family & parent training',k:'therapy',col:'#d07a1e',how:'Train the family or parents, not just the patient.',m:[
+  ['Oppositional defiant disorder (ODD)','**Parent management training = most effective**; PCIT; no drug for ODD itself'],
+  ['Conduct disorder (CD)','PCIT, family therapy, problem-solving/social-skills training; no specific drug'],
+  ['Schizophrenia','**Family therapy ↓ relapse** + case management'],
+  ['Bipolar I disorder','Family therapy, ISRT']]},
+ {t:'Habit reversal (CBIT)',k:'therapy',col:'#2f86b8',how:'Notice the premonitory urge, then do a competing response.',m:[
+  ['Tourette syndrome (Tourette disorder)','**1st line** if impairing (often just educate and monitor)'],
+  ['Persistent (chronic) motor or vocal tic disorder','CBT / habit reversal'],
+  ['Other specified / unspecified tic disorder','As for other tics'],
+  ['Provisional tic disorder','Education, monitoring; CBT if distressing']]},
+ {t:'Developmental & school supports',k:'therapy',col:'#5a6b8c',how:'Test hearing and vision first. Then therapy plus an individualized education program (IEP).',m:[
+  ['Autism spectrum disorder (ASD)','**ABA** (start early), TEACCH, OT, speech therapy, PECS; drugs only for symptoms'],
+  ['Intellectual disability (ID)','Psychoeducational + behavioural interventions, **IEP** (yearly); drugs only for comorbid ADHD'],
+  ['Specific learning disorder (dyslexia, dyscalculia)','Quality instruction, classroom modifications, **IEP**'],
+  ['Language disorder','Speech-language pathologist + IEP'],
+  ['Speech sound disorder','Speech therapy'],
+  ['Childhood-onset fluency disorder (stuttering)','Speech-language pathologist (singing can help)'],
+  ['Social (pragmatic) communication disorder','Speech & social-skills therapy'],
+  ['Developmental coordination disorder (DCD)','Occupational + physical therapy'],
+  ['Stereotypic movement disorder (SMD)','Behavioural therapy, environmental modification, sometimes medication'],
+  ['Global developmental delay','Supports now; **reassess after age 5**'],
+  ['Down syndrome','Educational supports; **screen for heart disease, leukemia, early AD**'],
+  ['Fragile X syndrome','Educational supports; treat comorbid anxiety/ADHD'],
+  ['Prader-Willi syndrome','**Food/weight control**, behavioural supports'],
+  ['Rett syndrome','Multidisciplinary supportive care'],
+  ['Cri du chat syndrome','Developmental supports'],
+  ['Fetal alcohol spectrum disorder (FASD)','**Prevention** (no alcohol in pregnancy); early diagnosis and intervention']]},
+ {t:'Behavioural toileting',k:'therapy',col:'#a3741a',how:'Positive reinforcement; punishment doesn\'t help.',m:[
+  ['Enuresis','Fluid limits, void before bed, star charts → **enuresis alarm** → **desmopressin** (hyponatremia; sleepovers) → imipramine'],
+  ['Encopresis','Treat constipation: fruit juice, fibre, less dairy; **toilet-sit 10 min after meals** + praise']]},
+ {t:'Treat the cause or remove the agent',k:'other',col:'#5d6168',how:'Secondary or medical presentations: fix the driver.',m:[
+  ['Delirium / acute confusional state (acute toxic-metabolic encephalopathy)','Full work-up, treat **all** causes; safety measures; restraints last resort'],
+  ['Substance/medication-induced depressive disorder','**Remove the offending agent**'],
+  ['Depressive disorder due to another medical condition','Treat the underlying condition'],
+  ['Alcohol-induced mental disorders','Abstinence, then reassess'],
+  ['O-C & related disorder due to another medical condition — PANDAS','**Antibiotics**, immunotherapy, psychiatric treatment'],
+  ['Panic attack','Rule out medical causes'],
+  ['Major neurocognitive disorder (dementia)','History from family, MSE, exam; **work-up for reversible causes**']]},
+ {t:'Supportive care only',k:'other',col:'#8a6338',how:'No specific antidote or drug: keep them safe and correct physiology.',m:[
+  ['Dissociatives — PCP, ketamine','Supportive; **protect from injury**'],
+  ['Hallucinogens — LSD, psilocybin','Calm environment'],
+  ['Ecstasy (MDMA)','Cool, correct sodium/fluids'],
+  ["Synthetic cathinones ('bath salts', khat)",'Supportive'],
+  ["Synthetic cannabinoids ('herbal / liquid incense')",'Supportive'],
+  ['Inhalants (volatile solvents)','Supportive'],
+  ['Alcohol intoxication','Observation, IV fluids; screen + brief intervention'],
+  ['Frontotemporal dementia — behavioural variant (bvFTD)','No disease-specific treatment; supportive/behavioural care'],
+  ['Primary progressive aphasia (language-variant FTD)','Supportive']]},
+ {t:'Clinical management (not a drug)',k:'other',col:'#1f8a8a',how:'The doctor-patient relationship is the treatment.',m:[
+  ['Somatic symptom disorder','**Regular short-interval visits**, one clinician, **limit tests**, educate'],
+  ['Illness anxiety disorder','Same: alliance, limited testing, CBT'],
+  ['Functional neurological symptom disorder (FNSD, conversion)','**Validate**, rule out organic disease (not intentional)'],
+  ['Factitious disorder imposed on another (formerly Munchausen by proxy)','**Separate victim from perpetrator** (child protection)'],
+  ['Factitious disorder imposed on self','Not specified in lecture'],
+  ['Adjustment disorder','Not specified (most common consult diagnosis)']]}
+];
+var NEVER=[
+ ['Antipsychotics in alcohol withdrawal / DTs','Lower the seizure threshold'],
+ ['β-blockers or clonidine in alcohol withdrawal','Mask the signs that predict a seizure'],
+ ['Sedatives, antipsychotics, benzos, H1 blockers, TCAs or antimuscarinics in delirium (elderly)','They worsen confusion; treat the cause instead'],
+ ['Glucose before thiamine','Can precipitate Wernicke encephalopathy'],
+ ['Antidepressant alone in bipolar disorder','Can switch the patient into mania; screen for prior mania/hypomania'],
+ ['Naltrexone with opioid use, or in hepatitis/liver failure','Precipitates withdrawal / hepatotoxic. Needs 1 week opioid-free for OUD'],
+ ['Acamprosate in renal disease or pregnancy','Renally cleared (fine in liver disease)'],
+ ['Bupropion in seizure disorders or eating disorders','Lowers the seizure threshold'],
+ ['Stimulants without baseline height, weight, BP, HR and tic check','Growth suppression, cardiovascular effects, can unmask tics'],
+ ['Punishing a child for bedwetting or soiling','Doesn\'t help; use positive reinforcement (star charts, alarm)']
+];
+var RXS={by:'rx',cover:false,k:'all'};
+function rxBar(){var el=$('#rxbar');el.innerHTML='<button class="sc'+(RXS.by==='rx'?' on':'')+'" data-by="rx">By treatment</button><button class="sc'+(RXS.by==='cond'?' on':'')+'" data-by="cond">By condition</button><span style="width:10px"></span><label class="tgl"><input type="checkbox" id="rxc"'+(RXS.cover?' checked':'')+'> '+(RXS.by==='rx'?'Cover the uses':'Cover the treatments')+'</label>'+
+  (RXS.by==='rx'?['all','drug','therapy','other'].map(function(k){return '<button class="sc'+(RXS.k===k?' on':'')+'" data-k="'+k+'">'+({all:'All',drug:'💊 Drugs',therapy:'🗣 Therapies',other:'⚙️ Other'})[k]+'</button>';}).join(''):'')+'<span class="sp"></span><button class="btn" id="rxrev">Reveal all</button>';
+  $$('[data-by]',el).forEach(function(b){b.onclick=function(){RXS.by=b.getAttribute('data-by');rxRender();};});
+  $$('[data-k]',el).forEach(function(b){b.onclick=function(){RXS.k=b.getAttribute('data-k');rxRender();};});
+  $('#rxc').onchange=function(){RXS.cover=this.checked;rxRender();};
+  $('#rxrev').onclick=function(){$$('#rxbody .nt,#rxbody .pearl,#rxbody .tg').forEach(function(t){t.classList.add('shown');});};}
+function cname(n){var k=!!DET[n];return '<span class="fdot" style="--c:'+(k?fc(n):'var(--muted)')+'"></span>'+(k?'<a data-dx="'+esc(n)+'">'+esc(sn(n))+'</a>':esc(n));}
+function rxRender(){rxBar();var el=$('#rxbody'),h='';
+  if(RXS.by==='rx'){
+    h='<div class="rx-grid">';
+    if(RXS.k==='all')h+='<div class="rx never"><div class="rh"><h3>⛔ Never do</h3><span class="kind">contraindications</span></div><div class="how">Classic exam traps from the lectures.</div><div class="rm">'+NEVER.map(function(n){return '<div class="ri"><span class="cn">'+esc(n[0])+'</span><span class="nt">'+md(n[1])+'</span></div>';}).join('')+'</div></div>';
+    RX.forEach(function(g){if(RXS.k!=='all'&&g.k!==RXS.k)return;
+      h+='<div class="rx" style="--k:'+g.col+'"><div class="rh"><h3>'+esc(g.t)+'</h3><span class="kind">'+({drug:'💊 drug',therapy:'🗣 therapy',other:'⚙️ other'})[g.k]+'</span></div><div class="how">'+md(g.how)+'</div><div class="rm">'+
+        g.m.map(function(m){return '<div class="ri"><span class="cn">'+cname(m[0])+'</span><span class="nt">'+md(m[1])+'</span></div>';}).join('')+'</div>'+(g.pearl?'<div class="pearl">⚠️ '+md(g.pearl)+'</div>':'')+'</div>';});
+    h+='</div>';
+  }else{
+    var by={};RX.forEach(function(g){g.m.forEach(function(m){(by[m[0]]=by[m[0]]||[]).push([g,m[1]]);});});
+    h='<div class="rxc">';
+    FMEM.forEach(function(f){var F=FAM[f[0]],list=[];f[1].forEach(function(g){(Array.isArray(g[1])?g[1]:g).forEach(function(n){list.push(n);});});
+      var rows=list.map(function(n){var t=by[n];return '<div class="ct"><div class="cn">'+cname(n)+'</div><div class="tgs">'+(t?t.map(function(x){return '<span class="tg" style="--k:'+x[0].col+'"><b>'+esc(x[0].t)+':</b> '+md(x[1])+'</span>';}).join(''):'<span class="tg none" style="--k:var(--muted)">No specific treatment in the lectures</span>')+'</div></div>';}).join('');
+      h+='<div class="rxf" style="--c:'+F.c+'"><h3>'+esc(F.n)+'</h3>'+rows+'</div>';});
+    h+='</div>';}
+  el.innerHTML=h;el.classList.toggle('covered',RXS.cover);el.classList.toggle('byc',RXS.by==='cond');
+  el.onclick=function(e){var t=e.target.closest('.nt,.pearl,.tg');if(t&&RXS.cover&&!t.classList.contains('shown')){e.stopPropagation();t.classList.add('shown');}};}
+
 /* ---------- views ---------- */
 var cur=null,built={};
 function view(v){cur=v;$$('#tabs .tb').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-v')===v);});$$('section.view').forEach(function(s){s.classList.toggle('on',s.id==='v-'+v);});
-  if(!built[v]){built[v]=1;({dx:renderStep,flow:ftree,fam:famGrid,time:ruler,schizo:szRender,look:lkRender})[v]();}
+  if(!built[v]){built[v]=1;({dx:renderStep,flow:ftree,fam:famGrid,time:ruler,schizo:szRender,look:lkRender,rx:rxRender})[v]();}
   try{history.replaceState(null,'','#'+v);}catch(e){}}
 $('#tabs').onclick=function(e){var b=e.target.closest('.tb');if(b)view(b.getAttribute('data-v'));};
-var miss=[];Object.keys(FAMOF).forEach(function(n){if(!DET[n])miss.push(n);});Object.keys(PATHS).forEach(function(n){if(!DET[n])miss.push(n);});LK.forEach(function(g){g.m.forEach(function(m){if(!DET[m[0]])miss.push('LK:'+m[0]);});});if(miss.length)console.error('PDX missing',miss);
-var h0=(location.hash||'').slice(1);view(['dx','flow','fam','time','schizo','look'].indexOf(h0)>=0?h0:'dx');
+var miss=[];Object.keys(FAMOF).forEach(function(n){if(!DET[n])miss.push(n);});Object.keys(PATHS).forEach(function(n){if(!DET[n])miss.push(n);});LK.forEach(function(g){g.m.forEach(function(m){if(!DET[m[0]])miss.push('LK:'+m[0]);});});RX.forEach(function(g){g.m.forEach(function(m){if(!DET[m[0]])miss.push('RX:'+m[0]);});});if(miss.length)console.error('PDX missing',miss);
+var h0=(location.hash||'').slice(1);view(['dx','flow','fam','time','schizo','look','rx'].indexOf(h0)>=0?h0:'dx');
 })();
 </script>
 
