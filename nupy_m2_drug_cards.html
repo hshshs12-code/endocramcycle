@@ -228,6 +228,13 @@ input.wr.ok{border-color:var(--ok);background:var(--ok-bg)}input.wr.no{border-co
 .xd .lab{display:block;margin-bottom:1px;font-size:9.5px}
 .fc .xd{font-size:12.5px;border-top:1px dashed var(--line-strong);padding-top:10px}
 details.xdd{margin-top:6px}details.xdd summary{cursor:pointer;font:600 11.5px 'IBM Plex Mono',monospace;color:var(--gene-ink)}
+.cim{display:flex;gap:6px;overflow-x:auto;margin:0 0 10px;padding-bottom:3px;-webkit-overflow-scrolling:touch}
+.cim a{flex:0 0 auto;display:block;cursor:zoom-in}
+.cim img{height:110px;max-width:220px;object-fit:cover;border-radius:8px;border:1px solid var(--line-strong);background:#111;display:block}
+.fc .cim{justify-content:center}.fc .cim img{height:130px;max-width:260px}
+.lq .cim img{height:150px;max-width:300px}
+.trow .cim img{height:76px;max-width:150px}
+@media(max-width:760px){.fc .cim img{height:96px}.lq .cim img{height:110px}}
 /* terms list */
 .terms{max-width:1000px;margin:10px auto 40px;padding:0 20px}
 .terms h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0}
@@ -279,7 +286,7 @@ details.xdd{margin-top:6px}details.xdd summary{cursor:pointer;font:600 11.5px 'I
 (function(){
 'use strict';
 var D=window.QZ;
-var C=D.cards.map(function(c,i){return Array.isArray(c)?{i:i,t:c[0],d:c[1],g:[],l:[]}:{i:i,t:c.t,d:c.d,x:c.x||null,g:c.g||[],l:c.l||[]};});
+var C=D.cards.map(function(c,i){return Array.isArray(c)?{i:i,t:c[0],d:c[1],g:[],l:[],im:[]}:{i:i,t:c.t,d:c.d,x:c.x||null,g:c.g||[],l:c.l||[],im:c.im||[]};});
 var N=C.length;
 var KEY='nupyQz_'+D.id+'_v1';
 function dflt(){return {star:{},lv:{},seen:{},best:{},
@@ -293,6 +300,7 @@ function load(){var d=dflt(),s={};try{s=JSON.parse(localStorage.getItem(KEY)||'{
 var S=load();
 function inDeck(c){var f=S.flt;return (f.subj==='all'||c.g.indexOf(f.subj)>=0)&&(f.lec==='all'||c.l.indexOf(f.lec)>=0);}
 function A(){var a=C.filter(inDeck);return a.length?a:C.slice();}
+function imHTML(c){if(!c.im||!c.im.length)return '';return '<div class="cim">'+c.im.map(function(s){return '<a href="'+s+'"><img src="'+s+'" loading="lazy" alt=""></a>';}).join('')+'</div>';}
 function xHTML(c){if(!c.x)return '';return '<div class="xd">'+Object.keys(c.x).map(function(k){return '<div><span class="lab">'+esc(k)+'</span>'+fmt(c.x[k])+'</div>';}).join('')+'</div>';}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}tlRender();}
 
@@ -337,6 +345,7 @@ function toggleStar(i){if(S.star[i])delete S.star[i];else S.star[i]=1;save();
   $$('[data-star="'+i+'"]').forEach(function(b){b.classList.toggle('on',!!S.star[i]);b.textContent=S.star[i]?'★':'☆';});}
 document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   var b=t.closest('[data-star]');if(b){e.stopPropagation();e.preventDefault();toggleStar(+b.getAttribute('data-star'));return;}
+  b=t.closest('.cim a');if(b){e.stopPropagation();e.preventDefault();var lb=document.getElementById('skLb');if(lb){lb.querySelector('img').src=b.getAttribute('href');lb.querySelector('.sk-cap').textContent='';lb.classList.add('on');}return;}
   b=t.closest('[data-say]');if(b){e.stopPropagation();e.preventDefault();var p=b.getAttribute('data-say').split('|');speak(side(C[+p[0]],p[1]));}},true);
 function modal(title,body,onOk,okLabel,cancel){var m=document.createElement('div');m.className='md-bg';
   m.innerHTML='<div class="md" role="dialog"><div class="md-h"><span>'+title+'</span><button class="md-x" aria-label="Close">×</button></div><div class="md-b">'+body+'</div><div class="md-f">'+(cancel?'<button class="btn md-c">Cancel</button>':'')+'<button class="btn primary md-ok">'+(okLabel||'Done')+'</button></div></div>';
@@ -376,7 +385,7 @@ function fcInit(list){var p=list&&list.length?list:fcPool();var o=p.map(function
   F={ord:o,pos:0,flip:false,know:{},learn:{},hist:[],auto:false};}
 function fcCard(){return C[F.ord[F.pos]];}
 R.flashcards=function(){if(!F)fcInit();T.key=fcKey;fcRender(true);};
-function fcFace(cls,w,c){var txt=side(c,w);return '<div class="side '+cls+'"><div class="fc-h"><span class="lab">'+(w==='term'?'Term':'Definition')+'</span><span>'+sayBtn(c,w)+starBtn(c)+'</span></div><div class="fc-t" style="'+tstyle(txt)+'"><div>'+fmt(txt)+(w==='def'?xHTML(c):'')+'</div></div></div>';}
+function fcFace(cls,w,c){var txt=side(c,w);return '<div class="side '+cls+'"><div class="fc-h"><span class="lab">'+(w==='term'?'Term':'Definition')+'</span><span>'+sayBtn(c,w)+starBtn(c)+'</span></div><div class="fc-t" style="'+tstyle(txt)+'"><div>'+(w==='def'?imHTML(c):'')+fmt(txt)+(w==='def'?xHTML(c):'')+'</div></div></div>';}
 function fcRender(speakIt){
   var st=$('#stage'),n=F.ord.length,tr=S.fc.track;
   if(tr&&F.pos>=n)return fcDone();
@@ -481,7 +490,7 @@ function lRender(){var st=$('#stage');
   var dots='<div class="rdots" title="Round '+L.round+'">'+L.rc.map(function(x){return '<i class="'+(L.ok[x.i]?'ok':x===c?'cur':'')+'"></i>';}).join('')+'</div>';
   var tl={mc:'Multiple choice',tf:'True / False',wr:'Written',flash:'Flashcard'}[q.ty];
   var h='<div class="lq"><div class="lq-h"><span class="lab">'+(pw==='term'?'Term':'Definition')+'</span><span><span class="qtag">'+tl+'</span>'+sayBtn(c,pw)+starBtn(c)+'</span></div>'+
-    '<div class="lq-p">'+fmt(pr)+'</div>';
+    '<div class="lq-p">'+(pw==='def'?imHTML(c):'')+fmt(pr)+'</div>';
   if(q.ty==='mc'){h+='<div class="lab">Choose the matching '+alab+'</div><div class="mcg">'+q.opts.map(function(o,k){return '<button class="opt" data-k="'+k+'"><span class="nb">'+(k+1)+'</span><span>'+fmt(side(o,q.aw))+'</span></button>';}).join('')+'</div>';}
   else if(q.ty==='tf'){h+='<div class="lab">'+(q.aw==='term'?'Term':'Definition')+'</div><div class="lq-c">'+fmt(side(q.cand,q.aw))+'</div><div class="lab">Is this a match?</div><div class="tfg"><button class="opt" data-v="1"><span class="nb">1</span><span>True</span></button><button class="opt" data-v="0"><span class="nb">2</span><span>False</span></button></div>';}
   else if(q.ty==='wr'){h+='<div class="lab">Your answer</div><div class="wrrow"><input class="wr" id="wrIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the '+alab+'"><button class="btn primary" id="wrGo">Answer</button></div>';}
@@ -613,7 +622,7 @@ function ttGen(){var s=S.ts,pool=A().filter(function(c){return !s.starred||S.sta
 function L2(k){return String.fromCharCode(65+k);}
 function ttQ(q,res){var c=q.c,pw=other(q.aw),pr=side(c,pw),h='',n=TT.qs.length;
   var mark=res?'<span class="rmark '+(q.right?'ok':'no')+'">'+(q.right?'✓ Correct':'✕ Incorrect')+'</span>':'';
-  h+='<div class="tq" id="tq'+q.n+'"><div class="tq-h"><span class="lab">'+(pw==='term'?'Term':'Definition')+'</span><span>'+mark+' <span class="mono" style="color:var(--muted);font-size:12px">'+q.n+' of '+n+'</span></span></div><div class="lq-p">'+fmt(pr)+'</div>';
+  h+='<div class="tq" id="tq'+q.n+'"><div class="tq-h"><span class="lab">'+(pw==='term'?'Term':'Definition')+'</span><span>'+mark+' <span class="mono" style="color:var(--muted);font-size:12px">'+q.n+' of '+n+'</span></span></div><div class="lq-p">'+(pw==='def'?imHTML(c):'')+fmt(pr)+'</div>';
   if(q.ty==='tf'){h+='<div class="lq-c">'+fmt(side(q.cand,q.aw))+'</div><div class="tfg">'+[1,0].map(function(v){var on=q.resp===!!v;var cls=res?((!!v===(q.cand===c))?' ok':(on?' no':'')):(on?' sel':'');return '<button class="opt'+cls+'" data-tf="'+v+'"'+(res?' disabled':'')+'><span class="nb">'+(v?'T':'F')+'</span><span>'+(v?'True':'False')+'</span></button>';}).join('')+'</div>';
     if(res&&q.cand!==c)h+='<div class="rline right"><span class="lab">Correct '+(q.aw==='term'?'term':'definition')+'</span>'+fmt(side(c,q.aw))+'</div>';}
   if(q.ty==='mc'){h+='<div class="lab">Choose an answer</div><div class="mcg">'+q.opts.map(function(o,k){var cls=res?(o===c?' ok':(q.resp===k?' no':' dim')):(q.resp===k?' sel':'');return '<button class="opt'+cls+'" data-mc="'+k+'"'+(res?' disabled':'')+'><span class="nb">'+(k+1)+'</span><span>'+fmt(side(o,q.aw))+'</span></button>';}).join('')+'</div>';}
@@ -793,7 +802,7 @@ function blKey(e){if(!BL)return;
    ===================================================================== */
 function tlRender(){var el=$('#terms');if(!el)return;var g=S.tl.group,so=S.tl.starred,sc=starredCount(),act=A();
   var list=act.filter(function(c){return !so||S.star[c.i];});
-  function row(c){return '<div class="trow"><div class="tt">'+fmt(c.t)+'</div><div class="td">'+fmt(c.d)+(c.x?'<details class="xdd"><summary>Details</summary>'+xHTML(c)+'</details>':'')+'</div><div class="acts">'+starBtn(c)+sayBtn(c,'term')+'</div></div>';}
+  function row(c){return '<div class="trow"><div class="tt">'+fmt(c.t)+'</div><div class="td">'+imHTML(c)+fmt(c.d)+(c.x?'<details class="xdd"><summary>Details</summary>'+xHTML(c)+'</details>':'')+'</div><div class="acts">'+starBtn(c)+sayBtn(c,'term')+'</div></div>';}
   var h='<div class="th"><h2>Terms in this '+(act.length<N?'deck ('+act.length+' of '+N+')':'set ('+N+')')+'</h2><span style="display:flex;gap:8px;flex-wrap:wrap">'+seg('tlS',[['all','All'],['star','Starred ('+sc+')']],so?'star':'all')+seg('tlG',[['prog','Your progress'],['orig','Original order']],g?'prog':'orig')+'</span></div>';
   if(!list.length)h+='<p class="hint" style="text-align:left">No starred terms yet — tap ☆ on any card.</p>';
   else if(g){var lab={n:['Not studied','You haven’t studied these terms yet.'],f:['Still learning','You’ve started learning these terms. Keep it up!'],m:['Mastered','You know these terms well.']};
